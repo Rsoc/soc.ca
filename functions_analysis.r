@@ -35,139 +35,142 @@
 #'@author Anton Grau Larsen and Stefan Bastholm Andrade
 #'
 
+soc.ca <- function(x, sup=NULL, identifier=NULL, passive="Missing"){
 
+x       <- data.frame(lapply(x, factor))            # turn active variables into factor
+a.r     <- nrow(x)                                  # Number of active rows or the number of individuals
+sup.n   <- sum(unlist(lapply(as.data.frame(sup), nlevels))) # Number of supplementary modalities
 
-soc.ca <- function(x, sup=NA, identifier=NA){
+B           <- burt(x)                              # The active burt matrix is created    
+supmat <- matrix(, nrow=0, ncol=ncol(B))
 
-x <- data.frame(lapply(x, factor))
-sup <- data.frame(lapply(sup, factor))
+if (identical(sup, NULL)==FALSE){
+sup     <- data.frame(lapply(sup, factor))          # turn supplementary variables into factor
+supmat      <- sup.burt(x, sup)                     # The supplementary burt matrix is created
+}                                                    
 
-a.r <- nrow(x)
-
-# Surrogat identifier
-if (identical(NA, identifier)==TRUE){
-identifier <- as.factor(c(rep("No identifier", a.r-1), "No identifier"))
+if (identical(identifier, NULL)==FALSE){
+supmat                <- rbind(supmat, indicator(x, id=identifier)) # The supplementary indicatormatrix is created
 }
 
-# Surrogat supplementary points
-if (identical(NA, sup)==TRUE){
-sup <- as.data.frame(cbind(rep("No supplementary points", a.r), rep("No supplementary points", a.r)))
-colnames(sup) <- c("No identifier", "No supplementary points")
+if ((identical(identifier, NULL)==TRUE)&(identical(sup, NULL)==TRUE)){
+supmat <- matrix(, nrow=2, ncol=ncol(B))
+rownames(supmat) <- c("No Supplementary points", "No Supplementary points" )
 }
 
-B   <- burt(x)
-supmat 	<- sup.burt(x, sup, identifier)
-rownames(supmat)	<- gsub("identifier: ","",rownames(supmat))
+sub         <- grepl(paste(passive, collapse="|"),colnames(B))
+set         <- 1:ncol(B)
+subset      <- set[!sub]
 
-# Subset:
- if (exists("passive")==FALSE){
-  passive 	<- c("MISSING", "Missing", "Irrelevant", "999", "888", "8888", "9999")
-}
-sub 		<- grep(paste(passive, collapse="|"),colnames(B))
-set 		<- 1:ncol(B)
-subset 		<- set[-c(sub)]
+result      <- subset.ca(B, subset, supmat, nvar=ncol(x))
 
-result <- subset.ca(B, subset, supmat, nvar=ncol(x))
+l.active    <- length(subset)
+l.id        <- nlevels(identifier)
+l.sup 	    <- nrow(supmat)-l.id
+i.active    <- (1:l.active)
+i.sup	    <- (l.active+1):(l.active+l.sup)
+i.id 	    <- (l.active+l.sup+1):(l.active+l.sup+l.id)
 
-l.active <- length(subset)
-l.id	<- nlevels(identifier)
-l.sup 	<- nrow(supmat)-l.id
-i.active <- (1:l.active)
-i.sup	<- (l.active+1):(l.active+l.sup)
-i.id 	<- (l.active+l.sup+1):(l.active+l.sup+l.id)
+# List of descriptive values
+
+result$nid      <- a.r
+result$npassive <- length(which(sub==TRUE)) 
+result$passive  <- colnames(B)[sub] # Could be a matrix with the amount of individuals in each modality
 
 result$active 	<- i.active
 result$sup		<- i.sup
 result$identifier	<- i.id
 result$Burt 		<- B[subset, subset] 
 
-varnames <- colnames(x)
-ml <- vector()
+varnames    <- colnames(x)
+ml          <- vector()
 for (i in 1:ncol(x)){
-ml <- c(ml, rep(varnames[i], nlevels(x[,i])))
+ ml         <- c(ml, rep(varnames[i], nlevels(x[,i])))
 }
-ml <- ml[-sub]
-mm <- as.matrix(cbind(ml, 1:length(ml)))
-md <- matrix(, nrow=ncol(x), ncol=3)
+ml          <- ml[!sub]
+mm          <- as.matrix(cbind(ml, 1:length(ml)))
+md          <- matrix(, nrow=ncol(x), ncol=3)
 rownames(md) <- varnames
 colnames(md) <- c("Start", "End", "Modalities")
-md <- as.data.frame(md)
+md          <- as.data.frame(md)
 
 for (i in 1:ncol(x)){
-mr <- as.numeric(mm[,2][mm[,1]==varnames[i]])
-md[i,1] <- min(mr)
-md[i,2] <- max(mr)
-md[i,3] <- length(mr)
+ mr         <- as.numeric(mm[,2][mm[,1]==varnames[i]])
+ md[i,1]    <- min(mr)
+ md[i,2]    <- max(mr)
+ md[i,3]    <- length(mr)
 }
-md[,1] <- as.numeric(md[,1])
-md[,2] <- as.numeric(md[,2])
+md[,1]      <- as.numeric(md[,1])
+md[,2]      <- as.numeric(md[,2])
 
-result$modal <- md
+result$modal    <- md
 
-class(result) <- "soc.ca"
+class(result)   <- "soc.ca"
 return(result)
 }
-
 
 ################ Burt Matrix
 
 # Han laver Burt matricen udfra en indikatormatrice - den virker lidt som spild, men jeg kan ikke lige lave en anderledes en
-burt <- function(x, ps=": "){
-obj <- x
-    obj <- data.frame(lapply(data.frame(obj), as.factor))
-    I <- nrow(obj)
-    levels.n <- unlist(lapply(obj, nlevels))
-    n <- cumsum(levels.n)
-    Q <- ncol(obj)
-    Z <- matrix(0, nrow = I, ncol = n[length(n)])
-    newdat <- lapply(obj, as.numeric)
-    offset <- (c(0, n[-length(n)]))
-    for (i in 1:Q) Z[1:I + (I * (offset[i] + newdat[[i]] - 1))] <- 1
-    fn <- rep(names(obj), unlist(lapply(obj, nlevels)))
-    ln <- unlist(lapply(obj, levels))
-    B <- t(Z) %*% Z
-    col.names <- paste(fn, ln, sep = ps)
-    dimnames(Z)[[2]] <- col.names
-    dimnames(Z)[[1]] <- as.character(1:I)
+burt    <- function(x, ps=": "){
+obj     <- x
+obj     <- data.frame(lapply(data.frame(obj), as.factor))
+I       <- nrow(obj)
+levels.n <- unlist(lapply(obj, nlevels))
+n       <- cumsum(levels.n)
+Q       <- ncol(obj)
+Z       <- matrix(0, nrow = I, ncol = n[length(n)])
+newdat  <- lapply(obj, as.numeric)
+offset  <- (c(0, n[-length(n)]))
+for (i in 1:Q) Z[1:I + (I * (offset[i] + newdat[[i]] - 1))] <- 1
+fn      <- rep(names(obj), unlist(lapply(obj, nlevels)))
+ln      <- unlist(lapply(obj, levels))
+B       <- t(Z) %*% Z
+col.names        <- paste(fn, ln, sep = ps)
+dimnames(Z)[[2]] <- col.names
+dimnames(Z)[[1]] <- as.character(1:I)
 # Z er en f?rdig indikatormatrice - s? den kan jo bruges hvis man har lyst
-    dimnames(B)[[2]] <- col.names
-    dimnames(B)[[1]] <- col.names
+dimnames(B)[[2]] <- col.names
+dimnames(B)[[1]] <- col.names
 return(B)
 }
+
 
 ##################### Supplementary Burt matrix
 # Burt og sup.burt, kan forudsat at de er lavet p? det samme x objekt, kombineres med f?lgende kommando:
 # rbind(burt, sup.burt)
+# sup.burt(x, sup, identifier=NULL, ps=": ")
+# x is a soc.ca object
+# sup is a data.frame of vectors containing the supplementary variables
+# ps is the seperator used in the creation of the names of the columns (modalities).
 
-# Nu som en funktion
-sup.burt <- function(x, sup, identifier=NA, ps=": "){
+sup.burt <- function(x, sup, ps=": "){
 
-  if (is.na(identifier[1])==FALSE){ # Remake
-    sup <- cbind(sup, identifier)
-#sup <- cbind(sup, as.factor(identifier))
-}
-  
 supvar <- as.data.frame(sup) 
 addburt <- function(supvariable, x){
   a.l <- ncol(x)
-  fburt   	<- table(supvariable, x[,1])
+  fburt       <- table(supvariable, x[,1])
   for (i in 2:a.l){
-    temp 		<- table(supvariable, x[,i])
+    temp     	<- table(supvariable, x[,i])
     fburt 		<- cbind(fburt, temp)
   }
   return(fburt)
 }
 
-s.l <- ncol(supvar)
-fburt <- addburt(supvar[,1], x)
-for (i in 2:s.l){
-temp 		<- addburt(supvar[,i], x)
-fburt 		<- rbind(fburt, temp)
+sup.n <- sum(unlist(lapply(supvar, nlevels))) # The number of supplementary modalities
+active.n <- sum(unlist(lapply(x, nlevels))) # The number of active modalities
+
+fburt       <- matrix(,ncol=active.n, nrow=sup.n)
+counter     <- 1
+for (i in seq(supvar)){
+position    <- seq(counter, (counter+nlevels(supvar[,i])-1))
+fburt[position,] <-  addburt(supvar[,i], x)
+counter     <- counter+nlevels(supvar[,i])
 }
 
 # Her s?tter vi navne p? de supplement?re variable
-fn <- rep(names(sup), unlist(lapply(sup, nlevels)))
-ln <- unlist(lapply(sup, levels))
+fn <- rep(names(as.data.frame(sup)), unlist(lapply(as.data.frame(sup), nlevels)))
+ln <- unlist(lapply(as.data.frame(sup), levels))
 col.names <- paste(fn, ln, sep = ps)
 rownames(fburt) <- col.names
 
@@ -175,10 +178,11 @@ rownames(fburt) <- col.names
 fn <- rep(names(x), unlist(lapply(x, nlevels)))
 ln <- unlist(lapply(x, levels))
 col.names <- paste(fn, ln, sep = ps)
-dimnames(fburt)[[2]] <- col.names
+colnames(fburt) <- col.names
 
-fburt
+return(fburt)
 }
+
 
 #################### Correspondence analysis on a Burt matrix
 # B is a Burt matrix
@@ -304,4 +308,38 @@ lambda.adj <- ((Q/(Q - 1))^2 * (sqrt(lambda0)[1:nd.max] - 1/Q)^2)
     ca.output <- list(sv = sv, nd = nd, ev = ev, totin = totin , names = modal.names, mass = mass[subset], 
         chidist = chidist, inertia = inertia, explained.inertia = explained.inertia , adj.inertia=adj.inertia, contrib=ctr, cor=cor,  coord = rpc, average.contrib=av.ctr , standard.coord=phi)
         return(ca.output)
+}
+
+
+################################### Indicator matrix
+
+indicator <- function(x, id=NULL, ps=": "){
+obj     <- x
+#obj     <- data.frame(lapply(data.frame(obj), as.factor)) # Gør hele analyse objektet til factor - kan sættes ind et andet sted.
+I       <- nrow(obj)                                      # Number of individuals
+levels.n <- unlist(lapply(obj, nlevels))
+n       <- cumsum(levels.n)                               # Number of modalities for each question
+m       <- max(n)                                         # Total number of modalities
+Q       <- ncol(obj)                                      # Number of questions
+Z       <- matrix(0, nrow = I, ncol = m)                  # Predefinition of the indicatormatrix
+newdat  <- lapply(obj, as.numeric)
+offset  <- (c(0, n[-length(n)]))
+for (i in seq(Q)) Z[seq(I) + (I * (offset[i] + newdat[[i]] - 1))] <- 1 # Indicator matrix
+fn      <- rep(names(obj), unlist(lapply(obj, nlevels)))  
+ln      <- unlist(lapply(obj, levels))
+col.names   <- paste(fn, ln, sep = ps)
+colnames(Z) <- col.names
+
+if (identical(id, NULL)==TRUE){
+rownames(Z) <- as.character(seq(I))
+}else{
+rownames(Z) <- id
+}    
+return(Z)
+
+# Creates a indicator matrix from a data.frame with questions as columns and individuals as rows.
+# indicator(x, id=NULL, ps=": ")
+# x is a data.frame
+# id is a vector defining the labels for the individuals. If id = NULL row number is used.
+# ps is the seperator used in the creation of the names of the columns (modalities).
 }
