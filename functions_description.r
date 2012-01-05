@@ -1,10 +1,11 @@
 #### Functions for describtion and printing
 
+
 # Print objects from the soc.ca function
 print.soc.ca <- function(object){
-Nmodal   	<- length(object$active) 
-Nsup 		<- length(object$sup) # S?t if ind
-Nid 		<- length(object$identifier) # S?t if ind
+Nmodal       <- length(object$active) 
+Nsup     	<- length(object$sup) # S?t if ind
+Nid 		<- object$nid
 Vnames 		<- paste(rownames(object$modal), " (",object$modal[,3], ")", sep="")
 Submass 	<- round(sum(object$mass), digits=2) # Er det her i Procent aka. summer mass altid til 1.
 
@@ -76,6 +77,8 @@ if (length(pm.minus)>0){
 
 }
 
+
+
 #################### Balance measure for contributing modalities
 # Object is a soc.ca class object
 # act.dim is the number of active dimensions to be measured
@@ -123,9 +126,6 @@ return(starscree)
 # Modkritik: Hvis en modalitet opsnapper al inertien på en dimension, så behøver de andre dimensioner ikke at tage højde for den på samme måde og det kan give et skævt kort.??
 
 ############################ The most contributing modalities
-# x is a soc.ca object
-# dim is the included dimensions
-
 contribution <- function(x, dim=1){
 ctr <- round(1000*x$contrib[,dim])
 cor <- round(1000*x$cor[,dim])
@@ -140,6 +140,12 @@ coord.lab <- paste("Coord. dim:", dim)
 colnames(out)<-c(ctr.lab, cor.lab, coord.lab)
 out <- out[order(-out[,1]), ]
 as.matrix(out)
+# Returns the modalities with above average contribution to the selected dimension
+# x is a soc.ca object
+# dim is the included dimensions
+# Ctr is the contribution in 1000
+# Cor is the correlation with the dimension
+# Coord is the principal coordinate
 }
 
 ############################## The most contributing modalities according to direction on dimension
