@@ -2,6 +2,7 @@
 library(ggplot2)
 library(ellipse)
 library(scales)
+library(grid)
 options(width=250)
 
 # These are the functions that are related to the analysis: soc.ca, burt, subset.ca ...
