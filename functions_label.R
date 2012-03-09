@@ -37,15 +37,6 @@ return(object)
 # Search and replace in resultat objekt
 # export and preserve
 
-get.label <- function(object){
-ca.label <- cbind(object$names, object$names)
-colnames(ca.label) <- c("New label", "Old label")
-temp <- ca.label
-ca.label <- edit(ca.label)
-ca.label[,2] <- temp[,2]
-ca.label
-}
-
 get.varlabel <- function(object){
 varname <- rownames(object$modal)
 tab.label <- cbind(varname, varname, 1:length(varname))
@@ -56,35 +47,30 @@ tab.label[,1] <- temp[,1]
 tab.label
 }
 
-export.label <- function(ca.label){
-l.fil <- deparse(substitute(ca.label)) 
-write.csv(ca.label, file=l.fil)
+export.label <- function(object, file=FALSE, encoding="UTF-8"){
+  ca.label <- cbind(object$names, object$names)
+  colnames(ca.label) <- c("New label", "Old label")
+  if (identical(file, FALSE)==TRUE){
+    file <- paste("label_",deparse(substitute(object)), ".csv", sep="")
+  }
+  write.csv(ca.label, file=file, fileEncoding=encoding)
 }
 
-
-#indf?r en quote funktion
-import.label <- function(file="ca.label"){
-read.csv(file)
+assign.label <- function(object, file=FALSE, encoding="UTF-8"){
+  if (identical(file, FALSE)==TRUE){
+    file <- paste("label_",deparse(substitute(object)), ".csv", sep="")
 }
-
-edit.label <- function(ca.label){
-temp <- ca.label
-ca.label <- edit(ca.label)
-ca.label[,2] <- temp[,2]
-ca.label
-}
-
-assign.label <- function(object, ca.label){
-obj.label <- as.character(object$names)
-new.label <- as.character(ca.label[,2])
-old.label <- as.character(ca.label[,3])
-for (i in 1:length(old.label)){
-#indices <- grep(old.label[i], obj.label, fixed=TRUE)
-indices   <- which(old.label[i]==obj.label)
-obj.label[indices] <- new.label[i]
-}
-object$names <- obj.label
-object
-}
+      label  <- read.csv(file, encoding=encoding)
+      obj.label <- as.character(object$names)
+      new.label <- as.character(label$New.label)
+      old.label <- as.character(label$Old.label)
+      for (i in 1:length(old.label)){
+        indices   <- which(old.label[i]==obj.label)
+        obj.label[indices] <- new.label[i]
+      }
+      object$names <- obj.label
+      return(object)
+    }
+    
 
 
