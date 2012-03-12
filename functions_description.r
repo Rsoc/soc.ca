@@ -162,21 +162,35 @@ contribution <- function(object, dim=1, modality.indices=FALSE){
 # dim is the dimension
 
 # Er ikke den bedste implementation - jeg vil helst have dem ved siden af hinanden og uden det latterlige nummer. M?ske skulle der ogs? v?re akselabels? M?ske istedetfor det t?belige nummer?
-tab.dim <- function(x, dim=1){
-ctr <- round(1000*x$contrib[,dim])
-coord <- round(x$coord[,dim], digits=2)
-names <- x$names
-av.ctr<- contribution(x, dim, TRUE)
-out <- data.frame(ctr[av.ctr], coord[av.ctr])
-rownames(out) <- names[av.ctr]
-ctr.lab   <- paste("Ctr. dim:", dim)
-coord.lab 	<- paste("Coord. dim:", dim)
-colnames(out)	<-c(ctr.lab, coord.lab)
-out 		<- out[order(-out[,1]), ]
-out.label 	<- c(ctr.lab, coord.lab)
-outminus	<- out[which(out[,2]<=0),]
-outplus 	<- out[which(out[,2]>=0),]
-out <- rbind(outplus, out.label, outminus)
-noquote(as.matrix(out))
+tab.dim <- function(x, dim=1, label.plus=NULL, label.minus=NULL){
+  
+  
+  if (identical(label.plus, NULL)==TRUE){
+    label.plus    <- paste("Dimension ", dim ,". (+)", sep="")
+  }
+  
+  if (identical(label.minus, NULL)==TRUE){
+    label.minus   <- paste("Dimension ", dim ,". (-)", sep="")
+  }
+  
+  ctr <- round(1000*x$contrib[,dim])
+  coord <- round(x$coord[,dim], digits=1)
+  names <- x$names
+  av.ctr<- contribution(x, dim, TRUE)
+  out <- data.frame(ctr[av.ctr], coord[av.ctr])
+  rownames(out) <- names[av.ctr]
+  ctr.lab   <- paste("Ctr")
+  coord.lab   <- paste("Coord")
+  colnames(out)  <-c(ctr.lab, coord.lab)
+  out 		<- out[order(-out[,1]), ]
+  out.label 	<- c(ctr.lab, coord.lab)
+  outminus	<- out[which(out[,2]<=0),]
+  outplus 	<- out[which(out[,2]>=0),]
+  
+  cat("\n",format(label.plus, width=50, justify="centre"), "\n")
+  print(format(outplus, justify="centre", width=8))
+  cat("\n",format(label.minus, width=50, justify="centre"), "\n")
+  format(outminus, justify="centre", width=8)
 }
+
 
