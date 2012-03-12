@@ -2,15 +2,16 @@
 
 ## Modalitetsfrekvenser
 # Kan kun s?tte p? aktive modaliteter
-add.n <- function(object, add=FALSE, text=" (n:"){
-a.m <- object$active
-mnames <- object$names[a.m]
-b <- object$Burt
-freq <- matrix(data=NA, nrow=ncol(b), ncol=1)
+# Kan forbedres med diag()
+add.n   <- function(object, add=TRUE, text=" (n:"){
+a.m     <- object$active
+mnames  <- object$names[a.m]
+b       <- object$Burt
+freq    <- matrix(data=NA, nrow=ncol(b), ncol=1)
 for (i in 1:ncol(b)){
 freq[i,1] <- b[i,i] 
 }
-freq <- as.data.frame(freq)
+freq    <- as.data.frame(freq)
 rownames(freq) <- mnames
 colnames(freq) <- c("Number")
 if (add==FALSE){
@@ -18,9 +19,9 @@ return(freq)
 }
 
 if (add==TRUE){
-tname <- matrix(data=NA, nrow=ncol(b), ncol=1)
+    tname         <- matrix(data=NA, nrow=ncol(b), ncol=1)
 for (i in 1:ncol(b)){
-tname[i,1]<- paste(mnames[i],text,freq[i,1],")", sep="")
+    tname[i,1]    <- paste(mnames[i],text,freq[i,1],")", sep="")
 }
 object$names[a.m] <- tname[,1]
 }
@@ -47,30 +48,28 @@ tab.label[,1] <- temp[,1]
 tab.label
 }
 
-export.label <- function(object, file=FALSE, encoding="UTF-8"){
-  ca.label <- cbind(object$names, object$names)
-  colnames(ca.label) <- c("New label", "Old label")
-  if (identical(file, FALSE)==TRUE){
-    file <- paste("label_",deparse(substitute(object)), ".csv", sep="")
-  }
-  write.csv(ca.label, file=file, fileEncoding=encoding)
+export.label    <- function(object, file=FALSE, encoding="UTF-8", overwrite=FALSE){
+ca.label        <- cbind(object$names, object$names)
+colnames(ca.label)  <- c("New label", "Old label")
+    if (identical(file, FALSE)==TRUE){
+        file    <- paste("label_",deparse(substitute(object)), ".csv", sep="")
+    }
+    if(file.exists(file)==TRUE & identical(overwrite, FALSE)) stop("File already exists")
+    write.csv(ca.label, file=file, fileEncoding=encoding)
 }
 
 assign.label <- function(object, file=FALSE, encoding="UTF-8"){
   if (identical(file, FALSE)==TRUE){
     file <- paste("label_",deparse(substitute(object)), ".csv", sep="")
 }
-      label  <- read.csv(file, encoding=encoding)
+      label     <- read.csv(file, encoding=encoding)
       obj.label <- as.character(object$names)
       new.label <- as.character(label$New.label)
       old.label <- as.character(label$Old.label)
       for (i in 1:length(old.label)){
-        indices   <- which(old.label[i]==obj.label)
-        obj.label[indices] <- new.label[i]
+      indices   <- which(old.label[i]==obj.label)
+      obj.label[indices] <- new.label[i]
       }
       object$names <- obj.label
       return(object)
-    }
-    
-
-
+}

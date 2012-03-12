@@ -126,26 +126,35 @@ return(starscree)
 # Modkritik: Hvis en modalitet opsnapper al inertien på en dimension, så behøver de andre dimensioner ikke at tage højde for den på samme måde og det kan give et skævt kort.??
 
 ############################ The most contributing modalities
-contribution <- function(x, dim=1){
-ctr <- round(1000*x$contrib[,dim])
-cor <- round(1000*x$cor[,dim])
-coord <- round(x$coord[,dim], digits=2)
-names <- x$names
-av.ctr <- unlist(x$average.contrib[dim])
-out <- data.frame(ctr[av.ctr], cor[av.ctr], coord[av.ctr])
-rownames(out) <- names[av.ctr]
-ctr.lab <- paste("Ctr. dim:", dim)
-cor.lab <- paste("Cor. dim:", dim)
-coord.lab <- paste("Coord. dim:", dim)
-colnames(out)<-c(ctr.lab, cor.lab, coord.lab)
-out <- out[order(-out[,1]), ]
-as.matrix(out)
-# Returns the modalities with above average contribution to the selected dimension
-# x is a soc.ca object
-# dim is the included dimensions
-# Ctr is the contribution in 1000
-# Cor is the correlation with the dimension
-# Coord is the principal coordinate
+contribution <- function(object, dim=1, modality.indices=FALSE){
+    if(identical(modality.indices, TRUE)==TRUE){
+        ctr     <- object$contrib[,dim]
+        av.ctr  <- as.vector(apply(as.matrix(ctr), 2, function(x) which(x >= mean(x, na.rm=TRUE))))
+        if(is.list(av.ctr)==TRUE) av.ctr  <- unlist(av.ctr[dim], use.names=FALSE)
+        av.ctr     <- av.ctr[duplicated(av.ctr)==FALSE]    
+        return(av.ctr)
+    }else{
+        ctr <- round(1000*object$contrib[,dim])
+        cor <- round(1000*object$cor[,dim])
+        coord <- round(object$coord[,dim], digits=2)
+        names <- object$names
+        av.ctr<- contribution(object, dim, TRUE)
+        out <- data.frame(ctr[av.ctr], cor[av.ctr], coord[av.ctr])
+        rownames(out) <- names[av.ctr]
+        ctr.lab <- paste("Ctr. dim:", dim)
+        cor.lab <- paste("Cor. dim:", dim)
+        coord.lab <- paste("Coord. dim:", dim)
+        colnames(out)<-c(ctr.lab, cor.lab, coord.lab)
+        out <- out[order(-out[,1]), ]
+        return(as.matrix(out))
+    }
+    # Returns the modalities with above average contribution to the selected dimension
+    # object is a soc.ca object
+    # dim is the included dimensions
+    # modality.indices: If TRUE returns a vector with the row indices of the modalities
+    # Ctr is the contribution in 1000
+    # Cor is the correlation with the dimension
+    # Coord is the principal coordinate
 }
 
 ############################## The most contributing modalities according to direction on dimension
@@ -157,7 +166,7 @@ tab.dim <- function(x, dim=1){
 ctr <- round(1000*x$contrib[,dim])
 coord <- round(x$coord[,dim], digits=2)
 names <- x$names
-av.ctr <- unlist(x$average.contrib[dim])
+av.ctr<- contribution(x, dim, TRUE)
 out <- data.frame(ctr[av.ctr], coord[av.ctr])
 rownames(out) <- names[av.ctr]
 ctr.lab   <- paste("Ctr. dim:", dim)

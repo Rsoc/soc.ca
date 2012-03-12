@@ -267,10 +267,10 @@ for (i in 1:nd){
 }
 ctr 		<- t(ctr)
 
-av.ctr 		<- list()
-for (i in 1:nd){
-  av.ctr[[i]]	<- which(ctr[,i] >= mean(ctr[,i], na.rm=TRUE))
-}
+#av.ctr 		<- list()
+#for (i in 1:nd){
+#  av.ctr[[i]]	<- which(ctr[,i] >= mean(ctr[,i], na.rm=TRUE))
+#}
 
 ## Vi prøver at adjuste
 
@@ -306,7 +306,8 @@ lambda.adj <- ((Q/(Q - 1))^2 * (sqrt(lambda0)[1:nd.max] - 1/Q)^2)
 
 
     ca.output <- list(sv = sv, nd = nd, ev = ev, totin = totin , names = modal.names, mass = mass[subset], 
-        chidist = chidist, inertia = inertia, explained.inertia = explained.inertia , adj.inertia=adj.inertia, contrib=ctr, cor=cor,  coord = rpc, average.contrib=av.ctr , standard.coord=phi)
+        chidist = chidist, inertia = inertia, explained.inertia = explained.inertia ,
+        adj.inertia=adj.inertia, contrib=ctr, cor=cor,  coord = rpc, standard.coord=phi)
         return(ca.output)
 }
 

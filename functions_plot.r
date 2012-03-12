@@ -253,8 +253,7 @@ mnames		<- object$names[-id]
 # ctr
 if (identical(plot.type, "ctr")==TRUE){
 id          <- object$identifier
-av.ctr   	<- unlist(object$average.contrib[ctr.dim], use.names=FALSE)
-av.ctr 		<- av.ctr[duplicated(av.ctr)==FALSE]
+av.ctr      <- contribution(object, ctr.dim, modality.indices=TRUE)
 coord     	<- object$coord[av.ctr,]
 mnames		<- object$names[av.ctr]
 }
