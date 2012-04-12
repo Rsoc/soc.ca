@@ -113,6 +113,25 @@ t.plot      <- b.plot + theme_min() # Theme
 return(t.plot)
 }
 
+############################### List map
+p.list          <- function(object, modal.list=rep(TRUE, length(object$names)), dim=c(1,2), map.title="list", labelx=NULL, labely=NULL, scale.interval=NULL, point.label=TRUE, point.shape=15, point.size=1.6, text.size=2.5){
+    gg.proc     <- round(object$adj.inertia[,3]) # Adjusted inertia
+    gg.data     <- data.plot(object, plot.type="list", dim, ctr.dim=NULL, modal.list=modal.list) # Data selection
+    axis.labels <- plot.axis(labelx=labelx, labely=labely, gg.proc=gg.proc, dim=dim) # Axis labels
+    map.title   <- plot.title(map.title=map.title, ctr.dim=ctr.dim) # Plot title
+    scales      <- breaksandscales(gg.data, scale.interval) # Scales og breaks
+    
+    gg.input    <- list(gg.data=gg.data, axis.inertia=gg.proc,
+                        map.title=map.title, labelx=axis.labels$x, labely=axis.labels$y,
+                        scales=scales, point.label=point.label)
+    
+    b.plot      <- basic.plot(gg.input, text.size=text.size, point.size=point.size, point.shape=point.shape) # Plot
+    t.plot      <- b.plot + theme_min() # Theme
+    return(t.plot)
+}
+
+
+
 ################## plot over dimensionerne
 #! Mangler at blive ryddet op i.
 # Overvej om det kan betale sig at smide dens værdier ind i de andre funktioner - det skal nok gøres for at den kan blive en del af en større plot funktion
@@ -175,27 +194,31 @@ return(p)
 ####################### Plot title
 
 plot.title  <- function(map.title=NULL, ctr.dim=NULL){
-# Map title for ctr plot    
+    # Map title for ctr plot    
     if (identical(map.title, "ctr")==TRUE) {
-map.title     <- paste("The modalities contributing above average to dimension " , paste(ctr.dim, collapse=" & "), sep="")
-}
-# Map title for all plot
+        map.title     <- paste("The modalities contributing above average to dimension " , paste(ctr.dim, collapse=" & "), sep="")
+    }
+    # Map title for all plot
     if (identical(map.title, "all")==TRUE) {
-map.title     <- "Cloud of active modalities"
-}
-# Map title for active plot
+        map.title     <- "Cloud of active modalities"
+    }
+    # Map title for active plot
     if (identical(map.title, "active")==TRUE) {
-map.title     <- "Cloud of active modalities"
-}
-# Map title for sup plot
+        map.title     <- "Cloud of active modalities"
+    }
+    # Map title for sup plot
     if (identical(map.title, "sup")==TRUE) {
-map.title     <- "Cloud of supplementary modalities"
-}
-# Map title for id plot
+        map.title     <- "Cloud of supplementary modalities"
+    }
+    # Map title for id plot
     if (identical(map.title, "id")==TRUE) {
-map.title     <- "Cloud of individuals"
-}
-return(map.title)
+        map.title     <- "Cloud of individuals"
+    }
+    # Map title for list plot
+    if (identical(map.title, "list")==TRUE) {
+        map.title     <- "Cloud of selected modalities"
+    }
+    return(map.title)
 }
 
 ############# Axis labels
@@ -238,45 +261,52 @@ scales <- list(scalebreaks=scalebreaks, breaklabel=breaklabel, lim.min=lim.min, 
 return(scales)
 }
 
-#################### data.plot v.1 
+#################### data.plot v.2
 
-data.plot   <- function(object, plot.type, dim, ctr.dim=NULL){
-# Types: all, active, sup, ctr, id
-
-# all
-if (identical(plot.type, "all")==TRUE){
-id     	    <- object$identifier
-coord 		<- object$coord[-id,]
-mnames		<- object$names[-id]
+data.plot   <- function(object, plot.type, dim, ctr.dim=NULL, modal.list=NULL){
+    # Types: all, active, sup, ctr, id
+    
+    # all
+    if (identical(plot.type, "all")==TRUE){
+        id             <- object$identifier
+        coord     	<- object$coord[-id,]
+        mnames		<- object$names[-id]
+    }
+    
+    # ctr
+    if (identical(plot.type, "ctr")==TRUE){
+        id          <- object$identifier
+        av.ctr      <- contribution(object, ctr.dim, modality.indices=TRUE)
+        coord     	<- object$coord[av.ctr,]
+        mnames		<- object$names[av.ctr]
+    }
+    # active
+    if (identical(plot.type, "active")==TRUE){
+        active 		<- object$active
+        coord 		<- object$coord[active,]
+        mnames		<- object$names[active]
+    }
+    # sup
+    if (identical(plot.type, "sup")==TRUE){
+        supp 		<- object$sup
+        coord 		<- object$coord[supp,]
+        mnames		<- object$names[supp]
+    }
+    # id
+    if (identical(plot.type, "id")==TRUE){
+        id     	    <- object$identifier
+        coord 		<- object$coord[id,]
+        mnames		<- object$names[id]
+    }
+    
+    # list
+    if (identical(plot.type, "list")==TRUE){
+        coord 		<- object$coord[modal.list,]
+        mnames		<- object$names[modal.list]
+    }
+    
+    gg.data             <- data.frame(cbind(coord[,dim[1]], coord[,dim[2]]), mnames)
+    colnames(gg.data)   <- c("x", "y", "names")
+    return(gg.data)
 }
 
-# ctr
-if (identical(plot.type, "ctr")==TRUE){
-id          <- object$identifier
-av.ctr      <- contribution(object, ctr.dim, modality.indices=TRUE)
-coord     	<- object$coord[av.ctr,]
-mnames		<- object$names[av.ctr]
-}
-# active
-if (identical(plot.type, "active")==TRUE){
-active 		<- object$active
-coord 		<- object$coord[active,]
-mnames		<- object$names[active]
-}
-# sup
-if (identical(plot.type, "sup")==TRUE){
-supp 		<- object$sup
-coord 		<- object$coord[supp,]
-mnames		<- object$names[supp]
-}
-# id
-if (identical(plot.type, "id")==TRUE){
-id     	    <- object$identifier
-coord 		<- object$coord[id,]
-mnames		<- object$names[id]
-}
-
-gg.data             <- data.frame(cbind(coord[,dim[1]], coord[,dim[2]]), mnames)
-colnames(gg.data)   <- c("x", "y", "names")
-return(gg.data)
-}
