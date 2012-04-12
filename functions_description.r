@@ -119,14 +119,12 @@ starscree[[i]] <- noquote(rep("*", stars[i]))
 return(starscree)
 }
 
-
-
 # En funktion der undersøger om der er modaliteter der styrer en dimension for meget. 
 #Kritik - den vil spytte noget ud i et væk, hvis ikke den holdes nede til kun at undersøge et meget begrænset subset. Måske skal den gemmes til senere.
 # Modkritik: Hvis en modalitet opsnapper al inertien på en dimension, så behøver de andre dimensioner ikke at tage højde for den på samme måde og det kan give et skævt kort.??
 
 ############################ The most contributing modalities
-contribution <- function(object, dim=1, modality.indices=FALSE){
+contribution <- function(object, dim=1, all=FALSE, modality.indices=FALSE){
     if(identical(modality.indices, TRUE)==TRUE){
         ctr     <- object$contrib[,dim]
         av.ctr  <- as.vector(apply(as.matrix(ctr), 2, function(x) which(x >= mean(x, na.rm=TRUE))))
@@ -138,19 +136,26 @@ contribution <- function(object, dim=1, modality.indices=FALSE){
         cor <- round(1000*object$cor[,dim])
         coord <- round(object$coord[,dim], digits=2)
         names <- object$names
-        av.ctr<- contribution(object, dim, TRUE)
+        if (identical(all, FALSE)==TRUE){
+            av.ctr<- contribution(object, dim=dim, modality.indices=TRUE)    
+            header <- paste("The modalities contributing above average to dimension: ", dim, ".", sep="")
+        }
+        if (identical(all, TRUE)==TRUE){
+            av.ctr<- object$active  
+            header <- paste("The contribution of all modalities to dimension: ", dim, ".", sep="")
+        }
         out <- data.frame(ctr[av.ctr], cor[av.ctr], coord[av.ctr])
         rownames(out) <- names[av.ctr]
-        ctr.lab <- paste("Ctr. dim:", dim)
-        cor.lab <- paste("Cor. dim:", dim)
-        coord.lab <- paste("Coord. dim:", dim)
-        colnames(out)<-c(ctr.lab, cor.lab, coord.lab)
+        colnames(out) <- c("   Ctr.", "   Cor." , "   Coord")
         out <- out[order(-out[,1]), ]
-        return(as.matrix(out))
+        maxwidth <- max(nchar(names))+sum(nchar(colnames(out)))
+        cat("\n", format(header, width=maxwidth, justify="centre"), "\n", "\n")
+        print(out)
     }
     # Returns the modalities with above average contribution to the selected dimension
     # object is a soc.ca object
     # dim is the included dimensions
+    # all: If TRUE returns all modalities instead of just those that contribute above average
     # modality.indices: If TRUE returns a vector with the row indices of the modalities
     # Ctr is the contribution in 1000
     # Cor is the correlation with the dimension
@@ -161,36 +166,203 @@ contribution <- function(object, dim=1, modality.indices=FALSE){
 # x is a soc.ca object
 # dim is the dimension
 
-# Er ikke den bedste implementation - jeg vil helst have dem ved siden af hinanden og uden det latterlige nummer. M?ske skulle der ogs? v?re akselabels? M?ske istedetfor det t?belige nummer?
-tab.dim <- function(x, dim=1, label.plus=NULL, label.minus=NULL){
-  
-  
-  if (identical(label.plus, NULL)==TRUE){
-    label.plus    <- paste("Dimension ", dim ,". (+)", sep="")
-  }
-  
-  if (identical(label.minus, NULL)==TRUE){
-    label.minus   <- paste("Dimension ", dim ,". (-)", sep="")
-  }
-  
-  ctr <- round(1000*x$contrib[,dim])
-  coord <- round(x$coord[,dim], digits=1)
-  names <- x$names
-  av.ctr<- contribution(x, dim, TRUE)
-  out <- data.frame(ctr[av.ctr], coord[av.ctr])
-  rownames(out) <- names[av.ctr]
-  ctr.lab   <- paste("Ctr")
-  coord.lab   <- paste("Coord")
-  colnames(out)  <-c(ctr.lab, coord.lab)
-  out 		<- out[order(-out[,1]), ]
-  out.label 	<- c(ctr.lab, coord.lab)
-  outminus	<- out[which(out[,2]<=0),]
-  outplus 	<- out[which(out[,2]>=0),]
-  
-  cat("\n",format(label.plus, width=50, justify="centre"), "\n")
-  print(format(outplus, justify="centre", width=8))
-  cat("\n",format(label.minus, width=50, justify="centre"), "\n")
-  format(outminus, justify="centre", width=8)
+tab.dim <- function(x, dim=1, label.plus=NULL, label.minus=NULL, all=FALSE){
+    
+    if (identical(label.plus, NULL)==TRUE){
+        label.plus    <- paste("Dimension ", dim ,". (+)", sep="")
+    }
+    
+    if (identical(label.minus, NULL)==TRUE){
+        label.minus   <- paste("Dimension ", dim ,". (-)", sep="")
+    }
+    
+    ctr <- round(1000*x$contrib[,dim])
+    coord <- round(x$coord[,dim], digits=2)
+    names <- x$names
+    
+    if (identical(all, FALSE)==TRUE){
+        av.ctr<- contribution(object, dim=dim, modality.indices=TRUE)    
+    }
+    if (identical(all, TRUE)==TRUE){
+        av.ctr <- object$active  
+    }
+    
+    out <- data.frame(ctr[av.ctr], coord[av.ctr])
+    names <- names[av.ctr]
+    maxwidth    <- max(nchar(rownames(out)))
+    
+    for (i in seq(names)){
+        width       <- maxwidth-nchar(names[i])
+        fill        <- paste(rep(" ", width), sep="", collapse="")
+        names[i]    <- paste(names[i], fill, sep="", collapse="")
+    }
+    rownames(out) <- names
+    ctr.lab     <- paste("Ctr")
+    coord.lab   <- paste("Coord")
+    colnames(out)  <- c(ctr.lab, coord.lab)
+    out         <- out[order(-out[,1]), ]
+    out.label     <- c(ctr.lab, coord.lab)
+    outminus    <- out[which(out[,2]<=0),]
+    outplus 	<- out[which(out[,2]>=0),]
+    
+    
+    #outputwidth <- maxwidth+8*3
+    cat("\n",format(label.plus, width=maxwidth, justify="centre"), "\n")
+    print(format(outplus, justify="centre", width=8))
+    cat("\n",format(label.minus, width=maxwidth, justify="centre"), "\n")
+    format(outminus, justify="centre", width=8)
+}
+
+##################### Test.data 
+
+test.data <- function(x, sup=NULL, identifier=NULL, passive="default"){
+    
+    # Defining the passive modalities
+    if (identical(passive, "default")==TRUE){
+        passive <-  formals(soc.ca)$passive
+    }
+    
+    # Factor test
+    active.names <- colnames(x)    
+    fact <- unlist(lapply(x, is.factor))
+    fact <- active.names[which(fact==FALSE)]
+    
+    if (identical(sup, NULL)==FALSE){
+        sup.names <- colnames(sup)    
+        fact.sup <- unlist(lapply(sup, is.factor))
+        fact.sup <- active.names[which(fact.sup==FALSE)]
+    }
+    
+    # Test unique identifier
+    
+    if (identical(identifier, NULL)==FALSE){
+        n.dup <- length(identifier[duplicated(identifier)])
+    }
+    
+    # Test for rare modalities
+    # This test only makes sense if all active modalities are factors.
+    n5test      <- integer(0) 
+    if (length(fact)==0){
+        act.ind     <- indicator(x)
+        
+        sub         <- grepl(paste(passive, collapse="|"), colnames(act.ind)) 
+        sub.ind     <- act.ind[, sub==TRUE]
+        act.ind     <- act.ind[, sub==FALSE] # Subsetting
+        
+        modal.names <- colnames(act.ind)
+        n           <- nrow(x)
+        col.sum     <- apply(act.ind, 2, sum)
+        col.per     <- col.sum/n
+        n5          <- which(col.sum <= 4)     
+        n5per       <- which(col.per <= 0.05)
+        n5test      <- unique(c(n5, n5per))
+        n5names     <- modal.names[n5test] 
+    }
+    
+    
+    ######### Number of passive modalities per. individual
+    sub.mat     <- integer(0) 
+    if (length(fact)==0){
+        row.freq    <- table(apply(sub.ind, 1, sum))
+        row.prop    <- round(prop.table(row.freq), 2)
+        row.cum     <- cumsum(row.prop)
+        sub.mat     <- matrix(nrow=length(row.prop), ncol=3) 
+        rownames(sub.mat) <- dimnames(row.freq)[[1]]
+        sub.mat[,1] <- row.freq
+        sub.mat[,2] <- row.prop
+        sub.mat[,3] <- row.cum
+        colnames(sub.mat) <- c("Freq.", "%", "Cum.%" )
+    }
+    
+    
+    
+    # Test for "logical" correlations between modalities
+    # This test only makes sense if all active modalities are factors.
+    
+    var.test    <- matrix(nrow=0, ncol=3)  
+    colnames(var.test) <- c("X", "Y", "%")
+    if (length(fact)==0){
+        burt.abc    <- burt(x)
+        # Subsetting
+        sub         <- grepl(paste(passive, collapse="|"), colnames(burt.abc))
+        burt.abc    <- burt.abc[sub==FALSE, sub==FALSE]
+        
+        d           <- diag(burt.abc)
+        bd          <- round((burt.abc/d)*100) # We take the diagonal and divide the burt matrix with it.
+        bnames      <- colnames(burt.abc)
+        for (i in 1:nrow(bd)){
+            bd1     <- which(bd[i,]>=95) # This sets the threshold
+            bd1     <- bd1[bd1!=i]
+            if (length(bd1)>=1){
+                varrow  <- cbind(bnames[i], bnames[bd1], bd[i, bd1])
+                var.test <- rbind(var.test, varrow)
+            }
+        }
+        rownames(var.test) <- rep("", nrow(var.test))
+    }
+    
+    
+    ######### Print test-results
+    
+    # Factor test
+    if (length(fact)>=1){
+        cat("\n",format("Following active variables are not factors: ", width=100, justify="centre"), "\n", "\n")
+        cat(format(fact, width=25, justify="right"), fill=100)
+        cat("\n", "\n",format("The active variables were not tested for rare modalities or strong correlations; make them factors and try again.", width=100, justify="centre"), "\n")
+    }
+    
+    if (length(fact)==0){
+        cat("\n",format("All active variables are factors", width=100, justify="centre"), "\n")
+    }
+    
+    if (length(fact.sup)>=1){
+        cat("\n",format("Following supplementary variables are not factors: ", width=100, justify="centre"), "\n", "\n")
+        cat(format(fact.sup, width=25, justify="right"), fill=100)
+    }
+    
+    if (length(fact.sup)==0 & (identical(sup, NULL)==FALSE)){
+        cat("\n",format("All supplementary variables are factors", width=100, justify="centre"), "\n")
+    }
+    
+    # Print rare modalities
+    
+    if (((length(fact)==0) & (length(n5test)>=1))==TRUE){
+        cat("\n",format("Following modalities are rarer than 5% or 5 individuals: ", width=100, justify="centre"), "\n", "\n")
+        cat(format(n5names, width=25, justify="right"), fill=100)
+    }    
+    
+    if ((length(n5test)==0) & (length(fact)==0)) {
+        cat("\n",format("No modalities are rarer than 5% or 5 individuals.", width=100, justify="centre"), "\n")
+    }    
+    
+    # Print duplicated
+    if ((identical(identifier, NULL)==FALSE) & (length(n.dup)>=1)){
+        cat("\n",format(paste("There are ", n.dup, " duplicates in the identifier variable", sep="") , width=100, justify="centre"), "\n")
+    }
+    
+    if ((identical(identifier, NULL)==FALSE) & (length(n.dup)==0)){
+        cat("\n", format("There are no duplicates in the identifier variable", width=100, justify="left"), "\n")
+    }
+    
+    # Print correlation
+    
+    if (nrow(var.test)>=1){
+        cat("\n",format("Following modalities are too strongly related: ", width=100, justify="centre"), "\n", "\n")
+        print(var.test, quote=FALSE, right=TRUE) # Bedre layout
+    }
+    
+    if ((nrow(var.test)==0) & (length(fact)==0)) {
+        cat("\n",format("No modalities are too strongly related.", width=100, justify="centre"), "\n")
+    }    
+    
+    # Print number of passive modalities
+    
+    if (identical(sub.mat, integer(0))==FALSE) {
+        cat("\n",format("Number of individuals per amount of passive modalities:", width=100, justify="centre"), "\n")
+        print(sub.mat, quote=FALSE, right=TRUE, print.gap=3) # Bedre layout
+    }
+    
+    # End of function - insert documentation
 }
 
 
