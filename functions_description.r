@@ -181,10 +181,10 @@ tab.dim <- function(x, dim=1, label.plus=NULL, label.minus=NULL, all=FALSE){
     names <- x$names
     
     if (identical(all, FALSE)==TRUE){
-        av.ctr<- contribution(object, dim=dim, modality.indices=TRUE)    
+        av.ctr<- contribution(x, dim=dim, modality.indices=TRUE)    
     }
     if (identical(all, TRUE)==TRUE){
-        av.ctr <- object$active  
+        av.ctr <- x$active  
     }
     
     out <- data.frame(ctr[av.ctr], coord[av.ctr])
