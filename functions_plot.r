@@ -25,7 +25,7 @@
 ### Plot for all modalitites
 p.all <- function(object, dim=c(1,2), map.title="all", labelx=NULL, labely=NULL, scale.interval=NULL, point.label=TRUE, point.shape=15, point.size=1.6, text.size=2.5){
 
-gg.proc     <- round(object$adj.inertia[,3]) # Adjusted inertia
+gg.proc     <- round(object$adj.inertia[,4]) # Adjusted inertia
 gg.data     <- data.plot(object, plot.type="all", dim, ctr.dim=NULL) # Data selection
 axis.labels <- plot.axis(labelx=labelx, labely=labely, gg.proc=gg.proc, dim=dim) # Axis labels
 map.title   <- plot.title(map.title=map.title) # Plot title
@@ -43,7 +43,7 @@ return(t.plot)
 #################### De mest bidragene modaliteter
 p.ctr        <- function(object, ctr.dim=1, dim=c(1,2), map.title="ctr", labelx=NULL, labely=NULL, scale.interval=NULL, point.label=TRUE, point.shape=15, point.size=1.6, text.size=2.5){
 
-gg.proc     <- round(object$adj.inertia[,3]) # Adjusted inertia
+gg.proc     <- round(object$adj.inertia[,4]) # Adjusted inertia
 gg.data     <- data.plot(object, plot.type="ctr", dim, ctr.dim=ctr.dim) # Data selection
 
 axis.labels <- plot.axis(labelx=labelx, labely=labely, gg.proc=gg.proc, dim=dim) # Axis labels
@@ -63,7 +63,7 @@ return(t.plot)
 
 p.active     <- function(object, dim=c(1,2), map.title="active", labelx=NULL, labely=NULL, scale.interval=NULL, point.label=TRUE, point.shape=15, point.size=1.6, text.size=2.5){
 
-gg.proc 	<- round(object$adj.inertia[,3]) # Adjusted inertia
+gg.proc 	<- round(object$adj.inertia[,4]) # Adjusted inertia
 gg.data     <- data.plot(object, plot.type="active", dim, ctr.dim=NULL) # Data selection
 axis.labels <- plot.axis(labelx=labelx, labely=labely, gg.proc=gg.proc, dim=dim) # Axis labels
 map.title   <- plot.title(map.title=map.title, ctr.dim=ctr.dim) # Plot title
@@ -81,7 +81,7 @@ return(t.plot)
 ###################### Supplementary map
 
 p.sup     	<- function(object, dim=c(1,2), map.title="sup", labelx=NULL, labely=NULL, scale.interval=NULL, point.label=TRUE, point.shape=15, point.size=1.6, text.size=2.5){
-gg.proc 	<- round(object$adj.inertia[,3]) # Adjusted inertia
+gg.proc 	<- round(object$adj.inertia[,4]) # Adjusted inertia
 gg.data     <- data.plot(object, plot.type="sup", dim, ctr.dim=NULL) # Data selection
 axis.labels <- plot.axis(labelx=labelx, labely=labely, gg.proc=gg.proc, dim=dim) # Axis labels
 map.title   <- plot.title(map.title=map.title, ctr.dim=ctr.dim) # Plot title
@@ -99,7 +99,7 @@ return(t.plot)
 ######################## Id map
 p.id         <- function(object, dim=c(1,2), map.title="id", labelx=NULL, labely=NULL, scale.interval=NULL, point.label=FALSE, point.shape=15, point.size=1.6, text.size=2.5){
 
-gg.proc 	<- round(object$adj.inertia[,3]) # Adjusted inertia
+gg.proc 	<- round(object$adj.inertia[,4]) # Adjusted inertia
 gg.data     <- data.plot(object, plot.type="id", dim, ctr.dim=NULL) # Data selection
 axis.labels <- plot.axis(labelx=labelx, labely=labely, gg.proc=gg.proc, dim=dim) # Axis labels
 map.title   <- plot.title(map.title=map.title, ctr.dim=ctr.dim) # Plot title
@@ -115,7 +115,7 @@ return(t.plot)
 
 ############################### List map
 p.list          <- function(object, modal.list=rep(TRUE, length(object$names)), dim=c(1,2), map.title="list", labelx=NULL, labely=NULL, scale.interval=NULL, point.label=TRUE, point.shape=15, point.size=1.6, text.size=2.5){
-    gg.proc     <- round(object$adj.inertia[,3]) # Adjusted inertia
+    gg.proc     <- round(object$adj.inertia[,4]) # Adjusted inertia
     gg.data     <- data.plot(object, plot.type="list", dim, ctr.dim=NULL, modal.list=modal.list) # Data selection
     axis.labels <- plot.axis(labelx=labelx, labely=labely, gg.proc=gg.proc, dim=dim) # Axis labels
     map.title   <- plot.title(map.title=map.title, ctr.dim=ctr.dim) # Plot title
