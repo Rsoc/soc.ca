@@ -1,34 +1,21 @@
 ## Labels 
 
 ## Modalitetsfrekvenser
-# Kan kun s?tte p? aktive modaliteter
-# Kan forbedres med diag()
-add.n   <- function(object, add=TRUE, text=" (n:"){
-a.m     <- object$active
-mnames  <- object$names[a.m]
-b       <- object$Burt
-freq    <- matrix(data=NA, nrow=ncol(b), ncol=1)
-for (i in 1:ncol(b)){
-freq[i,1] <- b[i,i] 
+add.n   <- function(object, text=" (n:"){
+  
+  freq.mod  <- object$freq.mod
+  freq.sup  <- object$freq.sup
+  names.mod <- object$names.mod
+  names.sup <- object$names.sup
+  
+  names.mod <- paste(names.mod, text, freq.mod, ")", sep="")
+  names.sup <- paste(names.sup, text, freq.sup, ")", sep="")
+  
+  object$names.mod <- names.mod
+  object$names.sup <- names.sup
+  
+  return(object)
 }
-freq    <- as.data.frame(freq)
-rownames(freq) <- mnames
-colnames(freq) <- c("Number")
-if (add==FALSE){
-return(freq)
-}
-
-if (add==TRUE){
-    tname         <- matrix(data=NA, nrow=ncol(b), ncol=1)
-for (i in 1:ncol(b)){
-    tname[i,1]    <- paste(mnames[i],text,freq[i,1],")", sep="")
-}
-object$names[a.m] <- tname[,1]
-}
-return(object)
-}
-
-
 
 ## Labelovers?tteren:
 # Skaber et labelobjekt der kan gemmes i en fil og importeres. - S? label export er ogs? n?dvendig.
@@ -48,28 +35,55 @@ tab.label[,1] <- temp[,1]
 tab.label
 }
 
+
+##### Export label
 export.label    <- function(object, file=FALSE, encoding="UTF-8", overwrite=FALSE){
-ca.label        <- cbind(object$names, object$names)
-colnames(ca.label)  <- c("New label", "Old label")
-    if (identical(file, FALSE)==TRUE){
-        file    <- paste("label_",deparse(substitute(object)), ".csv", sep="")
-    }
-    if(file.exists(file)==TRUE & identical(overwrite, FALSE)) stop("File already exists")
-    write.csv(ca.label, file=file, fileEncoding=encoding)
+  
+  names         <- c(object$names.mod, object$names.sup, object$names.ind)
+  ca.label      <- cbind(names, names)
+  colnames(ca.label)  <- c("New label", "Old label")
+  
+  if (identical(file, FALSE)==TRUE){
+    file    <- paste("label_",deparse(substitute(object)), ".csv", sep="")
+  }
+  if(file.exists(file)==TRUE & identical(overwrite, FALSE)) stop("File already exists")
+  write.csv(ca.label, file=file, fileEncoding=encoding)
 }
+
+
+#####  Assign.label
 
 assign.label <- function(object, file=FALSE, encoding="UTF-8"){
   if (identical(file, FALSE)==TRUE){
     file <- paste("label_",deparse(substitute(object)), ".csv", sep="")
-}
-      label     <- read.csv(file, encoding=encoding)
-      obj.label <- as.character(object$names)
-      new.label <- as.character(label$New.label)
-      old.label <- as.character(label$Old.label)
-      for (i in 1:length(old.label)){
-      indices   <- which(old.label[i]==obj.label)
-      obj.label[indices] <- new.label[i]
-      }
-      object$names <- obj.label
-      return(object)
+  }
+  label     <- read.csv(file, encoding=encoding)
+  
+  names.mod <- as.character(object$names.mod)
+  names.sup <- as.character(object$names.sup)
+  names.ind <- as.character(object$names.ind)
+  
+  new.label <- as.character(label$New.label)
+  old.label <- as.character(label$Old.label)
+  
+  for (i in 1:length(old.label)){
+    indices   <- which(old.label[i]==names.mod)
+    names.mod[indices] <- new.label[i]
+  }
+  
+  for (i in 1:length(old.label)){
+    indices   <- which(old.label[i]==names.sup)
+    names.sup[indices] <- new.label[i]
+  }
+  
+  for (i in 1:length(old.label)){
+    indices   <- which(old.label[i]==names.ind)
+    names.ind[indices] <- new.label[i]
+  }
+  
+  
+  object$names.mod <- names.mod
+  object$names.sup <- names.sup
+  object$names.ind <- names.ind
+  return(object)
 }

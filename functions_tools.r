@@ -6,83 +6,53 @@
 #! Standard er ikke lavet endnu - men er oplagt bare standard.koord istedetfor
 #! Round er ikke lavet endnu
 #! Define classes
-export <- function(x, file="export.csv", nd=1:5, standard=FALSE, Round=TRUE) {
-if (is.matrix(x)==TRUE|is.data.frame(x)==TRUE){
-write.csv(x, file)}
-else{
-coord.x <- round(x$coord[,nd], digits=2)
-colnames(coord.x) <- paste("Principal coord. dim:", nd)
-row <-nrow(coord.x)
-
-ctr.x <- matrix(, ncol=length(nd), nrow=row)
-ctr.x[1:nrow(x$contrib),] <- round(1000*x$contrib[,nd])
-colnames(ctr.x) <- paste("Contribution dim:", nd)
-
-cor.x <- matrix(, ncol=length(nd), nrow=row)
-cor.x[1:nrow(x$cor),] <- round(x$cor[,nd], digits=2)
-colnames(cor.x) <- paste("Correlation dim:", nd)
-
-inertia <- vector(mode="numeric", length=row)
-inertia[1:length(x$inertia)] <- x$inertia
-
-ex <-cbind(inertia, coord.x, ctr.x, cor.x)
-rownames(ex) <- x$names
-write.csv(ex, file)
+export <- function(object, file="export.csv", dim=1:5) {
+  if (is.matrix(object)==TRUE|is.data.frame(object)==TRUE){
+    write.csv(object, file, fileEncoding="UTF-8")}
+  else{
+    coord.mod     <- object$coord.mod[,dim]
+    coord.sup     <- object$coord.sup[,dim]
+    coord.ind     <- object$coord.ind[,dim]
+    names.mod		  <- object$names.mod
+    names.sup  	  <- object$names.sup
+    names.ind     <- object$names.ind
+    coord         <- round(rbind(coord.mod, coord.sup, coord.ind), 2)
+    names         <- c(names.mod, names.sup, names.ind)
+    rownames(coord) <- names
+    
+    ctr.mod       <- object$ctr.mod[,dim]
+    ctr.sup       <- matrix(nrow=nrow(coord.sup), ncol=ncol(coord.sup))
+    ctr.ind       <- object$ctr.ind[,dim]
+    ctr           <- round(1000*rbind(ctr.mod, ctr.sup, ctr.ind))
+    
+    cor.mod       <- round(100*object$cor.mod[,dim], 1)
+    cor.sup       <- matrix(nrow=nrow(coord.sup), ncol=ncol(coord.sup))
+    cor.ind       <- matrix(nrow=nrow(coord.ind), ncol=ncol(coord.ind))
+    cor           <- rbind(cor.mod, cor.sup, cor.ind)
+    
+    out           <- cbind(coord, ctr, cor)
+    colnames(out) <- c(paste("Coord:", dim), paste("Ctr:", dim), paste("Cor:", dim))
+    write.csv(out, file, fileEncoding="UTF-8")
+  }
+  
+  # Export objects from the soc.ca package to csv files.
+  # export(object, file="export.csv", dim=1:5)
+  # object is a soc.ca class object or a contribution class object 
+  # dim is the dimensions to be exported
 }
 
-# Export objects from the soc.ca package to csv files.
-# export(x, file="export.csv", nd=1:5, standard=FALSE, Round=TRUE)
-# x is a soc.ca class object or a contribution class object 
-# nd is the dimensions to be exported
-# standard if TRUE standard coordinates are exported if FALSE principal coordinates are used instead.
-# Round a number for the amount of digits in the exported values if set to NULL values will not be rounded.
-}
-
-### Vis koordinater
-# Col navnene er ikke gode
-# Skal kunne sortere på typer af koordinater
-# Skelne mellem standard og principal
-
-coordinates <- function(x, dim=c(1,2,3)){
-
-nd                  <- dim
-coord.x             <- round(x$coord[,nd], digits=2)
-colnames(coord.x)   <- paste("Principal coord. dim:", nd)
-row                 <-nrow(coord.x)
-
-ctr.x               <- matrix(, ncol=length(nd), nrow=row)
-ctr.x[1:nrow(x$contrib),] <- round(1000*x$contrib[,nd])
-colnames(ctr.x)     <- paste("Contribution dim:", nd)
-
-cor.x               <- matrix(, ncol=length(nd), nrow=row)
-cor.x[1:nrow(x$cor),] <- round(x$cor[,nd], digits=2)
-colnames(cor.x)     <- paste("Correlation dim:", nd)
-
-inertia             <- vector(mode="numeric", length=row)
-inertia[1:length(x$inertia)] <- x$inertia
-
-ex                  <-cbind(inertia, coord.x, ctr.x, cor.x)
-rownames(ex)        <- x$names
-  fix(ex)
-
-# Show the coordinates of a correspondence analysis in an editor for easy analysis. No changes made in the editor are saved.
-# coordinates(x, dim=c(1,2,3))
-# x is a soc.ca object
-# dim is the dimensions of the analysis to be shown
-
-}
-
-## Vend
-# Skal også vende standard.coord !
+## Invert
 
 invert <- function(x, dim=1) {
-x$coord[,dim] <- x$coord[,dim] * -1
-return(x)
-
-# Invert one or more axis of a correspondence analysis. The principal coordinates of the analysis are multiplied by -1
-# invert(x, dim=1)
-# x is a soc.ca object
-# dim is the dimensions to be inverted
+  x$coord.mod[,dim] <- x$coord.mod[,dim] * -1
+  x$coord.ind[,dim] <- x$coord.ind[,dim] * -1
+  x$coord.sub[,dim] <- x$coord.sub[,dim] * -1
+  return(x)
+  
+  # Invert one or more axis of a correspondence analysis. The principal coordinates of the analysis are multiplied by -1
+  # invert(x, dim=1)
+  # x is a soc.ca object
+  # dim is the dimensions to be inverted
 }
 
 #### Set passive

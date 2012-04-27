@@ -35,77 +35,68 @@
 #'@author Anton Grau Larsen and Stefan Bastholm Andrade
 #'
 
-soc.ca <- function(x, sup=NULL, identifier=NULL, passive="Missing"){
+soc.ca <- function(active, sup=NULL, identifier=NULL, passive="Missing"){
   
-  x       <- data.frame(lapply(x, factor))            # turn active variables into factor
-  a.r     <- nrow(x)                                  # Number of active rows or the number of individuals
+  active  <- data.frame(lapply(active, factor))               # Turn active variables into factor
+  sup     <- data.frame(lapply(sup, factor))                  # Turn sup variables into factor
+  Q       <- ncol(active)                                     # Number of active variables 
+  a.r     <- nrow(active)                                     # Number of active rows or the number of individuals
   sup.n   <- sum(unlist(lapply(as.data.frame(sup), nlevels))) # Number of supplementary modalities
   
-  B           <- burt(x)                              # The active burt matrix is created    
-  supmat <- matrix(, nrow=0, ncol=ncol(B))
-  
-  if (identical(sup, NULL)==FALSE){
-    sup     <- data.frame(lapply(sup, factor))          # turn supplementary variables into factor
-    supmat      <- sup.burt(x, sup)                     # The supplementary burt matrix is created
-  }                                                    
-  
-  if (identical(identifier, NULL)==FALSE){
-    supmat                <- rbind(supmat, indicator(x, id=identifier)) # The supplementary indicatormatrix is created
+  if ((nrow(sup)==0)==TRUE){
+    sup             <- matrix(, nrow=nrow(active), ncol=2)
+    sup[,1:2]       <- cbind(rep(0, nrow(active)), rep(0, nrow(active)))
+    colnames(sup)   <- c("No supplementary points defined 1", "No supplementary points defined 2")
+    Z.sup           <- indicator(sup)    
   }
   
-  if ((identical(identifier, NULL)==TRUE)&(identical(sup, NULL)==TRUE)){
-    supmat <- matrix(, nrow=2, ncol=ncol(B))
-    rownames(supmat) <- c("No Supplementary points", "No Supplementary points" )
-  }
   
-  sub         <- grepl(paste(passive, collapse="|"),colnames(B))
-  set         <- 1:ncol(B)
+  
+  # Creating the indicatormatrix for active and supplementary variables
+  ind.act <- indicator(active)
+  ind.sup <- indicator(sup)
+  
+  # Finding the subset
+  sub         <- grepl(paste(passive, collapse="|"),colnames(ind.act))
+  set         <- 1:ncol(ind.act)
   subset      <- set[!sub]
   
   # Finds the amount of variables without passive modalities
-  Qm    <- ncol(x)
-  for (i in seq(ncol(x))){
-    lev <- levels(x[,i])
+  Qm    <- ncol(active)
+  for (i in seq(ncol(active))){
+    lev <- levels(active[,i])
     pasQ <- grepl(paste(passive, collapse="|"), lev)
     if (any(pasQ==TRUE)==TRUE){
       Qm <- Qm - 1
     }
   }
   
+  result      <- subset.ca.indicator(ind.act, ind.sup, subset, Q=Q , Qm=Qm)
   
-  result      <- subset.ca(B, subset, supmat, nvar=ncol(x), Qm=Qm)
+  if (identical(identifier, NULL)==TRUE){
+    identifier <- 1:nrow(active)
+  }
   
-  l.active    <- length(subset)
-  l.id        <- nlevels(identifier)
-  l.sup       <- nrow(supmat)-l.id
-  i.active    <- (1:l.active)
-  i.sup	    <- (l.active+1):(l.active+l.sup)
-  i.id 	    <- (l.active+l.sup+1):(l.active+l.sup+l.id)
+  # Names
+  result$names.mod      <- colnames(ind.act)[subset]
+  result$names.ind      <- as.character(identifier)
+  result$names.sup      <- colnames(ind.sup)
+  result$names.passive  <- colnames(ind.act)[sub]
   
   # List of descriptive values
-  
-  result$nid      <- a.r
-  result$npassive <- length(which(sub==TRUE)) 
-  result$passive  <- colnames(B)[sub] # Could be a matrix with the amount of individuals in each modality
-  
-  result$active 	<- i.active
-  result$sup		<- i.sup
-  result$identifier	<- i.id
-  result$Burt 		<- B[subset, subset] 
-  
-  varnames    <- colnames(x)
+  varnames    <- colnames(active)
   ml          <- vector()
-  for (i in 1:ncol(x)){
-    ml         <- c(ml, rep(varnames[i], nlevels(x[,i])))
+  for (i in 1:ncol(active)){
+    ml         <- c(ml, rep(varnames[i], nlevels(active[,i])))
   }
   ml          <- ml[!sub]
   mm          <- as.matrix(cbind(ml, 1:length(ml)))
-  md          <- matrix(, nrow=ncol(x), ncol=3)
+  md          <- matrix(, nrow=ncol(active), ncol=3)
   rownames(md) <- varnames
   colnames(md) <- c("Start", "End", "Modalities")
   md          <- as.data.frame(md)
   
-  for (i in 1:ncol(x)){
+  for (i in 1:ncol(active)){
     mr         <- as.numeric(mm[,2][mm[,1]==varnames[i]])
     md[i,1]    <- min(mr)
     md[i,2]    <- max(mr)
@@ -120,182 +111,117 @@ soc.ca <- function(x, sup=NULL, identifier=NULL, passive="Missing"){
   return(result)
 }
 
-################ Burt Matrix
-
-# Han laver Burt matricen udfra en indikatormatrice - den virker lidt som spild, men jeg kan ikke lige lave en anderledes en
-burt    <- function(x, ps=": "){
-obj     <- x
-obj     <- data.frame(lapply(data.frame(obj), as.factor))
-I       <- nrow(obj)
-levels.n <- unlist(lapply(obj, nlevels))
-n       <- cumsum(levels.n)
-Q       <- ncol(obj)
-Z       <- matrix(0, nrow = I, ncol = n[length(n)])
-newdat  <- lapply(obj, as.numeric)
-offset  <- (c(0, n[-length(n)]))
-for (i in 1:Q) Z[1:I + (I * (offset[i] + newdat[[i]] - 1))] <- 1
-fn      <- rep(names(obj), unlist(lapply(obj, nlevels)))
-ln      <- unlist(lapply(obj, levels))
-B       <- t(Z) %*% Z
-col.names        <- paste(fn, ln, sep = ps)
-dimnames(Z)[[2]] <- col.names
-dimnames(Z)[[1]] <- as.character(1:I)
-# Z er en f?rdig indikatormatrice - s? den kan jo bruges hvis man har lyst
-dimnames(B)[[2]] <- col.names
-dimnames(B)[[1]] <- col.names
-return(B)
-}
-
-
-##################### Supplementary Burt matrix
-# Burt og sup.burt, kan forudsat at de er lavet p? det samme x objekt, kombineres med f?lgende kommando:
-# rbind(burt, sup.burt)
-# sup.burt(x, sup, identifier=NULL, ps=": ")
-# x is a soc.ca object
-# sup is a data.frame of vectors containing the supplementary variables
-# ps is the seperator used in the creation of the names of the columns (modalities).
-
-sup.burt <- function(x, sup, ps=": "){
-
-supvar <- as.data.frame(sup) 
-addburt <- function(supvariable, x){
-  a.l <- ncol(x)
-  fburt       <- table(supvariable, x[,1])
-  for (i in 2:a.l){
-    temp     	<- table(supvariable, x[,i])
-    fburt 		<- cbind(fburt, temp)
-  }
-  return(fburt)
-}
-
-sup.n <- sum(unlist(lapply(supvar, nlevels))) # The number of supplementary modalities
-active.n <- sum(unlist(lapply(x, nlevels))) # The number of active modalities
-
-fburt       <- matrix(,ncol=active.n, nrow=sup.n)
-counter     <- 1
-for (i in seq(supvar)){
-position    <- seq(counter, (counter+nlevels(supvar[,i])-1))
-fburt[position,] <-  addburt(supvar[,i], x)
-counter     <- counter+nlevels(supvar[,i])
-}
-
-# Her s?tter vi navne p? de supplement?re variable
-fn <- rep(names(as.data.frame(sup)), unlist(lapply(as.data.frame(sup), nlevels)))
-ln <- unlist(lapply(as.data.frame(sup), levels))
-col.names <- paste(fn, ln, sep = ps)
-rownames(fburt) <- col.names
-
-# Her s?tter vi navne p? de aktive variable
-fn <- rep(names(x), unlist(lapply(x, nlevels)))
-ln <- unlist(lapply(x, levels))
-col.names <- paste(fn, ln, sep = ps)
-colnames(fburt) <- col.names
-
-return(fburt)
-}
-
 
 #################### Correspondence analysis on a Burt matrix
 # B is a Burt matrix
 # supmat is a supplementary burt matrix
 # nvar ???
-subset.ca   <- function(B, subset, supmat, nvar=ncol(x), Qm=Qm){
-  obj     <- B
-  nd 		<- ncol(obj)
-  modal.names 	<- colnames(obj)[subset]
-  N		<- matrix(as.matrix(obj), nrow = nd, ncol = nd)
-  n 		<- sum(N) 				# summen af Burtmatricen
-  P 		<- N/n 					# Den relative frekvens i forhold til totalen for Burt Matricen
-  mass 		<- apply(P, 1, sum)			# Summen af hver r?kkes relative frekvenser eller massen
-  s.mass 		<- mass[subset]
-  eP 		<- mass %*% t(mass) 			# Han ganger massen med den transponerede masse - som er den samme
-  eN 		<- eP * n 				# Fra relative procenter, til relative frekvenser
-  S 		<- (P - eP)/sqrt(eP)			# RESIDUALMATRICEN: givet ved skaleringsproduktet - her skabes den f?lles skala, p? tv?rs af dimensioner
-  S 		<- S[subset, subset]
-  dec 		<- svd(S)				# Singul?r v?rdi dekomposition
-  sv 		<- dec$d				# Her hentes de singul?re v?rdier (En for hver dimension)
-  u 		<- dec$u				# Her er de singul?re vectorer - (En modalitets position p? samtlige dimensioner i det dekompositionerede rum)
-  ev 		<- sv^2 				# EigenVEKTOR (Principal inertias)    
-  inertia 	<- apply(S^2, 1, sum) 			# Inerti for hver modalitet over dimensionerne
-  chidist 	<- sqrt(inertia/s.mass) 		# Chi afstande fra hver modalitet til origo/centriden
-  phi 		<- as.matrix(u)/sqrt(s.mass) 		# Standard koordinaterne
-  nd 		<- nd-(nd-length(subset))
+subset.ca.indicator <- function(Z.act, Z.sup, subset, Q, Qm){
   
-  rs.sum	 	<- apply(supmat, 1, sum)		# R?kkesummen af de supplement?re
-  supmat	 	<- supmat[,subset] 			# Her fjernes subsettet p? de aktive kolonner
+  #Z.act <- indicator(active) # The indicator matrix for the active modalities
+  #Z.sup <- indicator(sup) # The indicator matrix for the supplementary modalities
   
-  supchi		<- supmat / apply(supmat, 1, sum)	# Chi afstande for de supplement?re punkter
-  supchi		<- t((t(supchi) - s.mass) / sqrt(s.mass))
-  supchidist	<- sqrt(apply(supchi^2, 1, sum))
-  chidist 	<- c(chidist, as.numeric(supchidist))
+  I <- dim(Z.act)[1] # Number of individuals
+  J <- dim(Z.act)[2]  # Number of modalities >> Subset
+  Q <- ncol(active)   # Number of variables
   
-  cs		<- mass[subset]				# Coordinater for de supplement?re punkter
-  gam.00		<- phi
-  base2		<- supmat / matrix(rs.sum, nrow = nrow(supmat), ncol = ncol(supmat))
-  base2 		<- t(base2)
-  cs.0		<- matrix(cs, nrow = nrow(base2), ncol = ncol(base2))
-  svphi		<- matrix(sv[1:nd], nrow = nrow(supmat), ncol = nd, byrow = T) 
-  base2		<- base2 - cs.0
-  phi2		<- (t(as.matrix(base2)) %*% gam.00) / svphi
+  # Inertias
+  P <- Z.act / sum(Z.act)       # 
+  cm <- apply(P, 2, sum)        # Column (modality) mass
+  rm <- apply(P, 1, sum)        # Row (individual) mass
   
-  phi 	 	<- rbind(phi, phi2)
-  modal.names	<- c(modal.names, rownames(supmat))
-  rownames(phi) 	<- modal.names
+  diag.rm <- diag(1/ sqrt(rm))
+  diag.cm <- diag(1/ sqrt(cm))
   
-  # a.aktive 	<- ncol(supmat)
-  # a.sup		<- nrow(supmat)
-  # Mass og Inertia har ikke samme l?ngde som coord - fordi de ikke har NA til de supplement?re.
+  eP    <- rm %*% t(cm)           # Expected distances
+  S     <- (P - eP) / sqrt(eP)    # Euclidian distances
+  
+  # Subsetting
+  K   <- length(subset)
+  S   <- S[ ,subset]
+  cm  <- cm[subset]
+  diag.cm <- diag.cm[subset, subset]
+  
+  # Decomposition and eigenvectors
+  dec   <- svd(S)                 # Singular decomposition
+  eigen <- dec$d^2                # Eigenvector
   
   
   
-  ### Principal coordinates
+  # Principal coordinates
+  pc.ind <- diag.rm %*% dec$u %*% diag(dec$d)   # Principal coordinates for individuals
+  pc.mod <- diag.cm %*% dec$v %*% diag(dec$d)   # Principal coordinates for modalities
   
-  K   		  <- nd # Her udregnes principal coordinaterne
-  I   		  <- dim(phi)[1] 
+  # Inertias
+  inr.ind <- diag(rm) %*% pc.ind^2 # Inertia for row (Individuals) (mass x principal coordinates)
+  inr.mod <- diag(cm) %*% pc.mod^2 # Inertia for columns (Modalities)
   
+  # Contributions
+  ctr.ind <- t(t(inr.ind) / dec$d^2) # Contribution for the individuals (inertia / eigenvalue)
+  ctr.mod <- t(t(inr.mod) / dec$d^2) # Contribution for the modalities
   
-  svF 		  <- matrix(rep(sv, I), I, K, byrow = TRUE)
-  rpc 		  <- phi[,1:K] * svF
+  # Squared cosines or correlations
+  cor.ind <- inr.ind/apply(inr.ind, 2, sum)  # Squared cosines for individuals
+  cor.mod <- inr.mod/apply(inr.mod, 1, sum)  # Squared cosines for modalities
   
+  # Chi-distances
   
-  ####### This is the calculation of the adjusted rates of variance
+  # Supplementary principal coordinates
   
+  Z.star  <- Z.sup
+  I.star  <- dim(Z.sup)[1]
+  cs.star <- apply(Z.sup, 2, sum)
+  base    <- Z.star / matrix(rep(cs.star, I.star), nrow = I.star, byrow = TRUE)
+  f.s1    <- dec$u * sqrt(eigen) / sqrt(rm)   # Hvad er det her?
+  a.s1    <- f.s1 / sqrt(eigen)               # Og har vi det et andet sted - til når der skal subsettes???
+  pc.sup  <- t(base) %*% a.s1
+  
+  # Supplementary squared cosines or correlations
+  ### Det her mangler
+  #cor.sup <- inr.mod/apply(inr.mod, 1, sum)   # Squared cosines for modalities
+  
+  # First reduction of dimensionality
   R1.dim        <- K-Qm
-  R1.eigen.val  <- sv[1:R1.dim]
-  Mean.r.eigen  <- mean(R1.eigen.val, na.rm=TRUE)
-  R2.eigen.val  <- sv[sv>=Mean.r.eigen]
-  R2.dim        <- which(R2.eigen.val >= Mean.r.eigen) # The reduced dimensions
-  unadj.var     <- 100*(sv[1:R1.dim])/sum(sv[1:R1.dim]) #Ikke adjustede procenter
-  sum.adj.var.mod <- (sv[R2.dim]-Mean.r.eigen)^2
-  sum.adj.var   <- sum(sum.adj.var.mod)
-  adj.var       <- round(((sum.adj.var.mod/sum.adj.var)*100), digits=1)
-  cumpercent	  <- cumsum(adj.var)
+  R1.eigen.val  <- eigen[1:R1.dim]
   
-  adj.inertia 	<- cbind(R2.dim, round(sv[R2.dim], 3), round(unadj.var[R2.dim], 1), adj.var ,cumpercent) # De Rouanet adjustede inertier - skal nok rykkes ned.
+  # Second reduction of dimensionality
+  Mean.r.eigen  <- mean(R1.eigen.val, na.rm=TRUE)
+  R2.eigen.val  <- eigen[eigen>=Mean.r.eigen]
+  R2.dim        <- which(R2.eigen.val >= Mean.r.eigen)
+  
+  # Explained variance
+  unadj.var     <- 100*(eigen[1:R1.dim])/sum(eigen[1:R1.dim]) # Unadjusted rates of variance
+  sum.adj.var.mod <- (eigen[R2.dim]-Mean.r.eigen)^2
+  sum.adj.var   <- sum(sum.adj.var.mod)
+  adj.var       <- round(((sum.adj.var.mod/sum.adj.var)*100), digits=1) # The adjusted rates of variance
+  cumpercent    <- cumsum(adj.var)
+  adj.inertia   <- cbind(R2.dim, round(eigen[R2.dim], 3), round(unadj.var[R2.dim], 1), adj.var ,cumpercent) # De Rouanet adjustede inertier - skal nok rykkes ned.
   colnames(adj.inertia) <- c("Dim", "Sv", "Var" ,"Adj.Var", "Cum%")
   
-  # Reported values
-  totin   	<- sum(ev[R2.dim])				# Den totale inerti eller den samlede m?ngde variation/afstande
-
+  freq.mod <- apply(Z.act, 2, sum)[subset]
+  freq.sup <- apply(Z.sup, 2, sum)
   
-  # CTR
-  submass 	<- mass[subset]
-  rpcakt 		<- rpc[1:nd, 1:nd]
-  cor 		  <- rpc^2 / chidist^2
-  ctr 		  <- matrix(ncol=nd, nrow=nd)
-  for (i in 1:nd){
-    ctr[i,] 	<- as.matrix(submass * rpcakt[,i]^2 /sv[i]^2)
-  }
-  ctr 		<- t(ctr)
-
+  # Output
+  ca.output <- list(nd = max(R2.dim), n.ind = nrow(Z.act), n.mod = length(subset),
+                    eigen = eigen[R2.dim], total.inertia = sum(eigen[R2.dim]),
+                    adj.inertia=adj.inertia,
+                    freq.mod = freq.mod, freq.sup = freq.sup,
+                    ctr.mod = ctr.mod[, R2.dim], ctr.ind = ctr.ind[, R2.dim],
+                    cor.mod = cor.mod[, R2.dim], cor.ind = cor.ind[, R2.dim],
+                    mass.mod = cm, mass.ind = rm,
+                    coord.mod = pc.mod[, R2.dim], coord.ind = pc.ind[, R2.dim], coord.sup = pc.sup[, R2.dim]
+                    )
+  # Cleanup
+  names(ca.output$mass.mod)         <- NULL
+  names(ca.output$mass.ind)         <- NULL
+  dimnames(ca.output$coord.sup)     <- NULL
+  names(ca.output$freq.mod)         <- NULL
+  names(ca.output$freq.sup)         <- NULL
   
-  ca.output <- list(sv = sv[R2.dim], nd = nd[R2.dim], ev = ev[R2.dim], total.inertia = totin,
-                    names = modal.names, mass = mass[subset], inertia = inertia[R2.dim],
-                    adj.inertia=adj.inertia, contrib=ctr[,R2.dim], cor=cor[,R2.dim],
-                    coord = rpc[,R2.dim], standard.coord=phi[,R2.dim])
+  
   return(ca.output)
+  
 }
-
 
 
 ################################### Indicator matrix

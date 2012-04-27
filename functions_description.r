@@ -1,13 +1,18 @@
 #### Functions for describtion and printing
 
 
+
+
+
+
+
 # Print objects from the soc.ca function
-print.soc.ca <- function(object){
-  Nmodal       <- length(object$active) 
-  Nsup       <- length(object$sup) # S?t if ind
-  Nid   	<- object$nid
-  Vnames 		<- paste(rownames(object$modal), " (",object$modal[,3], ")", sep="")
-  Submass 	<- round(sum(object$mass), digits=2) # Er det her i Procent aka. summer mass altid til 1.
+print.soc.ca  <- function(object){
+  Nmodal      <- object$n.mod
+  Nsup        <- nrow(object$coord.sup) # S?t if ind
+  Nid         <- object$n.ind
+  Vnames   	  <- paste(rownames(object$modal), " (",object$modal[,3], ")", sep="")
+  Submass 	  <- round(sum(object$mass.mod), digits=2) # Er det her i Procent aka. summer mass altid til 1.
   
   act.dim 	<- nrow(object$adj.inertia)
   dim80 		<- which.min(object$adj.inertia[,5] < 80)
@@ -77,29 +82,30 @@ print.soc.ca <- function(object){
   
 }
 
+
 #################### Balance measure for contributing modalities
 # Object is a soc.ca class object
 # act.dim is the number of active dimensions to be measured
 
 balance.ctr <- function(object, act.dim=object$nd){
-active <- object$active
-coord <- object$coord[active, 1:act.dim]
-contrib <- object$contrib[active, 1:act.dim]
-pm <- matrix(, nrow=act.dim, ncol=3)
-for (i in 1:act.dim){
-temp <- cbind(coord[,i], contrib[,i])
-temp <- temp[order(temp[,1]),]
-plus <-  temp[which(temp[,1] >= 0), ]
-minus <- temp[which(temp[,1] <= 0), ]
-pcontrib <- sum(plus[,2])
-mcontrib <- sum(minus[,2])
-pm[i,1] <- pcontrib
-pm[i,2] <- mcontrib
-pm[i,3] <- pcontrib/mcontrib
+  coord   <- object$coord.mod[, 1:act.dim]
+  contrib <- object$ctr.mod[, 1:act.dim]
+  pm      <- matrix(, nrow=act.dim, ncol=3)
+  for (i in 1:act.dim){
+    temp <- cbind(coord[,i], contrib[,i])
+    temp <- temp[order(temp[,1]),]
+    plus <-  temp[which(temp[,1] >= 0), ]
+    minus <- temp[which(temp[,1] <= 0), ]
+    pcontrib <- sum(plus[,2])
+    mcontrib <- sum(minus[,2])
+    pm[i,1] <- pcontrib
+    pm[i,2] <- mcontrib
+    pm[i,3] <- pcontrib/mcontrib
+  }
+  colnames(pm) <- c("+ Contrib.", "- Contrib.", "Balance (+/-)")
+  return(pm)
 }
-colnames(pm) <- c("+ Contrib.", "- Contrib.", "Balance (+/-)")
-return(pm)
-}
+
 
 #################### Screeplot
 # Object is a soc.ca class object
@@ -124,41 +130,41 @@ scree <- function(object, dim=6){
 
 ############################ The most contributing modalities
 contribution <- function(object, dim=1, all=FALSE, modality.indices=FALSE){
-    if(identical(modality.indices, TRUE)==TRUE){
-        ctr     <- object$contrib[,dim]
-        av.ctr  <- as.vector(apply(as.matrix(ctr), 2, function(x) which(x >= mean(x, na.rm=TRUE))))
-        if(is.list(av.ctr)==TRUE) av.ctr  <- unlist(av.ctr[dim], use.names=FALSE)
-        av.ctr     <- av.ctr[duplicated(av.ctr)==FALSE]    
-        return(av.ctr)
-    }else{
-        ctr <- round(1000*object$contrib[,dim])
-        cor <- round(1000*object$cor[,dim])
-        coord <- round(object$coord[,dim], digits=2)
-        names <- object$names
-        if (identical(all, FALSE)==TRUE){
-            av.ctr<- contribution(object, dim=dim, modality.indices=TRUE)    
-            header <- paste("The modalities contributing above average to dimension: ", dim, ".", sep="")
-        }
-        if (identical(all, TRUE)==TRUE){
-            av.ctr<- object$active  
-            header <- paste("The contribution of all modalities to dimension: ", dim, ".", sep="")
-        }
-        out <- data.frame(ctr[av.ctr], cor[av.ctr], coord[av.ctr])
-        rownames(out) <- names[av.ctr]
-        colnames(out) <- c("   Ctr.", "   Cor." , "   Coord")
-        out <- out[order(-out[,1]), ]
-        maxwidth <- max(nchar(names))+sum(nchar(colnames(out)))
-        cat("\n", format(header, width=maxwidth, justify="centre"), "\n", "\n")
-        print(out)
+  if(identical(modality.indices, TRUE)==TRUE){
+    ctr     <- object$ctr.mod[,dim]
+    av.ctr  <- as.vector(apply(as.matrix(ctr), 2, function(x) which(x >= mean(x, na.rm=TRUE))))
+    if(is.list(av.ctr)==TRUE) av.ctr  <- unlist(av.ctr[dim], use.names=FALSE)
+    av.ctr     <- av.ctr[duplicated(av.ctr)==FALSE]    
+    return(av.ctr)
+  }else{
+    ctr <- round(1000*object$ctr.mod[,dim])
+    cor <- round(1000*object$cor.mod[,dim])
+    coord <- round(object$coord.mod[,dim], digits=2)
+    names <- object$names.mod
+    if (identical(all, FALSE)==TRUE){
+      av.ctr<- contribution(object, dim=dim, modality.indices=TRUE)    
+      header <- paste("The modalities contributing above average to dimension: ", dim, ".", sep="")
     }
-    # Returns the modalities with above average contribution to the selected dimension
-    # object is a soc.ca object
-    # dim is the included dimensions
-    # all: If TRUE returns all modalities instead of just those that contribute above average
-    # modality.indices: If TRUE returns a vector with the row indices of the modalities
-    # Ctr is the contribution in 1000
-    # Cor is the correlation with the dimension
-    # Coord is the principal coordinate
+    if (identical(all, TRUE)==TRUE){
+      av.ctr <- 1:length(ctr)
+      header <- paste("The contribution of all modalities to dimension: ", dim, ".", sep="")
+    }
+    out <- data.frame(ctr[av.ctr], cor[av.ctr], coord[av.ctr])
+    rownames(out) <- names[av.ctr]
+    colnames(out) <- c("   Ctr.", "   Cor." , "   Coord")
+    out <- out[order(-out[,1]), ]
+    maxwidth <- max(nchar(names))+sum(nchar(colnames(out)))
+    cat("\n", format(header, width=maxwidth, justify="centre"), "\n", "\n")
+    print(out)
+  }
+  # Returns the modalities with above average contribution to the selected dimension
+  # object is a soc.ca object
+  # dim is the included dimensions
+  # all: If TRUE returns all modalities instead of just those that contribute above average
+  # modality.indices: If TRUE returns a vector with the row indices of the modalities
+  # Ctr is the contribution in 1000
+  # Cor is the correlation with the dimension
+  # Coord is the principal coordinate
 }
 
 ############################## The most contributing modalities according to direction on dimension
@@ -166,50 +172,50 @@ contribution <- function(object, dim=1, all=FALSE, modality.indices=FALSE){
 # dim is the dimension
 
 tab.dim <- function(x, dim=1, label.plus=NULL, label.minus=NULL, all=FALSE){
-    
-    if (identical(label.plus, NULL)==TRUE){
-        label.plus    <- paste("Dimension ", dim ,". (+)", sep="")
-    }
-    
-    if (identical(label.minus, NULL)==TRUE){
-        label.minus   <- paste("Dimension ", dim ,". (-)", sep="")
-    }
-    
-    ctr <- round(1000*x$contrib[,dim])
-    coord <- round(x$coord[,dim], digits=2)
-    names <- x$names
-    
-    if (identical(all, FALSE)==TRUE){
-        av.ctr<- contribution(x, dim=dim, modality.indices=TRUE)    
-    }
-    if (identical(all, TRUE)==TRUE){
-        av.ctr <- x$active  
-    }
-    
-    out <- data.frame(ctr[av.ctr], coord[av.ctr])
-    names <- names[av.ctr]
-    maxwidth    <- max(nchar(rownames(out)))
-    
-    for (i in seq(names)){
-        width       <- maxwidth-nchar(names[i])
-        fill        <- paste(rep(" ", width), sep="", collapse="")
-        names[i]    <- paste(names[i], fill, sep="", collapse="")
-    }
-    rownames(out) <- names
-    ctr.lab     <- paste("Ctr")
-    coord.lab   <- paste("Coord")
-    colnames(out)  <- c(ctr.lab, coord.lab)
-    out         <- out[order(-out[,1]), ]
-    out.label     <- c(ctr.lab, coord.lab)
-    outminus    <- out[which(out[,2]<=0),]
-    outplus 	<- out[which(out[,2]>=0),]
-    
-    
-    #outputwidth <- maxwidth+8*3
-    cat("\n",format(label.plus, width=maxwidth, justify="centre"), "\n")
-    print(format(outplus, justify="centre", width=8))
-    cat("\n",format(label.minus, width=maxwidth, justify="centre"), "\n")
-    format(outminus, justify="centre", width=8)
+  
+  if (identical(label.plus, NULL)==TRUE){
+    label.plus    <- paste("Dimension ", dim ,". (+)", sep="")
+  }
+  
+  if (identical(label.minus, NULL)==TRUE){
+    label.minus   <- paste("Dimension ", dim ,". (-)", sep="")
+  }
+  
+  ctr     <- round(1000*x$ctr.mod[,dim])
+  coord   <- round(x$coord.mod[,dim], digits=2)
+  names   <- x$names.mod
+  
+  if (identical(all, FALSE)==TRUE){
+    av.ctr<- contribution(x, dim=dim, modality.indices=TRUE)    
+  }
+  if (identical(all, TRUE)==TRUE){
+    av.ctr <- seq(x$n.mod)
+  }
+  
+  out         <- data.frame(ctr[av.ctr], coord[av.ctr])
+  names       <- names[av.ctr]
+  maxwidth    <- max(nchar(names))
+  
+  for (i in seq(names)){
+    width       <- maxwidth-nchar(names[i])
+    fill        <- paste(rep(" ", width), sep="", collapse="")
+    names[i]    <- paste(names[i], fill, sep="", collapse="")
+  }
+  rownames(out) <- names
+  ctr.lab       <- paste("Ctr")
+  coord.lab     <- paste("Coord")
+  colnames(out) <- c(ctr.lab, coord.lab)
+  out           <- out[order(-out[,1]), ]
+  out.label     <- c(ctr.lab, coord.lab)
+  outminus      <- out[which(out[,2]<=0),]
+  outplus       <- out[which(out[,2]>=0),]
+  
+  
+  #outputwidth <- maxwidth+8*3
+  cat("\n",format(label.plus, width=maxwidth, justify="centre"), "\n")
+  print(format(outplus, justify="centre", width=8))
+  cat("\n",format(label.minus, width=maxwidth, justify="centre"), "\n")
+  format(outminus, justify="centre", width=8)
 }
 
 ##################### Test.data 
