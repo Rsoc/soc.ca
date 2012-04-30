@@ -46,7 +46,7 @@ export <- function(object, file="export.csv", dim=1:5) {
 invert <- function(x, dim=1) {
   x$coord.mod[,dim] <- x$coord.mod[,dim] * -1
   x$coord.ind[,dim] <- x$coord.ind[,dim] * -1
-  x$coord.sub[,dim] <- x$coord.sub[,dim] * -1
+  x$coord.sup[,dim] <- x$coord.sup[,dim] * -1
   return(x)
   
   # Invert one or more axis of a correspondence analysis. The principal coordinates of the analysis are multiplied by -1

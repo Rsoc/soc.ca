@@ -23,7 +23,7 @@
 # object <- soc.ca(analyse, sup, identifier)
 
 ### Plot for all modalitites
-p.all <- function(object, dim=c(1,2), map.title="all", labelx=NULL, labely=NULL, scale.interval=NULL, point.label=TRUE, point.shape=15, point.size=1.6, text.size=2.5){
+p.all <- function(object, dim=c(1,2), map.title="all", labelx=NULL, labely=NULL, scale.interval=NULL, point.label=TRUE, point.shape=15, point.size=1.6, text.size=2.5, colour="black"){
 
 gg.proc     <- round(object$adj.inertia[,4]) # Adjusted inertia
 gg.data     <- data.plot(object, plot.type="all", dim, ctr.dim=NULL) # Data selection
@@ -35,13 +35,14 @@ gg.input    <- list(gg.data=gg.data, axis.inertia=gg.proc,
                   map.title=map.title, labelx=axis.labels$x, labely=axis.labels$y,
                   scales=scales, point.label=point.label)
 
-b.plot      <- basic.plot(gg.input, text.size=text.size, point.size=point.size, point.shape=point.shape) # Plot
+b.plot      <- basic.plot(gg.input, text.size=text.size, point.size=point.size, point.shape=point.shape, colour=colour) # Plot
 t.plot      <- b.plot + theme_min()
+t.plot$dimensions <- dim
 return(t.plot)
 }
 
 #################### De mest bidragene modaliteter
-p.ctr        <- function(object, ctr.dim=1, dim=c(1,2), map.title="ctr", labelx=NULL, labely=NULL, scale.interval=NULL, point.label=TRUE, point.shape=15, point.size=1.6, text.size=2.5){
+p.ctr        <- function(object, ctr.dim=1, dim=c(1,2), map.title="ctr", labelx=NULL, labely=NULL, scale.interval=NULL, point.label=TRUE, point.shape=15, point.size=1.6, text.size=2.5, colour="black"){
 
 gg.proc     <- round(object$adj.inertia[,4]) # Adjusted inertia
 gg.data     <- data.plot(object, plot.type="ctr", dim, ctr.dim=ctr.dim) # Data selection
@@ -54,14 +55,15 @@ gg.input    <- list(gg.data=gg.data, axis.inertia=gg.proc,
                   map.title=map.title, labelx=axis.labels$x, labely=axis.labels$y,
                   scales=scales, point.label=point.label)
 
-b.plot      <- basic.plot(gg.input, text.size=text.size, point.size=point.size, point.shape=point.shape) # Plot
+b.plot      <- basic.plot(gg.input, text.size=text.size, point.size=point.size, point.shape=point.shape, colour=colour) # Plot
 t.plot      <- b.plot + theme_min() # Theme
+t.plot$dimensions <- dim 
 return(t.plot)
 }
 
 ######################## Active map
 
-p.active     <- function(object, dim=c(1,2), map.title="active", labelx=NULL, labely=NULL, scale.interval=NULL, point.label=TRUE, point.shape=15, point.size=1.6, text.size=2.5){
+p.active     <- function(object, dim=c(1,2), map.title="active", labelx=NULL, labely=NULL, scale.interval=NULL, point.label=TRUE, point.shape=15, point.size=1.6, text.size=2.5, colour="black"){
 
 gg.proc 	<- round(object$adj.inertia[,4]) # Adjusted inertia
 gg.data     <- data.plot(object, plot.type="active", dim, ctr.dim=NULL) # Data selection
@@ -73,14 +75,15 @@ gg.input    <- list(gg.data=gg.data, axis.inertia=gg.proc,
                   map.title=map.title, labelx=axis.labels$x, labely=axis.labels$y,
                   scales=scales, point.label=point.label)
 
-b.plot      <- basic.plot(gg.input, text.size=text.size, point.size=point.size, point.shape=point.shape) # Plot
+b.plot      <- basic.plot(gg.input, text.size=text.size, point.size=point.size, point.shape=point.shape, colour=colour) # Plot
 t.plot      <- b.plot + theme_min() # Theme
+t.plot$dimensions <- dim
 return(t.plot)
 }
 
 ###################### Supplementary map
 
-p.sup     	<- function(object, dim=c(1,2), map.title="sup", labelx=NULL, labely=NULL, scale.interval=NULL, point.label=TRUE, point.shape=15, point.size=1.6, text.size=2.5){
+p.sup     	<- function(object, dim=c(1,2), map.title="sup", labelx=NULL, labely=NULL, scale.interval=NULL, point.label=TRUE, point.shape=15, point.size=1.6, text.size=2.5, colour="black"){
 gg.proc 	<- round(object$adj.inertia[,4]) # Adjusted inertia
 gg.data     <- data.plot(object, plot.type="sup", dim, ctr.dim=NULL) # Data selection
 axis.labels <- plot.axis(labelx=labelx, labely=labely, gg.proc=gg.proc, dim=dim) # Axis labels
@@ -91,13 +94,14 @@ gg.input    <- list(gg.data=gg.data, axis.inertia=gg.proc,
                   map.title=map.title, labelx=axis.labels$x, labely=axis.labels$y,
                   scales=scales, point.label=point.label)
 
-b.plot      <- basic.plot(gg.input, text.size=text.size, point.size=point.size, point.shape=point.shape) # Plot
+b.plot      <- basic.plot(gg.input, text.size=text.size, point.size=point.size, point.shape=point.shape, colour=colour) # Plot
 t.plot      <- b.plot + theme_min() # Theme
+t.plot$dimensions <- dim
 return(t.plot)
 }
 
 ######################## Id map
-p.id         <- function(object, dim=c(1,2), map.title="id", labelx=NULL, labely=NULL, scale.interval=NULL, point.label=FALSE, point.shape=15, point.size=1.6, text.size=2.5){
+p.id         <- function(object, dim=c(1,2), map.title="id", labelx=NULL, labely=NULL, scale.interval=NULL, point.label=FALSE, point.shape=15, point.size=1.6, text.size=2.5, colour="black"){
 
 gg.proc 	<- round(object$adj.inertia[,4]) # Adjusted inertia
 gg.data     <- data.plot(object, plot.type="id", dim, ctr.dim=NULL) # Data selection
@@ -108,13 +112,14 @@ scales      <- breaksandscales(gg.data, scale.interval) # Scales og breaks
 gg.input    <- list(gg.data=gg.data, axis.inertia=gg.proc,
                   map.title=map.title, labelx=axis.labels$x, labely=axis.labels$y,
                   scales=scales, point.label=point.label)
-b.plot      <- basic.plot(gg.input, text.size=text.size, point.size=point.size, point.shape=point.shape) # Plot
+b.plot      <- basic.plot(gg.input, text.size=text.size, point.size=point.size, point.shape=point.shape, colour=colour) # Plot
 t.plot      <- b.plot + theme_min() # Theme
+t.plot$dimensions <- dim
 return(t.plot)
 }
 
 ############################### List map
-p.list        <- function(object, list.mod=NULL, list.sup=NULL, list.ind=NULL, dim=c(1,2), map.title="list", labelx=NULL, labely=NULL, scale.interval=NULL, point.label=TRUE, point.shape=15, point.size=1.6, text.size=2.5){
+p.list        <- function(object, list.mod=NULL, list.sup=NULL, list.ind=NULL, dim=c(1,2), map.title="list", labelx=NULL, labely=NULL, scale.interval=NULL, point.label=TRUE, point.shape=15, point.size=1.6, text.size=2.5, colour="black"){
   
   modal.list  <- list(list.mod=list.mod, list.sup=list.sup, list.ind=list.ind)
   
@@ -128,8 +133,9 @@ p.list        <- function(object, list.mod=NULL, list.sup=NULL, list.ind=NULL, d
                       map.title=map.title, labelx=axis.labels$x, labely=axis.labels$y,
                       scales=scales, point.label=point.label)
   
-  b.plot      <- basic.plot(gg.input, text.size=text.size, point.size=point.size, point.shape=point.shape) # Plot
+  b.plot      <- basic.plot(gg.input, text.size=text.size, point.size=point.size, point.shape=point.shape, colour=colour) # Plot
   t.plot      <- b.plot + theme_min() # Theme
+  t.plot$dimensions <- dim
   return(t.plot)
 }
 
@@ -164,25 +170,59 @@ p		<- p + opts(legend.position = "none")
 return(p)
 }
 
+
+############### Add new points to an existing plot
+
+add.points <- function(object, ca.plot, data.type=NULL, list.mod=NULL, list.sup=NULL, list.ind=NULL, ctr.dim=NULL, point.label=TRUE, point.shape=15, point.size=1.6, text.size=2.5, colour="black"){
+  
+  p           <- ca.plot
+  dim         <- ca.plot$dimensions
+  org.scales  <- ca.plot$ca.scales
+  modal.list  <- list(list.mod=list.mod, list.sup=list.sup, list.ind=list.ind)
+  add.data    <- data.plot(object, plot.type=data.type, dim, ctr.dim=ctr.dim, modal.list=modal.list)
+  p           <- p + geom_point(data=add.data, aes(x=x, y=y), shape=point.shape, colour=colour, fill=alpha("white", 0.5), size=point.size)
+  
+  if (identical(point.label, TRUE)==TRUE){
+    p         <- p + geom_text(data=add.data, aes(x=x, y=y, label=names), size=text.size, vjust=1.5, colour=colour)
+  }
+  
+  # Scales and labels
+  
+  org.max     <- org.scales$lim.max
+  org.min     <- org.scales$lim.min
+  n.max       <- max(c(max(add.data[,1:2]), org.max))
+  n.min       <- (c(min(add.data[,1:2]), org.min))
+  tscales <- add.data
+  tscales[1,1:2] <- n.max
+  tscales[2,1:2] <- n.min
+  scales <- breaksandscales(tscales, scale.interval=NULL)
+  
+  p     <- p + scale_x_continuous(breaks=scales$scalebreaks, limits=c(scales$lim.min, scales$lim.max), labels= scales$breaklabel)
+  p   	<- p + scale_y_continuous(breaks=scales$scalebreaks, limits=c(scales$lim.min, scales$lim.max), labels= scales$breaklabel)
+  
+  return(p)
+}
+
+
+
+
+
+
 ############################## Plot delfunktioner ########################################
 
 
 ############################# basic.plot 
-basic.plot <- function(gg.input, point.shape=15, point.size=1.6, text.size=2.5){ 
+basic.plot <- function(gg.input, point.shape=15, point.size=1.6, text.size=2.5, colour="black"){ 
 p       <- ggplot()   
 # The middle plot axis
 p       <- p + geom_hline(yintercept = 0, colour = "grey90", size = 0.3, linetype="solid")
 p       <- p + geom_vline(xintercept = 0, colour = "grey90", size = 0.3, linetype="solid")
 # Points
-if (length(point.shape)==1){
-p         <- p + geom_point(data=gg.input$gg.data, aes(x=x, y=y), shape=point.shape, colour="black", fill=alpha("white", 0.5), size=point.size) 
-}else{
-# Points according to shape
-p         <- p + geom_point(data=gg.input$gg.data, aes(x=x, y=y, shape=point.shape), colour="black", fill=alpha("white", 0.5), size=point.size)
-}
+p         <- p + geom_point(data=gg.input$gg.data, aes(x=x, y=y), shape=point.shape, colour=colour, fill=alpha("white", 0.5), size=point.size) 
+
 # Text labels for all points
 if (identical(gg.input$point.label, TRUE)==TRUE){
-p     	<- p + geom_text(data=gg.input$gg.data, aes(x=x, y=y, label=names),size=text.size, vjust=1.5)
+p     	<- p + geom_text(data=gg.input$gg.data, aes(x=x, y=y, label=names),size=text.size, vjust=1.5, colour=colour)
     }
 # Title and axis labels
 p 		<- p + opts(title=gg.input$map.title)
@@ -190,6 +230,8 @@ p 		<- p + xlab(gg.input$labelx) + ylab(gg.input$labely)
 # Scales and breaks
 p   	<- p + scale_x_continuous(breaks=gg.input$scales$scalebreaks, limits=c(gg.input$scales$lim.min, gg.input$scales$lim.max), labels= gg.input$scales$breaklabel)
 p 		<- p + scale_y_continuous(breaks=gg.input$scales$scalebreaks, limits=c(gg.input$scales$lim.min, gg.input$scales$lim.max), labels= gg.input$scales$breaklabel)
+p$ca.scales <- gg.input$scales
+
 return(p)
 }
 
