@@ -62,8 +62,8 @@ soc.ca <- function(active, sup=NULL, identifier=NULL, passive="Missing"){
   subset      <- set[!sub]
   
   # Finds the amount of variables without passive modalities
-  Qm    <- ncol(active)
-  for (i in seq(ncol(active))){
+  Qm    <- Q
+  for (i in seq(Q)){
     lev <- levels(active[,i])
     pasQ <- grepl(paste(passive, collapse="|"), lev)
     if (any(pasQ==TRUE)==TRUE){
@@ -118,12 +118,9 @@ soc.ca <- function(active, sup=NULL, identifier=NULL, passive="Missing"){
 # nvar ???
 subset.ca.indicator <- function(Z.act, Z.sup, subset, Q, Qm){
   
-  #Z.act <- indicator(active) # The indicator matrix for the active modalities
-  #Z.sup <- indicator(sup) # The indicator matrix for the supplementary modalities
-  
-  I <- dim(Z.act)[1] # Number of individuals
+  I <- dim(Z.act)[1]  # Number of individuals
   J <- dim(Z.act)[2]  # Number of modalities >> Subset
-  Q <- ncol(active)   # Number of variables
+  Q <- Q              # Number of variables
   
   # Inertias
   P <- Z.act / sum(Z.act)       # 
