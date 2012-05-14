@@ -167,6 +167,51 @@ contribution <- function(object, dim=1, all=FALSE, modality.indices=FALSE){
   # Coord is the principal coordinate
 }
 
+################### The most contributing individuals
+
+individuals <- function(object, dim=1, all=FALSE, ind.indices=FALSE){
+  if(identical(ind.indices, TRUE)==TRUE){
+    ctr     <- object$ctr.ind[,dim]
+    av.ctr  <- as.vector(apply(as.matrix(ctr), 2, function(x) which(x >= mean(x, na.rm=TRUE))))
+    if(is.list(av.ctr)==TRUE) av.ctr  <- unlist(av.ctr[dim], use.names=FALSE)
+    av.ctr     <- av.ctr[duplicated(av.ctr)==FALSE]    
+    return(av.ctr)
+  }else{
+    ctr <- round(1000*object$ctr.ind[,dim])
+    # cor <- round(1000*object$cor.ind[,dim])
+    coord <- round(object$coord.ind[,dim], digits=2)
+    names <- object$names.ind
+    if (identical(all, FALSE)==TRUE){
+      av.ctr<- individuals(object, dim=dim, ind.indices=TRUE)    
+      header <- paste("The individuals contributing above average to dimension: ", dim, ".", sep="")
+    }
+    if (identical(all, TRUE)==TRUE){
+      av.ctr <- 1:length(ctr)
+      header <- paste("The contribution of all individuals to dimension: ", dim, ".", sep="")
+    }
+    #out <- data.frame(ctr[av.ctr], cor[av.ctr], coord[av.ctr])
+    out <- data.frame(ctr[av.ctr], coord[av.ctr])
+    rownames(out) <- names[av.ctr]
+    colnames(out) <- c("   Ctr.", "   Coord")
+    out <- out[order(-out[,1]), ]
+    maxwidth <- max(nchar(names))+sum(nchar(colnames(out)))
+    cat("\n", format(header, width=maxwidth, justify="centre"), "\n", "\n")
+    print(out)
+  }
+  # Returns the individuals with above average contribution to the selected dimension
+  # object is a soc.ca object
+  # dim is the included dimensions
+  # all: If TRUE returns all individuals instead of just those that contribute above average
+  # ind.indices: If TRUE returns a vector with the row indices of the individuals
+  # Ctr is the contribution in 1000
+  # Cor is the correlation with the dimension
+  # Coord is the principal coordinate
+}
+
+
+
+
+
 ############################## The most contributing modalities according to direction on dimension
 # x is a soc.ca object
 # dim is the dimension
