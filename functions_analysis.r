@@ -107,6 +107,13 @@ soc.ca <- function(active, sup=NULL, identifier=NULL, passive="Missing"){
   
   result$modal    <- md
   
+  variable <- vector()
+  for (i in 1:nrow(md)){
+    variable <- c(variable, rep(rownames(md)[i], md[i,3]))
+  }
+  
+  result$variable <- variable
+  
   class(result)   <- "soc.ca"
   return(result)
 }
