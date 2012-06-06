@@ -1,11 +1,5 @@
 #### Functions for describtion and printing
 
-
-
-
-
-
-
 # Print objects from the soc.ca function
 print.soc.ca  <- function(object){
   Nmodal      <- object$n.mod
@@ -261,7 +255,84 @@ tab.dim <- function(x, dim=1, label.plus=NULL, label.minus=NULL, all=FALSE){
   print(format(outplus, justify="centre", width=8))
   cat("\n",format(label.minus, width=maxwidth, justify="centre"), "\n")
   format(outminus, justify="centre", width=8)
+# tab.dim
+  
+  }
+
+##########################      ctr.var       #### Contribution per variabel
+ctr.var     <- function(object, dim=1:3){
+    variable    <- as.factor(object$variable)
+    ctr.mod     <- object$ctr.mod[,dim]
+    lev.var     <- levels(variable)
+    names.mod   <- object$names.mod
+    freq.mod    <- object$freq.mod
+    
+    var.list    <- list()
+    for (i in seq(length(lev.var))){
+        var.ctr           <- round(ctr.mod[variable==lev.var[i],]*1000)
+        var.ctr           <- cbind(var.ctr, freq.mod[variable==lev.var[i]])
+        var.ctr           <- rbind(var.ctr, colSums(var.ctr))
+        rownames(var.ctr) <- c(names.mod[variable==lev.var[i]], "Total")
+        colnames(var.ctr) <- c(paste(" Dim.", dim, sep=""), "  Freq")
+        
+        var.list[[paste(lev.var[i])]] <- var.ctr
+    }
+    
+    # The printing
+    
+    av.ctr <- round(1000/object$n.mod)
+    maxwidth <- max(nchar(names.mod))
+    
+    cat("The contribution of the active variables")
+    # Beautiful printing!
+    for (i in seq(length(lev.var))){
+        var.ctr <- var.list[[i]]
+        cat("\n", "\n", format(lev.var[1], width=maxwidth), colnames(var.ctr))
+        
+        for (q in seq(nrow(var.ctr))){
+            cat("\n", format(rownames(var.ctr)[q], width=maxwidth), format(var.ctr[q,], width=6))
+        }
+        
+    }
+    cat("\n","Average contribution per modality: ", av.ctr, sep="")
+    cat("\n", "Total number of individuals: ", object$n.ind, sep="")
+    
+    invisible(var.list)
+    # ctr.var returns the contribution values of all modalities ordered by variable
+    # object is a soc.ca object
+    # dim is the included dimensions. The default is 1:3
+    # If assigned using <- ctr.var returns a list of matrixes with the contribution values
 }
+
+
+
+
+
+
+##########################    tab.variance    #### Variance tabel
+tab.variance <- function(object, dim=NULL){
+    
+    variance <- object$adj.inertia
+    if (identical(dim, NULL)==TRUE){
+        dim <- variance[,5]<=91
+    }
+    variance <- t(variance[dim,])
+    line.dim <- paste(1:ncol(variance) ,".", sep="")
+    cat("\n", "Dim        ", format(line.dim, width=6), sep="")
+    cat("\n", "Sv       ", format(round(variance[2,], 2), width=6), sep="")
+    cat("\n", "Var     ", format(round(variance[3,], 2), width=6), sep="")
+    cat("\n", "Adj.Var ", format(round(variance[4,], 1), width=6), sep="")
+    cat("\n", "Cum %   ", format(round(variance[5,], 1), width=6), sep="")
+    
+    invisible(variance)
+    # tab.variance returns a table of variance for the dimensions
+    # object is a soc.ca object
+    # dim is the included dimensions, if set to NULL (default),
+    # then only the dimensions explaining approx. 90% of the adjusted variance are included
+    # If assigned using <- tab.variance returns a matrix version of the table of variance    
+}
+
+
 
 ##################### Test.data 
 
