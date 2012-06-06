@@ -23,7 +23,7 @@
 # object <- soc.ca(analyse, sup, identifier)
 
 ### Plot for all modalitites
-p.all <- function(object, dim=c(1,2), map.title="all", labelx=NULL, labely=NULL, scale.interval=NULL, point.label=TRUE, point.shape=15, point.size=1.6, text.size=2.5, colour="black"){
+p.all <- function(object, dim=c(1,2), map.title="all", labelx=NULL, labely=NULL, scale.interval=NULL, point.label=TRUE, point.shape=15, point.size=1.6, text.size=3.3, colour="black"){
 
 gg.proc     <- round(object$adj.inertia[,4]) # Adjusted inertia
 gg.data     <- data.plot(object, plot.type="all", dim, ctr.dim=NULL) # Data selection
@@ -42,7 +42,7 @@ return(t.plot)
 }
 
 #################### De mest bidragene modaliteter
-p.ctr        <- function(object, ctr.dim=1, dim=c(1,2), map.title="ctr", labelx=NULL, labely=NULL, scale.interval=NULL, point.label=TRUE, point.shape=15, point.size=1.6, text.size=2.5, colour="black"){
+p.ctr        <- function(object, ctr.dim=1, dim=c(1,2), map.title="ctr", labelx=NULL, labely=NULL, scale.interval=NULL, point.label=TRUE, point.shape=15, point.size=1.6, text.size=3.3, colour="black"){
 
 gg.proc     <- round(object$adj.inertia[,4]) # Adjusted inertia
 gg.data     <- data.plot(object, plot.type="ctr", dim, ctr.dim=ctr.dim) # Data selection
@@ -63,7 +63,7 @@ return(t.plot)
 
 ######################## Active map
 
-p.active     <- function(object, dim=c(1,2), map.title="active", labelx=NULL, labely=NULL, scale.interval=NULL, point.label=TRUE, point.shape=15, point.size=1.6, text.size=2.5, colour="black"){
+p.active     <- function(object, dim=c(1,2), map.title="active", labelx=NULL, labely=NULL, scale.interval=NULL, point.label=TRUE, point.shape=15, point.size=1.6, text.size=3.3, colour="black"){
 
 gg.proc 	<- round(object$adj.inertia[,4]) # Adjusted inertia
 gg.data     <- data.plot(object, plot.type="active", dim, ctr.dim=NULL) # Data selection
@@ -83,7 +83,7 @@ return(t.plot)
 
 ###################### Supplementary map
 
-p.sup     	<- function(object, dim=c(1,2), map.title="sup", labelx=NULL, labely=NULL, scale.interval=NULL, point.label=TRUE, point.shape=15, point.size=1.6, text.size=2.5, colour="black"){
+p.sup     	<- function(object, dim=c(1,2), map.title="sup", labelx=NULL, labely=NULL, scale.interval=NULL, point.label=TRUE, point.shape=15, point.size=1.6, text.size=3.3, colour="black"){
 gg.proc 	<- round(object$adj.inertia[,4]) # Adjusted inertia
 gg.data     <- data.plot(object, plot.type="sup", dim, ctr.dim=NULL) # Data selection
 axis.labels <- plot.axis(labelx=labelx, labely=labely, gg.proc=gg.proc, dim=dim) # Axis labels
@@ -101,7 +101,7 @@ return(t.plot)
 }
 
 ######################## Id map
-p.id         <- function(object, dim=c(1,2), map.title="id", labelx=NULL, labely=NULL, scale.interval=NULL, point.label=FALSE, point.shape=15, point.size=1.6, text.size=2.5, colour="black"){
+p.id         <- function(object, dim=c(1,2), map.title="id", labelx=NULL, labely=NULL, scale.interval=NULL, point.label=FALSE, point.shape=15, point.size=1.6, text.size=3.3, colour="black"){
 
 gg.proc 	<- round(object$adj.inertia[,4]) # Adjusted inertia
 gg.data     <- data.plot(object, plot.type="id", dim, ctr.dim=NULL) # Data selection
@@ -119,7 +119,7 @@ return(t.plot)
 }
 
 ############################### List map
-p.list        <- function(object, list.mod=NULL, list.sup=NULL, list.ind=NULL, dim=c(1,2), map.title="list", labelx=NULL, labely=NULL, scale.interval=NULL, point.label=TRUE, point.shape=15, point.size=1.6, text.size=2.5, colour="black"){
+p.list        <- function(object, list.mod=NULL, list.sup=NULL, list.ind=NULL, dim=c(1,2), map.title="list", labelx=NULL, labely=NULL, scale.interval=NULL, point.label=TRUE, point.shape=15, point.size=1.6, text.size=3.3, colour="black"){
   
   modal.list  <- list(list.mod=list.mod, list.sup=list.sup, list.ind=list.ind)
   
@@ -173,7 +173,7 @@ return(p)
 
 ############### Add new points to an existing plot
 
-add.points <- function(object, ca.plot, data.type=NULL, list.mod=NULL, list.sup=NULL, list.ind=NULL, ctr.dim=NULL, point.label=TRUE, point.shape=15, point.size=1.6, text.size=2.5, colour="black"){
+add.points <- function(object, ca.plot, data.type=NULL, list.mod=NULL, list.sup=NULL, list.ind=NULL, ctr.dim=NULL, point.label=TRUE, point.shape=15, point.size=1.6, text.size=3.3, colour="black"){
   
   p           <- ca.plot
   dim         <- ca.plot$dimensions
@@ -212,17 +212,17 @@ add.points <- function(object, ca.plot, data.type=NULL, list.mod=NULL, list.sup=
 
 
 ############################# basic.plot 
-basic.plot <- function(gg.input, point.shape=15, point.size=1.6, text.size=2.5, colour="black"){ 
+basic.plot <- function(gg.input, point.shape=15, point.size=1.6, text.size=3.3, colour="black"){ 
 p       <- ggplot()   
 # The middle plot axis
-p       <- p + geom_hline(yintercept = 0, colour = "grey90", size = 0.3, linetype="solid")
-p       <- p + geom_vline(xintercept = 0, colour = "grey90", size = 0.3, linetype="solid")
+p       <- p + geom_hline(yintercept = 0, colour = "grey50", size = 0.33, linetype="solid")
+p       <- p + geom_vline(xintercept = 0, colour = "grey50", size = 0.33, linetype="solid")
 # Points
 p         <- p + geom_point(data=gg.input$gg.data, aes(x=x, y=y), shape=point.shape, colour=colour, fill=alpha("white", 0.5), size=point.size) 
 
 # Text labels for all points
 if (identical(gg.input$point.label, TRUE)==TRUE){
-p     	<- p + geom_text(data=gg.input$gg.data, aes(x=x, y=y, label=names),size=text.size, vjust=1.5, colour=colour)
+p     	<- p + geom_text(data=gg.input$gg.data, aes(x=x, y=y, label=names),size=text.size, vjust=1.5, colour=colour, family="sans")
     }
 # Title and axis labels
 p 		<- p + opts(title=gg.input$map.title)

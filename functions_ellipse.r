@@ -34,15 +34,15 @@ ellipse.data <- ellipse.data
 
 for (i in 1:nlevels(variabel)){
 # Ellipserne
-ca.plot <- ca.plot + geom_path(data=ellipse.data[[i]]$el.coord, aes(x=x, y=y), colour="grey30", size=0.5)
+ca.plot <- ca.plot + geom_path(data=ellipse.data[[i]]$el.coord, aes(x=x, y=y), colour="grey70", size=0.33)
 # Akserne
-ca.plot <- ca.plot + geom_path(data=ellipse.data[[i]]$el.axis[[1]],aes(x=x, y=y), colour="grey30", size=0.5, linetype=2, na.rm=TRUE) # Det er muligt at vi kan tegne med aes istedet og undgå at det der rækkeshit
-ca.plot <- ca.plot + geom_path(data=ellipse.data[[i]]$el.axis[[2]],aes(x=x, y=y), colour="grey30", size=0.5, linetype=2, na.rm=TRUE)
+ca.plot <- ca.plot + geom_path(data=ellipse.data[[i]]$el.axis[[1]],aes(x=x, y=y), colour="grey70", size=0.33, linetype=2, na.rm=TRUE) # Det er muligt at vi kan tegne med aes istedet og undgå at det der rækkeshit
+ca.plot <- ca.plot + geom_path(data=ellipse.data[[i]]$el.axis[[2]],aes(x=x, y=y), colour="grey70", size=0.33, linetype=2, na.rm=TRUE)
 # Origo
-ca.plot <- ca.plot + geom_point(data=ellipse.data[[i]]$el.origo, aes(x=x, y=y), size=2, shape=21, fill="white", colour="grey30", na.rm=TRUE)
+ca.plot <- ca.plot + geom_point(data=ellipse.data[[i]]$el.origo, aes(x=x, y=y), size=2, shape=21, fill="white", colour="grey70", na.rm=TRUE)
 # Origo label
 #! Måske annotate ville være en god funktion??
-ca.plot <- ca.plot + geom_text(aes(x=x, y=y, label=label), data=ellipse.data[[i]]$el.origo, size=2.1, hjust=-0.1)
+ca.plot <- ca.plot + geom_text(aes(x=x, y=y, label=label), data=ellipse.data[[i]]$el.origo, size=3.3, hjust=-0.15, fontface="italic")
 }
 
 ## New scales
