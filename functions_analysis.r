@@ -1,39 +1,6 @@
 # Functions analysis
-
 #'Specific Multiple Correspondence Analysis
-#'
-#'
-#'@param x Defines the active modalities in a data.frame with rows of individuals and columns of factors, without NA's' 
-#'@param sup Defines the supplementary modalities in a data.frame with rows of individuals and columns of factors, without NA's 
-#'@param identifier A single factor containing a single value for each row/individual in x and sup. Typically a name or an id.number.
-#'
-#'@return sv Singular values
-#'@return nd Number of dimensions NB! 
-#'@return ev Eigenvectors
-#'@return totin Total inertia
-#'@return names Names of the modalities
-#'@return mass Mass for each modality
-#'@return chidist Chi-square distances to centroid 
-#'@return inertia Inertia for each modality
-#'@return explained.inertia A matrix containing the explained dimensions, Sv, percentage of explained inertia and the cumulative percentage
-#'@return adj.inertia A matrix containing the adjusted (Rouanet-adjustment) dimensions, Sv, percentage of explained inertia and the cumulative percentage
-#'@return contrib The contribution of each modality to each dimension
-#'@return cor
-#'@return coord Principal coordinates
-#'@return average.contrib 
-#'@return standard.coord Standard coordinates
-#'@return active A vector with rownumbers for the active modalities
-#'@return sup A vector with rownumbers for the supplementary modalities
-#'@return identifier A vector with rownumbers for the individuals
-#'@return Burt The burt matrix containing the active modalities
-#'@return modal
-#'
-#'
-#'
-#'@ References Greenacre NB!!!!
-#'@name smca
-#'@author Anton Grau Larsen and Stefan Bastholm Andrade
-#'
+
 
 soc.ca <- function(active, sup=NULL, identifier=NULL, passive="Missing"){
   
@@ -116,13 +83,50 @@ soc.ca <- function(active, sup=NULL, identifier=NULL, passive="Missing"){
   
   class(result)   <- "soc.ca"
   return(result)
+
+  #'Specific Multiple Correspondence Analysis
+  #'
+  #'soc.ca(active, sup=NULL, identifier=NULL, passive="Missing")
+  #'
+  #'@param active       Defines the active modalities in a data.frame with rows of individuals and columns of factors, without NA's' 
+  #'@param sup          Defines the supplementary modalities in a data.frame with rows of individuals and columns of factors, without NA's 
+  #'@param identifier   A single vector containing a single value for each row/individual in x and sup. Typically a name or an id.number.
+  #'@param passive      A single character vector with the full or partial names of the passive modalities. All names that have a full or partial match will be set as passive. see also set.passive()
+  #'
+  #'@return sv          Singular values
+  #'@return nd          Number of active dimensions: #¤ Check the actual definition and make a reference to le roux
+  #'@return n.ind       The number of active individuals
+  #'@return n.mod       The number of active modalities
+  #'@return eigen       Eigenvectors
+  #'@return total.inertia The sum of inertia
+  #'@return adj.inertia A matrix with all active dimensions, adjusted and unadjusted inertias. See also tab.variance()
+  #'@return freq.mod    Frequencies for the active modalities. See also add.n()
+  #'@return freq.sup    Frequencies for the supplementary modalities. See also add.n()
+  #'@return ctr.mod     A matrix with the contribution values of the active modalities per dimension. See also contribution()
+  #'@return ctr.ind     A matrix with the contribution values of the individuals per dimension. See also individuals()
+  #'@return cor.mod     The correlation or quality of each modality per dimension.
+  #'@return cor.ind     The correlation or quality of each individual per dimension. #¤ This may be defunct!
+  #'@return mass.mod    The mass of each modality
+  #'@return mass.mod    The mass of each individual #¤ Why is this even here?? Because we might weight the individuals later??
+  #'@return coord.mod   A matrix with the principal coordinates of each active modality per dimension.
+  #'@return coord.ind   A matrix with the principal coordinates of each individual per dimension.
+  #'@return coord.sup   A matrix with the principal coordinates of each supplementary modality per dimension.
+  #'@return names.mod   The names of the active modalities
+  #'@return names.ind   The names of the individuals
+  #'@return names.sup   The names of the supplementary modalities
+  #'@return names.passive The names of the passive modalities
+  #'@return modal       A matrix with the number of modalities per variable and their location
+  #'@return variable    A vector with the name of the variable of the active modalities
+  
+  #'@ References Greenacre NB!!!! And Le Roux #¤
+  #'@name soc.ca
+  #'@author Anton Grau Larsen and Stefan Bastholm Andrade
+    
 }
 
 
-#################### Correspondence analysis on a Burt matrix
-# B is a Burt matrix
-# supmat is a supplementary burt matrix
-# nvar ???
+#################### Correspondence analysis on a indicator matrix
+
 subset.ca.indicator <- function(Z.act, Z.sup, subset, Q, Qm){
   
   I <- dim(Z.act)[1]  # Number of individuals
@@ -224,7 +228,19 @@ subset.ca.indicator <- function(Z.act, Z.sup, subset, Q, Qm){
   
   
   return(ca.output)
-  
+
+  # Subset.ca.indicator
+  # This function is part of the soc.ca function but allows for manipulation of the indicator matrix before analysis. Most users will not need this function.
+  # subset.ca.indicator(Z.act, Z.sup, subset, Q, Qm)
+  # Inputs
+  # Z.act   An indicator matrix of all the active modalities (including those that are to be set as passive)
+  # Z.sup   An indicator matrix of the supplementary modalities
+  # subset  A vector containing column indices of passive modalities
+  # Q       The number of variables
+  # Qm      The number of variables without passive modalities
+  # Outputs
+  # See soc.ca() documentation
+
 }
 
 
@@ -254,9 +270,13 @@ rownames(Z) <- id
 }    
 return(Z)
 
-# Creates a indicator matrix from a data.frame with questions as columns and individuals as rows.
+# indicator()
+# Creates an indicator matrix from a data.frame with questions as columns and individuals as rows.
 # indicator(x, id=NULL, ps=": ")
+# Inputs
 # x is a data.frame
 # id is a vector defining the labels for the individuals. If id = NULL row number is used.
 # ps is the seperator used in the creation of the names of the columns (modalities).
+# Output
+# Returns an indicator matrix
 }
