@@ -9,7 +9,7 @@ p.ellipse <- function(object, ca.plot, variabel){ # Skal gg.input være definere
 dim         <- ca.plot$dimensions 
 id.coord    <- object$coord.ind[, dim]
 lev.var     <- levels(variabel)
-
+id          <- object$names.ind
 # En liste, af lister-objekter med samtlige nødvendige informationer
 # Label
 # Kryds koordinater
@@ -18,17 +18,17 @@ lev.var     <- levels(variabel)
 ## Fremtid: freq til at afgøre origo størrelse.
 ellipse.data <- list()
 for (i in 1:nlevels(variabel)){
-binvar <- which(variabel==lev.var[i])
-id.coord.var <- id.coord[binvar,]
-label <- lev.var[i]
-el.coord <- ellipse.coord(id, id.coord.var)
-el.axis  <- ellipse.axis(el.coord)
-el.origo <- ellipse.origo(el.axis)
-el.origo <- data.frame(x=el.origo[1], y=el.origo[2], label)
+binvar            <- which(variabel==lev.var[i])
+id.coord.var      <- id.coord[binvar,]
+label             <- lev.var[i]
+el.coord          <- ellipse.coord(id, id.coord.var)
+el.axis           <- ellipse.axis(el.coord)
+el.origo          <- ellipse.origo(el.axis)
+el.origo          <- data.frame(x=el.origo[1], y=el.origo[2], label)
 ellipse.data[[i]] <- list(label=label, el.coord=el.coord, el.axis=el.axis, el.origo=el.origo)
 }
 
-ellipse.data <- ellipse.data
+ellipse.data      <- ellipse.data
 
 # Her plottes.
 
@@ -52,19 +52,19 @@ org.min     <- org.scales$lim.min
 
 el.max <- vector()
 for (i in seq(lev.var)){
-el.max <- c(max(ellipse.data[[i]]$el.coord), el.max)
+el.max      <- c(max(ellipse.data[[i]]$el.coord), el.max)
 }
 
 el.min <- vector()
 for (i in seq(lev.var)){
-  el.min <- c(min(ellipse.data[[i]]$el.coord), el.min)
+  el.min    <- c(min(ellipse.data[[i]]$el.coord), el.min)
 }
 n.max       <- max(c(el.max, org.max))
 n.min       <- min(c(el.min, org.min))
 
-tscales <- rbind(rep(n.max, 2), rep(n.min, 2))
+tscales     <- rbind(rep(n.max, 2), rep(n.min, 2))
 
-scales <- breaksandscales(tscales, scale.interval=NULL)
+scales      <- breaksandscales(tscales, scale.interval=NULL)
 ca.plot     <- ca.plot + scale_x_continuous(breaks=scales$scalebreaks, limits=c(scales$lim.min, scales$lim.max), labels= scales$breaklabel)
 ca.plot     <- ca.plot + scale_y_continuous(breaks=scales$scalebreaks, limits=c(scales$lim.min, scales$lim.max), labels= scales$breaklabel)
 
@@ -75,10 +75,10 @@ ca.plot
 ################### Ellipse akser funktionen
 ellipse.axis <- function(el.dat){
 # Her defineres antallet af punkter
-n <- length(na.omit(el.dat[,1]))
+n           <- length(na.omit(el.dat[,1]))
 # Her parrer vi punkter med hinanden
-p.pairs <- el.dat[1,]
-for (i in 1:(n/2)){
+p.pairs     <- el.dat[1,]
+  for (i in 1:(n/2)){
 p.pairs[i,] <- c(i,i+(n/2))
 }
 p.pairs <- cbind(p.pairs, rep(0,n/2))
@@ -86,13 +86,13 @@ colnames(p.pairs) <- c("x", "y", "distance")
 
 # Her udregner vi afstandene mellem hvert par af punkter
 for (i in 1:(n/2)){
-a <- el.dat[i,]
-b <- el.dat[i+(n/2),]
+a       <- el.dat[i,]
+b       <- el.dat[i+(n/2),]
 p.pairs[i,3] <- ((b$x-a$x)^2+(b$y-a$y)^2)^0.5
 }
 # Her defineres den korteste og længste path
-p.min <- which.min(p.pairs[,3])
-p.max <- which.max(p.pairs[,3])
+p.min   <- which.min(p.pairs[,3])
+p.max   <- which.max(p.pairs[,3])
 
 #l.id <- 3:nrow(gg.input)
 mintemp <- p.pairs[p.min, 1:2]
@@ -110,12 +110,12 @@ ellipse.axis.points
 ellipse.coord <- function(id, id.coord.var){
 # Her laves de binære variable der skal bruges til at tegne koordinaterne. Det kan gøres mere abstrakt.
 #variabel01 <- which(variabel==levels(variabel)[1])
-id.var <- as.data.frame(id.coord.var)
+id.var    <- as.data.frame(id.coord.var)
 colnames(id.var) <- c("x","y")
 
-xdata <- with(as.data.frame(id.var), xyTable(x,y))# Her laves en bestemt binning - det er uklart for mig hvad det faktisk er.
-xframe <- cbind.data.frame(x=xdata$x, y=xdata$y, n=xdata$number)
-data.ell <- as.data.frame(with(id.var, ellipse(cor(x, y), 
+xdata     <- with(as.data.frame(id.var), xyTable(x,y))# Her laves en bestemt binning - det er uklart for mig hvad det faktisk er.
+xframe    <- cbind.data.frame(x=xdata$x, y=xdata$y, n=xdata$number)
+data.ell  <- as.data.frame(with(id.var, ellipse(cor(x, y), 
                                          scale=c(sd(x),sd(y)), 
                                          centre=c(mean(x),mean(y)), npoints = 1000)))
 # if ((length(id)>360)==TRUE){
