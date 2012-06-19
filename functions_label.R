@@ -17,24 +17,6 @@ add.n   <- function(object, text=" (n:"){
   return(object)
 }
 
-## Labelovers?tteren:
-# Skaber et labelobjekt der kan gemmes i en fil og importeres. - S? label export er ogs? n?dvendig.
-# Skal der ?ndres direkte i resultat-objektet? Det er m?ske det smarteste, for s? kan beh?ver al anden kode ikke at forholde sig til de labels. 
-# I konstruktionen af ggplot datas?ttet med individskyen - m? labels til modaliteterne hentes fra labelobjektet. - Hvis det kan g?res...
-# Create labelobjekt
-# Search and replace in resultat objekt
-# export and preserve
-
-get.varlabel <- function(object){
-varname <- rownames(object$modal)
-tab.label <- cbind(varname, varname, 1:length(varname))
-colnames(tab.label) <- c("Old label", "New label", "Heading")
-temp <- tab.label
-tab.label <- edit(tab.label)
-tab.label[,1] <- temp[,1]
-tab.label
-}
-
 
 ##### Export label
 export.label    <- function(object, file=FALSE, encoding="UTF-8", overwrite=FALSE){
