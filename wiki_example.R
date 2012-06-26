@@ -133,5 +133,4 @@ add.points(result2, lars, data.type="list", list.ind=individual, colour="red")
 # Adding concentration ellipses to an existing plot
 el.forfatter <- p.ellipse(result, map.forfatter, author)
 el.forfatter
-el.forfatter <- p.ellipse(result, map.forfatter, former_top_ceo_in_other_company)
-el.forfatter
+

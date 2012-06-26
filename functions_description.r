@@ -287,7 +287,7 @@ ctr.var     <- function(object, dim=1:3){
     # Beautiful printing!
     for (i in seq(length(lev.var))){
         var.ctr <- var.list[[i]]
-        cat("\n", "\n", format(lev.var[1], width=maxwidth), colnames(var.ctr))
+        cat("\n", "\n", format(lev.var[i], width=maxwidth), colnames(var.ctr))
         
         for (q in seq(nrow(var.ctr))){
             cat("\n", format(rownames(var.ctr)[q], width=maxwidth), format(var.ctr[q,], width=6))

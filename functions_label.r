@@ -35,11 +35,11 @@ export.label    <- function(object, file=FALSE, encoding="UTF-8", overwrite=FALS
 
 #####  Assign.label
 
-assign.label <- function(object, file=FALSE, encoding="UTF-8"){
+assign.label <- function(object, file=FALSE, encoding = "UTF-8", sep = ","){
   if (identical(file, FALSE)==TRUE){
-    file <- paste("label_",deparse(substitute(object)), ".csv", sep="")
+    file <- paste("label_", deparse(substitute(object)), ".csv", sep = "")
   }
-  label     <- read.csv(file, encoding=encoding)
+  label     <- read.csv(file, encoding=encoding, sep = sep)
   
   names.mod <- as.character(object$names.mod)
   names.sup <- as.character(object$names.sup)
