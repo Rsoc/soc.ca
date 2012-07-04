@@ -45,29 +45,6 @@ ca.plot <- ca.plot + geom_point(data=ellipse.data[[i]]$el.origo, aes(x=x, y=y), 
 ca.plot <- ca.plot + geom_text(aes(x=x, y=y, label=label), data=ellipse.data[[i]]$el.origo, size=3.3, hjust=-0.15, fontface="italic")
 }
 
-## New scales
-org.scales  <- ca.plot$ca.scales
-org.max     <- org.scales$lim.max
-org.min     <- org.scales$lim.min
-
-el.max <- vector()
-for (i in seq(lev.var)){
-el.max      <- c(max(ellipse.data[[i]]$el.coord), el.max)
-}
-
-el.min <- vector()
-for (i in seq(lev.var)){
-  el.min    <- c(min(ellipse.data[[i]]$el.coord), el.min)
-}
-n.max       <- max(c(el.max, org.max))
-n.min       <- min(c(el.min, org.min))
-
-tscales     <- rbind(rep(n.max, 2), rep(n.min, 2))
-
-scales      <- breaksandscales(tscales, scale.interval=NULL)
-ca.plot     <- ca.plot + scale_x_continuous(breaks=scales$scalebreaks, limits=c(scales$lim.min, scales$lim.max), labels= scales$breaklabel)
-ca.plot     <- ca.plot + scale_y_continuous(breaks=scales$scalebreaks, limits=c(scales$lim.min, scales$lim.max), labels= scales$breaklabel)
-
 ca.plot
 }
 

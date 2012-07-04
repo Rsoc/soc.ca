@@ -1,35 +1,11 @@
-# De relativt f?rdige plotfunktioner:
-# Vi mangler at f? en pch funktion p? alle mapene.
-# Vi skulle m?ske i virkeligheden arbejde med fire titler +/- kapital i hver sin ende af dimensionen
-# Size som funktion af quality
-# Standard.coord !!!
-
-# Se dev_plot.r
-
-### Funktioner der mangler:
-# Tilføj illustrative punkter
-# ! enkelte, udfra label eller position
-# ! alle af en type
-# ! alle individer med et bestemt udfald
-# ! 
-
-
-# Start up
-
-# source("pakken.r")
-# source("eksempel.r")
-# source("plothelp.r")
-# identifier <- idento
-# object <- soc.ca(analyse, sup, identifier)
-
 ### Plot for all modalitites
-p.all <- function(object, dim=c(1,2), map.title="all", labelx=NULL, labely=NULL, scale.interval=NULL, point.label=TRUE, point.shape=15, point.size=1.6, text.size=3.3, colour="black"){
+p.all <- function(object, dim=c(1,2), map.title="all", labelx=NULL, labely=NULL, point.label=TRUE, point.shape=15, point.size=1.6, text.size=3.3, colour="black"){
 
 gg.proc     <- round(object$adj.inertia[,4]) # Adjusted inertia
 gg.data     <- data.plot(object, plot.type="all", dim, ctr.dim=NULL) # Data selection
 axis.labels <- plot.axis(labelx=labelx, labely=labely, gg.proc=gg.proc, dim=dim) # Axis labels
 map.title   <- plot.title(map.title=map.title) # Plot title
-scales      <- breaksandscales(gg.data, scale.interval) # Scales og breaks
+scales      <- breaksandscales(gg.data) # Scales og breaks
 
 gg.input    <- list(gg.data=gg.data, axis.inertia=gg.proc, 
                   map.title=map.title, labelx=axis.labels$x, labely=axis.labels$y,
@@ -41,15 +17,15 @@ t.plot$dimensions <- dim
 return(t.plot)
 }
 
-#################### De mest bidragene modaliteter
-p.ctr        <- function(object, ctr.dim=1, dim=c(1,2), map.title="ctr", labelx=NULL, labely=NULL, scale.interval=NULL, point.label=TRUE, point.shape=15, point.size=1.6, text.size=3.3, colour="black"){
+#################### The most contributing modalities
+p.ctr        <- function(object, ctr.dim=1, dim=c(1,2), map.title="ctr", labelx=NULL, labely=NULL, point.label=TRUE, point.shape=15, point.size=1.6, text.size=3.3, colour="black"){
 
 gg.proc     <- round(object$adj.inertia[,4]) # Adjusted inertia
 gg.data     <- data.plot(object, plot.type="ctr", dim, ctr.dim=ctr.dim) # Data selection
 
 axis.labels <- plot.axis(labelx=labelx, labely=labely, gg.proc=gg.proc, dim=dim) # Axis labels
 map.title   <- plot.title(map.title=map.title, ctr.dim=ctr.dim) # Plot title
-scales      <- breaksandscales(gg.data, scale.interval) # Scales og breaks
+scales      <- breaksandscales(gg.data) # Scales og breaks
 
 gg.input    <- list(gg.data=gg.data, axis.inertia=gg.proc,
                   map.title=map.title, labelx=axis.labels$x, labely=axis.labels$y,
@@ -63,13 +39,13 @@ return(t.plot)
 
 ######################## Active map
 
-p.active     <- function(object, dim=c(1,2), map.title="active", labelx=NULL, labely=NULL, scale.interval=NULL, point.label=TRUE, point.shape=15, point.size=1.6, text.size=3.3, colour="black"){
+p.active     <- function(object, dim=c(1,2), map.title="active", labelx=NULL, labely=NULL, point.label=TRUE, point.shape=15, point.size=1.6, text.size=3.3, colour="black"){
 
 gg.proc 	<- round(object$adj.inertia[,4]) # Adjusted inertia
 gg.data     <- data.plot(object, plot.type="active", dim, ctr.dim=NULL) # Data selection
 axis.labels <- plot.axis(labelx=labelx, labely=labely, gg.proc=gg.proc, dim=dim) # Axis labels
 map.title   <- plot.title(map.title=map.title, ctr.dim=ctr.dim) # Plot title
-scales      <- breaksandscales(gg.data, scale.interval) # Scales og breaks
+scales      <- breaksandscales(gg.data) # Scales og breaks
 
 gg.input    <- list(gg.data=gg.data, axis.inertia=gg.proc,
                   map.title=map.title, labelx=axis.labels$x, labely=axis.labels$y,
@@ -83,12 +59,12 @@ return(t.plot)
 
 ###################### Supplementary map
 
-p.sup     	<- function(object, dim=c(1,2), map.title="sup", labelx=NULL, labely=NULL, scale.interval=NULL, point.label=TRUE, point.shape=15, point.size=1.6, text.size=3.3, colour="black"){
+p.sup     	<- function(object, dim=c(1,2), map.title="sup", labelx=NULL, labely=NULL, point.label=TRUE, point.shape=15, point.size=1.6, text.size=3.3, colour="black"){
 gg.proc 	<- round(object$adj.inertia[,4]) # Adjusted inertia
 gg.data     <- data.plot(object, plot.type="sup", dim, ctr.dim=NULL) # Data selection
 axis.labels <- plot.axis(labelx=labelx, labely=labely, gg.proc=gg.proc, dim=dim) # Axis labels
 map.title   <- plot.title(map.title=map.title, ctr.dim=ctr.dim) # Plot title
-scales      <- breaksandscales(gg.data, scale.interval) # Scales og breaks
+scales      <- breaksandscales(gg.data) # Scales og breaks
 
 gg.input    <- list(gg.data=gg.data, axis.inertia=gg.proc,
                   map.title=map.title, labelx=axis.labels$x, labely=axis.labels$y,
@@ -101,13 +77,13 @@ return(t.plot)
 }
 
 ######################## Id map
-p.id         <- function(object, dim=c(1,2), map.title="id", labelx=NULL, labely=NULL, scale.interval=NULL, point.label=FALSE, point.shape=15, point.size=1.6, text.size=3.3, colour="black"){
+p.id         <- function(object, dim=c(1,2), map.title="id", labelx=NULL, labely=NULL, point.label=FALSE, point.shape=15, point.size=1.6, text.size=3.3, colour="black"){
 
 gg.proc 	<- round(object$adj.inertia[,4]) # Adjusted inertia
 gg.data     <- data.plot(object, plot.type="id", dim, ctr.dim=NULL) # Data selection
 axis.labels <- plot.axis(labelx=labelx, labely=labely, gg.proc=gg.proc, dim=dim) # Axis labels
 map.title   <- plot.title(map.title=map.title, ctr.dim=ctr.dim) # Plot title
-scales      <- breaksandscales(gg.data, scale.interval) # Scales og breaks
+scales      <- breaksandscales(gg.data) # Scales og breaks
 
 gg.input    <- list(gg.data=gg.data, axis.inertia=gg.proc,
                   map.title=map.title, labelx=axis.labels$x, labely=axis.labels$y,
@@ -119,7 +95,7 @@ return(t.plot)
 }
 
 ############################### List map
-p.list        <- function(object, list.mod=NULL, list.sup=NULL, list.ind=NULL, dim=c(1,2), map.title="list", labelx=NULL, labely=NULL, scale.interval=NULL, point.label=TRUE, point.shape=15, point.size=1.6, text.size=3.3, colour="black"){
+p.list        <- function(object, list.mod=NULL, list.sup=NULL, list.ind=NULL, dim=c(1,2), map.title="list", labelx=NULL, labely=NULL, point.label=TRUE, point.shape=15, point.size=1.6, text.size=3.3, colour="black"){
   
   modal.list  <- list(list.mod=list.mod, list.sup=list.sup, list.ind=list.ind)
   
@@ -127,7 +103,7 @@ p.list        <- function(object, list.mod=NULL, list.sup=NULL, list.ind=NULL, d
   gg.data     <- data.plot(object, plot.type="list", dim, ctr.dim=NULL, modal.list=modal.list) # Data selection
   axis.labels <- plot.axis(labelx=labelx, labely=labely, gg.proc=gg.proc, dim=dim) # Axis labels
   map.title   <- plot.title(map.title=map.title, ctr.dim=ctr.dim) # Plot title
-  scales      <- breaksandscales(gg.data, scale.interval) # Scales og breaks
+  scales      <- breaksandscales(gg.data) # Scales og breaks
   
   gg.input    <- list(gg.data=gg.data, axis.inertia=gg.proc,
                       map.title=map.title, labelx=axis.labels$x, labely=axis.labels$y,
@@ -137,37 +113,6 @@ p.list        <- function(object, list.mod=NULL, list.sup=NULL, list.ind=NULL, d
   t.plot      <- b.plot + theme_min() # Theme
   t.plot$dimensions <- dim
   return(t.plot)
-}
-
-
-################## plot over dimensionerne
-#! Mangler at blive ryddet op i.
-# Overvej om det kan betale sig at smide dens værdier ind i de andre funktioner - det skal nok gøres for at den kan blive en del af en større plot funktion
-# Percent - skal ud og så skal der sættes % tegn på tallene på y dim.
-# Funktion der vælger om det skal være almindelig eller adjusted inertia
-
-p.dim <- function(object, dim=NA, map.title="The share of inertia per axis", labelx="Dimension", labely="Percent"){
-gg.input 	<<- as.data.frame(object$adj.inertia)
-gg.title 	<<- map.title
-gg.axis1	<<- labelx
-gg.axis2	<<- labely
-gg.dim		<<- dim
-
-p 		<- ggplot(gg.input, aes(gg.input[,1], gg.input[,3], width=0.1))
-p 		<- p + geom_linerange(aes(x=gg.input[,1], ymax=gg.input[,3], ymin=0), stat="identity", fill="black", colour="black")
-p 		<- p + coord_flip()
-p 		<- p + scale_x_continuous(breaks=1:length(gg.input[,1]), trans="reverse")
-
-if (is.na(dim)==FALSE){
-  p 		<- p + geom_text(aes(max(dim), max(gg.input[,3])-3, vjust=1.5, label=paste("Total: ", round(sum(gg.input[,3][1:max(gg.dim)])), "%", sep=""), size= 0.8, family="F"))
-  p 		<- p + geom_vline(xintercept = max(dim)+0.5, colour = "#999999", size = 0.4, linetype="dashed")
-}
-p 		<- p + opts(title=gg.title)
-p 		<- p + xlab(gg.axis1) + ylab(gg.axis2)
-p 		<- p + theme_min_bar(gridColor="white")
-p		<- p + opts(legend.position = "none") 
-
-return(p)
 }
 
 
@@ -195,46 +140,42 @@ add.points <- function(object, ca.plot, data.type=NULL, list.mod=NULL, list.sup=
   tscales <- add.data
   tscales[1,1:2] <- n.max
   tscales[2,1:2] <- n.min
-  scales <- breaksandscales(tscales, scale.interval=NULL)
+  scales <- breaksandscales(tscales)
   
-  p     <- p + scale_x_continuous(breaks=scales$scalebreaks, limits=c(scales$lim.min, scales$lim.max), labels= scales$breaklabel)
-  p   	<- p + scale_y_continuous(breaks=scales$scalebreaks, limits=c(scales$lim.min, scales$lim.max), labels= scales$breaklabel)
-  
+  p     <- p + scale_x_continuous(breaks=scales$scalebreaks, labels= scales$breaklabel)
+  p   	<- p + scale_y_continuous(breaks=scales$scalebreaks, labels= scales$breaklabel)
+  p$ca.scales <- scales
   return(p)
 }
-
-
-
-
-
 
 ############################## Plot delfunktioner ########################################
 
 
 ############################# basic.plot 
 basic.plot <- function(gg.input, point.shape=15, point.size=1.6, text.size=3.3, colour="black"){ 
-p       <- ggplot()   
-# The middle plot axis
-p       <- p + geom_hline(yintercept = 0, colour = "grey50", size = 0.33, linetype="solid")
-p       <- p + geom_vline(xintercept = 0, colour = "grey50", size = 0.33, linetype="solid")
-# Points
-p         <- p + geom_point(data=gg.input$gg.data, aes(x=x, y=y), shape=point.shape, colour=colour, fill=alpha("white", 0.5), size=point.size) 
-
-# Text labels for all points
-if (identical(gg.input$point.label, TRUE)==TRUE){
-p     	<- p + geom_text(data=gg.input$gg.data, aes(x=x, y=y, label=names),size=text.size, vjust=1.5, colour=colour, family="sans")
-    }
-# Title and axis labels
-p 		<- p + opts(title=gg.input$map.title)
-p 		<- p + xlab(gg.input$labelx) + ylab(gg.input$labely)
-# Scales and breaks
-p   	<- p + scale_x_continuous(breaks=gg.input$scales$scalebreaks, limits=c(gg.input$scales$lim.min, gg.input$scales$lim.max), labels= gg.input$scales$breaklabel)
-p 		<- p + scale_y_continuous(breaks=gg.input$scales$scalebreaks, limits=c(gg.input$scales$lim.min, gg.input$scales$lim.max), labels= gg.input$scales$breaklabel)
-p$ca.scales <- gg.input$scales
-
-return(p)
+  p       <- ggplot()   
+  # The middle plot axis
+  p       <- p + geom_hline(yintercept = 0, colour = "grey50", size = 0.33, linetype="solid")
+  p       <- p + geom_vline(xintercept = 0, colour = "grey50", size = 0.33, linetype="solid")
+  # Points
+  p         <- p + geom_point(data=gg.input$gg.data, aes(x=x, y=y), shape=point.shape, colour=colour, fill=alpha("white", 0.5), size=point.size) 
+  
+  # Text labels for all points
+  if (identical(gg.input$point.label, TRUE)==TRUE){
+    p       <- p + geom_text(data=gg.input$gg.data, aes(x=x, y=y, label=names),size=text.size, vjust=1.5, colour=colour, family="sans")
+  }
+  # Title and axis labels
+  p   	<- p + opts(title=gg.input$map.title)
+  p 		<- p + xlab(gg.input$labelx) + ylab(gg.input$labely)
+  # Scales and breaks
+  
+  p     <- p + scale_x_continuous(breaks=gg.input$scales$scalebreaks, labels=gg.input$scales$breaklabel)
+  p 		<- p + scale_y_continuous(breaks=gg.input$scales$scalebreaks, labels=gg.input$scales$breaklabel)
+  
+  p$ca.scales <- gg.input$scales
+  
+  return(p)
 }
-
 ####################### Plot title
 
 plot.title  <- function(map.title=NULL, ctr.dim=NULL){
@@ -278,31 +219,30 @@ return(axis.labels)
 }
 
 ####################### breaksandscales
-breaksandscales <- function(gg.data, scale.interval=NULL){
-# Hjælpe funktion
-mround <- function(x,base){
-  base*round(x/base)
-}
-
-mini   	<- mround(min(c(min(gg.data[,1]), min(gg.data[,2]))), 0.5)
-maxi 		<- mround(max(c(max(gg.data[,1]), max(gg.data[,2]))), 0.5)
-lim.min 		<- min(c(min(gg.data[,1]), min(gg.data[,2])))
-lim.max 		<- max(c(max(gg.data[,1]), max(gg.data[,2])))
-
-if (identical(scale.interval,NULL)==TRUE){
-  scalebreaks 	<- round(seq(mini, maxi, by=0.25), digits=2)
-} else {
-  scalebreaks 	<- scale.interval
-}
-
-nolabel <-  seq(-5,5, by=0.5)
-inter <- intersect(scalebreaks, nolabel)
-truelabel <- is.element(scalebreaks, nolabel)
-breaklabel <- scalebreaks
-breaklabel[truelabel==FALSE] <-  ""
-
-scales <- list(scalebreaks=scalebreaks, breaklabel=breaklabel, lim.min=lim.min, lim.max=lim.max)
-return(scales)
+breaksandscales <- function(gg.data){
+  # Hjælpe funktion
+  mround <- function(x,base){
+    base*round(x/base)
+  }
+  
+  lim.min.x   	<- min(gg.data[,1])
+  lim.min.y   	<- min(gg.data[,2])
+  lim.max.x   	<- max(gg.data[,1])
+  lim.max.y   	<- max(gg.data[,2])
+  
+  scalebreaks <- seq(-10,10, by=0.25)
+  nolabel     <-  seq(-10, 10, by=0.5)
+  inter       <- intersect(scalebreaks, nolabel)
+  truelabel   <- is.element(scalebreaks, nolabel)
+  breaklabel  <- scalebreaks  
+  breaklabel[truelabel==FALSE] <-  ""
+    
+  length.x <- sqrt(lim.min.x^2) + sqrt(lim.max.x^2)
+  length.y <- sqrt(lim.min.y^2) + sqrt(lim.max.y^2)
+  
+  scales <- list(scalebreaks=scalebreaks, breaklabel=breaklabel, lim.min.x=lim.min.x, lim.min.y=lim.min.y,
+                 lim.max.x=lim.max.x, lim.max.y=lim.max.y, length.x=length.x, length.y=length.y)
+  return(scales)
 }
 
 #################### data.plot v.2

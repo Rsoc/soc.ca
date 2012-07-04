@@ -9,7 +9,31 @@
 export <- function(object, file="export.csv", dim=1:5) {
   if (is.matrix(object)==TRUE|is.data.frame(object)==TRUE){
     write.csv(object, file, fileEncoding="UTF-8")}
-  else{
+    
+  # Export soc.ca
+    if ((class(object)=="ctr.var")==TRUE){
+      
+      ll    <- length(object)
+      nam   <- names(object)
+      a     <- object[[1]]
+      coln  <- ncol(a)
+      line  <- c(rep("", coln))
+      line2 <- c(rep("", coln))
+      a     <- rbind(line, a, line2)      
+      
+    for (i in 2:ll){
+      line <- c(rep("", coln))
+      line2 <- c(rep("", coln))
+      a <- rbind(a,line, object[[i]], line2)
+      line2  <- c(rep("", coln))
+    }
+    rownames(a)[rownames(a)=="line"] <- nam
+    rownames(a)[rownames(a)=="line2"] <- ""
+    out <- a
+    write.csv(out, file, fileEncoding="UTF-8")  
+    }
+    # Export soc.ca
+    if ((class(object)=="soc.ca")==TRUE){
     coord.mod     <- object$coord.mod[,dim]
     coord.sup     <- object$coord.sup[,dim]
     coord.ind     <- object$coord.ind[,dim]
@@ -33,6 +57,7 @@ export <- function(object, file="export.csv", dim=1:5) {
     out           <- cbind(coord, ctr, cor)
     colnames(out) <- c(paste("Coord:", dim), paste("Ctr:", dim), paste("Cor:", dim))
     write.csv(out, file, fileEncoding="UTF-8")
+  
   }
   
   # Export objects from the soc.ca package to csv files.

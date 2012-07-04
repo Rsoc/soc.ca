@@ -131,8 +131,8 @@ contribution <- function(object, dim=1, all=FALSE, modality.indices=FALSE){
     av.ctr     <- av.ctr[duplicated(av.ctr)==FALSE]    
     return(av.ctr)
   }else{
-    ctr <- round(1000*object$ctr.mod[,dim])
-    cor <- round(1000*object$cor.mod[,dim])
+    ctr <- round(100*object$ctr.mod[,dim], digits=1)
+    cor <- round(100*object$cor.mod[,dim], digits=1)
     coord <- round(object$coord.mod[,dim], digits=2)
     names <- object$names.mod
     if (identical(all, FALSE)==TRUE){
@@ -156,7 +156,7 @@ contribution <- function(object, dim=1, all=FALSE, modality.indices=FALSE){
   # dim is the included dimensions
   # all: If TRUE returns all modalities instead of just those that contribute above average
   # modality.indices: If TRUE returns a vector with the row indices of the modalities
-  # Ctr is the contribution in 1000
+  # Ctr is the contribution in percentage
   # Cor is the correlation with the dimension
   # Coord is the principal coordinate
 }
@@ -171,7 +171,7 @@ individuals <- function(object, dim=1, all=FALSE, ind.indices=FALSE){
     av.ctr     <- av.ctr[duplicated(av.ctr)==FALSE]    
     return(av.ctr)
   }else{
-    ctr <- round(1000*object$ctr.ind[,dim])
+    ctr <- round(100*object$ctr.ind[,dim], digits=1)
     # cor <- round(1000*object$cor.ind[,dim])
     coord <- round(object$coord.ind[,dim], digits=2)
     names <- object$names.ind
@@ -220,7 +220,7 @@ tab.dim <- function(x, dim=1, label.plus=NULL, label.minus=NULL, all=FALSE){
     label.minus   <- paste("Dimension ", dim ,". (-)", sep="")
   }
   
-  ctr     <- round(1000*x$ctr.mod[,dim])
+  ctr     <- round(100*x$ctr.mod[,dim], digits=1)
   coord   <- round(x$coord.mod[,dim], digits=2)
   names   <- x$names.mod
   
@@ -269,7 +269,7 @@ ctr.var     <- function(object, dim=1:3){
     
     var.list    <- list()
     for (i in seq(length(lev.var))){
-        var.ctr           <- round(ctr.mod[variable==lev.var[i],]*1000)
+        var.ctr           <- round(ctr.mod[variable==lev.var[i],]*100, digits=1)
         var.ctr           <- cbind(var.ctr, freq.mod[variable==lev.var[i]])
         var.ctr           <- rbind(var.ctr, colSums(var.ctr))
         rownames(var.ctr) <- c(names.mod[variable==lev.var[i]], "Total")
@@ -280,7 +280,7 @@ ctr.var     <- function(object, dim=1:3){
     
     # The printing
     
-    av.ctr <- round(1000/object$n.mod)
+    av.ctr <- round(100/object$n.mod, digits=1)
     maxwidth <- max(nchar(names.mod))
     
     cat("The contribution of the active variables")
@@ -290,13 +290,14 @@ ctr.var     <- function(object, dim=1:3){
         cat("\n", "\n", format(lev.var[i], width=maxwidth), colnames(var.ctr))
         
         for (q in seq(nrow(var.ctr))){
-            cat("\n", format(rownames(var.ctr)[q], width=maxwidth), format(var.ctr[q,], width=6))
+            cat("\n", format(rownames(var.ctr)[q], width=maxwidth), format(var.ctr[q,dim], width=6), format(var.ctr[q,length(dim)+1], width=6, drop0trailing=TRUE))
         }
         
     }
     cat("\n","Average contribution per modality: ", av.ctr, sep="")
     cat("\n", "Total number of individuals: ", object$n.ind, sep="")
     
+    class(var.list) <- "ctr.var"
     invisible(var.list)
     # ctr.var returns the contribution values of all modalities ordered by variable
     # object is a soc.ca object
