@@ -171,7 +171,7 @@ basic.plot <- function(gg.input, point.shape=15, point.size=1.6, text.size=3.3, 
   
   p     <- p + scale_x_continuous(breaks=gg.input$scales$scalebreaks, labels=gg.input$scales$breaklabel)
   p 		<- p + scale_y_continuous(breaks=gg.input$scales$scalebreaks, labels=gg.input$scales$breaklabel)
-  
+  p     <- p + coord_fixed()
   p$ca.scales <- gg.input$scales
   
   return(p)

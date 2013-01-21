@@ -12,7 +12,7 @@ soc.ca <- function(active, sup=NULL, identifier=NULL, passive="Missing"){
   a.r     <- nrow(active)                                     # Number of active rows or the number of individuals
   sup.n   <- sum(unlist(lapply(as.data.frame(sup), nlevels))) # Number of supplementary modalities
   
-  if ((nrow(sup)==0)==TRUE){                                  # This process is slow at + 150.000 individuals
+  if ((nrow(sup)==0)==TRUE){                                  
     sup             <- matrix(0, nrow=nrow(active), ncol=2)
     sup[,1:2]       <- cbind(rep(0, nrow(active)), rep(0, nrow(active)))
     colnames(sup)   <- c("No supplementary points defined 1", "No supplementary points defined 2")
