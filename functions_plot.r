@@ -165,7 +165,7 @@ basic.plot <- function(gg.input, point.shape=15, point.size=1.6, text.size=3.3, 
     p       <- p + geom_text(data=gg.input$gg.data, aes(x=x, y=y, label=names),size=text.size, vjust=1.5, colour=colour, family="sans")
   }
   # Title and axis labels
-  p   	<- p + opts(title=gg.input$map.title)
+  p   	<- p + ggtitle(label=gg.input$map.title)
   p 		<- p + xlab(gg.input$labelx) + ylab(gg.input$labely)
   # Scales and breaks
   

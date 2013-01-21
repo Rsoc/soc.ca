@@ -1,30 +1,31 @@
 # Functions analysis
-#'Specific Multiple Correspondence Analysis
-
+# Specific Multiple Correspondence Analysis
+#  sup=NULL
+#  identifier=NULL
+#  passive="Missing"
 
 soc.ca <- function(active, sup=NULL, identifier=NULL, passive="Missing"){
   
-  active  <- data.frame(lapply(active, factor))               # Turn active variables into factor
-  sup     <- data.frame(lapply(sup, factor))                  # Turn sup variables into factor
+  active  <- data.frame(lapply(active, factor))               # Turn active variables into factor ## Slet det her og sæt en advarsel ind i stedet
+  sup     <- data.frame(lapply(sup, factor))                  # Turn sup variables into factor    ## Slet det her og sæt en advarsel ind i stedet
   Q       <- ncol(active)                                     # Number of active variables 
   a.r     <- nrow(active)                                     # Number of active rows or the number of individuals
   sup.n   <- sum(unlist(lapply(as.data.frame(sup), nlevels))) # Number of supplementary modalities
   
-  if ((nrow(sup)==0)==TRUE){
-    sup             <- matrix(, nrow=nrow(active), ncol=2)
+  if ((nrow(sup)==0)==TRUE){                                  # This process is slow at + 150.000 individuals
+    sup             <- matrix(0, nrow=nrow(active), ncol=2)
     sup[,1:2]       <- cbind(rep(0, nrow(active)), rep(0, nrow(active)))
     colnames(sup)   <- c("No supplementary points defined 1", "No supplementary points defined 2")
-    Z.sup           <- indicator(sup)    
+    ind.sup         <- sup
+  }else{
+    ind.sup <- indicator(sup)  
   }
-  
-  
-  
+    
   # Creating the indicatormatrix for active and supplementary variables
   ind.act <- indicator(active)
-  ind.sup <- indicator(sup)
-  
+      
   # Finding the subset
-  sub         <- grepl(paste(passive, collapse="|"),colnames(ind.act))
+  sub         <- grepl(paste(passive, collapse="|"), colnames(ind.act))
   set         <- 1:ncol(ind.act)
   subset      <- set[!sub]
   
@@ -126,6 +127,11 @@ soc.ca <- function(active, sup=NULL, identifier=NULL, passive="Missing"){
 
 
 #################### Correspondence analysis on a indicator matrix
+# Z.act = ind.act
+# Z.sup = ind.sup
+# subset
+# Q=Q
+# Qm=Qm
 
 subset.ca.indicator <- function(Z.act, Z.sup, subset, Q, Qm){
   
@@ -135,11 +141,10 @@ subset.ca.indicator <- function(Z.act, Z.sup, subset, Q, Qm){
   
   # Inertias
   P <- Z.act / sum(Z.act)       # 
-  cm <- apply(P, 2, sum)        # Column (modality) mass
-  rm <- apply(P, 1, sum)        # Row (individual) mass
+  cm <- colSums(P)              # Column (modality) mass
+  rm <- rowSums(P)              # Row (individual) mass
   
-  diag.rm <- diag(1/ sqrt(rm))
-  diag.cm <- diag(1/ sqrt(cm))
+  diag.cm <- diag(1/ sqrt(cm))  # This commmand scales badly because it creates a individual X individual matrix - If this number could be obtained differently - for instance - through the Burt matrix - there is a substantial speed gain.
   
   eP    <- rm %*% t(cm)           # Expected distances
   S     <- (P - eP) / sqrt(eP)    # Euclidian distances
@@ -153,29 +158,42 @@ subset.ca.indicator <- function(Z.act, Z.sup, subset, Q, Qm){
   # Decomposition and eigenvectors
   dec   <- svd(S)                 # Singular decomposition
   eigen <- dec$d^2                # Eigenvector
-  
-  
-  
+    
   # Principal coordinates
-  pc.ind <- diag.rm %*% dec$u %*% diag(dec$d)   # Principal coordinates for individuals
   pc.mod <- diag.cm %*% dec$v %*% diag(dec$d)   # Principal coordinates for modalities
   
-  # Inertias
-  inr.ind <- diag(rm) %*% pc.ind^2 # Inertia for row (Individuals) (mass x principal coordinates)
-  inr.mod <- diag(cm) %*% pc.mod^2 # Inertia for columns (Modalities)
+  # Fast principal coordinates for individuals
+  if (identical(var(rm), 0)){
+  sqrm       <- 1/ sqrt(rm)
+  pc.ind     <- (sqrm[1] * dec$u) %*% diag(dec$d)    
+  }else{
+    # Original principal coordinates for individuals
+    diag.rm <- diag(1/ sqrt(rm))  
+    pc.ind  <- diag.rm %*% dec$u %*% diag(dec$d)   # Principal coordinates for individuals # This is a slow process, but it scales ok # Anders Holm adjustment  
+  }
+  
+    
+  # Fast inertias
+  if (identical(var(rm), 0)){
+  inr.ind <- rm[1] * pc.ind^2
+  inr.mod <- diag(cm) %*% pc.mod^2
+  }else{
+    # Original inertias
+    inr.ind <- diag(rm) %*% pc.ind^2 # Inertia for row (Individuals) (mass x principal coordinates) # This is a slow process and it scales badly - diag(rm) is a individual X individual matrix. It is also sparse - so it might be possible to do it quicker.
+    inr.mod <- diag(cm) %*% pc.mod^2 # Inertia for columns (Modalities)
+  }
   
   # Contributions
   ctr.ind <- t(t(inr.ind) / dec$d^2) # Contribution for the individuals (inertia / eigenvalue)
   ctr.mod <- t(t(inr.mod) / dec$d^2) # Contribution for the modalities
   
   # Squared cosines or correlations
-  cor.ind <- inr.ind/apply(inr.ind, 2, sum)  # Squared cosines for individuals
-  cor.mod <- inr.mod/apply(inr.mod, 1, sum)  # Squared cosines for modalities
-  
+  cor.ind <- inr.ind/colSums(inr.ind)  # Squared cosines for individuals
+  cor.mod <- inr.mod/rowSums(inr.mod)  # Squared cosines for modalities
+    
   # Chi-distances
   
   # Supplementary principal coordinates
-  
   Z.star  <- Z.sup
   I.star  <- dim(Z.sup)[1]
   cs.star <- apply(Z.sup, 2, sum)
@@ -206,8 +224,8 @@ subset.ca.indicator <- function(Z.act, Z.sup, subset, Q, Qm){
   adj.inertia   <- cbind(R2.dim, round(eigen[R2.dim], 3), round(unadj.var[R2.dim], 1), adj.var ,cumpercent) # De Rouanet adjustede inertier - skal nok rykkes ned.
   colnames(adj.inertia) <- c("Dim", "Sv", "Var" ,"Adj.Var", "Cum%")
   
-  freq.mod <- apply(Z.act, 2, sum)[subset]
-  freq.sup <- apply(Z.sup, 2, sum)
+  freq.mod <- colSums(Z.act)[subset]
+  freq.sup <- colSums(Z.sup)
   
   # Output
   ca.output <- list(nd = max(R2.dim), n.ind = nrow(Z.act), n.mod = length(subset),

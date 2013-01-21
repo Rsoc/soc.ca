@@ -9,6 +9,13 @@ source("https://raw.github.com/Rsoc/soc.ca/master/web.soc.ca.r")
 
 data        <- read.csv(file="https://raw.github.com/Rsoc/soc.ca/master/wiki_data.csv", sep=";", encoding="UTF-8")
 
+setwd("~/Dropbox/R/soc.ca")
+
+source("soc.ca.r")
+
+data        <- read.csv(file="wiki_data.csv", sep=";", encoding="UTF-8")
+
+
 attach(data)
 
 
@@ -53,7 +60,8 @@ result      <- invert(result, c(1,2,3))
 # Export and assign label
 export.label(result)
 
-result      <- assign.label(result, file="https://raw.github.com/Rsoc/soc.ca/master/wiki_labels.csv")
+#result      <- assign.label(result, file="https://raw.github.com/Rsoc/soc.ca/master/wiki_labels.csv")
+result      <- assign.label(result, file="wiki_labels.csv")
 
 
 # Add.n
@@ -118,7 +126,6 @@ map.forfatter <- p.list(result, list.ind=notforfatter, point.label=FALSE)
 map.forfatter
 map.forfatter <- add.points(result, map.forfatter, data.type="list", list.ind=forfatter)
 map.forfatter
-
 
 # Plotting all the modalities of one individual
 result2     <- soc.ca(active, sup, id)
