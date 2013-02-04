@@ -84,6 +84,7 @@ p.id(result, dim=c(2,1), map.title="The top 100 Danish CEO's")
 
 p.ctr(result, dim=c(2,1))
 p.ctr(result, dim=c(2,1), ctr.dim=2)
+p.ctr(result, point.size=3)
 
 p.active(result, dim=c(2,1))
 p.sup(result, dim=c(2,1))
