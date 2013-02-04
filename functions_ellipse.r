@@ -1,7 +1,3 @@
-# Muligvis er der et problem med at tegne ellipser udenfor det yderste punkt i skyen - det er ggplot relateret
-# Højere opløsning kunne være en fordel, fordi vi ikke rammer helt i midten endnu.
-# Vi har stadig bøvl med gg.input og ellipse.data's antal rækker. Jeg kender ikke en god løsning endnu.
-
 ######################## Ellipse tegne funktionen
 p.ellipse <- function(object, ca.plot, variabel){ # Skal gg.input være defineret som default?
 # De indledende øvelser

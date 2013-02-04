@@ -9,7 +9,7 @@ source("https://raw.github.com/Rsoc/soc.ca/master/web.soc.ca.r")
 
 data        <- read.csv(file="https://raw.github.com/Rsoc/soc.ca/master/wiki_data.csv", sep=";", encoding="UTF-8")
 
-setwd("~/Dropbox/R/soc.ca")
+setwd("~/My Dropbox/R/soc.ca")
 
 source("soc.ca.r")
 
