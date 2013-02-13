@@ -139,9 +139,6 @@ add.points <- function(object, ca.plot, data.type=NULL, list.mod=NULL, list.sup=
   modal.list  <- list(list.mod=list.mod, list.sup=list.sup, list.ind=list.ind)
   add.data    <- data.plot(object, plot.type=data.type, dim, ctr.dim=ctr.dim, modal.list=modal.list, point.size=point.size)
   
-  # Point shape
-  if (identical(point.shape, "variable")==FALSE) gg.input$variable <- rep(point.shape, length.out=length(gg.input$variable))
-  
   # Points
   p           <- p + geom_point(data=add.data, aes(x=x, y=y, size=freq, shape=variable), colour=colour, fill=alpha("white", 0.5))
   
@@ -190,8 +187,7 @@ basic.plot <- function(gg.input, point.shape="variable", text.size=3.3, colour="
   # The middle plot axis
   p       <- p + geom_hline(yintercept = 0, colour = "grey50", size = 0.5, linetype="solid")
   p       <- p + geom_vline(xintercept = 0, colour = "grey50", size = 0.5, linetype="solid")
-  # Point shape
-  if (identical(point.shape, "variable")==FALSE) gg.input$variable <- rep(point.shape, length.out=length(gg.input$variable))
+  
   # Points
   p         <- p + geom_point(data=gg.input$gg.data, aes(x=x, y=y, size=freq, shape=variable), colour=colour, fill=alpha(fill, 0.5)) 
 
@@ -203,7 +199,7 @@ basic.plot <- function(gg.input, point.shape="variable", text.size=3.3, colour="
   # Point shape scale
   if (identical(point.shape, "variable")==FALSE){
     p         <- p + scale_shape_manual(guide="none", values=point.shape)  }else{
-    shapes    <- c(21, 22, 23, 0, 3, 1, 2, 5, 4, 10, 14, 12, 35, 64,  36:120)   
+    shapes    <- c(21, 22, 23, 24, 25, 6, 0, 1, 2, 3, 4, 5, 7, 8, 9, 10, 12, 15, 16, 17, 18, 42, 45, 61, 48, 50:120)   
     p         <- p + scale_shape_manual(guide="none", values=shapes)   
   }
   
