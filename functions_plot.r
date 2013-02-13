@@ -12,7 +12,7 @@
 # colour="black"
 # ctr.dim = 1
 
-p.all <- function(object, dim=c(1,2), map.title="all", labelx=NULL, labely=NULL, point.label=TRUE, point.shape=21, point.size="freq", text.size=3.3, colour="black"){
+p.all <- function(object, dim=c(1,2), map.title="all", labelx=NULL, labely=NULL, point.label=TRUE, point.shape="variable", point.size="freq", text.size=3.3, colour="black"){
 
 gg.proc     <- round(object$adj.inertia[,4]) # Adjusted inertia
 gg.data     <- data.plot(object, plot.type="all", dim, ctr.dim=NULL, point.size=point.size) # Data selection
@@ -31,7 +31,7 @@ return(t.plot)
 }
 
 #################### The most contributing modalities
-p.ctr        <- function(object, ctr.dim=1, dim=c(1,2), map.title="ctr", labelx=NULL, labely=NULL, point.label=TRUE, point.shape=21, point.size="freq", text.size=3.3, colour="black"){
+p.ctr        <- function(object, ctr.dim=1, dim=c(1,2), map.title="ctr", labelx=NULL, labely=NULL, point.label=TRUE, point.shape="variable", point.size="freq", text.size=3.3, colour="black"){
 
 gg.proc     <- round(object$adj.inertia[,4]) # Adjusted inertia
 gg.data     <- data.plot(object, plot.type="ctr", dim, ctr.dim=ctr.dim, point.size=point.size) # Data selection
@@ -52,7 +52,7 @@ return(t.plot)
 
 ######################## Active map
 
-p.active     <- function(object, dim=c(1,2), map.title="active", labelx=NULL, labely=NULL, point.label=TRUE, point.shape=21, point.size="freq", text.size=3.3, colour="black"){
+p.active     <- function(object, dim=c(1,2), map.title="active", labelx=NULL, labely=NULL, point.label=TRUE, point.shape="variable", point.size="freq", text.size=3.3, colour="black"){
 
 gg.proc 	<- round(object$adj.inertia[,4]) # Adjusted inertia
 gg.data     <- data.plot(object, plot.type="active", dim, ctr.dim=NULL, point.size=point.size) # Data selection
@@ -72,7 +72,7 @@ return(t.plot)
 
 ###################### Supplementary map
 
-p.sup     	<- function(object, dim=c(1,2), map.title="sup", labelx=NULL, labely=NULL, point.label=TRUE, point.shape=21, point.size="freq", text.size=3.3, colour="black"){
+p.sup     	<- function(object, dim=c(1,2), map.title="sup", labelx=NULL, labely=NULL, point.label=TRUE, point.shape="variable", point.size="freq", text.size=3.3, colour="black"){
 gg.proc 	<- round(object$adj.inertia[,4]) # Adjusted inertia
 gg.data     <- data.plot(object, plot.type="sup", dim, ctr.dim=NULL, point.size=point.size) # Data selection
 axis.labels <- plot.axis(labelx=labelx, labely=labely, gg.proc=gg.proc, dim=dim) # Axis labels
@@ -90,7 +90,7 @@ return(t.plot)
 }
 
 ######################## Id map
-p.id         <- function(object, dim=c(1,2), map.title="id", labelx=NULL, labely=NULL, point.label=FALSE, point.shape=21, point.size="freq", text.size=3.3, colour="black"){
+p.id         <- function(object, dim=c(1,2), map.title="id", labelx=NULL, labely=NULL, point.label=FALSE, point.shape="variable", point.size=3, text.size=3.3, colour="black"){
 
 gg.proc 	<- round(object$adj.inertia[,4]) # Adjusted inertia
 gg.data     <- data.plot(object, plot.type="id", dim, ctr.dim=NULL, point.size=point.size) # Data selection
@@ -108,7 +108,7 @@ return(t.plot)
 }
 
 ############################### List map
-p.list        <- function(object, list.mod=NULL, list.sup=NULL, list.ind=NULL, dim=c(1,2), map.title="list", labelx=NULL, labely=NULL, point.label=TRUE, point.shape=21, point.size="freq", text.size=3.3, colour="black"){
+p.list        <- function(object, list.mod=NULL, list.sup=NULL, list.ind=NULL, dim=c(1,2), map.title="list", labelx=NULL, labely=NULL, point.label=TRUE, point.shape="variable", point.size="freq", text.size=3.3, colour="black"){
   
   modal.list  <- list(list.mod=list.mod, list.sup=list.sup, list.ind=list.ind)
   
@@ -131,7 +131,7 @@ p.list        <- function(object, list.mod=NULL, list.sup=NULL, list.ind=NULL, d
 
 ############### Add new points to an existing plot
 
-add.points <- function(object, ca.plot, data.type=NULL, list.mod=NULL, list.sup=NULL, list.ind=NULL, ctr.dim=NULL, point.label=TRUE, point.shape=21, point.size="freq", text.size=3.3, colour="black"){
+add.points <- function(object, ca.plot, data.type=NULL, list.mod=NULL, list.sup=NULL, list.ind=NULL, ctr.dim=NULL, point.label=TRUE, point.shape="variable", point.size="freq", text.size=3.3, colour="black"){
   
   p           <- ca.plot
   dim         <- ca.plot$dimensions
@@ -139,12 +139,25 @@ add.points <- function(object, ca.plot, data.type=NULL, list.mod=NULL, list.sup=
   modal.list  <- list(list.mod=list.mod, list.sup=list.sup, list.ind=list.ind)
   add.data    <- data.plot(object, plot.type=data.type, dim, ctr.dim=ctr.dim, modal.list=modal.list, point.size=point.size)
   
-  p           <- p + geom_point(data=add.data, aes(x=x, y=y, size=freq), shape=point.shape, colour=colour, fill=alpha("white", 0.5))
+  # Point shape
+  if (identical(point.shape, "variable")==FALSE) gg.input$variable <- rep(point.shape, length.out=length(gg.input$variable))
   
+  # Points
+  p           <- p + geom_point(data=add.data, aes(x=x, y=y, size=freq, shape=variable), colour=colour, fill=alpha("white", 0.5))
+  
+  # Point size
   if (length(add.data$point.size)==1 & is.numeric(add.data$point.size)==TRUE){
     p         <- p + scale_size_identity(guide="none")  }else{
     p         <- p + scale_size(guide="none")      
     }
+  
+  # Point shape scale
+  if (identical(point.shape, "variable")==FALSE){
+    p         <- p + scale_shape_manual(guide="none", values=point.shape)  }else{
+    shapes    <- c(21, 22, 23, 0, 3, 1, 2, 5, 4, 10, 14, 12, 35, 64,  36:120)   
+    p         <- p + scale_shape_manual(guide="none", values=shapes)   
+   }
+  
   
   if (identical(point.label, TRUE)==TRUE){
     p         <- p + geom_text(data=add.data, aes(x=x, y=y, label=names), size=text.size, vjust=1.4, colour=colour, lineheight=0.9)
@@ -171,19 +184,28 @@ add.points <- function(object, ca.plot, data.type=NULL, list.mod=NULL, list.sup=
 
 
 ############################# basic.plot 
-basic.plot <- function(gg.input, point.shape=21, text.size=3.3, colour="black", fill="grey80"){ 
+basic.plot <- function(gg.input, point.shape="variable", text.size=3.3, colour="black", fill="grey80"){ 
   # Defining point.size
   p       <- ggplot()   
   # The middle plot axis
   p       <- p + geom_hline(yintercept = 0, colour = "grey50", size = 0.5, linetype="solid")
   p       <- p + geom_vline(xintercept = 0, colour = "grey50", size = 0.5, linetype="solid")
+  # Point shape
+  if (identical(point.shape, "variable")==FALSE) gg.input$variable <- rep(point.shape, length.out=length(gg.input$variable))
   # Points
-  p         <- p + geom_point(data=gg.input$gg.data, aes(x=x, y=y, size=freq), shape=point.shape, colour=colour, fill=alpha(fill, 0.5)) 
+  p         <- p + geom_point(data=gg.input$gg.data, aes(x=x, y=y, size=freq, shape=variable), colour=colour, fill=alpha(fill, 0.5)) 
 
+  # Point size scale
   if (length(gg.input$point.size)==1 & is.numeric(gg.input$point.size)==TRUE){
     p         <- p + scale_size_identity(guide="none")  }else{
     p         <- p + scale_size(guide="none", range=c(2,12)) 
     }
+  # Point shape scale
+  if (identical(point.shape, "variable")==FALSE){
+    p         <- p + scale_shape_manual(guide="none", values=point.shape)  }else{
+    shapes    <- c(21, 22, 23, 0, 3, 1, 2, 5, 4, 10, 14, 12, 35, 64,  36:120)   
+    p         <- p + scale_shape_manual(guide="none", values=shapes)   
+  }
   
     # Text labels for all points
   if (identical(gg.input$point.label, TRUE)==TRUE){
@@ -279,7 +301,8 @@ data.plot   <- function(object, plot.type, dim, ctr.dim=NULL, modal.list=NULL, p
   if (identical(plot.type, "all")==TRUE){
     coord       <- rbind(object$coord.mod, object$coord.sup, object$coord.ind)
     mnames  	  <- c(object$names.mod, object$names.sup, object$names.ind)
-    freq        <- c(object$freq.mod, object$freq.sup, rep(1,object$n.ind))   
+    freq        <- c(object$freq.mod, object$freq.sup, rep(1,object$n.ind))
+    variable    <- c(object$variable, object$variable.sup, rep("ind", object$n.ind))
   }
   
   # ctr
@@ -288,24 +311,28 @@ data.plot   <- function(object, plot.type, dim, ctr.dim=NULL, modal.list=NULL, p
     coord     	<- object$coord.mod[av.ctr,]
     mnames		  <- object$names.mod[av.ctr]
     freq        <- object$freq.mod[av.ctr]
+    variable    <- object$variable[av.ctr]
   }
   # active
   if (identical(plot.type, "active")==TRUE){
     coord 		  <- object$coord.mod
     mnames		  <- object$names.mod
     freq        <- object$freq.mod
+    variable    <- object$variable
   }
   # sup
   if (identical(plot.type, "sup")==TRUE){
     coord 		<- object$coord.sup
     mnames		<- object$names.sup
     freq      <- object$freq.sup
+    variable  <- object$variable.sup
   }
   # id
   if (identical(plot.type, "id")==TRUE){
     coord 		<- object$coord.ind
     mnames		<- object$names.ind
     freq      <- rep(1, object$n.ind)
+    variable  <- rep("ind",object$n.ind)
   }
   
   # list
@@ -323,11 +350,15 @@ data.plot   <- function(object, plot.type, dim, ctr.dim=NULL, modal.list=NULL, p
     freq.sup      <- object$freq.sup[modal.list$list.sup]
     freq.ind      <- rep(1, object$n.ind)[modal.list$list.ind]
     freq          <- c(freq.mod, freq.sup, freq.ind)
+    variable.mod  <- object$variable[modal.list$list.mod]
+    variable.sup  <- object$variable.sup[modal.list$list.sup]
+    variable.ind  <- rep("ind", object$n.ind)[modal.list$list.ind]
+    variable      <- c(variable.mod, variable.sup, variable.ind)
   }
   
   if(is.numeric(point.size))  freq <- rep(point.size, length.out=nrow(coord))
   
-  gg.data             <- data.frame(cbind(coord[,dim[1]], coord[,dim[2]]), mnames, freq)
-  colnames(gg.data)   <- c("x", "y", "names", "freq")
+  gg.data             <- data.frame(cbind(coord[,dim[1]], coord[,dim[2]]), mnames, freq, variable)
+  colnames(gg.data)   <- c("x", "y", "names", "freq", "variable")
   return(gg.data)
 }
