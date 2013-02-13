@@ -46,14 +46,15 @@ sample.test <- function(result, active, dim=1:5, sample.sizes=seq(0.01, 0.5, by=
   ctr.test <- t(as.data.frame(cbind(ctr.test)))
   rownames(ctr.test) <- sample.sizes
   melt.ctr <- melt(ctr.test)
-  p.c   <- ggplot(data=melt.ctr, aes(x=X1, y=value, colour=as.factor(X2), group=X2)) + geom_smooth() + theme_bw() + ggtitle("Test of all ctr.")
-  
+  p.c   <- ggplot(data=melt.ctr, aes(x=X1, y=value, colour=as.factor(X2), group=X2)) + geom_smooth() + theme_bw() + ggtitle("Test of all ctr.") #+ geom_point(shape=4, alpha=0.5)
+    
   av.test <- t(as.data.frame(cbind(av.test)))
   rownames(av.test) <- sample.sizes
   melt.av <- melt(av.test)
   p.av<- ggplot(data=melt.av, aes(x=X1, y=value, colour=as.factor(X2), group=X2)) + geom_smooth() + theme_bw() + ggtitle("Test of changes across the above average threshold")
   
-  print(p.c)
   print(p.av)
+  print(p.c)
+    
 }
 

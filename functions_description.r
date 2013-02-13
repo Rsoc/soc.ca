@@ -258,7 +258,7 @@ tab.dim <- function(x, dim=1, label.plus=NULL, label.minus=NULL, all=FALSE){
   }
 
 ##########################      ctr.var       #### Contribution per variabel
-ctr.var     <- function(object, dim=1:3){
+tab.variable    <- function(object, dim=1:3, sup=FALSE){
     variable    <- as.factor(object$variable)
     ctr.mod     <- object$ctr.mod[,dim]
     lev.var     <- levels(variable)
@@ -276,12 +276,38 @@ ctr.var     <- function(object, dim=1:3){
         var.list[[paste(lev.var[i])]] <- var.ctr
     }
     
+    ### Supplementary modalities
+    
+    if (identical(sup, TRUE)){
+      
+      variable    <- as.factor(object$variable.sup)
+      coord.sup   <- object$coord.sup[,dim]
+      lev.var     <- levels(variable)
+      names.mod   <- object$names.sup
+      freq.mod    <- object$freq.sup
+      
+      var.list    <- list()
+      for (i in seq(length(lev.var))){
+        var.ctr           <- round(coord.sup[variable==lev.var[i],],digits=2)
+        var.ctr           <- cbind(var.ctr, freq.mod[variable==lev.var[i]])
+        rownames(var.ctr) <- c(names.mod[variable==lev.var[i]])
+        colnames(var.ctr) <- c(paste(" Dim.", dim, sep=""), "  Freq")
+        
+        var.list[[paste(lev.var[i])]] <- var.ctr
+      }
+          
+      
+    }
+    
     # The printing
     
     av.ctr <- round(100/object$n.mod, digits=1)
     maxwidth <- max(nchar(names.mod))
     
-    cat("The contribution of the active variables")
+    
+    if (identical(sup, FALSE)) cat("The contribution of the active variables")
+    if (identical(sup, TRUE))  cat("The coordinates of the supplementary variables")
+    
     # Beautiful printing!
     for (i in seq(length(lev.var))){
         var.ctr <- var.list[[i]]
@@ -292,15 +318,18 @@ ctr.var     <- function(object, dim=1:3){
         }
         
     }
-    cat("\n","Average contribution per modality: ", av.ctr, sep="")
+    
+    
+    if (identical(sup, FALSE))cat("\n","Average contribution per modality: ", av.ctr, sep="")
     cat("\n", "Total number of individuals: ", object$n.ind, sep="")
     
-    class(var.list) <- "ctr.var"
+    class(var.list) <- "tab.variable"
     invisible(var.list)
-    # ctr.var returns the contribution values of all modalities ordered by variable
+    # tab.variable returns the contribution values of all modalities ordered by variable
     # object is a soc.ca object
     # dim is the included dimensions. The default is 1:3
-    # If assigned using <- ctr.var returns a list of matrixes with the contribution values
+    # If assigned using <- tab.variable returns a list of matrixes with the contribution values
+    # If sup=TRUE the coordinates of the supplementary variables are given instead
 }
 
 

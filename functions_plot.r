@@ -147,7 +147,7 @@ add.points <- function(object, ca.plot, data.type=NULL, list.mod=NULL, list.sup=
     }
   
   if (identical(point.label, TRUE)==TRUE){
-    p         <- p + geom_text(data=add.data, aes(x=x, y=y, label=names), size=text.size, vjust=1.5, colour=colour)
+    p         <- p + geom_text(data=add.data, aes(x=x, y=y, label=names), size=text.size, vjust=1.4, colour=colour, lineheight=0.9)
   }
   
   # Scales and labels
@@ -175,19 +175,19 @@ basic.plot <- function(gg.input, point.shape=21, text.size=3.3, colour="black", 
   # Defining point.size
   p       <- ggplot()   
   # The middle plot axis
-  p       <- p + geom_hline(yintercept = 0, colour = "grey50", size = 0.33, linetype="solid")
-  p       <- p + geom_vline(xintercept = 0, colour = "grey50", size = 0.33, linetype="solid")
+  p       <- p + geom_hline(yintercept = 0, colour = "grey50", size = 0.5, linetype="solid")
+  p       <- p + geom_vline(xintercept = 0, colour = "grey50", size = 0.5, linetype="solid")
   # Points
   p         <- p + geom_point(data=gg.input$gg.data, aes(x=x, y=y, size=freq), shape=point.shape, colour=colour, fill=alpha(fill, 0.5)) 
 
   if (length(gg.input$point.size)==1 & is.numeric(gg.input$point.size)==TRUE){
     p         <- p + scale_size_identity(guide="none")  }else{
-    p         <- p + scale_size(guide="none")      
+    p         <- p + scale_size(guide="none", range=c(2,12)) 
     }
   
     # Text labels for all points
   if (identical(gg.input$point.label, TRUE)==TRUE){
-    p       <- p + geom_text(data=gg.input$gg.data, aes(x=x, y=y, label=names),size=text.size, vjust=1.5, colour=colour, family="sans")
+    p       <- p + geom_text(data=gg.input$gg.data, aes(x=x, y=y, label=names),size=text.size, vjust=1.4, colour=colour, family="sans", lineheight=0.9)
   }
   # Title and axis labels
   p   	<- p + ggtitle(label=gg.input$map.title)

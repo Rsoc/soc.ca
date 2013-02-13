@@ -11,7 +11,7 @@ export <- function(object, file="export.csv", dim=1:5) {
     write.csv(object, file, fileEncoding="UTF-8")}
     
   # Export soc.ca
-    if ((class(object)=="ctr.var")==TRUE){
+    if ((class(object)=="tab.variable")==TRUE){
       
       ll    <- length(object)
       nam   <- names(object)

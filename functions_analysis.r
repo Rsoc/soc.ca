@@ -52,6 +52,7 @@ soc.ca <- function(active, sup=NULL, identifier=NULL, passive="Missing"){
   result$names.passive  <- colnames(ind.act)[sub]
   
   # List of descriptive values
+  # The position and length of the active variables
   varnames    <- colnames(active)
   ml          <- vector()
   for (i in 1:ncol(active)){
@@ -72,15 +73,25 @@ soc.ca <- function(active, sup=NULL, identifier=NULL, passive="Missing"){
   }
   md[,1]      <- as.numeric(md[,1])
   md[,2]      <- as.numeric(md[,2])
-  
   result$modal    <- md
   
   variable <- vector()
   for (i in 1:nrow(md)){
     variable <- c(variable, rep(rownames(md)[i], md[i,3]))
   }
-  
   result$variable <- variable
+  
+  # 
+  if (identical(sup, NULL)==FALSE){
+  
+  varnames    <- colnames(sup)
+  ml          <- vector()
+  for (i in 1:ncol(sup)){
+    ml         <- c(ml, rep(varnames[i], nlevels(sup[,i])))
+  }
+  result$variable.sup <- ml
+  }
+  
   
   class(result)   <- "soc.ca"
   return(result)
