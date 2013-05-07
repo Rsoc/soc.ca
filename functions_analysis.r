@@ -4,7 +4,7 @@
 #  identifier=NULL
 #  passive="Missing"
 
-soc.ca <- function(active, sup=NULL, identifier=NULL, passive="Missing"){
+soc.ca <- function(active, sup=NULL, identifier=NULL, passive=getOption("passive", default="Missing")){
   
   active  <- data.frame(lapply(active, factor))               # Turn active variables into factor ## Slet det her og sæt en advarsel ind i stedet
   sup     <- data.frame(lapply(sup, factor))                  # Turn sup variables into factor    ## Slet det her og sæt en advarsel ind i stedet
@@ -50,6 +50,9 @@ soc.ca <- function(active, sup=NULL, identifier=NULL, passive="Missing"){
   result$names.ind      <- as.character(identifier)
   result$names.sup      <- colnames(ind.sup)
   result$names.passive  <- colnames(ind.act)[sub]
+  
+  # The active indicator matrix
+  result$indicator.matrix <- ind.act[,subset]
   
   # List of descriptive values
   # The position and length of the active variables
