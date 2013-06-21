@@ -2,22 +2,47 @@
 
 library(soc.ca)
 
-# taste <- read.csv("~/My Dropbox/R/soc.ca.package/taste.csv", sep = ";")
-# save(taste, file="~/My Dropbox/R/soc.ca.package/Data/taste.rda")
-
 data(taste)
 
-dta          <- taste
-dta          <- dta[ which(dta$Isup =='Active'),]
+data           <- taste
+data           <- data[ which(data$Isup =='Active'),]
 
 
-attach(dta)
-dat = data.frame(TV, Film, Art, Eat, Gender, Age, Income)
-detach(dta)
+attach(data)
+active         <- data.frame(TV, Film, Art, Eat, Gender)
+sup            <- data.frame(Age, Income)
+detach(data)
 
-sup.ind      <- 5:7
-aktive       <- dat[,-sup.ind]
-super        <- dat[,sup.ind]
+
+# Multiple Correspondence Analysis
+result.mca     <- soc.ca(active, sup)
+str(result.mca)
+result.mca
+
+variance(result.mca)
+
+contribution(result.mca, 1)
+contribution(result.mca, 2)
+
+# Her mangler contribution variables
+
+
+
+
+map.active(result.mca)
+map.active(result.mca, map.title="Map of active modalities with size of contribution to 1. dimension", point.size=result.mca$ctr.mod[,1])
+map.active(result.mca, map.title="Map of active modalities with size of contribution to 2. dimension", point.size=result.mca$ctr.mod[,2])
+map.ind(result.mca)
+
+# Specific Multiple Correspondence Analysis
+options(passive= c("Film: CostumeDrama", "TV: Tv-Sport"))
+result.smca     <- soc.ca(active, sup)
+result.smca
+result.smca$names.passive
+
+
+
+
 class.age    <- which(dat$Age =='55-64')
 
 result       <- soc.ca(aktive)

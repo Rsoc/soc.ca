@@ -189,7 +189,10 @@ contribution <- function(object, dim=1, all=FALSE, indices=FALSE, mode="sort"){
   if(identical(mode, "sort")){
     tab.dim(object, dim)
   }
-  
+  # Variables
+  if(identical(mode, "variable")){
+    tab.variable(object, dim)
+  }
 }
 
 # ' The most contributing individuals

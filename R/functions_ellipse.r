@@ -20,7 +20,7 @@ map.ellipse <- function(object, ca.plot, variable){
 
 dim         <- ca.plot$dimensions 
 id.coord    <- object$coord.ind[, dim]
-lev.var     <- levels(variabel)
+lev.var     <- levels(variable)
 id          <- object$names.ind
 # En liste, af lister-objekter med samtlige nødvendige informationer
 # Label
@@ -29,8 +29,8 @@ id          <- object$names.ind
 # Ellipse koordinater
 ## Fremtid: freq til at afgøre origo størrelse.
 ellipse.data <- list()
-for (i in 1:nlevels(variabel)){
-binvar            <- which(variabel==lev.var[i])
+for (i in 1:nlevels(variable)){
+binvar            <- which(variable==lev.var[i])
 id.coord.var      <- id.coord[binvar,]
 label             <- lev.var[i]
 el.coord          <- ellipse.coord(id, id.coord.var)
@@ -44,7 +44,7 @@ ellipse.data      <- ellipse.data
 
 # Her plottes.
 
-for (i in 1:nlevels(variabel)){
+for (i in 1:nlevels(variable)){
 # Ellipserne
 ca.plot <- ca.plot + geom_path(data=ellipse.data[[i]]$el.coord, aes(x=x, y=y), colour="grey70", size=0.33)
 # Akserne
@@ -98,7 +98,7 @@ ellipse.axis.points
 ############## Ellipse.coord
 ellipse.coord <- function(id, id.coord.var){
 # Her laves de binære variable der skal bruges til at tegne koordinaterne. Det kan gøres mere abstrakt.
-#variabel01 <- which(variabel==levels(variabel)[1])
+#variable01 <- which(variable==levels(variable)[1])
 id.var    <- as.data.frame(id.coord.var)
 colnames(id.var) <- c("x","y")
 
