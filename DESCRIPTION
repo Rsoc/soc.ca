@@ -1,0 +1,29 @@
+Package: soc.ca
+Title: Specific correspondence analysis for sociologists
+Description: soc.ca is a package optimized to the needs of sociologists
+    producing specific correspondence analysis on survey-like data. Soc.ca is
+    optimized to only give the most essential statistical values sorted so as
+    to help in analysis. Seperate functions exists for almost publication-ready
+    plots and tables.
+URL: https://github.com/Rsoc/soc.ca
+Version: 0.1
+Maintainer: Anton Grau Larsen <alar@soc.ku.dk>
+Author: Anton Grau Larsen <alar@soc.ku.dk>
+Depends:
+    R (>= 2.15.0),
+    ggplot2,
+    ellipse,
+    scales,
+    grid
+License: GPL-3
+Collate:
+    'data_documentation.r'
+    'functions_analysis.r'
+    'functions_description.r'
+    'functions_ellipse.r'
+    'functions_label.r'
+    'functions_plot.r'
+    'functions_test.r'
+    'functions_tools.r'
+    'functions_var.r'
+    'plot_theme.r'

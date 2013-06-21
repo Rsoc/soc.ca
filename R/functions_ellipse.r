@@ -1,5 +1,21 @@
-######################## Ellipse tegne funktionen
-p.ellipse <- function(object, ca.plot, variabel){ # Skal gg.input være defineret som default?
+######################### ELLIPSES
+
+
+
+#' Concentration ellipses
+#'
+#' Add ellipses for each level in a factor to a plot made from a soc.ca object.
+#' @param object is a soc.ca class object
+#' @param ca.plot is a plot made from a soc.ca object
+#' @param variable is a factor of the same length and in the same order as the active varibles used for the soc.ca object.
+#' @return a plot with a concentration ellipse containing 80% of the individuals for each modality
+#' @seealso \link{map.ind}, \link{map.ctr}, \link{soc.ca}
+#' @examples
+#' example(soc.ca)
+#' map.ind(result)
+#' @export
+
+map.ellipse <- function(object, ca.plot, variable){ 
 # De indledende øvelser
 
 dim         <- ca.plot$dimensions 

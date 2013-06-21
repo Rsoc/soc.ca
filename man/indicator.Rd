@@ -1,0 +1,31 @@
+\name{indicator}
+\alias{indicator}
+\title{Indicator matrix}
+\usage{
+  indicator(x, id = NULL, ps = ": ")
+}
+\arguments{
+  \item{x}{a data.frame of factors}
+
+  \item{id}{a vector defining the labels for the
+  individuals. If id = NULL row number is used.}
+
+  \item{ps}{the seperator used in the creation of the names
+  of the columns (modalities).}
+}
+\value{
+  Returns a indicator matrix
+}
+\description{
+  Creates an indicator matrix from a data.frame with
+  questions as columns and individuals as rows.
+}
+\examples{
+a <- rep(c("A","B"), 5)
+b <- rep(c("C", "D"), 5)
+indicator(data.frame(a,b))
+}
+\seealso{
+  \link{soc.ca}, \link{subset.ca.indicator}
+}
+

@@ -1,7 +1,14 @@
 ## Labels 
 
-## Modalitetsfrekvenser
-add.n   <- function(object, text=" (n:"){
+#' Add to label
+#'
+#' Adds values to the end of the label of each modality.
+#' @param  object is a soc.ca object
+#' @param  text is the prefix used to construct the added text.
+#' @return a soc.ca object with altered labels in names.mod and names.sup.
+#' @export
+
+add.to.label <- function(object, text=" (n:"){
   
   freq.mod  <- object$freq.mod
   freq.sup  <- object$freq.sup
@@ -15,13 +22,23 @@ add.n   <- function(object, text=" (n:"){
   object$names.sup <- names.sup
   
   return(object)
-# Add frequencies to the end of the label of each modality.
-# object is a soc.ca object
-# text is the prefix used to construct the added text.
 }
 
+#' Exports the labels of a soc.ca object into a csv file.
+#' 
+#' This function allows easy translation and renaming of modalities by exporting the labels into a .csv file that is easier to work with.
+#' 
+#' Two columns are created within the .csv: 'New label' and 'Old label'. In the 'New label' column you write the new labels. Remember to leave 'Old label' unchanged as this column is used for matching.
+#' 
+#' If you want to add frequencies to the labels with the \link{add.to.label} function you should do this after exporting and assigning labels with the \link{assign.label} function.
+#' Otherwise the matching of the labels is likely to fail.
+#' @param object is a soc.ca object
+#' @param file is the name and path of the exported file
+#' @param encoding is the character encoding of the exported file
+#' @param overwrite decides whether to overwrite already existing files
+#' @return A .csv with two columns and preferably UTF-8 encoding.
+#' @export
 
-##### Export label
 export.label    <- function(object, file=FALSE, encoding="UTF-8", overwrite=FALSE){
   
   names         <- c(object$names.mod, object$names.sup, object$names.ind)
@@ -34,16 +51,19 @@ export.label    <- function(object, file=FALSE, encoding="UTF-8", overwrite=FALS
   if(file.exists(file)==TRUE & identical(overwrite, FALSE)) stop("File already exists")
   write.csv(ca.label, file=file, fileEncoding=encoding)
 
-# Exports the labels of a soc.ca object into a csv file.
-# This function allows easy translation and renaming of modalities
-# object is a soc.ca object
-# file is the name and path of the exported file
-# encoding is the character encoding of the exported file
-# overwrite decides whether to overwrite already existing files
 }
 
 
-#####  Assign.label
+#'  Assign.label
+#'  
+#' Assigns new labels to an soc.ca object. The input labels are defined in a .csv file created by the export.label() function.
+#' @param object is a soc.ca object
+#' @param file is the path of the .csv file with the new labels. The file is preferably created by the export.label() function
+#' @param encoding is the encoding of the imported file
+#' @param sep is the seperator used to create the imported .csv file  
+#' @return a soc.ca object with altered labels in names.mod, names.ind and names.sup
+#' @seealso \link{export.label}, \link{add.to.label}
+#' @export
 
 assign.label <- function(object, file=FALSE, encoding = "UTF-8", sep = ","){
   if (identical(file, FALSE)==TRUE){
@@ -79,9 +99,4 @@ assign.label <- function(object, file=FALSE, encoding = "UTF-8", sep = ","){
   object$names.ind <- names.ind
   return(object)
 
-  # Assigns new labels to an soc.ca object. The input labels are defined in a .csv file created by the export.label() function.
-  # object is a soc.ca object
-  # file is the path of the .csv file with the new labels. The file is preferably created by the export.label() function
-  # encoding is the encoding of the imported file
-  # sep is the seperator used to create the .csv file  
 }

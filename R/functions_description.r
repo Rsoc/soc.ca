@@ -1,6 +1,19 @@
 #### Functions for describtion and printing
 
-# Print objects from the soc.ca function
+#' Print soc.ca objects
+#'
+#' Prints commonly used measures used in the analysis of specific correspondence analysis
+#' @param object is a soc.ca class object created with by \link{soc.ca}
+#' @return Active dimensions is the number of dimensions remaining after the reduction of the dimensionality of the analysis.
+#' @return Active modalities is the number of modalities that are not set as passive.
+#' @return Share of passive mass is the percentage of the total mass that is represented by the passive modalities.
+#' @return The values represented in the scree plot are the adjusted inertias, see \link{variance}
+#' @return The active variables are represented with their number of active modalities and their share of the total variance/inertia.
+#' @seealso \link{soc.ca}, \link{contribution}
+#' @examples
+#' example(soc.ca)
+#' @export
+
 print.soc.ca  <- function(object){
   
   # Help functions
@@ -18,26 +31,25 @@ print.soc.ca  <- function(object){
     # Dim is the number of dimensions included in the plot
   }
     
-  Nmodal      <- object$n.mod
-  Nsup        <- nrow(object$coord.sup) # S?t if ind
-  Nid         <- object$n.ind
-  Vnames   	  <- paste(rownames(object$modal), " (",object$modal[,3], ")", sep="")
-  Submass 	  <- round(sum(object$mass.mod), digits=2) # Er det her i Procent aka. summer mass altid til 1.
+  Nmodal       <- object$n.mod
+  Nsup         <- sum(object$freq.sup != 0)
+  Nid          <- object$n.ind
+  Share.of.var <- round((object$modal[,3]-1)/ (length(object$names.passive)+Nmodal- nrow(object$modal)),2)*100
+  #Vnames   	   <- paste(rownames(object$modal), " (",object$modal[,3], " - ", format(Share.of.var),")", sep="")
+  Vnames        <- paste(rownames(object$modal), " [",object$modal[,3], " - ", format(Share.of.var),"%]", sep="")
+  Vnames       <- Vnames[order(Share.of.var, decreasing=TRUE)]
+  Submass 	   <- 1-round(sum(object$mass.mod), digits=2) 
+  act.dim 	   <- nrow(object$adj.inertia)
+  dim80 		   <- which.min(object$adj.inertia[,5] < 80)
+  scree.dim	   <- 7
+  N.pas.mod    <- length(object$names.passive)
+  stars 		   <- scree(object, scree.dim)
+  adj.dim      <- 1:scree.dim
   
-  act.dim 	<- nrow(object$adj.inertia)
-  dim80 		<- which.min(object$adj.inertia[,5] < 80)
-  scree.dim	<- 6
-  stars 		<- scree(object, scree.dim)
-  adj.dim   <- 1:scree.dim
-  #adj.dim 	<- object$adj.inertia[1:scree.dim,1]
-  dim.a   <- ifelse((scree.dim<nrow(object$adj.inertia)), scree.dim, nrow(object$adj.inertia))
-  adj <- vector(mode="numeric", length=scree.dim) # Måske skal den ikke smide 0 som output men noget bedre, når der ikke er flere dim end 6
+  dim.a        <- ifelse((scree.dim<nrow(object$adj.inertia)), scree.dim, nrow(object$adj.inertia))
+  adj          <- vector(mode="numeric", length=scree.dim) # Måske skal den ikke smide 0 som output men noget bedre, når der ikke er flere dim end 6
   adj[1:dim.a] <- object$adj.inertia[1:dim.a,4]
-  adj	<- paste(formatC(adj,format="f",digits=1), sep="", collide="%")
-  ## Tests
-  pm 		<- balance.ctr(object, act.dim)
-  pm.minus <- which(as.numeric(pm[,3])<0.5)
-  pm.plus <- which(as.numeric(pm[,3])>2)
+  adj	         <- paste(formatC(adj,format="f",digits=1), sep="", collide="%")
   
   ## Output
   cat(format("Specific Correspondence Analysis:", 	width=90, justify="centre"),"\n", "\n", 
@@ -58,44 +70,40 @@ print.soc.ca  <- function(object){
       format("	Individuals: ",		 		width=40,), format(Nid, 	width=10, justify="right"), 
       format("|  5.", width=10, justify="centre" ), format(adj[5], width=10, justify="centre"), format(paste(stars[[5]]), width=1), "\n",
       
-      format("	Mass in subset",	 		width=40,), format(Submass, 	width=10, justify="right"), 
+      format("	Share of passive mass:",	 		width=40,), format(Submass, 	width=10, justify="right"), 
       format("|  6.", width=10, justify="centre" ), format(adj[6], width=10, justify="centre"), format(paste(stars[[6]]), width=1), "\n",
       
+      format(" Number of passive modalities:",	 		width=40,), format(N.pas.mod, 	width=10, justify="right"), 
+      format("|  7.", width=10, justify="centre" ), format(adj[7], width=10, justify="centre"), format(paste(stars[[7]]), width=1), "\n",
+      
       "\n",
-      format("The active variables:", 			width=100, justify="centre" ),
+      format(paste("The", length(Vnames),"active variables: [No. modalities - share of variance]"), 			width=100, justify="centre" ),
+      "\n",
       "\n",
       sep="")
   cat(format(Vnames, width=25, justify="right"), fill=100)
-  
-  # Test
-  
-  
-  if (length(pm.plus)>0){
-    p.out <- matrix(, ncol=3, nrow=length(pm.plus))
-    p.out[,] <- formatC(pm[pm.plus,], format="f", digits=2)
-    rownames(p.out) <- rep(format("", width=35), times=length(pm.plus))  
-    p.out <- cbind(paste(pm.plus, ".", sep=""), p.out)
-    colnames(p.out) <- c("Dim.", "+", "-", "+/-")
-    cat("\n",format("These dimensions contributions are skewed towards (+): ", width=100, justify="centre"), "\n")
-    print(p.out, quote=FALSE, right=TRUE)
-  }      
-  
-  if (length(pm.minus)>0){
-    p.out <- matrix(, ncol=3, nrow=length(pm.minus))
-    p.out[,] <- formatC(pm[pm.minus,], format="f", digits=2)
-    rownames(p.out) <- rep(format("", width=35), times=length(pm.minus))
-    p.out <- cbind(paste(pm.minus, ".", sep=""), p.out)
-    colnames(p.out) <- c("Dim.", "+", "-", "+/-")
-    cat("\n",format("These dimensions contributions are skewed towards (-): ", width=100, justify="centre"), "\n")
-    print(p.out, quote=FALSE, right=TRUE)
-  }
-  
+   
 }
 
+#' Balance measure for contributing modalities
+#' 
+#' Calculates the balance of the contribution of each dimension. 
+#' This measure indicates whether too much of a dimensions contribution is placed on either the + or - side of the dimension.
+#' @param Object is a soc.ca class object
+#' @param act.dim is the number of active dimensions to be measured
+#' @return A matrix with the share of contribution on each side of 0 and their balance (+/-)
+#' @seealso \link{print.soc.ca}, \link{contribution}
+#' @examples
+#' # We use the example from soc.ca - for details see ?soc.ca
+#' example(soc.ca)
+#' 
+#' balance(result)
+#' 
+#' balance(result, act.dim=3)
+#' @export
 
-#################### Balance measure for contributing modalities
 
-balance.ctr <- function(object, act.dim=object$nd){
+balance   <- function(object, act.dim=object$nd){
   coord   <- object$coord.mod[, 1:act.dim]
   contrib <- object$ctr.mod[, 1:act.dim]
   pm      <- matrix(, nrow=act.dim, ncol=3)
@@ -113,55 +121,92 @@ balance.ctr <- function(object, act.dim=object$nd){
   colnames(pm) <- c("+ Contrib.", "- Contrib.", "Balance (+/-)")
   return(pm)
 
-# Calculates the balance of the contribution of each dimension. 
-# This measure indicates whether too much of a dimensions contribution is placed on either the + or - side of the dimension.
-# Object is a soc.ca class object
-# act.dim is the number of active dimensions to be measured
 }
 
-############################ The most contributing modalities
-contribution <- function(object, dim=1, all=FALSE, modality.indices=FALSE){
-  if(identical(modality.indices, TRUE)==TRUE){
+#' The modalities or individuals with contributions above average
+#' 
+#' Returns the modalities with above average contribution to the selected dimension
+#' @param object is a soc.ca object
+#' @param dim is the included dimensions
+#' @param all: If TRUE returns all modalities instead of just those that contribute above average
+#' @param indices: If TRUE; returns a vector with the row indices of the modalities
+#' @param mode indicates which form of output. Possible values: "sort", "mod", "ind".
+#' @return Ctr is the contribution in percentage
+#' @return Cor is the correlation with the dimension
+#' @return Coord is the principal coordinate
+#' @return Contribution values for individuals are in permille.
+#' @seealso \link{map.ctr}
+#' @examples
+#' 
+#' example(soc.ca)
+#' contribution(result)
+#' contribution(result, 2)
+#' contribution(result, dim=3, all=TRUE)
+#' contribution(result, indices=TRUE)
+#' contribution(result, mode="ind")
+#' contribution(result, mode="ind", indices=TRUE)
+#' @export
+
+contribution <- function(object, dim=1, all=FALSE, indices=FALSE, mode="sort"){
+  if(indices==TRUE & mode=="mod"){
     ctr     <- object$ctr.mod[,dim]
     av.ctr  <- as.vector(apply(as.matrix(ctr), 2, function(x) which(x >= mean(x, na.rm=TRUE))))
     if(is.list(av.ctr)==TRUE) av.ctr  <- unlist(av.ctr[dim], use.names=FALSE)
     av.ctr     <- av.ctr[duplicated(av.ctr)==FALSE]    
     return(av.ctr)
-  }else{
+  }
+  
+  
+  # Modalities
+  if(identical(mode, "mod")){
     ctr <- round(100*object$ctr.mod[,dim], digits=1)
     cor <- round(100*object$cor.mod[,dim], digits=1)
     coord <- round(object$coord.mod[,dim], digits=2)
     names <- object$names.mod
     if (identical(all, FALSE)==TRUE){
-      av.ctr<- contribution(object, dim=dim, modality.indices=TRUE)    
+      av.ctr <- contribution(object, dim=dim, indices=TRUE, mode=mode)    
       header <- paste("The modalities contributing above average to dimension: ", dim, ".", sep="")
     }
     if (identical(all, TRUE)==TRUE){
       av.ctr <- 1:length(ctr)
       header <- paste("The contribution of all modalities to dimension: ", dim, ".", sep="")
     }
-    out <- data.frame(ctr[av.ctr], cor[av.ctr], coord[av.ctr])
+    
+    out           <- data.frame(ctr[av.ctr], cor[av.ctr], coord[av.ctr])
     rownames(out) <- names[av.ctr]
     colnames(out) <- c("   Ctr.", "   Cor." , "   Coord")
     out <- out[order(-out[,1]), ]
     maxwidth <- max(nchar(names))+sum(nchar(colnames(out)))
     cat("\n", format(header, width=maxwidth, justify="centre"), "\n", "\n")
     print(out)
+    
   }
-  # Returns the modalities with above average contribution to the selected dimension
-  # object is a soc.ca object
-  # dim is the included dimensions
-  # all: If TRUE returns all modalities instead of just those that contribute above average
-  # modality.indices: If TRUE returns a vector with the row indices of the modalities
-  # Ctr is the contribution in percentage
-  # Cor is the correlation with the dimension
-  # Coord is the principal coordinate
+  # Individuals  
+  if(identical(mode, "ind")){
+    print(individuals(object, dim, indices=indices))
+  }
+  # Side sorted modalities
+  if(identical(mode, "sort")){
+    tab.dim(object, dim)
+  }
+  
 }
 
-################### The most contributing individuals
+# ' The most contributing individuals
+# ' 
+# ' Returns the individuals with above average contribution to the selected dimension
+# ' @param object is a soc.ca object
+# ' @param dim is the included dimensions
+# ' @param all: If TRUE returns all individuals instead of just those that contribute above average
+# ' @param ind.indices: If TRUE returns a vector with the row indices of the individuals
+# ' @return Ctr is the contribution in 1000
+# ' @return Cor is the correlation with the dimension
+# ' @return Coord is the principal coordinate
+# ' @seealso \link{tab.dim}, \link{soc.ca}, \link{contribution}, \link{p.id}
+# ' @export
 
-individuals <- function(object, dim=1, all=FALSE, ind.indices=FALSE){
-  if(identical(ind.indices, TRUE)==TRUE){
+individuals <- function(object, dim=1, all=FALSE, indices=FALSE){
+  if(identical(indices, TRUE)==TRUE){
     ctr     <- object$ctr.ind[,dim]
     av.ctr  <- as.vector(apply(as.matrix(ctr), 2, function(x) which(x >= mean(x, na.rm=TRUE))))
     if(is.list(av.ctr)==TRUE) av.ctr  <- unlist(av.ctr[dim], use.names=FALSE)
@@ -173,7 +218,7 @@ individuals <- function(object, dim=1, all=FALSE, ind.indices=FALSE){
     coord <- round(object$coord.ind[,dim], digits=2)
     names <- object$names.ind
     if (identical(all, FALSE)==TRUE){
-      av.ctr<- individuals(object, dim=dim, ind.indices=TRUE)    
+      av.ctr<- individuals(object, dim=dim, indices=TRUE)    
       header <- paste("The individuals contributing above average to dimension: ", dim, ".", sep="")
     }
     if (identical(all, TRUE)==TRUE){
@@ -189,17 +234,24 @@ individuals <- function(object, dim=1, all=FALSE, ind.indices=FALSE){
     cat("\n", format(header, width=maxwidth, justify="centre"), "\n", "\n")
     print(out)
   }
-  # Returns the individuals with above average contribution to the selected dimension
-  # object is a soc.ca object
-  # dim is the included dimensions
-  # all: If TRUE returns all individuals instead of just those that contribute above average
-  # ind.indices: If TRUE returns a vector with the row indices of the individuals
-  # Ctr is the contribution in 1000
-  # Cor is the correlation with the dimension
-  # Coord is the principal coordinate
+
 }
 
-############################## The most contributing modalities according to direction on dimension
+# ' The most contributing modalities according to direction on dimension
+# ' 
+# ' Gives the most contributing modalities sorted according to direction on dimension
+# ' @param x is a soc.ca object
+# ' @param dim is the dimension
+# ' @param label.plus is the label of the dimensions plus side
+# ' @param label.minus is the label of the dimensions minus side
+# ' @param all defines whether all modalities are to be printed
+# ' @seealso \link{contribution}, \link{soc.ca}, \link{p.ctr}
+# ' @examples
+# ' example(soc.ca)
+# ' tab.dim(result, 2)
+# ' tab.dim(result, 2, label.plus="Technical capital", label.minus="Organizational capital")
+# ' @export
+
 
 tab.dim <- function(x, dim=1, label.plus=NULL, label.minus=NULL, all=FALSE){
   
@@ -216,7 +268,7 @@ tab.dim <- function(x, dim=1, label.plus=NULL, label.minus=NULL, all=FALSE){
   names   <- x$names.mod
   
   if (identical(all, FALSE)==TRUE){
-    av.ctr<- contribution(x, dim=dim, modality.indices=TRUE)    
+    av.ctr<- contribution(x, dim=dim, indices=TRUE, mode="mod")    
   }
   if (identical(all, TRUE)==TRUE){
     av.ctr <- seq(x$n.mod)
@@ -246,18 +298,26 @@ tab.dim <- function(x, dim=1, label.plus=NULL, label.minus=NULL, all=FALSE){
   print(format(outplus, justify="centre", width=8))
   cat("\n",format(label.minus, width=maxwidth, justify="centre"), "\n")
   format(outminus, justify="centre", width=8)
-# tab.dim
-
-  # Gives the most contributing modalities sorted according to direction on dimension
-  # x is a soc.ca object
-  # dim is the dimension
-  # label.plus is the label of the dimensions plus side
-  # label.minus is the label of the dimensions minus side
-  # all defines whether all modalities are to be printed
   
   }
 
-##########################      ctr.var       #### Contribution per variabel
+# ' Contribution per variabel
+# ' 
+# ' tab.variable returns the contribution values of all modalities ordered by variable
+# ' 
+# ' @param object is a soc.ca object
+# ' @param dim is the included dimensions. The default is 1:3
+# ' @param If sup=TRUE the coordinates of the supplementary variables are given instead
+# ' @return If assigned using <- tab.variable returns a list of matrixes with the contribution values
+# ' @return The returned list is a tab.variable class object and can be exported with the \link{export} function included in the soc.ca package.  
+# ' @seealso \link{export}, \link{contribution}
+# ' @examples
+# ' example(soc.ca)
+# ' tab.variable(result)
+# ' tab.variable(result, dim=c(1,3))
+# ' tab.variable(result, sup=TRUE)
+# ' @export
+
 tab.variable    <- function(object, dim=1:3, sup=FALSE){
     variable    <- as.factor(object$variable)
     ctr.mod     <- object$ctr.mod[,dim]
@@ -325,24 +385,28 @@ tab.variable    <- function(object, dim=1:3, sup=FALSE){
     
     class(var.list) <- "tab.variable"
     invisible(var.list)
-    # tab.variable returns the contribution values of all modalities ordered by variable
-    # object is a soc.ca object
-    # dim is the included dimensions. The default is 1:3
-    # If assigned using <- tab.variable returns a list of matrixes with the contribution values
-    # If sup=TRUE the coordinates of the supplementary variables are given instead
+
 }
 
 
+#' Variance tabel
+#'
+#' variance returns a table of variance for the selected dimensions.
+#' @param object is a soc.ca object
+#' @param dim is the included dimensions, if set to NULL, then only the dimensions explaining approx. 90% of the adjusted variance are included
+#' @return If assigned using <- variance returns a matrix version of the table of variance    
+#' @seealso \link{soc.ca}, \link{print.soc.ca}
+#' @examples
+#' example(soc.ca)
+#' variance(result)
+#' variance(result, dim=1:4)
+#' @export
 
-
-
-
-##########################    tab.variance    #### Variance tabel
-tab.variance <- function(object, dim=NULL){
+variance    <- function(object, dim=NULL){
     
     variance <- object$adj.inertia
     if (identical(dim, NULL)==TRUE){
-        dim <- variance[,5]<=91
+        dim  <- variance[,5]<=91
     }
     variance <- t(variance[dim,])
     line.dim <- paste(1:ncol(variance) ,".", sep="")
@@ -353,11 +417,6 @@ tab.variance <- function(object, dim=NULL){
     cat("\n", "Cum %   ", format(round(variance[5,], 1), width=6), sep="")
     
     invisible(variance)
-    # tab.variance returns a table of variance for the dimensions
-    # object is a soc.ca object
-    # dim is the included dimensions, if set to NULL (default),
-    # then only the dimensions explaining approx. 90% of the adjusted variance are included
-    # If assigned using <- tab.variance returns a matrix version of the table of variance    
 }
 
 

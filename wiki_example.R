@@ -29,7 +29,7 @@ sup     		<- data.frame(size_prestige, ownership_cat_2, sector, location)
 
 id          <- navn
 
-set.passive(c("MISSING", "Missing", "Irrelevant", "residence_value_cat2: Udlandet"))
+options(passive=c("MISSING", "Missing", "Irrelevant", "residence_value_cat2: Udlandet"))
 
 result      <- soc.ca(active, sup, id)
 
@@ -48,8 +48,9 @@ tab.dim(result, 1, all=TRUE)
 individuals(result, 1)
 
 # Contribution of the variables
-ctr.var(result)
-ctr.var(result, 2:4)
+tab.variable(result)
+tab.variable(result, 2:4)
+
 
 # Table of variance
 tab.variance(result)

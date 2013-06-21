@@ -1,11 +1,16 @@
 # Tools, exports and other helpful functions
 
 
-## Export
-#! Der er fuckup i contrib - det er fedest hvis output har den rigtige l?ngde. Fuckker
-#! Standard er ikke lavet endnu - men er oplagt bare standard.koord istedetfor
-#! Round er ikke lavet endnu
-#! Define classes
+#' Export from soc.ca
+#'
+#' Export objects from the soc.ca package to csv files.
+#' @param object is a soc.ca class object or a contribution class object 
+#' @param dim is the dimensions to be exported
+#' @param file is the path and name of the .csv values are to be exported to
+#' @return A .csv file with various values in UTF-8 encoding
+#' @seealso \link{soc.ca}, \link{tab.variable}, \link{contribution}
+#' @export
+
 export <- function(object, file="export.csv", dim=1:5) {
   if (is.matrix(object)==TRUE|is.data.frame(object)==TRUE){
     write.csv(object, file, fileEncoding="UTF-8")}
@@ -60,30 +65,21 @@ export <- function(object, file="export.csv", dim=1:5) {
   
   }
   
-  # Export objects from the soc.ca package to csv files.
-  # export(object, file="export.csv", dim=1:5)
-  # object is a soc.ca class object or a contribution class object 
-  # dim is the dimensions to be exported
 }
 
-## Invert
+#' Invert
+#' 
+#' Invert one or more axis of a correspondence analysis. The principal coordinates of the analysis are multiplied by -1.
+#' @details This is a convienient function as you would have to modify coord.mod, coord.ind and coord.sup in the soc.ca object. This is more likely to provoke human errors.
+#' 
+#' @param x is a soc.ca object
+#' @param dim is the dimensions to be inverted
+#' @seealso \link{soc.ca}, \link{add.to.label}
+#' @export
 
 invert <- function(x, dim=1) {
   x$coord.mod[,dim] <- x$coord.mod[,dim] * -1
   x$coord.ind[,dim] <- x$coord.ind[,dim] * -1
   x$coord.sup[,dim] <- x$coord.sup[,dim] * -1
   return(x)
-  
-  # Invert one or more axis of a correspondence analysis. The principal coordinates of the analysis are multiplied by -1
-  # invert(x, dim=1)
-  # x is a soc.ca object
-  # dim is the dimensions to be inverted
 }
-
-#### Set passive
-set.passive <- function(x){
-    formals(soc.ca)$passive <<- as.character(x)
-# Defines the default for the passive modalities in a soc.ca.
-# x is the list of passive modalities
-    }
-
