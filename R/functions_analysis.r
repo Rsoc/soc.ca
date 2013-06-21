@@ -406,11 +406,11 @@ return(Z)
 #' @examples # This example can be found in further detail at our wiki on github - https://github.com/Rsoc/soc.ca/wiki/How-to-use-soc.ca
 #' 
 
-soc.csca <- function(result, class.indicator, sup=NULL){
+soc.csca <- function(object, class.indicator, sup=NULL){
  
  
-  Z.act  <- result$indicator.matrix             # Original indicator matrix
-  Q      <- nlevels(as.factor(result$variable)) # Number of questions
+  Z.act  <- object$indicator.matrix             # Original indicator matrix
+  Q      <- nlevels(as.factor(object$variable)) # Number of questions
   I      <- nrow(Z.act)                         # Original number of individuals
   
   Z.hat = Z.act[class.indicator,]  # Indicator matrix for the CSA
@@ -461,7 +461,7 @@ soc.csca <- function(result, class.indicator, sup=NULL){
   ###############################################
   #### Dimension reduction and explained variance
   K                <- ncol(Z.act)
-  Qm               <- result$subset.var
+  Qm               <- object$subset.var
   
   # First reduction of dimensionality
   R1.dim           <- K-Qm
@@ -503,10 +503,10 @@ soc.csca <- function(result, class.indicator, sup=NULL){
   }
   
   ############
-  # Preparing for result object
+  # Preparing for object object
   names.mod      <- modal.names
-  names.ind      <- result$names.ind[class.indicator]
-  names.passive  <- result$names.passive
+  names.ind      <- object$names.ind[class.indicator]
+  names.passive  <- object$names.passive
   
   
   ############
@@ -536,7 +536,7 @@ soc.csca <- function(result, class.indicator, sup=NULL){
   # Result object
   
   csca.result <- list(
-    nd=result$nd,
+    nd=object$nd,
     n.ind=i, 
     n.mod=ncol(Z.hat),
     eigen=eigen,
@@ -563,19 +563,19 @@ soc.csca <- function(result, class.indicator, sup=NULL){
     names.sup = names.sup,
     names.passive = names.passive,
     indicator.matrix = Z.hat,
-    modal = result$modal,
-    variable = result$variable,
+    modal = object$modal,
+    variable = object$variable,
     variable.sup = "Not Implemented",
-    subset.var = result$subset.var,
-    original.result = result
+    subset.var = object$subset.var,
+    original.result = object
   )
 
-  median.standard <- function(result){
-    coord.ind     <- result$coord.ind
+  median.standard <- function(object){
+    coord.ind     <- object$coord.ind
     coord.median  <- apply(coord.ind, 2, median)  
     dim.ind       <- seq(ncol(coord.ind))[coord.median > 0]
-    result        <- invert(result, dim.ind)
-    return(result)
+    object        <- invert(object, dim.ind)
+    return(object)
   }
   
   csca.result     <- median.standard(csca.result)
@@ -583,7 +583,7 @@ soc.csca <- function(result, class.indicator, sup=NULL){
   ####################################
   # correlation matrix
   csca.coord    <- csca.result$coord.ind
-  ca.coord      <- result$coord.ind[class.indicator,]
+  ca.coord      <- object$coord.ind[class.indicator,]
   dim           <- seq(min(c(ncol(csca.coord), ncol(ca.coord))))
   csca.coord    <- csca.coord[,dim]
   ca.coord      <- ca.coord[,dim]
@@ -615,8 +615,8 @@ soc.csca <- function(result, class.indicator, sup=NULL){
 #' @seealso \link{soc.ca}
 #' @examples 
 #' example(soc.ca)
-#' create.quadrant(soc.ca, dim=c(2,1))
-#' table(create.quadrant(soc.ca, dim=c(1,3), cut.radius=0.5))
+#' create.quadrant(result, dim=c(2,1))
+#' table(create.quadrant(result, dim=c(1,3), cut.radius=0.5))
 #' @export
 
 create.quadrant <- function(result, dim=c(1,2), cut.min=-0.125, cut.max=0.125, cut.radius=0.25){

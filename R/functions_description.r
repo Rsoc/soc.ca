@@ -300,7 +300,7 @@ tab.dim <- function(x, dim=1, label.plus=NULL, label.minus=NULL, all=FALSE){
   cat("\n",format(label.plus, width=maxwidth, justify="centre"), "\n")
   print(format(outplus, justify="centre", width=8))
   cat("\n",format(label.minus, width=maxwidth, justify="centre"), "\n")
-  format(outminus, justify="centre", width=8)
+  print(format(outminus, justify="centre", width=8))
   
   }
 
@@ -323,7 +323,7 @@ tab.dim <- function(x, dim=1, label.plus=NULL, label.minus=NULL, all=FALSE){
 
 tab.variable    <- function(object, dim=1:3, sup=FALSE){
     variable    <- as.factor(object$variable)
-    ctr.mod     <- object$ctr.mod[,dim]
+    ctr.mod     <- as.matrix(object$ctr.mod[,dim])
     lev.var     <- levels(variable)
     names.mod   <- object$names.mod
     freq.mod    <- object$freq.mod

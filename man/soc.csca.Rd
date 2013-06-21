@@ -2,7 +2,7 @@
 \alias{soc.csca}
 \title{Class Specific Multiple Correspondence Analysis  ### Al dokumentationen for csca er forkert!}
 \usage{
-  soc.csca(result, class.indicator, sup = NULL)
+  soc.csca(object, class.indicator, sup = NULL)
 }
 \arguments{
   \item{active}{Defines the active modalities in a
