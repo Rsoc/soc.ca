@@ -1,14 +1,14 @@
 # Tools, exports and other helpful functions
 
 
-#' Export from soc.ca
+#' Export from soc.mca
 #'
 #' Export objects from the soc.ca package to csv files.
-#' @param object is a soc.ca class object or a contribution class object 
+#' @param object is a soc.mca class object or a contribution class object 
 #' @param dim is the dimensions to be exported
 #' @param file is the path and name of the .csv values are to be exported to
 #' @return A .csv file with various values in UTF-8 encoding
-#' @seealso \link{soc.ca}, \link{tab.variable}, \link{contribution}
+#' @seealso \link{soc.mca}, \link{contribution}
 #' @export
 
 export <- function(object, file="export.csv", dim=1:5) {
@@ -38,7 +38,7 @@ export <- function(object, file="export.csv", dim=1:5) {
     write.csv(out, file, fileEncoding="UTF-8")  
     }
     # Export soc.ca
-    if ((class(object)=="soc.ca")==TRUE){
+    if ((class(object)=="soc.mca")==TRUE){
     coord.mod     <- object$coord.mod[,dim]
     coord.sup     <- object$coord.sup[,dim]
     coord.ind     <- object$coord.ind[,dim]
@@ -70,11 +70,11 @@ export <- function(object, file="export.csv", dim=1:5) {
 #' Invert
 #' 
 #' Invert one or more axis of a correspondence analysis. The principal coordinates of the analysis are multiplied by -1.
-#' @details This is a convienient function as you would have to modify coord.mod, coord.ind and coord.sup in the soc.ca object. This is more likely to provoke human errors.
+#' @details This is a convienient function as you would have to modify coord.mod, coord.ind and coord.sup in the soc.mca object. This is more likely to provoke human errors.
 #' 
-#' @param x is a soc.ca object
+#' @param x is a soc.mca object
 #' @param dim is the dimensions to be inverted
-#' @seealso \link{soc.ca}, \link{add.to.label}
+#' @seealso \link{soc.mca}, \link{add.to.label}
 #' @export
 
 invert <- function(x, dim=1) {

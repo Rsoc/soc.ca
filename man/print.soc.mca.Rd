@@ -1,12 +1,12 @@
-\name{print.soc.ca}
-\alias{print.soc.ca}
-\title{Print soc.ca objects}
+\name{print.soc.mca}
+\alias{print.soc.mca}
+\title{Print soc.mca objects}
 \usage{
-  print.soc.ca(object)
+  print.soc.mca(x)
 }
 \arguments{
-  \item{object}{is a soc.ca class object created with by
-  \link{soc.ca}}
+  \item{x}{is a soc.mca class object created with
+  \link{soc.mca}}
 }
 \value{
   Active dimensions is the number of dimensions remaining
@@ -31,9 +31,10 @@
   specific correspondence analysis
 }
 \examples{
-example(soc.ca)
+example(soc.mca)
+print(result)
 }
 \seealso{
-  \link{soc.ca}, \link{contribution}
+  \link{soc.mca}, \link{contribution}
 }
 

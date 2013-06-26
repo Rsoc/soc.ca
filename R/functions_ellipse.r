@@ -4,15 +4,16 @@
 
 #' Concentration ellipses
 #'
-#' Add ellipses for each level in a factor to a plot made from a soc.ca object.
-#' @param object is a soc.ca class object
-#' @param ca.plot is a plot made from a soc.ca object
-#' @param variable is a factor of the same length and in the same order as the active varibles used for the soc.ca object.
+#' Add ellipses for each level in a factor to a plot made from a soc.mca object.
+#' @param object is a soc.mca class object
+#' @param ca.plot is a plot made from a soc.mca object
+#' @param variable is a factor of the same length and in the same order as the active varibles used for the soc.mca object.
 #' @return a plot with a concentration ellipse containing 80% of the individuals for each modality
-#' @seealso \link{map.ind}, \link{map.ctr}, \link{soc.ca}
+#' @seealso \link{map.ind}, \link{map.ctr}, \link{soc.mca}
 #' @examples
-#' example(soc.ca)
-#' map.ind(result)
+#' example(soc.mca)
+#' map <- map.ind(result)
+#' map.ellipse(result, map, active[,2])
 #' @export
 
 map.ellipse <- function(object, ca.plot, variable){ 
@@ -121,6 +122,6 @@ ellipse.origo <- function(el.axis){
  x2 <- temp[2,1]
  y1 <- temp[1,2]
  y2 <- temp[2,2]
-el.origo <<-c((x1+x2)/2, (y1+y2)/2)
+el.origo<-c((x1+x2)/2, (y1+y2)/2)
 el.origo
 }

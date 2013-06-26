@@ -6,7 +6,7 @@
     sep = ",")
 }
 \arguments{
-  \item{object}{is a soc.ca object}
+  \item{object}{is a soc.mca object}
 
   \item{file}{is the path of the .csv file with the new
   labels. The file is preferably created by the
@@ -18,11 +18,11 @@
   .csv file}
 }
 \value{
-  a soc.ca object with altered labels in names.mod,
+  a soc.mca object with altered labels in names.mod,
   names.ind and names.sup
 }
 \description{
-  Assigns new labels to an soc.ca object. The input labels
+  Assigns new labels to an soc.mca object. The input labels
   are defined in a .csv file created by the export.label()
   function.
 }

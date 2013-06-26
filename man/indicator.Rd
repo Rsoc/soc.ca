@@ -26,6 +26,6 @@ b <- rep(c("C", "D"), 5)
 indicator(data.frame(a,b))
 }
 \seealso{
-  \link{soc.ca}, \link{subset.ca.indicator}
+  \link{soc.mca}
 }
 

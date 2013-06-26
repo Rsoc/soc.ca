@@ -1,6 +1,6 @@
 # The taste example
 
-library(soc.ca)
+library(soc.mca)
 
 data(taste)
 
@@ -14,7 +14,7 @@ detach(data)
 
 
 # Multiple Correspondence Analysis
-result.mca     <- soc.ca(active, sup)
+result.mca     <- soc.mca(active, sup)
 str(result.mca)
 result.mca
 
@@ -34,12 +34,12 @@ map.ind(result.mca, dim=c(1,2), point.colour=result.mca$ctr.ind[,1], point.shape
 
 # Specific Multiple Correspondence Analysis
 options(passive= c("Film: CostumeDrama", "TV: Tv-Sport"))
-result.smca     <- soc.ca(active, sup)
+result.smca     <- soc.mca(active, sup)
 result.smca
 result.smca$names.passive
 
 # Class Specific Correspondence Analysis
-options(passive=c("Nothing"))
+options(passive=NULL)
 
 class.age     <- which(data$Age =='55-64')
 
@@ -59,36 +59,10 @@ map.ind(result.csca)
 
 # Plot of all dublets
 map.ind(result.mca, map.title="Map of all unique individuals", point.colour=duplicated(active))
-
 map.ind(result.mca, map.title="Map of with individuals colored by the TV variable", point.colour=active$TV)
 
 # Ellipse 
 
+soc.csca.variable(result.mca, data$Age, dim=1:5)
 
-#####################################
-### csca modelsøgning
-
-object <- result.mca
-
-soc.csca.variable <- function(object, variable, dim=1:5){
-lev.variable <- levels(variable)
-result.list     <- list()
-for (i in 1:length(lev.variable)){
-dummy.class         <- which(variable == lev.variable[i])
-result.list[[i]]    <- soc.csca(object, class.indicator=dummy.class)
-}
-
-names(result.list) <- lev.variable
-
-cor.list <- list()
-  for (i in 1:length(result.list)){
-  cor.list[[i]]<- result.list[[i]]$cor.dim[dim,dim]
-  }
-names(cor.list) <- lev.variable
-
-list(results=result.list, cor=cor.list)
-}
-
-nif <- soc.csca.variable(result.mca, data$Age, dim=1:5)
-nif$cor
 

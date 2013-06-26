@@ -16,18 +16,18 @@
 #' Map all modalities
 #' 
 #' Creates a map of all active and supplementary modalities on two selected dimension.
-#' @param object is a soc.ca class object as created by \link{soc.ca} and \link{soc.csca}
+#' @param object is a soc.mca class object as created by \link{soc.mca} and \link{soc.csa}
 #' @param dim gives the dimensions in the order they are to be plotted. The first number defines the horizontal axis and the second number defines the vertical axis.
 #' @param map.title is the title of the map. If set to its default the standard title is used.
 #' @param labelx is the label of the horizontal axis. If set to NULL a standard label is used.
 #' @param labely is the label of the vertical axis. If set to NULL a standard label is used.
-#' @param point.label if set to TRUE each point is assigned its label, defined in the soc.ca object. See \link{assign.label} and \link{add.to.label} for ways to alter the labels.
+#' @param point.label if set to TRUE each point is assigned its label, defined in the soc.mca object. See \link{assign.label} and \link{add.to.label} for ways to alter the labels.
 #' @param point.shape is a numerical value defining the shape of the points. If set to its default, the default scale is used. It may be defined by a variable with a suitable length.
 #' @param point.size is a numerical value defining the size of the points. If set to its default, the size is determined by the frequency of each modality. It may be defined by a variable with a suitable length.
 #' @param text.size defines the size of the labels
 #' @param colour defines the colour of both label and the line of the points. The fill is set to a standard grey.
 #' @examples
-#' example(soc.ca)
+#' example(soc.mca)
 #' map.mod(result)
 #' map.mod(result, dim=c(3,2), point.size=2)
 #' @export 
@@ -52,19 +52,19 @@ return(t.plot)
 #' Map the most contributing modalities
 #' 
 #' Creates a map of the modalities contributing above average to one or more dimensions on two selected dimension.
-#' @param object is a soc.ca class object as created by \link{soc.ca} and \link{soc.csca}
+#' @param object is a soc.mca class object as created by \link{soc.mca} and \link{soc.csa}
 #' @param ctr.dim is dimensions from which the contribution values are taken.
 #' @param dim gives the dimensions in the order they are to be plotted. The first number defines the horizontal axis and the second number defines the vertical axis.
 #' @param map.title is the title of the map. If set to its default the standard title is used.
 #' @param labelx is the label of the horizontal axis. If set to NULL a standard label is used.
 #' @param labely is the label of the vertical axis. If set to NULL a standard label is used.
-#' @param point.label if set to TRUE each point is assigned its label, defined in the soc.ca object. See \link{assign.label} and \link{add.to.label} for ways to alter the labels.
+#' @param point.label if set to TRUE each point is assigned its label, defined in the soc.mca object. See \link{assign.label} and \link{add.to.label} for ways to alter the labels.
 #' @param point.shape is a numerical value defining the shape of the points. If set to its default, the default scale is used. It may be defined by a variable with a suitable length.
 #' @param point.size is a numerical value defining the size of the points. If set to its default, the size is determined by the frequency of each modality. It may be defined by a variable with a suitable length.
 #' @param text.size defines the size of the labels
 #' @param colour defines the colour of both label and the line of the points. The fill is set to a standard grey.
 #' @examples
-#' example(soc.ca)
+#' example(soc.mca)
 #' map.ctr(result)
 #' map.ctr(result, ctr.dim=c(1,2))
 #' @export 
@@ -91,18 +91,18 @@ return(t.plot)
 #' Map the active modalities
 #' 
 #' Creates a map of the active modalities on two selected dimension.
-#' @param object is a soc.ca class object as created by \link{soc.ca} and \link{soc.csca}
+#' @param object is a soc.mca class object as created by \link{soc.mca} and \link{soc.csa}
 #' @param dim gives the dimensions in the order they are to be plotted. The first number defines the horizontal axis and the second number defines the vertical axis.
 #' @param map.title is the title of the map. If set to its default the standard title is used.
 #' @param labelx is the label of the horizontal axis. If set to NULL a standard label is used.
 #' @param labely is the label of the vertical axis. If set to NULL a standard label is used.
-#' @param point.label if set to TRUE each point is assigned its label, defined in the soc.ca object. See \link{assign.label} and \link{add.to.label} for ways to alter the labels.
+#' @param point.label if set to TRUE each point is assigned its label, defined in the soc.mca object. See \link{assign.label} and \link{add.to.label} for ways to alter the labels.
 #' @param point.shape is a numerical value defining the shape of the points. If set to its default, the default scale is used. It may be defined by a variable with a suitable length.
 #' @param point.size is a numerical value defining the size of the points. If set to its default, the size is determined by the frequency of each modality. It may be defined by a variable with a suitable length.
 #' @param text.size defines the size of the labels
 #' @param colour defines the colour of both label and the line of the points. The fill is set to a standard grey.
 #' @examples
-#' example(soc.ca)
+#' example(soc.mca)
 #' map.active(result)
 #' map.active(result, dim=c(2,1))
 #' map.active(result, point.size=result$ctr.mod[,1], map.title="All active modalities with size according to contribution")
@@ -113,7 +113,7 @@ map.active     <- function(object, dim=c(1,2), map.title="active", labelx=NULL, 
 gg.proc 	<- round(object$adj.inertia[,4]) # Adjusted inertia
 gg.data     <- data.plot(object, plot.type="active", dim, ctr.dim=NULL, point.size=point.size) # Data selection
 axis.labels <- plot.axis(labelx=labelx, labely=labely, gg.proc=gg.proc, dim=dim) # Axis labels
-map.title   <- plot.title(map.title=map.title, ctr.dim=ctr.dim) # Plot title
+map.title   <- plot.title(map.title=map.title) # Plot title
 scales      <- breaksandscales(gg.data) # Scales og breaks
 
 gg.input    <- list(gg.data=gg.data, axis.inertia=gg.proc,
@@ -129,18 +129,18 @@ return(t.plot)
 #' Map the supplementary modalities
 #' 
 #' Creates a map of the supplementary modalities on two selected dimension.
-#' @param object is a soc.ca class object as created by \link{soc.ca} and \link{soc.csca}
+#' @param object is a soc.mca class object as created by \link{soc.mca} and \link{soc.csa}
 #' @param dim gives the dimensions in the order they are to be plotted. The first number defines the horizontal axis and the second number defines the vertical axis.
 #' @param map.title is the title of the map. If set to its default the standard title is used.
 #' @param labelx is the label of the horizontal axis. If set to NULL a standard label is used.
 #' @param labely is the label of the vertical axis. If set to NULL a standard label is used.
-#' @param point.label if set to TRUE each point is assigned its label, defined in the soc.ca object. See \link{assign.label} and \link{add.to.label} for ways to alter the labels.
+#' @param point.label if set to TRUE each point is assigned its label, defined in the soc.mca object. See \link{assign.label} and \link{add.to.label} for ways to alter the labels.
 #' @param point.shape is a numerical value defining the shape of the points. If set to its default, the default scale is used. It may be defined by a variable with a suitable length.
 #' @param point.size is a numerical value defining the size of the points. If set to its default, the size is determined by the frequency of each modality. It may be defined by a variable with a suitable length.
 #' @param text.size defines the size of the labels
 #' @param colour defines the colour of both label and the line of the points. The fill is set to a standard grey.
 #' @examples
-#' example(soc.ca)
+#' example(soc.mca)
 #' map.sup(result)
 #' map.sup(result, dim=c(2,1))
 #' map.sup(result, point.size=result$coord.sup[,4], map.title="All supplementary modalities with size according to coordinate on the 4th dimension")
@@ -149,7 +149,7 @@ map.sup     	<- function(object, dim=c(1,2), map.title="sup", labelx=NULL, label
 gg.proc 	<- round(object$adj.inertia[,4]) # Adjusted inertia
 gg.data     <- data.plot(object, plot.type="sup", dim, ctr.dim=NULL, point.size=point.size) # Data selection
 axis.labels <- plot.axis(labelx=labelx, labely=labely, gg.proc=gg.proc, dim=dim) # Axis labels
-map.title   <- plot.title(map.title=map.title, ctr.dim=ctr.dim) # Plot title
+map.title   <- plot.title(map.title=map.title) # Plot title
 scales      <- breaksandscales(gg.data) # Scales og breaks
 
 gg.input    <- list(gg.data=gg.data, axis.inertia=gg.proc,
@@ -162,24 +162,24 @@ t.plot$dimensions <- dim
 return(t.plot)
 }
 
-#' Map the individuals of a soc.ca analysis
+#' Map the individuals of a soc.mca analysis
 #' 
 #' Creates a map of the individuals on two selected dimension.
-#' @param object is a soc.ca class object as created by \link{soc.ca} and \link{soc.csca}
+#' @param object is a soc.mca class object as created by \link{soc.mca} and \link{soc.csa}
 #' @param dim gives the dimensions in the order they are to be plotted. The first number defines the horizontal axis and the second number defines the vertical axis.
 #' @param map.title is the title of the map. If set to its default the standard title is used.
 #' @param labelx is the label of the horizontal axis. If set to NULL a standard label is used.
 #' @param labely is the label of the vertical axis. If set to NULL a standard label is used.
-#' @param point.label if set to TRUE each point is assigned its label, defined in the soc.ca object. See \link{assign.label} and \link{add.to.label} for ways to alter the labels.
+#' @param point.label if set to TRUE each point is assigned its label, defined in the soc.mca object. See \link{assign.label} and \link{add.to.label} for ways to alter the labels.
 #' @param point.shape is a numerical value defining the shape of the points. If set to its default, the default scale is used. It may be defined by a variable with a suitable length.
-#' @param point.variable is a factor of the samel length and order as the ones used for the soc.ca object. Each level is given its own shape.
+#' @param point.variable is a factor of the samel length and order as the ones used for the soc.mca object. Each level is given its own shape.
 #' @param point.size is a numerical value defining the size of the points. If set to its default, the size is determined by the frequency of each modality. It may be defined by a variable with a suitable length.
 #' @param text.size defines the size of the labels
 #' @param legend if set to TRUE a legend is provided
 #' @param colour defines the colour of the text labels
-#' @param point.colour is a factor of the same length and order as the ones used for the soc.ca object. 
+#' @param point.colour is a factor of the same length and order as the ones used for the soc.mca object. 
 #' @examples
-#' example(soc.ca)
+#' example(soc.mca)
 #' map.ind(result)
 #' map.ind(result, map.title="Each individual is given its shape according to a value in a factor", point.variable=active[,1], legend=TRUE)
 #' map.ind(result, map.title="The contribution of the individuals with a new color scale defined by ggplot2", point.colour=result$ctr.ind[,1], point.shape=18) + scale_color_continuous(low="white", high="red")
@@ -191,7 +191,7 @@ map.ind         <- function(object, dim=c(1,2), map.title="ind", labelx=NULL, la
 gg.proc 	  <- round(object$adj.inertia[,4]) # Adjusted inertia
 gg.data     <- data.plot(object, plot.type="ind", dim, ctr.dim=NULL, point.size=point.size, point.variable=point.variable, point.colour=point.colour) # Data selection
 axis.labels <- plot.axis(labelx=labelx, labely=labely, gg.proc=gg.proc, dim=dim) # Axis labels
-map.title   <- plot.title(map.title=map.title, ctr.dim=ctr.dim) # Plot title
+map.title   <- plot.title(map.title=map.title) # Plot title
 scales      <- breaksandscales(gg.data) # Scales og breaks
 
 gg.input    <- list(gg.data=gg.data, axis.inertia=gg.proc,
@@ -210,23 +210,21 @@ return(t.plot)
 #' Map select modalities and individuals
 #' 
 #' Creates a map of selected modalities or individuals 
-#' @param object is a soc.ca class object as created by \link{soc.ca} and \link{soc.csca}
+#' @param object is a soc.mca class object as created by \link{soc.mca} and \link{soc.csa}
 #' @param dim gives the dimensions in the order they are to be plotted. The first number defines the horizontal axis and the second number defines the vertical axis.
 #' @param map.title is the title of the map. If set to its default the standard title is used.
 #' @param labelx is the label of the horizontal axis. If set to NULL a standard label is used.
 #' @param labely is the label of the vertical axis. If set to NULL a standard label is used.
-#' @param point.label if set to TRUE each point is assigned its label, defined in the soc.ca object. See \link{assign.label} and \link{add.to.label} for ways to alter the labels.
+#' @param point.label if set to TRUE each point is assigned its label, defined in the soc.mca object. See \link{assign.label} and \link{add.to.label} for ways to alter the labels.
 #' @param point.shape is a numerical value defining the shape of the points. If set to its default, the default scale is used. It may be defined by a variable with a suitable length.
 #' @param point.size is a numerical value defining the size of the points. If set to its default, the size is determined by the frequency of each modality. It may be defined by a variable with a suitable length.
 #' @param text.size defines the size of the labels
-#' @param legend if set to TRUE a legend is provided
 #' @param colour defines the colour of the text labels
-#' @param point.colour is a factor of the same length and order as the ones used for the soc.ca object. 
 #' @param list.mod is a numerical vector indicating which active modalities to plot. It may also be a logical vector of the same length and order as the modalities in object$names.mod.
 #' @param list.sup is a numerical vector indicating which supplementary modalities to plot. It may also be a logical vector of the same length and order as the modalities in object$names.sup.
 #' @param list.ind is a numerical vector indicating which individuals to plot. It may also be a logical vector of the same length and order as the modalities in object$names.ind.
 #' @examples
-#' example(soc.ca)
+#' example(soc.mca)
 #' map.select(result, map.title="Map of the first ten modalities",list.mod=1:10)
 #' select   <- active[,3]
 #' select   <- select == levels(select)[2]
@@ -240,7 +238,7 @@ map.select    <- function(object, list.mod=NULL, list.sup=NULL, list.ind=NULL, d
   gg.proc     <- round(object$adj.inertia[,4]) # Adjusted inertia
   gg.data     <- data.plot(object, plot.type="select", dim, ctr.dim=NULL, modal.list=modal.list, point.size=point.size) # Data selection
   axis.labels <- plot.axis(labelx=labelx, labely=labely, gg.proc=gg.proc, dim=dim) # Axis labels
-  map.title   <- plot.title(map.title=map.title, ctr.dim=ctr.dim) # Plot title
+  map.title   <- plot.title(map.title=map.title) # Plot title
   scales      <- breaksandscales(gg.data) # Scales og breaks
   
   gg.input    <- list(gg.data=gg.data, axis.inertia=gg.proc,
@@ -256,28 +254,29 @@ map.select    <- function(object, list.mod=NULL, list.sup=NULL, list.ind=NULL, d
 
 
 #' Add points to an existing map
-#' @param object is a soc.ca class object as created by \link{soc.ca} and \link{soc.csca}
-#' @param ca.map is a map created using one of the soc.ca map functions
+#' @param object is a soc.mca class object as created by \link{soc.mca} and \link{soc.csa}
+#' @param ca.map is a map created using one of the soc.mca map functions
 #' @param data.type defines which type of points to add to the map. Accepted values are: "mod", "sup", "ind", "ctr". These values correspond to the different forms of 
 #' @param list.mod is a numerical vector indicating which active modalities to plot. It may also be a logical vector of the same length and order as the modalities in object$names.mod.
 #' @param list.sup is a numerical vector indicating which supplementary modalities to plot. It may also be a logical vector of the same length and order as the modalities in object$names.sup.
 #' @param list.ind is a numerical vector indicating which individuals to plot. It may also be a logical vector of the same length and order as the modalities in object$names.ind.
-#' @param point.label if set to TRUE each point is assigned its label, defined in the soc.ca object. See \link{assign.label} and \link{add.to.label} for ways to alter the labels.
+#' @param ctr.dim is dimensions from which the contribution values are taken.
+#' @param point.label if set to TRUE each point is assigned its label, defined in the soc.mca object. See \link{assign.label} and \link{add.to.label} for ways to alter the labels.
 #' @param point.shape is a numerical value defining the shape of the points. If set to its default, the default scale is used. It may be defined by a variable with a suitable length.
 #' @param point.size is a numerical value defining the size of the points. If set to its default, the size is determined by the frequency of each modality. It may be defined by a variable with a suitable length.
 #' @param text.size defines the size of the labels
 #' @param colour defines the colour of the text labels
 #' @examples
-#' example(soc.ca)
+#' example(soc.mca)
 #' original.map    <- map.sup(result)
 #' map.add(result, original.map, data.type="ctr", ctr.dim=2)
 #' map.add(result, map.ind(result), data.type="ind",list.ind=1:50, colour="red", point.label=FALSE, point.size=12)
 #' @export
-map.add        <- function(object, ca.plot, data.type=NULL, list.mod=NULL, list.sup=NULL, list.ind=NULL, ctr.dim=NULL, point.label=TRUE, point.shape="variable", point.size="freq", text.size=3.3, colour="black"){
+map.add        <- function(object, ca.map, data.type=NULL, list.mod=NULL, list.sup=NULL, list.ind=NULL, ctr.dim=NULL, point.label=TRUE, point.shape="variable", point.size="freq", text.size=3.3, colour="black"){
   
-  p           <- ca.plot
-  dim         <- ca.plot$dimensions
-  org.scales  <- ca.plot$ca.scales
+  p           <- ca.map
+  dim         <- ca.map$dimensions
+  org.scales  <- ca.map$ca.scales
   modal.list  <- list(list.mod=list.mod, list.sup=list.sup, list.ind=list.ind)
   add.data    <- data.plot(object, plot.type=data.type, dim, ctr.dim=ctr.dim, modal.list=modal.list, point.size=point.size)
   

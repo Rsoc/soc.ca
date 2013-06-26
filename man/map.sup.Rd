@@ -8,8 +8,8 @@
     text.size = 3.3, colour = "black")
 }
 \arguments{
-  \item{object}{is a soc.ca class object as created by
-  \link{soc.ca} and \link{soc.csca}}
+  \item{object}{is a soc.mca class object as created by
+  \link{soc.mca} and \link{soc.csa}}
 
   \item{dim}{gives the dimensions in the order they are to
   be plotted. The first number defines the horizontal axis
@@ -25,7 +25,7 @@
   to NULL a standard label is used.}
 
   \item{point.label}{if set to TRUE each point is assigned
-  its label, defined in the soc.ca object. See
+  its label, defined in the soc.mca object. See
   \link{assign.label} and \link{add.to.label} for ways to
   alter the labels.}
 
@@ -49,7 +49,7 @@
   selected dimension.
 }
 \examples{
-example(soc.ca)
+example(soc.mca)
 map.sup(result)
 map.sup(result, dim=c(2,1))
 map.sup(result, point.size=result$coord.sup[,4], map.title="All supplementary modalities with size according to coordinate on the 4th dimension")

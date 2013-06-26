@@ -26,7 +26,7 @@ id          <- navn
 
 options(passive=c("MISSING", "Missing", "Irrelevant", "residence_value_cat2: Udlandet"))
 
-result      <- soc.ca(active, sup, id)
+result      <- soc.mca(active, sup, id)
 
 result
 
@@ -37,6 +37,7 @@ contribution(result, 3)
 contribution(result, 1, all=TRUE)
 contribution(result, 1, indices=TRUE)
 contribution(result, 1, mode="mod")
+contribution(result, mode="variable")
 
 # Individuals
 contribution(result, 1, mode="ind")
@@ -142,6 +143,3 @@ map.add(result2, lars, data.type="select", list.ind=individual, colour="red")
 # Adding concentration ellipses to an existing plot
 el.forfatter <- map.ellipse(result, map.forfatter, author)
 el.forfatter
-
-
-

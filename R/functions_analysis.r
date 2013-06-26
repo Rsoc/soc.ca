@@ -7,75 +7,68 @@
 
 #' Specific Multiple Correspondence Analysis
 #'
-#' \code{soc.ca} performs a specific multiple correspondence analysis on a data.frame of factors, where cases are rows and columns are variables.
+#' \code{soc.mca} performs a specific multiple correspondence analysis on a data.frame of factors, where cases are rows and columns are variables.
 #' @param active       Defines the active modalities in a data.frame with rows of individuals and columns of factors, without NA's' 
 #' @param sup          Defines the supplementary modalities in a data.frame with rows of individuals and columns of factors, without NA's 
 #' @param identifier   A single vector containing a single value for each row/individual in x and sup. Typically a name or an id.number.
-#' @param passive      A single character vector with the full or partial names of the passive modalities. All names that have a full or partial match will be set as passive. See \link{set.passive}
+#' @param passive      A single character vector with the full or partial names of the passive modalities. All names that have a full or partial match will be set as passive.
 #' 
-#' @return sv          Singular values
-#' 
-#' @return nd          Number of active dimensions: #¤ Check the actual definition and make a reference to le roux
-#' 
-#' @return n.ind       The number of active individuals
-#' 
-#' @return n.mod       The number of active modalities
-#' 
-#' @return eigen       Eigenvectors
-#' 
-#' @return total.inertia The sum of inertia
-#' @return adj.inertia A matrix with all active dimensions, adjusted and unadjusted inertias. See \link{variance}
-#' @return freq.mod    Frequencies for the active modalities. See also \link{add.to.label}
-#' @return freq.sup    Frequencies for the supplementary modalities. See also \link{add.to.label}
-#' @return ctr.mod     A matrix with the contribution values of the active modalities per dimension. See \link{contribution}
-#' @return ctr.ind     A matrix with the contribution values of the individuals per dimension. See \link{individuals}
-#' @return cor.mod     The correlation or quality of each modality per dimension.
-#' @return cor.ind     The correlation or quality of each individual per dimension. #¤ This may be defunct!
-#' @return mass.mod    The mass of each modality
-#' @return coord.mod   A matrix with the principal coordinates of each active modality per dimension.
-#' @return coord.ind   A matrix with the principal coordinates of each individual per dimension.
-#' @return coord.sup   A matrix with the principal coordinates of each supplementary modality per dimension.
-#' @return names.mod   The names of the active modalities
-#' @return names.ind   The names of the individuals
-#' @return names.sup   The names of the supplementary modalities
-#' @return names.passive The names of the passive modalities
-#' @return modal       A matrix with the number of modalities per variable and their location
-#' @return variable    A vector with the name of the variable of the active modalities
-#'
-#' @name soc.ca
+#' @return \item{sv}{Singular values}
+#'  \item{nd}{Number of active dimensions: # Check the actual definition and make a reference to le roux}
+#'  \item{n.ind}{The number of active individuals}
+#'  \item{n.mod}{The number of active modalities}
+#'  \item{eigen}{Eigenvectors}
+#'  \item{total.inertia}{The sum of inertia}
+#'  \item{adj.inertia}{A matrix with all active dimensions, adjusted and unadjusted inertias. See \link{variance}}
+#'  \item{freq.mod}{Frequencies for the active modalities. See also \link{add.to.label}}
+#'  \item{freq.sup}{Frequencies for the supplementary modalities. See also \link{add.to.label}}
+#'  \item{ctr.mod}{A matrix with the contribution values of the active modalities per dimension. See \link{contribution}}
+#'  \item{ctr.ind}{A matrix with the contribution values of the individuals per dimension.}
+#'  \item{cor.mod}{The correlation or quality of each modality per dimension.}
+#'  \item{cor.ind}{The correlation or quality of each individual per dimension. # This may be defunct!}
+#'  \item{mass.mod}{The mass of each modality}
+#'  \item{coord.mod}{A matrix with the principal coordinates of each active modality per dimension.}
+#'  \item{coord.ind}{A matrix with the principal coordinates of each individual per dimension.}
+#'  \item{coord.sup}{A matrix with the principal coordinates of each supplementary modality per dimension.}
+#'  \item{names.mod}{The names of the active modalities}
+#'  \item{names.ind}{The names of the individuals}
+#'  \item{names.sup}{The names of the supplementary modalities}
+#'  \item{names.passive}{The names of the passive modalities}
+#'  \item{modal}{A matrix with the number of modalities per variable and their location}
+#'  \item{variable}{A vector with the name of the variable of the active modalities}
+#' @name soc.mca
 #' @export
 #' @author Anton Grau Larsen, University of Copenhagen
 #' @author Stefan Bastholm Andrade, University of Copenhagen
 #' @author Christoph Ellersgaard, University of Copenhagen
-#' @seealso \link{add.to.label}, \link{contribution}
-#' @examples # This example can be found in further detail at our wiki on github - https://github.com/Rsoc/soc.ca/wiki/How-to-use-soc.ca
+#' @seealso \link{soc.csa}, \link{contribution}
+#' @examples # This example can be found in further detail at our wiki on github - https://github.com/Rsoc/soc.mca/wiki/How-to-use-soc.mca
 #'
-#'# Loads the "directors" dataset included in this package
-#'data(directors)
-#'attach(directors)
+#'# Loads the "taste" dataset included in this package
+#'data(taste)
+#'attach(taste)
 #' # Create a data frame of factors containing all the active variables 
-#' active      <- data.frame(careerprofile_maclean_cat, careerfoundation_maclean_cat,
-#'                           years_between_edu_dir_cat, time_in_corp_before_ceo_cat,
-#'                           age_as_ceo_cat, career_changes_cat2, mba, abroad, hd, phd,
-#'                           education, author, placeofbirth, familyclass_bourdieu,
-#'                           partnersfamily_in_whoswho, family_in_whoswho)
-#' # Create a data frame of factors containing all the supplementary variables 
-#' sup       	 <- data.frame(size_prestige, ownership_cat_2, sector, location)
+#' data           <- taste
+#' data           <- data[which(data$Isup =='Active'),]
+#'
+#' attach(data)
+#' active         <- data.frame(TV, Film, Art, Eat)
+#' sup            <- data.frame(Gender, Age, Income)
+#' detach(data)
 #' 
-#' # This is a vector containing names of the cases
-#' id          <- navn
-#' 
-#' detach(directors)
-#' 
-#' # Defines what words or phrases that are looked for in the labels of the active modalities.
-#' options(passive= c("MISSING", "Missing", "Irrelevant", "residence_value_cat2: Udlandet"))
 #' # Runs the analysis
-#' result      <- soc.ca(active, sup, id)
+#' result      <- soc.mca(active, sup)
 #' 
 #' # Prints the results
 #' result
+#' 
+#' # A specific multiple correspondence analysis
+#' # options defines what words or phrases that are looked for in the labels of the active modalities.
+#' options(passive= c("Film: CostumeDrama", "TV: Tv-Sport"))
+#' soc.mca(active, sup)
+#' options(passive=NULL)
 
-soc.ca <- function(active, sup=NULL, identifier=NULL, passive=getOption("passive", default="Missing")){
+soc.mca <- function(active, sup=NULL, identifier=NULL, passive=getOption("passive", default="Missing")){
   
   active  <- data.frame(lapply(active, factor))               # Turn active variables into factor ## Slet det her og sæt en advarsel ind i stedet
   sup     <- data.frame(lapply(sup, factor))                  # Turn sup variables into factor    ## Slet det her og sæt en advarsel ind i stedet
@@ -178,23 +171,23 @@ soc.ca <- function(active, sup=NULL, identifier=NULL, passive=getOption("passive
   
   result          <- median.standard(result)
     
-  class(result)   <- "soc.ca"
+  class(result)   <- "soc.mca"
   return(result)    
 }
 
 
-#' Correspondence analysis on a indicator matrix
-#' 
-#' This function is part of the soc.ca function but allows for manipulation of the indicator matrix before analysis.
-#' Most users will not need this function.
-#' 
-#' @param indicator.act   An indicator matrix of all the active modalities (including those that are to be set as passive)
-#' @param indicator.sup   An indicator matrix of the supplementary modalities
-#' @param subset  A vector containing column indices of passive modalities
-#' @param Q       The number of variables
-#' @param Qm      The number of variables without passive modalities
-#' @export
-#' @return a list of various results. See \link{soc.ca} documentation
+# ' Correspondence analysis on a indicator matrix
+# ' 
+# ' This function is part of the soc.mca function but allows for manipulation of the indicator matrix before analysis.
+# ' Most users will not need this function.
+# ' 
+# ' @param indicator.act   An indicator matrix of all the active modalities (including those that are to be set as passive)
+# ' @param indicator.sup   An indicator matrix of the supplementary modalities
+# ' @param subset  A vector containing column indices of passive modalities
+# ' @param Q       The number of variables
+# ' @param Qm      The number of variables without passive modalities
+# ' #@export
+# ' @return a list of various results. See \link{soc.mca} documentation
 
 subset.ca.indicator <- function(indicator.act, indicator.sup, subset, Q, Qm){
   Z.act <- indicator.act
@@ -326,7 +319,7 @@ subset.ca.indicator <- function(indicator.act, indicator.sup, subset, Q, Qm){
 #' @param ps  the seperator used in the creation of the names of the columns (modalities).
 #'
 #' @return Returns a indicator matrix
-#' @seealso \link{soc.ca}, \link{subset.ca.indicator}
+#' @seealso \link{soc.mca}
 #' @examples 
 #' a <- rep(c("A","B"), 5)
 #' b <- rep(c("C", "D"), 5)
@@ -362,51 +355,46 @@ return(Z)
 
 #' Class Specific Multiple Correspondence Analysis  ### Al dokumentationen for csca er forkert!
 #'
-#' \code{soc.csca} performs a class specific multiple correspondence analysis on a data.frame of factors, where cases are rows and columns are variabels.
-#' @param active       Defines the active modalities in a data.frame with rows of individuals and columns of factors, without NA's' 
+#' \code{soc.csa} performs a class specific multiple correspondence analysis on a data.frame of factors, where cases are rows and columns are variabels. Most descriptive and analytical functions that work for \link{soc.mca}, also work for \code{soc.csa}
+#' @param object  is a soc.mca class object created with \link{soc.mca}
+#' @param class.indicator the row indices of the class specific individuals
 #' @param sup          Defines the supplementary modalities in a data.frame with rows of individuals and columns of factors, without NA's 
-#' @param identifier   A single vector containing a single value for each row/individual in x and sup. Typically a name or an id.number.
-#' @param passive      A single character vector with the full or partial names of the passive modalities. All names that have a full or partial match will be set as passive. See \link{set.passive}
-#' 
-#' @return sv          Singular values
-#' 
-#' @return nd          Number of active dimensions: #¤ Check the actual definition and make a reference to le roux
-#' 
-#' @return n.ind       The number of active individuals
-#' 
-#' @return n.mod       The number of active modalities
-#' 
-#' @return eigen       Eigenvectors
-#' 
-#' @return total.inertia The sum of inertia
-#' @return adj.inertia A matrix with all active dimensions, adjusted and unadjusted inertias. See \link{variance}
-#' @return freq.mod    Frequencies for the active modalities. See also \link{add.to.label}
-#' @return freq.sup    Frequencies for the supplementary modalities. See also \link{add.to.label}
-#' @return ctr.mod     A matrix with the contribution values of the active modalities per dimension. See \link{contribution}
-#' @return ctr.ind     A matrix with the contribution values of the individuals per dimension. See \link{individuals}
-#' @return cor.mod     The correlation or quality of each modality per dimension.
-#' @return cor.ind     The correlation or quality of each individual per dimension. #¤ This may be defunct!
-#' @return mass.mod    The mass of each modality
-#' @return coord.mod   A matrix with the principal coordinates of each active modality per dimension.
-#' @return coord.ind   A matrix with the principal coordinates of each individual per dimension.
-#' @return coord.sup   A matrix with the principal coordinates of each supplementary modality per dimension.
-#' @return names.mod   The names of the active modalities
-#' @return names.ind   The names of the individuals
-#' @return names.sup   The names of the supplementary modalities
-#' @return names.passive The names of the passive modalities
-#' @return modal       A matrix with the number of modalities per variable and their location
-#' @return variable    A vector with the name of the variable of the active modalities
-#'
-#' @name soc.csca
+#' @return \item{sv}{Singular values}
+#'  \item{nd}{Number of active dimensions: # Check the actual definition and make a reference to le roux}
+#'  \item{n.ind}{The number of active individuals}
+#'  \item{n.mod}{The number of active modalities}
+#'  \item{eigen}{Eigenvectors}
+#'  \item{total.inertia}{The sum of inertia}
+#'  \item{adj.inertia}{A matrix with all active dimensions, adjusted and unadjusted inertias. See \link{variance}}
+#'  \item{freq.mod}{Frequencies for the active modalities. See also \link{add.to.label}}
+#'  \item{freq.sup}{Frequencies for the supplementary modalities. See also \link{add.to.label}}
+#'  \item{ctr.mod}{A matrix with the contribution values of the active modalities per dimension. See \link{contribution}}
+#'  \item{ctr.ind}{A matrix with the contribution values of the individuals per dimension.}
+#'  \item{cor.mod}{The correlation or quality of each modality per dimension.}
+#'  \item{cor.ind}{The correlation or quality of each individual per dimension. # This may be defunct!}
+#'  \item{mass.mod}{The mass of each modality}
+#'  \item{coord.mod}{A matrix with the principal coordinates of each active modality per dimension.}
+#'  \item{coord.ind}{A matrix with the principal coordinates of each individual per dimension.}
+#'  \item{coord.sup}{A matrix with the principal coordinates of each supplementary modality per dimension. Notice that the position of the supplementary modalities in class specific analysis is the mean point of the individuals, which is not directly comparable with the cloud of the active modalities.}
+#'  \item{names.mod}{The names of the active modalities}
+#'  \item{names.ind}{The names of the individuals}
+#'  \item{names.sup}{The names of the supplementary modalities}
+#'  \item{names.passive}{The names of the passive modalities}
+#'  \item{modal}{A matrix with the number of modalities per variable and their location}
+#'  \item{variable}{A vector with the name of the variable of the active modalities}
+#'  \item{cor.dim}{A correlation matrix with the correlations between the original dimensions and the class specific dimensions}
+#' @name soc.csa
 #' @export
 #' @author Anton Grau Larsen, University of Copenhagen
 #' @author Stefan Bastholm Andrade, University of Copenhagen
 #' @author Christoph Ellersgaard, University of Copenhagen
 #' @seealso \link{add.to.label}, \link{contribution}
-#' @examples # This example can be found in further detail at our wiki on github - https://github.com/Rsoc/soc.ca/wiki/How-to-use-soc.ca
-#' 
+#' @examples # This example can be found in further detail at our wiki on github - https://github.com/Rsoc/soc.mca/wiki/How-to-use-soc.mca
+#' example(soc.mca)
+#' class.age    <- which(data$Age =='55-64')
+#' soc.csa(result, class.age)
 
-soc.csca <- function(object, class.indicator, sup=NULL){
+soc.csa <- function(object, class.indicator, sup=NULL){
  
  
   Z.act  <- object$indicator.matrix             # Original indicator matrix
@@ -588,11 +576,11 @@ soc.csca <- function(object, class.indicator, sup=NULL){
   csca.coord    <- csca.coord[,dim]
   ca.coord      <- ca.coord[,dim]
   cor.mat       <- cor(csca.coord, ca.coord)
-  rownames(cor.mat)   <- paste("CSCA dim.", dim)
-  colnames(cor.mat)   <- paste("CA dim.", dim)
+  rownames(cor.mat)   <- paste("CSA dim.", dim)
+  colnames(cor.mat)   <- paste("MCA dim.", dim)
   csca.result$cor.dim <- cor.mat
   
-  class(csca.result)   <- c("soc.ca", "soc.csca")
+  class(csca.result)   <- c("soc.mca", "soc.csa")
   return(csca.result)
   
   
@@ -603,25 +591,25 @@ soc.csca <- function(object, class.indicator, sup=NULL){
 
 #' Create quadrants
 #' 
-#' Creates a vector from two dimensions from a soc.ca object. Labels are the cardinal directions with the first designated dimension running East - West.
+#' Creates a vector from two dimensions from a soc.mca object. Labels are the cardinal directions with the first designated dimension running East - West.
 #' 
-#' @param result   a soc.ca object
+#' @param object  is a soc.mca class object created with \link{soc.mca}
 #' @param dim  the dimensions
 #' @param cut.min  Minimum cut value
 #' @param cut.max  Maximum cut value
 #' @param cut.radius  Radius of the center category
 #' 
 #' @return Returns a character vector
-#' @seealso \link{soc.ca}
+#' @seealso \link{soc.mca}
 #' @examples 
-#' example(soc.ca)
+#' example(soc.mca)
 #' create.quadrant(result, dim=c(2,1))
 #' table(create.quadrant(result, dim=c(1,3), cut.radius=0.5))
 #' @export
 
-create.quadrant <- function(result, dim=c(1,2), cut.min=-0.125, cut.max=0.125, cut.radius=0.25){
+create.quadrant <- function(object, dim=c(1,2), cut.min=-0.125, cut.max=0.125, cut.radius=0.25){
   
-  coord                    <- result$coord.ind
+  coord                    <- object$coord.ind
   coord.cut                <- coord
   coord.cut[coord < cut.min] <- "Min"
   coord.cut[coord > cut.max]  <- "Max"
@@ -648,5 +636,43 @@ create.quadrant <- function(result, dim=c(1,2), cut.min=-0.125, cut.max=0.125, c
   
   return(position)
 }
+
+
+#' csa.all 
+#'
+#' \code{csa.all} performs a class specific correspondence analysis for each level in a factor variable
+#' @param object  is a soc.mca class object created with \link{soc.mca}
+#' @param variable a factor with the same length and order as the active variables that created the soc.mca object
+#' @param dim is the dimensions included in the correlation matrixes
+#' @return results a list of \link{soc.mca} result objects
+#' @return cor a list of correlation matrixes
+#' @export
+#' @examples
+#' example(soc.mca)
+#' csa.all(result, data$Age)
+#' @seealso \link{soc.mca}, \link{soc.csa}, \link{cor}
+
+csa.all <- function(object, variable, dim=1:5){
+  lev.variable <- levels(variable)
+  result.list     <- list()
+  for (i in 1:length(lev.variable)){
+    dummy.class         <- which(variable == lev.variable[i])
+    result.list[[i]]    <- soc.csa(object, class.indicator=dummy.class)
+  }
+  
+  names(result.list) <- lev.variable
+  
+  cor.list <- list()
+  for (i in 1:length(result.list)){
+    cor.list[[i]]<- result.list[[i]]$cor.dim[dim,dim]
+  }
+  names(cor.list) <- lev.variable
+  
+  list(results=result.list, cor=cor.list)
+}
+
+
+
+
 
 

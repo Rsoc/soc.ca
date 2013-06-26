@@ -8,8 +8,8 @@
     point.size = "freq", text.size = 3.3, colour = "black")
 }
 \arguments{
-  \item{object}{is a soc.ca class object as created by
-  \link{soc.ca} and \link{soc.csca}}
+  \item{object}{is a soc.mca class object as created by
+  \link{soc.mca} and \link{soc.csa}}
 
   \item{ctr.dim}{is dimensions from which the contribution
   values are taken.}
@@ -28,7 +28,7 @@
   to NULL a standard label is used.}
 
   \item{point.label}{if set to TRUE each point is assigned
-  its label, defined in the soc.ca object. See
+  its label, defined in the soc.mca object. See
   \link{assign.label} and \link{add.to.label} for ways to
   alter the labels.}
 
@@ -53,7 +53,7 @@
   dimension.
 }
 \examples{
-example(soc.ca)
+example(soc.mca)
 map.ctr(result)
 map.ctr(result, ctr.dim=c(1,2))
 }

@@ -9,8 +9,8 @@
     text.size = 3.3, colour = "black")
 }
 \arguments{
-  \item{object}{is a soc.ca class object as created by
-  \link{soc.ca} and \link{soc.csca}}
+  \item{object}{is a soc.mca class object as created by
+  \link{soc.mca} and \link{soc.csa}}
 
   \item{dim}{gives the dimensions in the order they are to
   be plotted. The first number defines the horizontal axis
@@ -26,7 +26,7 @@
   to NULL a standard label is used.}
 
   \item{point.label}{if set to TRUE each point is assigned
-  its label, defined in the soc.ca object. See
+  its label, defined in the soc.mca object. See
   \link{assign.label} and \link{add.to.label} for ways to
   alter the labels.}
 
@@ -42,12 +42,7 @@
 
   \item{text.size}{defines the size of the labels}
 
-  \item{legend}{if set to TRUE a legend is provided}
-
   \item{colour}{defines the colour of the text labels}
-
-  \item{point.colour}{is a factor of the same length and
-  order as the ones used for the soc.ca object.}
 
   \item{list.mod}{is a numerical vector indicating which
   active modalities to plot. It may also be a logical
@@ -68,7 +63,7 @@
   Creates a map of selected modalities or individuals
 }
 \examples{
-example(soc.ca)
+example(soc.mca)
 map.select(result, map.title="Map of the first ten modalities",list.mod=1:10)
 select   <- active[,3]
 select   <- select == levels(select)[2]

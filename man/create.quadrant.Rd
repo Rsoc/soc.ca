@@ -2,11 +2,12 @@
 \alias{create.quadrant}
 \title{Create quadrants}
 \usage{
-  create.quadrant(result, dim = c(1, 2), cut.min = -0.125,
+  create.quadrant(object, dim = c(1, 2), cut.min = -0.125,
     cut.max = 0.125, cut.radius = 0.25)
 }
 \arguments{
-  \item{result}{a soc.ca object}
+  \item{object}{is a soc.mca class object created with
+  \link{soc.mca}}
 
   \item{dim}{the dimensions}
 
@@ -20,16 +21,16 @@
   Returns a character vector
 }
 \description{
-  Creates a vector from two dimensions from a soc.ca
+  Creates a vector from two dimensions from a soc.mca
   object. Labels are the cardinal directions with the first
   designated dimension running East - West.
 }
 \examples{
-example(soc.ca)
+example(soc.mca)
 create.quadrant(result, dim=c(2,1))
 table(create.quadrant(result, dim=c(1,3), cut.radius=0.5))
 }
 \seealso{
-  \link{soc.ca}
+  \link{soc.mca}
 }
 

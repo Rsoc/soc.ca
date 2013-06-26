@@ -3,9 +3,9 @@
 #' Add to label
 #'
 #' Adds values to the end of the label of each modality.
-#' @param  object is a soc.ca object
+#' @param  object is a soc.mca object
 #' @param  text is the prefix used to construct the added text.
-#' @return a soc.ca object with altered labels in names.mod and names.sup.
+#' @return a soc.mca object with altered labels in names.mod and names.sup.
 #' @export
 
 add.to.label <- function(object, text=" (n:"){
@@ -24,7 +24,7 @@ add.to.label <- function(object, text=" (n:"){
   return(object)
 }
 
-#' Exports the labels of a soc.ca object into a csv file.
+#' Exports the labels of a soc.mca object into a csv file.
 #' 
 #' This function allows easy translation and renaming of modalities by exporting the labels into a .csv file that is easier to work with.
 #' 
@@ -32,7 +32,7 @@ add.to.label <- function(object, text=" (n:"){
 #' 
 #' If you want to add frequencies to the labels with the \link{add.to.label} function you should do this after exporting and assigning labels with the \link{assign.label} function.
 #' Otherwise the matching of the labels is likely to fail.
-#' @param object is a soc.ca object
+#' @param object is a soc.mca object
 #' @param file is the name and path of the exported file
 #' @param encoding is the character encoding of the exported file
 #' @param overwrite decides whether to overwrite already existing files
@@ -56,12 +56,12 @@ export.label    <- function(object, file=FALSE, encoding="UTF-8", overwrite=FALS
 
 #'  Assign.label
 #'  
-#' Assigns new labels to an soc.ca object. The input labels are defined in a .csv file created by the export.label() function.
-#' @param object is a soc.ca object
+#' Assigns new labels to an soc.mca object. The input labels are defined in a .csv file created by the export.label() function.
+#' @param object is a soc.mca object
 #' @param file is the path of the .csv file with the new labels. The file is preferably created by the export.label() function
 #' @param encoding is the encoding of the imported file
 #' @param sep is the seperator used to create the imported .csv file  
-#' @return a soc.ca object with altered labels in names.mod, names.ind and names.sup
+#' @return a soc.mca object with altered labels in names.mod, names.ind and names.sup
 #' @seealso \link{export.label}, \link{add.to.label}
 #' @export
 

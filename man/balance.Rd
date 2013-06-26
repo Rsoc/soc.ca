@@ -5,7 +5,7 @@
   balance(object, act.dim = object$nd)
 }
 \arguments{
-  \item{Object}{is a soc.ca class object}
+  \item{object}{is a soc.mca class object}
 
   \item{act.dim}{is the number of active dimensions to be
   measured}
@@ -21,14 +21,14 @@
   side of the dimension.
 }
 \examples{
-# We use the example from soc.ca - for details see ?soc.ca
-example(soc.ca)
+# We use the example from soc.mca - for details see ?soc.mca
+example(soc.mca)
 
 balance(result)
 
 balance(result, act.dim=3)
 }
 \seealso{
-  \link{print.soc.ca}, \link{contribution}
+  \link{print.soc.mca}, \link{contribution}
 }
 

@@ -5,13 +5,13 @@
   add.to.label(object, text = " (n:")
 }
 \arguments{
-  \item{object}{is a soc.ca object}
+  \item{object}{is a soc.mca object}
 
   \item{text}{is the prefix used to construct the added
   text.}
 }
 \value{
-  a soc.ca object with altered labels in names.mod and
+  a soc.mca object with altered labels in names.mod and
   names.sup.
 }
 \description{

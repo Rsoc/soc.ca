@@ -1,11 +1,11 @@
 \name{export}
 \alias{export}
-\title{Export from soc.ca}
+\title{Export from soc.mca}
 \usage{
   export(object, file = "export.csv", dim = 1:5)
 }
 \arguments{
-  \item{object}{is a soc.ca class object or a contribution
+  \item{object}{is a soc.mca class object or a contribution
   class object}
 
   \item{dim}{is the dimensions to be exported}
@@ -20,6 +20,6 @@
   Export objects from the soc.ca package to csv files.
 }
 \seealso{
-  \link{soc.ca}, \link{tab.variable}, \link{contribution}
+  \link{soc.mca}, \link{contribution}
 }
 

@@ -6,14 +6,14 @@
     indices = FALSE, mode = "sort")
 }
 \arguments{
-  \item{object}{is a soc.ca object}
+  \item{object}{is a soc.mca object}
 
   \item{dim}{is the included dimensions}
 
-  \item{all:}{If TRUE returns all modalities instead of
-  just those that contribute above average}
+  \item{all}{If TRUE returns all modalities instead of just
+  those that contribute above average}
 
-  \item{indices:}{If TRUE; returns a vector with the row
+  \item{indices}{If TRUE; returns a vector with the row
   indices of the modalities}
 
   \item{mode}{indicates which form of output. Possible
@@ -33,7 +33,7 @@
   the selected dimension
 }
 \examples{
-example(soc.ca)
+example(soc.mca)
 contribution(result)
 contribution(result, 2)
 contribution(result, dim=3, all=TRUE)
