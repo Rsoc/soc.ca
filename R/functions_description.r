@@ -131,7 +131,7 @@ balance   <- function(object, act.dim=object$nd){
 #' @param dim is the included dimensions
 #' @param all If TRUE returns all modalities instead of just those that contribute above average
 #' @param indices If TRUE; returns a vector with the row indices of the modalities
-#' @param mode indicates which form of output. Possible values: "sort", "mod", "ind".
+#' @param mode indicates which form of output. Possible values: "sort", "mod", "ind", "variable". If the mode is "variable", dim can be a sequence of dimensions: \code{1:5}
 #' @return Ctr is the contribution in percentage
 #' @return Cor is the correlation with the dimension
 #' @return Coord is the principal coordinate
@@ -144,8 +144,7 @@ balance   <- function(object, act.dim=object$nd){
 #' contribution(result, 2)
 #' contribution(result, dim=3, all=TRUE)
 #' contribution(result, indices=TRUE)
-#' contribution(result, mode="ind")
-#' contribution(result, mode="ind", indices=TRUE)
+#' contribution(result, 1:2, mode="variable")
 #' @export
 
 contribution <- function(object, dim=1, all=FALSE, indices=FALSE, mode="sort"){
@@ -365,8 +364,9 @@ tab.variable    <- function(object, dim=1:3, sup=FALSE){
     
     # The printing
     
-    av.ctr <- round(100/object$n.mod, digits=1)
-    maxwidth <- max(nchar(names.mod))
+    av.ctr      <- round(100/object$n.mod, digits=1)
+    maxwidth    <- max(nchar(names.mod))
+    l           <- ncol(var.ctr)
     
     
     if (identical(sup, FALSE)) cat("The contribution of the active variables")
@@ -378,7 +378,7 @@ tab.variable    <- function(object, dim=1:3, sup=FALSE){
         cat("\n", "\n", format(lev.var[i], width=maxwidth), colnames(var.ctr))
         
         for (q in seq(nrow(var.ctr))){
-            cat("\n", format(rownames(var.ctr)[q], width=maxwidth), format(var.ctr[q,dim], width=6), format(var.ctr[q,length(dim)+1], width=6, drop0trailing=TRUE))
+            cat("\n", format(rownames(var.ctr)[q], width=maxwidth), format(var.ctr[q,-l], width=6), format(var.ctr[q,length(dim)+1], width=6, drop0trailing=TRUE))
         }
         
     }

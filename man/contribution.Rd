@@ -17,7 +17,9 @@
   indices of the modalities}
 
   \item{mode}{indicates which form of output. Possible
-  values: "sort", "mod", "ind".}
+  values: "sort", "mod", "ind", "variable". If the mode is
+  "variable", dim can be a sequence of dimensions:
+  \code{1:5}}
 }
 \value{
   Ctr is the contribution in percentage
@@ -38,8 +40,7 @@ contribution(result)
 contribution(result, 2)
 contribution(result, dim=3, all=TRUE)
 contribution(result, indices=TRUE)
-contribution(result, mode="ind")
-contribution(result, mode="ind", indices=TRUE)
+contribution(result, 1:2, mode="variable")
 }
 \seealso{
   \link{map.ctr}
