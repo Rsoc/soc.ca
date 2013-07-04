@@ -75,6 +75,10 @@ soc.csa(result, class.age)
 
   Christoph Ellersgaard, University of Copenhagen
 }
+\references{
+  Le Roux, B., og H. Rouanet. 2010. Multiple correspondence
+  analysis. Thousand Oaks: Sage.
+}
 \seealso{
   \link{add.to.label}, \link{contribution}
 }

@@ -15,9 +15,9 @@
   matrixes}
 }
 \value{
-  results a list of \link{soc.mca} result objects
+  \item{results}{a list of \link{soc.csa} result objects}
 
-  cor a list of correlation matrixes
+  \item{cor}{a list of correlation matrixes}
 }
 \description{
   \code{csa.all} performs a class specific correspondence

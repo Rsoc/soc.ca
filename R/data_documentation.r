@@ -1,3 +1,39 @@
+
+
+
+
+
+#' Soc.ca a package for specific correspondence analysis
+#' 
+#' This package is optimized to the needs of sociologists
+#' producing specific and class specific multiple correspondence analysis on
+#' survey-like data. Soc.ca is optimized to only give the most essential
+#' statistical output values sorted so as to help in analysis. Seperate functions
+#' exists for near publication-ready plots and tables.
+#' 
+#' We are in debt to the great work of others, especially Brigitte Le Roux and Henry Rouanet for the mathematical definitions of the method and their examples. 
+#' Furthermore this package was initially based on code from the ca package written by Michael Greenacre and Oleg Nenadic.
+#' 
+#' 
+#' If you are looking for features that are absent in soc.ca, it may be available in some of these great packages for correspondence analysis:
+#' \pkg{ca}, \pkg{anacor} and \pkg{FactoMineR}.
+#' 
+#' @references Le Roux, B., og H. Rouanet. 2010. Multiple correspondence analysis. Thousand Oaks: Sage.
+#' 
+#' @docType package
+#' @name soc.ca
+NULL
+
+
+
+
+
+
+
+
+
+
+
 #' Directors dataset
 #' 
 #' Prosopographical data on the top 100 CEO's from the 82 largest Danish corporations. 
@@ -12,13 +48,17 @@
 #' a minimum of 500 employees was also required, excluding 12 firms. Companies
 #' acting only as subsidiaries were also excluded.
 #'
-#'
 #' @name directors
 #' @docType data
 #' @author Christoph Ellersgaard
 #' @author Anton Grau Larsen
+#' @references Ellersgaard, Christoph, Anton Grau Larsen, og Martin D. Munk. 2012. "A Very Economic Elite: The Case of the Danish Top CEOs". Sociology. (http://soc.sagepub.com/cgi/doi/10.1177/0038038512454349).
+#' @references Ellersgaard, Christoph Houman, og Anton Grau Larsen. 2010. "Firmaets Maend". Master Thesis, Copenhagen: University of Copenhagen.
+#' @references Ellersgaard, Christoph Houman, og Anton Grau Larsen. 2011. "Kulturel kapital blandt topdirektoerer i Danmark - En domineret kapitalform?" Dansk Sociologi 22(3):9-29.
+#' @references Larsen, Anton Grau, og Christoph Houman Ellersgaard. 2012. "Status og integration paa magtens felt for danske topdirektoerer". Praktiske Grunde. Nordisk tidsskrift for kultur- og samfundsvidenskab 2012(2-3).
 #' @keywords data
 #' @examples
+#' \dontrun{
 #' data(directors)
 #' attach(directors)
 #' 
@@ -152,7 +192,7 @@
 #' # Adding concentration ellipses to an existing plot
 #' el.forfatter <- map.ellipse(result, map.forfatter, author)
 #' el.forfatter
-#' #' 
+#' }
 NULL
 
 #' Taste dataset

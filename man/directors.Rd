@@ -31,6 +31,7 @@
   Companies acting only as subsidiaries were also excluded.
 }
 \examples{
+\dontrun{
 data(directors)
 attach(directors)
 
@@ -164,12 +165,31 @@ map.add(result2, lars, data.type="select", list.ind=individual, colour="red")
 # Adding concentration ellipses to an existing plot
 el.forfatter <- map.ellipse(result, map.forfatter, author)
 el.forfatter
-#'
+}
 }
 \author{
   Christoph Ellersgaard
 
   Anton Grau Larsen
+}
+\references{
+  Ellersgaard, Christoph, Anton Grau Larsen, og Martin D.
+  Munk. 2012. "A Very Economic Elite: The Case of the
+  Danish Top CEOs". Sociology.
+  (http://soc.sagepub.com/cgi/doi/10.1177/0038038512454349).
+
+  Ellersgaard, Christoph Houman, og Anton Grau Larsen.
+  2010. "Firmaets Maend". Master Thesis, Copenhagen:
+  University of Copenhagen.
+
+  Ellersgaard, Christoph Houman, og Anton Grau Larsen.
+  2011. "Kulturel kapital blandt topdirektoerer i Danmark -
+  En domineret kapitalform?" Dansk Sociologi 22(3):9-29.
+
+  Larsen, Anton Grau, og Christoph Houman Ellersgaard.
+  2012. "Status og integration paa magtens felt for danske
+  topdirektoerer". Praktiske Grunde. Nordisk tidsskrift for
+  kultur- og samfundsvidenskab 2012(2-3).
 }
 \keyword{data}
 \keyword{datasets}

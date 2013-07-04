@@ -38,6 +38,7 @@
 #'  \item{variable}{A vector with the name of the variable of the active modalities}
 #' @name soc.mca
 #' @export
+#' @references Le Roux, B., og H. Rouanet. 2010. Multiple correspondence analysis. Thousand Oaks: Sage.
 #' @author Anton Grau Larsen, University of Copenhagen
 #' @author Stefan Bastholm Andrade, University of Copenhagen
 #' @author Christoph Ellersgaard, University of Copenhagen
@@ -389,6 +390,7 @@ return(Z)
 #' @author Stefan Bastholm Andrade, University of Copenhagen
 #' @author Christoph Ellersgaard, University of Copenhagen
 #' @seealso \link{add.to.label}, \link{contribution}
+#' @references Le Roux, B., og H. Rouanet. 2010. Multiple correspondence analysis. Thousand Oaks: Sage.
 #' @examples # This example can be found in further detail at our wiki on github - https://github.com/Rsoc/soc.mca/wiki/How-to-use-soc.mca
 #' example(soc.mca)
 #' class.age    <- which(data$Age =='55-64')
@@ -644,8 +646,8 @@ create.quadrant <- function(object, dim=c(1,2), cut.min=-0.125, cut.max=0.125, c
 #' @param object  is a soc.mca class object created with \link{soc.mca}
 #' @param variable a factor with the same length and order as the active variables that created the soc.mca object
 #' @param dim is the dimensions included in the correlation matrixes
-#' @return results a list of \link{soc.mca} result objects
-#' @return cor a list of correlation matrixes
+#' @return \item{results}{a list of \link{soc.csa} result objects}
+#' @return \item{cor}{a list of correlation matrixes}
 #' @export
 #' @examples
 #' example(soc.mca)

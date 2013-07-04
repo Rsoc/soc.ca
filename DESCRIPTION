@@ -3,8 +3,8 @@ Title: Specific correspondence analysis for sociologists
 Description: soc.ca is a package optimized to the needs of sociologists
     producing specific and class specific multiple correspondence analysis on
     survey-like data. Soc.ca is optimized to only give the most essential
-    statistical values sorted so as to help in analysis. Seperate functions
-    exists for near publication-ready plots and tables.
+    statistical output values sorted so as to help in analysis. Seperate
+    functions exists for near publication-ready plots and tables.
 URL: https://github.com/Rsoc/soc.ca
 Version: 0.1
 Maintainer: Anton Grau Larsen <alar@soc.ku.dk>
