@@ -18,7 +18,7 @@
 
 map.ellipse <- function(object, ca.plot, variable){ 
 # De indledende øvelser
-
+variable    <- as.factor(variable) 
 dim         <- ca.plot$dimensions 
 id.coord    <- object$coord.ind[, dim]
 lev.var     <- levels(variable)
