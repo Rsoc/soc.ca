@@ -1,8 +1,3 @@
-
-
-
-
-
 #' Soc.ca a package for specific correspondence analysis
 #' 
 #' This package is optimized to the needs of sociologists
@@ -23,16 +18,6 @@
 #' @docType package
 #' @name soc.ca
 NULL
-
-
-
-
-
-
-
-
-
-
 
 #' Directors dataset
 #' 
