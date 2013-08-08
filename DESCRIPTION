@@ -12,6 +12,7 @@ Author: Anton Grau Larsen <alar@soc.ku.dk>
 Depends:
     R (>= 2.15.0),
     ggplot2,
+    gridExtra,
     ellipse,
     scales,
     grid
@@ -25,3 +26,4 @@ Collate:
     'functions_plot.r'
     'functions_tools.r'
     'plot_theme.r'
+    'functions_array.r'

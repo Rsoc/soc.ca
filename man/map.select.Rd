@@ -5,7 +5,7 @@
   map.select(object, list.mod = NULL, list.sup = NULL,
     list.ind = NULL, dim = c(1, 2), map.title = "select",
     labelx = NULL, labely = NULL, point.label = TRUE,
-    point.shape = "variable", point.size = "freq",
+    point.shape = "variable", point.size = 3,
     text.size = 3.3, colour = "black")
 }
 \arguments{
@@ -36,9 +36,9 @@
   suitable length.}
 
   \item{point.size}{is a numerical value defining the size
-  of the points. If set to its default, the size is
-  determined by the frequency of each modality. It may be
-  defined by a variable with a suitable length.}
+  of the points. If set to "freq", the size is determined
+  by the frequency of each modality. It may be defined by a
+  variable with a suitable length.}
 
   \item{text.size}{defines the size of the labels}
 

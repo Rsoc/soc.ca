@@ -217,7 +217,7 @@ return(t.plot)
 #' @param labely is the label of the vertical axis. If set to NULL a standard label is used.
 #' @param point.label if set to TRUE each point is assigned its label, defined in the soc.mca object. See \link{assign.label} and \link{add.to.label} for ways to alter the labels.
 #' @param point.shape is a numerical value defining the shape of the points. If set to its default, the default scale is used. It may be defined by a variable with a suitable length.
-#' @param point.size is a numerical value defining the size of the points. If set to its default, the size is determined by the frequency of each modality. It may be defined by a variable with a suitable length.
+#' @param point.size is a numerical value defining the size of the points. If set to "freq", the size is determined by the frequency of each modality. It may be defined by a variable with a suitable length.
 #' @param text.size defines the size of the labels
 #' @param colour defines the colour of the text labels
 #' @param list.mod is a numerical vector indicating which active modalities to plot. It may also be a logical vector of the same length and order as the modalities in object$names.mod.
@@ -231,7 +231,7 @@ return(t.plot)
 #' map.select(result, map.title="Map of all individuals sharing a particular value", list.ind=select, point.size=3)
 #' map.select(result, map.title="Map of both select individuals and modalities", list.ind=select, list.mod=1:10)
 #' @export
-map.select    <- function(object, list.mod=NULL, list.sup=NULL, list.ind=NULL, dim=c(1,2), map.title="select", labelx=NULL, labely=NULL, point.label=TRUE, point.shape="variable", point.size="freq", text.size=3.3, colour="black"){
+map.select    <- function(object, list.mod=NULL, list.sup=NULL, list.ind=NULL, dim=c(1,2), map.title="select", labelx=NULL, labely=NULL, point.label=TRUE, point.shape="variable", point.size=3, text.size=3.3, colour="black"){
   
   modal.list  <- list(list.mod=list.mod, list.sup=list.sup, list.ind=list.ind)
   
@@ -483,7 +483,7 @@ data.plot   <- function(object, plot.type, dim, ctr.dim=NULL, modal.list=NULL, p
     point.colour <- point.colour
   }
   
-  # list
+  # select
   if (identical(plot.type, "select")==TRUE){
     coord.mod 		<- object$coord.mod[modal.list$list.mod,]
     coord.sup     <- object$coord.sup[modal.list$list.sup,]

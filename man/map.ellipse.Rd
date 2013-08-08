@@ -2,7 +2,7 @@
 \alias{map.ellipse}
 \title{Concentration ellipses}
 \usage{
-  map.ellipse(object, ca.plot, variable)
+  map.ellipse(object, ca.plot, variable, label = TRUE)
 }
 \arguments{
   \item{object}{is a soc.mca class object}

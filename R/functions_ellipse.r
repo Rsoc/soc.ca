@@ -1,7 +1,5 @@
 ######################### ELLIPSES
 
-
-
 #' Concentration ellipses
 #'
 #' Add ellipses for each level in a factor to a plot made from a soc.mca object.
@@ -16,7 +14,7 @@
 #' map.ellipse(result, map, active[,2])
 #' @export
 
-map.ellipse <- function(object, ca.plot, variable){ 
+map.ellipse <- function(object, ca.plot, variable, label=TRUE){ 
 # De indledende øvelser
 variable    <- as.factor(variable) 
 dim         <- ca.plot$dimensions 
@@ -55,7 +53,7 @@ ca.plot <- ca.plot + geom_path(data=ellipse.data[[i]]$el.axis[[2]],aes(x=x, y=y)
 ca.plot <- ca.plot + geom_point(data=ellipse.data[[i]]$el.origo, aes(x=x, y=y), size=2, shape=21, fill="white", colour="grey70", na.rm=TRUE)
 # Origo label
 #! Måske annotate ville være en god funktion??
-ca.plot <- ca.plot + geom_text(aes(x=x, y=y, label=label), data=ellipse.data[[i]]$el.origo, size=3.3, hjust=-0.15, fontface="italic")
+if(identical(label, TRUE)) ca.plot <- ca.plot + geom_text(aes(x=x, y=y, label=label), data=ellipse.data[[i]]$el.origo, size=3.3, hjust=-0.15, fontface="italic")
 }
 
 ca.plot
