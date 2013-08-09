@@ -1,6 +1,6 @@
 Package: soc.ca
-Title: Specific correspondence analysis for sociologists
-Description: soc.ca is a package optimized to the needs of sociologists
+Title: Specific correspondence analysis for the social sciences
+Description: soc.ca is a package optimized to the needs of scientists within the social sciences
     producing specific and class specific multiple correspondence analysis on
     survey-like data. Soc.ca is optimized to only give the most essential
     statistical output values sorted so as to help in analysis. Seperate

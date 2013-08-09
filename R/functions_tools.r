@@ -81,5 +81,6 @@ invert <- function(x, dim=1) {
   x$coord.mod[,dim] <- x$coord.mod[,dim] * -1
   x$coord.ind[,dim] <- x$coord.ind[,dim] * -1
   x$coord.sup[,dim] <- x$coord.sup[,dim] * -1
+  if(inherits(x, "soc.csa")==TRUE) x$cor.dim[dim,] <- x$cor.dim[dim,] * -1
   return(x)
 }

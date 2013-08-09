@@ -74,7 +74,7 @@ print.soc.mca  <- function(x){
       format("	Share of passive mass:",	 		width=40,), format(Submass, 	width=10, justify="right"), 
       format("|  6.", width=10, justify="centre" ), format(adj[6], width=10, justify="centre"), format(paste(stars[[6]]), width=1), "\n",
       
-      format(" Number of passive modalities:",	 		width=40,), format(N.pas.mod, 	width=10, justify="right"), 
+      format(" Number of passive modalities:",	 		width=40,), format(N.pas.mod, 	width=9, justify="right"), 
       format("|  7.", width=10, justify="centre" ), format(adj[7], width=10, justify="centre"), format(paste(stars[[7]]), width=1), "\n",
       
       "\n",
@@ -415,7 +415,7 @@ variance    <- function(object, dim=NULL){
     variance <- t(variance[dim,])
     line.dim <- paste(1:ncol(variance) ,".", sep="")
     cat("\n", "Dim        ", format(line.dim, width=6), sep="")
-    cat("\n", "Sv       ", format(round(variance[2,], 2), width=6), sep="")
+    cat("\n", "Eigen    ", format(round(variance[2,], 2), width=6), sep="")
     cat("\n", "Var     ", format(round(variance[3,], 2), width=6), sep="")
     cat("\n", "Adj.Var ", format(round(variance[4,], 1), width=6), sep="")
     cat("\n", "Cum %   ", format(round(variance[5,], 1), width=6), sep="")

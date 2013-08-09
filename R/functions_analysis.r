@@ -13,8 +13,7 @@
 #' @param identifier   A single vector containing a single value for each row/individual in x and sup. Typically a name or an id.number.
 #' @param passive      A single character vector with the full or partial names of the passive modalities. All names that have a full or partial match will be set as passive.
 #' 
-#' @return \item{sv}{Singular values}
-#'  \item{nd}{Number of active dimensions: # Check the actual definition and make a reference to le roux}
+#' @return \item{nd}{Number of active dimensions}
 #'  \item{n.ind}{The number of active individuals}
 #'  \item{n.mod}{The number of active modalities}
 #'  \item{eigen}{Eigenvectors}
@@ -281,7 +280,7 @@ subset.ca.indicator <- function(indicator.act, indicator.sup, subset, Q, Qm){
   adj.var       <- round(((sum.adj.var.mod/sum.adj.var)*100), digits=1) # The adjusted rates of variance
   cumpercent    <- cumsum(adj.var)
   adj.inertia   <- cbind(R2.dim, round(eigen[R2.dim], 3), round(unadj.var[R2.dim], 1), adj.var ,cumpercent) # De Rouanet adjustede inertier - skal nok rykkes ned.
-  colnames(adj.inertia) <- c("Dim", "Sv", "Var" ,"Adj.Var", "Cum%")
+  colnames(adj.inertia) <- c("Dim", "Eigen", "Var" ,"Adj.Var", "Cum%")
   
   freq.mod <- colSums(Z.act)[subset]
   freq.sup <- colSums(Z.sup)
@@ -360,8 +359,7 @@ return(Z)
 #' @param object  is a soc.mca class object created with \link{soc.mca}
 #' @param class.indicator the row indices of the class specific individuals
 #' @param sup          Defines the supplementary modalities in a data.frame with rows of individuals and columns of factors, without NA's 
-#' @return \item{sv}{Singular values}
-#'  \item{nd}{Number of active dimensions: # Check the actual definition and make a reference to le roux}
+#' @return \item{nd}{Number of active dimensions: # Check the actual definition and make a reference to le roux}
 #'  \item{n.ind}{The number of active individuals}
 #'  \item{n.mod}{The number of active modalities}
 #'  \item{eigen}{Eigenvectors}
@@ -469,7 +467,7 @@ soc.csa <- function(object, class.indicator, sup=NULL){
   adj.var          <- round(((sum.adj.var.mod/sum.adj.var)*100), digits=1) # The adjusted rates of variance
   cumpercent       <- cumsum(adj.var)
   adj.inertia      <- cbind(R2.dim, round(eigen[R2.dim], 3), round(unadj.var[R2.dim], 1), adj.var ,cumpercent) # De Rouanet adjustede inertier - skal nok rykkes ned.
-  colnames(adj.inertia) <- c("Dim", "Sv", "Var" ,"Adj.Var", "Cum%")
+  colnames(adj.inertia) <- c("Dim", "Eigen", "Var" ,"Adj.Var", "Cum%")
   
   ###################
   

@@ -1,6 +1,6 @@
 #' Soc.ca a package for specific correspondence analysis
 #' 
-#' This package is optimized to the needs of sociologists
+#' This package is optimized to the needs of scientists within the social sciences
 #' producing specific and class specific multiple correspondence analysis on
 #' survey-like data. Soc.ca is optimized to only give the most essential
 #' statistical output values sorted so as to help in analysis. Seperate functions
