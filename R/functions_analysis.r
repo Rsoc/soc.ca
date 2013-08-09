@@ -353,7 +353,7 @@ return(Z)
 
 }
 
-#' Class Specific Multiple Correspondence Analysis  ### Al dokumentationen for csca er forkert!
+#' Class Specific Multiple Correspondence Analysis
 #'
 #' \code{soc.csa} performs a class specific multiple correspondence analysis on a data.frame of factors, where cases are rows and columns are variabels. Most descriptive and analytical functions that work for \link{soc.mca}, also work for \code{soc.csa}
 #' @param object  is a soc.mca class object created with \link{soc.mca}

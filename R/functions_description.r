@@ -422,6 +422,3 @@ variance    <- function(object, dim=NULL){
     
     invisible(variance)
 }
-
-
-

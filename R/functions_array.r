@@ -13,6 +13,9 @@
 #' Facetplot from list
 #'
 #' This function takes a list of plot objects and arranges them into a grid
+#' @param x is a plot object, created by one of the mapping functions in the soc.ca package or any other ggplot2 created plot
+#' @param ncol is the number of columns the plots are arranged into
+#' @param title is the main title of all the plots
 #' @examples
 #' \dontrun{
 #' example(soc.mca)
@@ -28,6 +31,14 @@ do.call(grid.arrange, c(x, ncol=ncol, main=title))
 #' Ellipse array
 #'
 #' Create seperate maps with ellipses for each level in a factor arranged in an array.
+#' @param object is a soc.mca or soc.csa class object
+#' @param variable is a factor of the same length as the data.frame used to create object
+#' @param dim indicates what dimensions to plot and in which order to plot them
+#' @param draw.ellipses if set as TRUE ellipses are drawn
+#' @param ncol is the number of columns the plots are arranged into
+#' @param titles is a vector of the same length as the number of levels in variable. These are the titles given to each subplot
+#' @param main.title is the main title for all the plots
+#' @param ... sends any further arguments to \link{map.select}. 
 #' @examples
 #' \dontrun{
 #' example(soc.mca)
