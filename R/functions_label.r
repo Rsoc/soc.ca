@@ -62,6 +62,9 @@ export.label    <- function(object, file=FALSE, encoding="UTF-8", overwrite=FALS
 #' @param encoding is the encoding of the imported file
 #' @param sep is the seperator used to create the imported .csv file  
 #' @return a soc.mca object with altered labels in names.mod, names.ind and names.sup
+#' @details To use this function first export the labels from your soc.mca analysis with the \link{export.label} function.
+#' Then open and edit the created file with your favorite spreadsheet editor, fx. LibreOffice Calc. Change the new.label column to the desired values and save.
+#' Use the assign.label function but remember to assign the results into a new object or overwrite the existing object.
 #' @seealso \link{export.label}, \link{add.to.label}
 #' @export
 
