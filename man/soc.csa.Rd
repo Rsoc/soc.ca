@@ -1,6 +1,6 @@
 \name{soc.csa}
 \alias{soc.csa}
-\title{Class Specific Multiple Correspondence Analysis  ### Al dokumentationen for csca er forkert!}
+\title{Class Specific Multiple Correspondence Analysis}
 \usage{
   soc.csa(object, class.indicator, sup = NULL)
 }
@@ -16,27 +16,27 @@
   factors, without NA's}
 }
 \value{
-  \item{sv}{Singular values} \item{nd}{Number of active
-  dimensions: # Check the actual definition and make a
-  reference to le roux} \item{n.ind}{The number of active
-  individuals} \item{n.mod}{The number of active
-  modalities} \item{eigen}{Eigenvectors}
-  \item{total.inertia}{The sum of inertia}
-  \item{adj.inertia}{A matrix with all active dimensions,
-  adjusted and unadjusted inertias. See \link{variance}}
-  \item{freq.mod}{Frequencies for the active modalities.
-  See also \link{add.to.label}} \item{freq.sup}{Frequencies
-  for the supplementary modalities. See also
-  \link{add.to.label}} \item{ctr.mod}{A matrix with the
-  contribution values of the active modalities per
-  dimension. See \link{contribution}} \item{ctr.ind}{A
-  matrix with the contribution values of the individuals
-  per dimension.} \item{cor.mod}{The correlation or quality
-  of each modality per dimension.} \item{cor.ind}{The
-  correlation or quality of each individual per dimension.
-  # This may be defunct!} \item{mass.mod}{The mass of each
-  modality} \item{coord.mod}{A matrix with the principal
-  coordinates of each active modality per dimension.}
+  \item{nd}{Number of active dimensions: # Check the actual
+  definition and make a reference to le roux}
+  \item{n.ind}{The number of active individuals}
+  \item{n.mod}{The number of active modalities}
+  \item{eigen}{Eigenvectors} \item{total.inertia}{The sum
+  of inertia} \item{adj.inertia}{A matrix with all active
+  dimensions, adjusted and unadjusted inertias. See
+  \link{variance}} \item{freq.mod}{Frequencies for the
+  active modalities. See also \link{add.to.label}}
+  \item{freq.sup}{Frequencies for the supplementary
+  modalities. See also \link{add.to.label}}
+  \item{ctr.mod}{A matrix with the contribution values of
+  the active modalities per dimension. See
+  \link{contribution}} \item{ctr.ind}{A matrix with the
+  contribution values of the individuals per dimension.}
+  \item{cor.mod}{The correlation or quality of each
+  modality per dimension.} \item{cor.ind}{The correlation
+  or quality of each individual per dimension. # This may
+  be defunct!} \item{mass.mod}{The mass of each modality}
+  \item{coord.mod}{A matrix with the principal coordinates
+  of each active modality per dimension.}
   \item{coord.ind}{A matrix with the principal coordinates
   of each individual per dimension.} \item{coord.sup}{A
   matrix with the principal coordinates of each

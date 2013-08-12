@@ -26,6 +26,15 @@
   are defined in a .csv file created by the export.label()
   function.
 }
+\details{
+  To use this function first export the labels from your
+  soc.mca analysis with the \link{export.label} function.
+  Then open and edit the created file with your favorite
+  spreadsheet editor, fx. LibreOffice Calc. Change the
+  new.label column to the desired values and save. Use the
+  assign.label function but remember to assign the results
+  into a new object or overwrite the existing object.
+}
 \seealso{
   \link{export.label}, \link{add.to.label}
 }

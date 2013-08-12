@@ -23,11 +23,9 @@
   have a full or partial match will be set as passive.}
 }
 \value{
-  \item{sv}{Singular values} \item{nd}{Number of active
-  dimensions: # Check the actual definition and make a
-  reference to le roux} \item{n.ind}{The number of active
-  individuals} \item{n.mod}{The number of active
-  modalities} \item{eigen}{Eigenvectors}
+  \item{nd}{Number of active dimensions} \item{n.ind}{The
+  number of active individuals} \item{n.mod}{The number of
+  active modalities} \item{eigen}{Eigenvectors}
   \item{total.inertia}{The sum of inertia}
   \item{adj.inertia}{A matrix with all active dimensions,
   adjusted and unadjusted inertias. See \link{variance}}

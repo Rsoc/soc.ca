@@ -4,13 +4,13 @@
 \alias{soc.ca-package}
 \title{Soc.ca a package for specific correspondence analysis}
 \description{
-  This package is optimized to the needs of sociologists
-  producing specific and class specific multiple
-  correspondence analysis on survey-like data. Soc.ca is
-  optimized to only give the most essential statistical
-  output values sorted so as to help in analysis. Seperate
-  functions exists for near publication-ready plots and
-  tables.
+  This package is optimized to the needs of scientists
+  within the social sciences producing specific and class
+  specific multiple correspondence analysis on survey-like
+  data. Soc.ca is optimized to only give the most essential
+  statistical output values sorted so as to help in
+  analysis. Seperate functions exists for near
+  publication-ready plots and tables.
 }
 \details{
   We are in debt to the great work of others, especially
@@ -25,7 +25,11 @@
   \pkg{anacor} and \pkg{FactoMineR}.
 }
 \references{
-  Le Roux, B., og H. Rouanet. 2010. Multiple correspondence
-  analysis. Thousand Oaks: Sage.
+  Le Roux, Brigitte, and Henry Rouanet. 2010. Multiple
+  correspondence analysis. Thousand Oaks: Sage.
+
+  Le Roux, Brigitte, and Henry Rouanet. 2004. Geometric
+  Data Analysis from Correspondence Analysis to Structured
+  Data Analysis. Dordrecht: Kluwer Academic Publishers.
 }
 

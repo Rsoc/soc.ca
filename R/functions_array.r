@@ -49,11 +49,7 @@ map.ellipse.array <- function(object, variable, dim=c(1,2), draw.ellipses=TRUE, 
   
   var.levels    <- levels(variable)
   list.of.maps  <- list()
-  minimums.x    <- vector(, length=length(var.levels)) 
-  minimums.y    <- vector(, length=length(var.levels))
-  maximums.x    <- vector(, length=length(var.levels))
-  maximums.y    <- vector(, length=length(var.levels))
-  
+    
   for (i in 1:length(var.levels)){
   ind.ind     <- which(variable == var.levels[i]) 
   ellipse.ind <- variable == var.levels[i]
@@ -64,20 +60,82 @@ map.ellipse.array <- function(object, variable, dim=c(1,2), draw.ellipses=TRUE, 
   if(identical(draw.ellipses, TRUE)) p    <- map.ellipse(object, p, ellipse.ind, label=FALSE)
   list.of.maps[[i]] <- p
   
-  minimums.x[i]    <- p$ca.scales$lim.min.x
-  minimums.y[i]    <- p$ca.scales$lim.min.y
-  maximums.x[i]    <- p$ca.scales$lim.max.x
-  maximums.y[i]    <- p$ca.scales$lim.max.y
   }
   
   # Standardize the coordinates
-  xlim <- c(max(maximums.x), min(minimums.x))
-  ylim <- c(max(maximums.y), min(minimums.y))
-  
-  for ( i in 1:length(var.levels)){
-  list.of.maps[[i]]  <- list.of.maps[[i]] + coord_fixed(xlim=xlim, ylim=ylim)
-  }
-  
+  list.of.maps <- fix.coords(list.of.maps)
   # Plot the maps
   map.array(list.of.maps, ncol=ncol, title=main.title)
+}
+
+#################################################################################################
+#' Array of several CSA
+#' 
+#' Creates an array of Class Specific Mulitple Correspondence analysis's
+#' 
+#' @param object is a \link{soc.mca} result object
+#' @param variable is a factor with the same order and length as those used for the active modalities in object
+#' @param dim indicates what dimensions to plot and in which order to plot them
+#' @ncol ncol is the number of columns the plots are arranged into
+#' @param titles is a vector of the same length as the number of levels in variable. These are the titles given to each subplot
+#' @param main.title is the main title for all the plots
+#' @param FUN is the mapping function used for the plots; \link{map.active}, \link{map.ctr}, \link{map.ind}, \link{map.select}
+#' @param fixed.coord if TRUE the limits of all plots are set to the same as the largest plot
+#' @param ... sends any further arguments to the mapping functions
+#' @export  
+#' @examples
+#' \dontrun{
+#' example(soc.csa)
+#' object   <- result
+#' variable <-  active[,1]
+#' map.csa.all(object, variable)
+#' map.csa.all(object, variable, FUN=map.ctr, ctr.dim=1)
+#' }
+
+map.csa.all <- function(object, variable, dim=c(1,2), ncol=2, FUN=map.ind, fixed.coord=TRUE, main.title="", titles=levels(variable),...){
+  
+  csa.list    <- csa.all(object, variable)
+  csa.results  <- csa.list$results
+  plot.list    <- lapply(csa.results, FUN, dim=dim, ...) 
+  
+  # Map titles
+  
+  if(length(titles) > 1){
+  for(i in 1:length(titles)){
+  plot.list[[i]] <- plot.list[[i]] + ggtitle(titles[i])
+  }
+  }
+  
+  # Coord standardization
+  if (identical(fixed.coord, TRUE)) plot.list <- fix.coords(plot.list)  
+    
+  map.array(plot.list, ncol=2, title=main.title)
+}
+
+#######################################################################3
+### Standardize coordinates
+
+fix.coords <- function(plot.list, padding=0.15){
+
+minimums.x    <- vector(, length=length(plot.list)) 
+minimums.y    <- vector(, length=length(plot.list))
+maximums.x    <- vector(, length=length(plot.list))
+maximums.y    <- vector(, length=length(plot.list))
+
+for ( i in 1:length(plot.list)){
+p                <- plot.list[[i]]
+minimums.x[i]    <- p$ca.scales$lim.min.x
+minimums.y[i]    <- p$ca.scales$lim.min.y
+maximums.x[i]    <- p$ca.scales$lim.max.x
+maximums.y[i]    <- p$ca.scales$lim.max.y
+}
+
+# Standardize the coordinates
+xlim <- c(max(maximums.x)+padding, min(minimums.x)-padding)
+ylim <- c(max(maximums.y)+padding, min(minimums.y)-padding) 
+
+for ( i in 1:length(plot.list)){
+  plot.list[[i]]  <- plot.list[[i]] + coord_fixed(xlim=xlim, ylim=ylim)
+}
+return(plot.list)
 }
