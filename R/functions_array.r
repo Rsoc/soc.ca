@@ -16,13 +16,18 @@
 #' @param x is a plot object, created by one of the mapping functions in the soc.ca package or any other ggplot2 created plot
 #' @param ncol is the number of columns the plots are arranged into
 #' @param title is the main title of all the plots
+#' @param fixed.coord if TRUE the limits of all plots are set to the same as the largest plot
+#' @param padding is the distance between the most extreme position and the axis limit
 #' @examples
 #' \dontrun{
 #' example(soc.mca)
 #' map.array(list(map.ind(result), map.mod(result)), ncol=2)
 #' }
 #' @export
-map.array <- function(x, ncol=1, title=""){
+map.array <- function(x, ncol=1, title="", fixed.coord=TRUE, padding=0.15){
+
+  if (identical(fixed.coord,TRUE)) x <- fix.coords(x, padding=padding)
+  
   
 do.call(grid.arrange, c(x, ncol=ncol, main=title))
 }
