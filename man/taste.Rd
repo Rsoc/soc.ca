@@ -1,8 +1,7 @@
 \docType{data}
 \name{taste}
 \alias{taste}
-\title{Taste dataset
-The taste example dataset used by Le Roux & Rouanet(2010):}
+\title{Taste dataset}
 \value{
   The variables included in the dataset: \item{Preferred TV
   program}{(8 categories): news, comedy, police, nature,
@@ -16,7 +15,7 @@ The taste example dataset used by Le Roux & Rouanet(2010):}
   Italian restaurant, French restaurant, steak house}
 }
 \description{
-  Taste dataset The taste example dataset used by Le Roux &
+  The taste example dataset used by Le Roux &
   Rouanet(2010):
 }
 \author{

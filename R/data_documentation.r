@@ -181,6 +181,7 @@ NULL
 NULL
 
 #' Taste dataset
+#' 
 #' The taste example dataset used by Le Roux & Rouanet(2010):
 #' @return
 #' The variables included in the dataset:

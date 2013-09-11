@@ -67,13 +67,12 @@
 data(taste)
 attach(taste)
 # Create a data frame of factors containing all the active variables
-data           <- taste
-data           <- data[which(data$Isup =='Active'),]
+taste          <- taste[which(taste$Isup =='Active'),]
 
-attach(data)
+attach(taste)
 active         <- data.frame(TV, Film, Art, Eat)
 sup            <- data.frame(Gender, Age, Income)
-detach(data)
+detach(taste)
 
 # Runs the analysis
 result      <- soc.mca(active, sup)

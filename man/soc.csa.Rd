@@ -65,7 +65,7 @@
 \examples{
 # This example can be found in further detail at our wiki on github - https://github.com/Rsoc/soc.mca/wiki/How-to-use-soc.mca
 example(soc.mca)
-class.age    <- which(data$Age =='55-64')
+class.age    <- which(taste$Age =='55-64')
 soc.csa(result, class.age)
 }
 \author{

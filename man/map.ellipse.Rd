@@ -12,6 +12,8 @@
   \item{variable}{is a factor of the same length and in the
   same order as the active varibles used for the soc.mca
   object.}
+
+  \item{label}{if TRUE the labels are included in the map}
 }
 \value{
   a plot with a concentration ellipse containing 80% of the

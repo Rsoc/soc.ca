@@ -81,7 +81,7 @@ map.ellipse.array <- function(object, variable, dim=c(1,2), draw.ellipses=TRUE, 
 #' @param object is a \link{soc.mca} result object
 #' @param variable is a factor with the same order and length as those used for the active modalities in object
 #' @param dim indicates what dimensions to plot and in which order to plot them
-#' @ncol ncol is the number of columns the plots are arranged into
+#' @param ncol is the number of columns the plots are arranged into
 #' @param titles is a vector of the same length as the number of levels in variable. These are the titles given to each subplot
 #' @param main.title is the main title for all the plots
 #' @param FUN is the mapping function used for the plots; \link{map.active}, \link{map.ctr}, \link{map.ind}, \link{map.select}

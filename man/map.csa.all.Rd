@@ -15,6 +15,9 @@
   \item{dim}{indicates what dimensions to plot and in which
   order to plot them}
 
+  \item{ncol}{is the number of columns the plots are
+  arranged into}
+
   \item{titles}{is a vector of the same length as the
   number of levels in variable. These are the titles given
   to each subplot}

@@ -422,3 +422,28 @@ variance    <- function(object, dim=NULL){
     
     invisible(variance)
 }
+
+
+
+#' Find the average.coordinate for each category in a variable on two dimensions
+#' 
+#' @param object is soc.ca result object
+#' @param x is a variable of the same length as the active variables used to construct the soc.ca object
+#' @param dim is the two dimensions used
+#' @return a matrix with the mean points and frequencies of the given variable
+#' @export
+#' @examples
+#' example(soc.mca)
+#' average.coord(result, taste$Income)
+
+average.coord <- function(object, x, dim=c(1,2)){
+  coord             <- object$coord.ind[, dim]
+  point.coord       <- aggregate(coord, list(x), mean)
+  point.coord[,2]  <- point.coord[, 2] / sqrt(object$eigen[dim[1]])
+  point.coord[,3]  <- point.coord[, 3] / sqrt(object$eigen[dim[2]])
+  point.coord       <- cbind(point.coord, table(x)) 
+  
+  colnames(point.coord) <- c("label", "X", "Y", "group", "Freq")
+  point.coord
+}
+

@@ -6,6 +6,7 @@
 #' @param object is a soc.mca class object
 #' @param ca.plot is a plot made from a soc.mca object
 #' @param variable is a factor of the same length and in the same order as the active varibles used for the soc.mca object.
+#' @param label if TRUE the labels are included in the map
 #' @return a plot with a concentration ellipse containing 80% of the individuals for each modality
 #' @seealso \link{map.ind}, \link{map.ctr}, \link{soc.mca}
 #' @examples

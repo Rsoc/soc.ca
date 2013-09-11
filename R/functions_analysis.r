@@ -48,13 +48,12 @@
 #'data(taste)
 #'attach(taste)
 #' # Create a data frame of factors containing all the active variables 
-#' data           <- taste
-#' data           <- data[which(data$Isup =='Active'),]
+#' taste          <- taste[which(taste$Isup =='Active'),]
 #'
-#' attach(data)
+#' attach(taste)
 #' active         <- data.frame(TV, Film, Art, Eat)
 #' sup            <- data.frame(Gender, Age, Income)
-#' detach(data)
+#' detach(taste)
 #' 
 #' # Runs the analysis
 #' result      <- soc.mca(active, sup)
@@ -391,7 +390,7 @@ return(Z)
 #' @references Le Roux, B., og H. Rouanet. 2010. Multiple correspondence analysis. Thousand Oaks: Sage.
 #' @examples # This example can be found in further detail at our wiki on github - https://github.com/Rsoc/soc.mca/wiki/How-to-use-soc.mca
 #' example(soc.mca)
-#' class.age    <- which(data$Age =='55-64')
+#' class.age    <- which(taste$Age =='55-64')
 #' soc.csa(result, class.age)
 
 soc.csa <- function(object, class.indicator, sup=NULL){
@@ -649,7 +648,7 @@ create.quadrant <- function(object, dim=c(1,2), cut.min=-0.125, cut.max=0.125, c
 #' @export
 #' @examples
 #' example(soc.mca)
-#' csa.all(result, data$Age)
+#' csa.all(result, taste$Age)
 #' @seealso \link{soc.mca}, \link{soc.csa}, \link{cor}
 
 csa.all <- function(object, variable, dim=1:5){

@@ -1,5 +1,62 @@
 # Tools, exports and other helpful functions
 
+#' Cut a continious variable into categories with a specified minimum
+#' 
+#' Many continious variables are very uneqaully distributed, often with many individuals in the lower categories and fewer in the top.
+#' As a result it is often difficult to create groups of equal size, with unique cut-points.
+#' By defining the wanted minimum of individuals in each category, but still allowing this minimum to be surpassed, it is easy to create ordinal variables from continious variables. 
+#' The last category will not neccessarily have the minimum number of individuals.
+#' 
+#' @param x is a continious numerical variable
+#' @param min.size is the minimum number of individuals in each category
+#' @return a numerical vector with the number of each category
+#' @export
+#' @examples
+#' a <- 1:1000
+#' table(cut.min(a))
+#' b <- c(rep(0, 50), 1:500)
+#' table(cut.min(b, min.size=20))
+
+cut.min <- function(x, min.size=length(x)/10){
+  
+  x.na <- x[is.na(x) == FALSE]
+  p.x <- cumsum(prop.table(table(x.na)))
+  t.x <- cumsum(table(x.na))
+  bm  <- cbind(table(x.na),t.x)
+  dif <- vector(length=nrow(bm))
+  for (i in 2:length(dif)) dif[i] <- bm[i,2] - bm[i-1,2]
+  dif[1] <- bm[1, 2]
+  bm <- cbind(bm, dif)
+  
+  group <- vector(length=nrow(bm))
+  g <- 1 
+  collect <- 0
+  for (i in 1:nrow(bm)){
+    if (dif[i] >= min.size | collect >= min.size-1){ # collect skal måske være mindre end min.size
+      group[i] <- g
+      g <- g + 1
+      collect <- 0
+    }else{
+      group[i] <- g
+      collect  <- collect + dif[i]
+    }
+  }
+  
+  x.group <- vector(length=length(x))
+  group.levels <- as.numeric(levels(as.factor(group)))
+  values <- as.numeric(rownames(bm))
+  levs   <- vector()
+  # Assigning group to the original x
+  for (i in 1:length(group.levels)){
+    g   <- group.levels[i]
+    val <- values[group == g]
+    g   <- paste(min(val), ":", max(val), sep="")
+    x.group[x %in% val]  <- g
+    levs                 <- c(levs, paste(min(val), ":", max(val), sep=""))
+  }
+  x.group[is.na(x)] <- NA
+  factor(x.group, labels=levs, ordered=TRUE)
+}
 
 #' Export from soc.mca
 #'
