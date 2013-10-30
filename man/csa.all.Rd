@@ -18,6 +18,11 @@
   \item{results}{a list of \link{soc.csa} result objects}
 
   \item{cor}{a list of correlation matrixes}
+
+  \item{cosines}{a list of matrixes with cosine values}
+
+  \item{angles}{a list of correlation matrixes with angles
+  between dimensions}
 }
 \description{
   \code{csa.all} performs a class specific correspondence

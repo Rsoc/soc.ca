@@ -144,3 +144,38 @@ for ( i in 1:length(plot.list)){
 }
 return(plot.list)
 }
+
+#' Map the coordinates of the individuals in a CSA and its MCA
+#'
+#'@export
+map.csa.mca <- function(csa.object, mca.dim=1, csa.dim=1){
+  dim               <- dim[1]  
+  mca.res           <- csa.object$original.result
+  class.indicator  <- csa.object$original.class.indicator
+  mca.coord         <- mca.res$coord.ind[class.indicator, mca.dim]
+  ggdata            <- data.frame(mca=mca.coord, csa=csa.object$coord.ind[,csa.dim])
+  titles            <- paste(c("CSA Dim:", "MCA Dim:"), c(csa.dim, mca.dim))
+  
+  p                 <- ggplot(ggdata, aes(x=mca, y=csa)) + geom_smooth(fill="grey90", color="red") + geom_point(shape=21, size=3, alpha=0.8) + theme_min() + xlab(titles[2]) + ylab(titles[1])
+  p$ca.scales       <- breaksandscales(ggdata)
+  p
+}
+
+#' Map an array of map.csa.mca
+#' 
+#' @export
+map.csa.mca.array <- function(csa.object, ndim=3, fixed.coord){
+  
+  plot.list <- list()
+  
+  count <- 1
+  for(j in 1:ndim){
+    for (i in 1:ndim){
+      plot.list[[count]] <- map.csa.mca(csa.object, mca.dim=i, csa.dim=j)
+      count <- count+1
+    }
+  }
+  
+  suppressMessages(print(map.array(plot.list, ncol=ndim, fixed.coord=fixed.coord)))
+}
+

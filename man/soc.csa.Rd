@@ -53,7 +53,13 @@
   \item{variable}{A vector with the name of the variable of
   the active modalities} \item{cor.dim}{A correlation
   matrix with the correlations between the original
-  dimensions and the class specific dimensions}
+  dimensions and the class specific dimensions.
+  Correlations are Spearman correlations, see \link{cor}}
+  \item{cosines}{A matrix of cosine similiarites between
+  the original dimensions and the class specific
+  dimensions} \item{angles}{A matrix of angles between the
+  original dimensions and the class specific dimensions
+  calculated on the basis of the cosine matrix}
 }
 \description{
   \code{soc.csa} performs a class specific multiple

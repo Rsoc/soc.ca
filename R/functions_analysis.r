@@ -380,7 +380,9 @@ return(Z)
 #'  \item{names.passive}{The names of the passive modalities}
 #'  \item{modal}{A matrix with the number of modalities per variable and their location}
 #'  \item{variable}{A vector with the name of the variable of the active modalities}
-#'  \item{cor.dim}{A correlation matrix with the correlations between the original dimensions and the class specific dimensions}
+#'  \item{cor.dim}{A correlation matrix with the correlations between the original dimensions and the class specific dimensions. Correlations are Spearman correlations, see \link{cor}}
+#'  \item{cosines}{A matrix of cosine similiarites between the original dimensions and the class specific dimensions}
+#'  \item{angles}{A matrix of angles between the original dimensions and the class specific dimensions calculated on the basis of the cosine matrix}
 #' @name soc.csa
 #' @export
 #' @author Anton Grau Larsen, University of Copenhagen
@@ -394,8 +396,8 @@ return(Z)
 #' soc.csa(result, class.age)
 
 soc.csa <- function(object, class.indicator, sup=NULL){
- 
- 
+  
+  
   Z.act  <- object$indicator.matrix             # Original indicator matrix
   Q      <- nlevels(as.factor(object$variable)) # Number of questions
   I      <- nrow(Z.act)                         # Original number of individuals
@@ -471,7 +473,7 @@ soc.csa <- function(object, class.indicator, sup=NULL){
   ###################
   
   freq.mod         <- cm
-
+  
   ###############
   # Principal coordinates
   
@@ -503,20 +505,20 @@ soc.csa <- function(object, class.indicator, sup=NULL){
   sup.coord               <- NULL
   freq.sup                <- 0
   if(identical(sup,NULL)==FALSE){
-  
-  sup.ind                 <- indicator(sup)[class.indicator,]
-  sup.coord               <- matrix(nrow=ncol(sup.ind), ncol=ncol(pc.ind))
-  rownames(sup.coord)     <- colnames(sup.ind)
-  freq.sup                <- colSums(sup.ind)
-  
-  for (j in 1:ncol(pc.ind)){
-  d1                      <- pc.ind[,j]
-  Sup.mat                 <- matrix(nrow=nrow(sup.ind), ncol=ncol(sup.ind))
-  colnames(Sup.mat)       <- colnames(sup.ind)
-  Sup.mat[sup.ind == 1]   <- 0
-  Sup.mat                 <- Sup.mat + d1
-  sup.coord[,j]           <- apply(Sup.mat, 2, mean, na.rm=TRUE)
-  }
+    
+    sup.ind                 <- indicator(sup)[class.indicator,]
+    sup.coord               <- matrix(nrow=ncol(sup.ind), ncol=ncol(pc.ind))
+    rownames(sup.coord)     <- colnames(sup.ind)
+    freq.sup                <- colSums(sup.ind)
+    
+    for (j in 1:ncol(pc.ind)){
+      d1                      <- pc.ind[,j]
+      Sup.mat                 <- matrix(nrow=nrow(sup.ind), ncol=ncol(sup.ind))
+      colnames(Sup.mat)       <- colnames(sup.ind)
+      Sup.mat[sup.ind == 1]   <- 0
+      Sup.mat                 <- Sup.mat + d1
+      sup.coord[,j]           <- apply(Sup.mat, 2, mean, na.rm=TRUE)
+    }
   }
   names.sup               <-  rownames(sup.coord)
   ############# 
@@ -554,9 +556,10 @@ soc.csa <- function(object, class.indicator, sup=NULL){
     variable = object$variable,
     variable.sup = "Not Implemented",
     subset.var = object$subset.var,
-    original.result = object
+    original.result = object,
+    original.class.indicator = class.indicator
   )
-
+  
   median.standard <- function(object){
     coord.ind     <- object$coord.ind
     coord.median  <- apply(coord.ind, 2, median)  
@@ -566,7 +569,7 @@ soc.csa <- function(object, class.indicator, sup=NULL){
   }
   
   csca.result     <- median.standard(csca.result)
-
+  
   ####################################
   # correlation matrix
   csca.coord    <- csca.result$coord.ind
@@ -579,9 +582,30 @@ soc.csa <- function(object, class.indicator, sup=NULL){
   colnames(cor.mat)   <- paste("MCA dim.", dim)
   csca.result$cor.dim <- cor.mat
   
-  class(csca.result)   <- c("soc.mca", "soc.csa")
-  return(csca.result)
+  ####################################
+  # Cosines similarity
+  cosine.similarity <- function(x,y) x %*% y / sqrt(x%*%x * y%*%y)
   
+  cosine.mat        <- matrix(ncol=ncol(ca.coord), nrow=ncol(ca.coord))
+  rownames(cosine.mat)   <- paste("CSA dim.", dim)
+  colnames(cosine.mat)   <- paste("MCA dim.", dim)
+  
+  for (i in 1:ncol(ca.coord)){
+    cosine.mat[i,]<- apply(ca.coord,2,cosine.similarity, csca.coord[,i])
+  }
+  csca.result$cosines    <- cosine.mat
+  
+  #####################################
+  # Angles
+  cosine.to.angle       <- function(x) acos(x)/pi*100
+  csca.result$angles    <- cosine.to.angle(cosine.mat)
+  
+  
+  #####################################
+  # Class and return
+  
+  class(csca.result)    <- c("soc.mca", "soc.csa")
+  return(csca.result)
   
 } 
 
@@ -645,6 +669,8 @@ create.quadrant <- function(object, dim=c(1,2), cut.min=-0.125, cut.max=0.125, c
 #' @param dim is the dimensions included in the correlation matrixes
 #' @return \item{results}{a list of \link{soc.csa} result objects}
 #' @return \item{cor}{a list of correlation matrixes}
+#' @return \item{cosines}{a list of matrixes with cosine values}
+#' @return \item{angles}{a list of correlation matrixes with angles between dimensions}
 #' @export
 #' @examples
 #' example(soc.mca)
@@ -661,13 +687,31 @@ csa.all <- function(object, variable, dim=1:5){
   
   names(result.list) <- lev.variable
   
+  #### Correlation matrices
+  
   cor.list <- list()
   for (i in 1:length(result.list)){
     cor.list[[i]]<- result.list[[i]]$cor.dim[dim,dim]
   }
   names(cor.list) <- lev.variable
   
-  list(results=result.list, cor=cor.list)
+  #### Cosine matrices
+  
+  cos.list <- list()
+  for (i in 1:length(result.list)){
+    cos.list[[i]]<- result.list[[i]]$cosines[dim,dim]
+  }
+  names(cos.list) <- lev.variable
+  
+  #### Angles matrices
+  
+  angles.list <- list()
+  for (i in 1:length(result.list)){
+    angles.list[[i]]<- result.list[[i]]$angles[dim,dim]
+  }
+  names(angles.list) <- lev.variable
+  
+  list(results=result.list, cor=cor.list, cosines=cos.list, angles=angles.list)
 }
 
 
