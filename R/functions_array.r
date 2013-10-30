@@ -164,7 +164,7 @@ map.csa.mca <- function(csa.object, mca.dim=1, csa.dim=1){
 #' Map an array of map.csa.mca
 #' 
 #' @export
-map.csa.mca.array <- function(csa.object, ndim=3, fixed.coord){
+map.csa.mca.array <- function(csa.object, ndim=3, fixed.coord=TRUE){
   
   plot.list <- list()
   
