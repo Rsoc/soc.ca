@@ -149,7 +149,6 @@ return(plot.list)
 #'
 #'@export
 map.csa.mca <- function(csa.object, mca.dim=1, csa.dim=1){
-  dim               <- dim[1]  
   mca.res           <- csa.object$original.result
   class.indicator  <- csa.object$original.class.indicator
   mca.coord         <- mca.res$coord.ind[class.indicator, mca.dim]
