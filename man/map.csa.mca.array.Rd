@@ -1,11 +1,28 @@
 \name{map.csa.mca.array}
 \alias{map.csa.mca.array}
-\title{Map an array of map.csa.mca}
+\title{CSA-MCA array}
 \usage{
   map.csa.mca.array(csa.object, ndim = 3,
-    fixed.coord = TRUE)
+    fixed.coord = TRUE, ...)
+}
+\arguments{
+  \item{csa.object}{is a result object created by the
+  \link{soc.csa} function}
+
+  \item{ndim}{is the number of dimensions to include in the
+  array, starting from 1}
+
+  \item{fixed.coord}{if TRUE the limits of all plots are
+  set to the same as the largest plot}
+
+  \item{...}{for further arguments see \link{map.csa.mca}}
 }
 \description{
-  Map an array of map.csa.mca
+  Create an array of \link{map.csa.mca} maps.
+}
+\examples{
+example(soc.csa)
+csa.res <- soc.csa(result, class.age)
+map.csa.mca.array(csa.res, ndim=3)
 }
 

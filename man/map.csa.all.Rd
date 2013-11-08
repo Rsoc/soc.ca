@@ -1,6 +1,6 @@
 \name{map.csa.all}
 \alias{map.csa.all}
-\title{Array of several CSA}
+\title{Array of several CSA maps}
 \usage{
   map.csa.all(object, variable, dim = c(1, 2), ncol = 2,
     FUN = map.ind, fixed.coord = TRUE, main.title = "",
@@ -12,17 +12,17 @@
   \item{variable}{is a factor with the same order and
   length as those used for the active modalities in object}
 
-  \item{dim}{indicates what dimensions to plot and in which
+  \item{dim}{indicates what dimensions to map and in which
   order to plot them}
 
-  \item{ncol}{is the number of columns the plots are
+  \item{ncol}{is the number of columns the maps are
   arranged into}
 
   \item{titles}{is a vector of the same length as the
   number of levels in variable. These are the titles given
   to each subplot}
 
-  \item{main.title}{is the main title for all the plots}
+  \item{main.title}{is the main title for all the maps}
 
   \item{FUN}{is the mapping function used for the plots;
   \link{map.active}, \link{map.ctr}, \link{map.ind},

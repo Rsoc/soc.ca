@@ -2,11 +2,13 @@
 \alias{map.add}
 \title{Add points to an existing map}
 \usage{
-  map.add(object, ca.map, data.type = NULL,
+  map.add(object, ca.map, plot.type = NULL, ctr.dim = 1,
     list.mod = NULL, list.sup = NULL, list.ind = NULL,
-    ctr.dim = NULL, point.label = TRUE,
-    point.shape = "variable", point.size = "freq",
-    text.size = 3.3, colour = "black")
+    point.shape = "variable", point.alpha = 0.8,
+    point.fill = "grey80", point.color = "black",
+    point.size = "freq", text = TRUE, text.alpha = 0.8,
+    text.color = "black", text.size = 3.3, labelx = NULL,
+    labely = NULL, legend = NULL)
 }
 \arguments{
   \item{object}{is a soc.mca class object as created by
@@ -54,7 +56,7 @@
 
   \item{text.size}{defines the size of the labels}
 
-  \item{colour}{defines the colour of the text labels}
+  \item{color}{defines the color of the text labels}
 }
 \description{
   Add points to an existing map
@@ -62,7 +64,7 @@
 \examples{
 example(soc.mca)
 original.map    <- map.sup(result)
-map.add(result, original.map, data.type="ctr", ctr.dim=2)
-map.add(result, map.ind(result), data.type="ind",list.ind=1:50, colour="red", point.label=FALSE, point.size=12)
+map.add(result, original.map, plot.type="ctr", ctr.dim=2)
+map.add(result, map.ind(result), plot.type="select",list.ind=1:50, point.color="red", text=FALSE, point.size=result$ctr.ind[1:50, 1]*2000)
 }
 

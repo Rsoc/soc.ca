@@ -2,10 +2,13 @@
 \alias{map.ctr}
 \title{Map the most contributing modalities}
 \usage{
-  map.ctr(object, ctr.dim = 1, dim = c(1, 2),
+  map.ctr(object, dim = c(1, 2), ctr.dim = 1,
+    point.shape = "variable", point.alpha = 0.8,
+    point.fill = "grey80", point.color = "black",
+    point.size = "freq", text = TRUE, text.alpha = 0.8,
+    text.color = "black", text.size = 3.3,
     map.title = "ctr", labelx = NULL, labely = NULL,
-    point.label = TRUE, point.shape = "variable",
-    point.size = "freq", text.size = 3.3, colour = "black")
+    legend = NULL)
 }
 \arguments{
   \item{object}{is a soc.mca class object as created by
@@ -44,8 +47,8 @@
 
   \item{text.size}{defines the size of the labels}
 
-  \item{colour}{defines the colour of both label and the
-  line of the points. The fill is set to a standard grey.}
+  \item{color}{defines the color of both label and the line
+  of the points. The fill is set to a standard grey.}
 }
 \description{
   Creates a map of the modalities contributing above

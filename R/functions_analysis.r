@@ -393,7 +393,8 @@ return(Z)
 #' @examples # This example can be found in further detail at our wiki on github - https://github.com/Rsoc/soc.mca/wiki/How-to-use-soc.mca
 #' example(soc.mca)
 #' class.age    <- which(taste$Age =='55-64')
-#' soc.csa(result, class.age)
+#' res.csa      <- soc.csa(result, class.age)
+#' res.csa
 
 soc.csa <- function(object, class.indicator, sup=NULL){
   
@@ -570,37 +571,6 @@ soc.csa <- function(object, class.indicator, sup=NULL){
   
   csca.result     <- median.standard(csca.result)
   
-  ####################################
-  # correlation matrix
-  csca.coord    <- csca.result$coord.ind
-  ca.coord      <- object$coord.ind[class.indicator,]
-  dim           <- seq(min(c(ncol(csca.coord), ncol(ca.coord))))
-  csca.coord    <- csca.coord[,dim]
-  ca.coord      <- ca.coord[,dim]
-  cor.mat       <- cor(csca.coord, ca.coord)
-  rownames(cor.mat)   <- paste("CSA dim.", dim)
-  colnames(cor.mat)   <- paste("MCA dim.", dim)
-  csca.result$cor.dim <- cor.mat
-  
-  ####################################
-  # Cosines similarity
-  cosine.similarity <- function(x,y) x %*% y / sqrt(x%*%x * y%*%y)
-  
-  cosine.mat        <- matrix(ncol=ncol(ca.coord), nrow=ncol(ca.coord))
-  rownames(cosine.mat)   <- paste("CSA dim.", dim)
-  colnames(cosine.mat)   <- paste("MCA dim.", dim)
-  
-  for (i in 1:ncol(ca.coord)){
-    cosine.mat[i,]<- apply(ca.coord,2,cosine.similarity, csca.coord[,i])
-  }
-  csca.result$cosines    <- cosine.mat
-  
-  #####################################
-  # Angles
-  cosine.to.angle       <- function(x) acos(x)/pi*100
-  csca.result$angles    <- cosine.to.angle(cosine.mat)
-  
-  
   #####################################
   # Class and return
   
@@ -677,7 +647,7 @@ create.quadrant <- function(object, dim=c(1,2), cut.min=-0.125, cut.max=0.125, c
 #' csa.all(result, taste$Age)
 #' @seealso \link{soc.mca}, \link{soc.csa}, \link{cor}
 
-csa.all <- function(object, variable, dim=1:5){
+csa.all <- function(object, variable, dim=1:5, ...){
   lev.variable <- levels(variable)
   result.list     <- list()
   for (i in 1:length(lev.variable)){
@@ -687,31 +657,9 @@ csa.all <- function(object, variable, dim=1:5){
   
   names(result.list) <- lev.variable
   
-  #### Correlation matrices
+  measure.list <- lapply(result.list, csa.independence, format=FALSE, ...)
   
-  cor.list <- list()
-  for (i in 1:length(result.list)){
-    cor.list[[i]]<- result.list[[i]]$cor.dim[dim,dim]
-  }
-  names(cor.list) <- lev.variable
-  
-  #### Cosine matrices
-  
-  cos.list <- list()
-  for (i in 1:length(result.list)){
-    cos.list[[i]]<- result.list[[i]]$cosines[dim,dim]
-  }
-  names(cos.list) <- lev.variable
-  
-  #### Angles matrices
-  
-  angles.list <- list()
-  for (i in 1:length(result.list)){
-    angles.list[[i]]<- result.list[[i]]$angles[dim,dim]
-  }
-  names(angles.list) <- lev.variable
-  
-  list(results=result.list, cor=cor.list, cosines=cos.list, angles=angles.list)
+  list(results=result.list, measures=measure.list)
 }
 
 

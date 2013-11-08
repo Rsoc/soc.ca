@@ -72,7 +72,8 @@
 # This example can be found in further detail at our wiki on github - https://github.com/Rsoc/soc.mca/wiki/How-to-use-soc.mca
 example(soc.mca)
 class.age    <- which(taste$Age =='55-64')
-soc.csa(result, class.age)
+res.csa      <- soc.csa(result, class.age)
+res.csa
 }
 \author{
   Anton Grau Larsen, University of Copenhagen

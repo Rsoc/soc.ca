@@ -9,7 +9,7 @@
 # point.shape=21
 # point.size="freq"
 # text.size=3.3
-# colour="black"
+# color="black"
 # ctr.dim = 1
 
 
@@ -25,28 +25,25 @@
 #' @param point.shape is a numerical value defining the shape of the points. If set to its default, the default scale is used. It may be defined by a variable with a suitable length.
 #' @param point.size is a numerical value defining the size of the points. If set to its default, the size is determined by the frequency of each modality. It may be defined by a variable with a suitable length.
 #' @param text.size defines the size of the labels
-#' @param colour defines the colour of both label and the line of the points. The fill is set to a standard grey.
+#' @param color defines the color of both label and the line of the points. The fill is set to a standard grey.
 #' @examples
 #' example(soc.mca)
 #' map.mod(result)
 #' map.mod(result, dim=c(3,2), point.size=2)
 #' @export 
-map.mod  <- function(object, dim=c(1,2), map.title="mod", labelx=NULL, labely=NULL, point.label=TRUE, point.shape="variable", point.size="freq", text.size=3.3, colour="black"){
-
-gg.proc     <- round(object$adj.inertia[,4]) # Adjusted inertia
-gg.data     <- data.plot(object, plot.type="mod", dim, ctr.dim=NULL, point.size=point.size) # Data selection
-axis.labels <- plot.axis(labelx=labelx, labely=labely, gg.proc=gg.proc, dim=dim) # Axis labels
-map.title   <- plot.title(map.title=map.title) # Plot title
-scales      <- breaksandscales(gg.data) # Scales og breaks
-
-gg.input    <- list(gg.data=gg.data, axis.inertia=gg.proc, 
-                  map.title=map.title, labelx=axis.labels$x, labely=axis.labels$y,
-                  scales=scales, point.label=point.label, point.size=point.size)
-
-b.plot      <- basic.plot(gg.input, text.size=text.size, point.shape=point.shape, colour=colour) # Plot
-t.plot      <- b.plot + theme_min()
-t.plot$dimensions <- dim
-return(t.plot)
+map.mod         <- function(object, dim=c(1,2),
+                            point.shape="variable", point.alpha = 0.8, point.fill="grey80", point.color="black", point.size="freq",
+                            text=TRUE, text.alpha = 0.8, text.color = "black", text.size = 3.3,
+                            map.title="mod", labelx=NULL, labely=NULL, legend=NULL){
+  
+  plot.type   <- "mod"
+  
+  plot.flow(object, dim=dim,
+            point.shape=point.shape, point.alpha = point.alpha, point.fill=point.fill, point.color=point.color, point.size=point.size,
+            text=text, text.alpha = text.alpha, text.color = text.color, text.size = text.size,
+            map.title=plot.type, labelx=labelx, labely=labely, legend=legend,
+            plot.type=plot.type)
+  
 }
 
 #' Map the most contributing modalities
@@ -62,30 +59,26 @@ return(t.plot)
 #' @param point.shape is a numerical value defining the shape of the points. If set to its default, the default scale is used. It may be defined by a variable with a suitable length.
 #' @param point.size is a numerical value defining the size of the points. If set to its default, the size is determined by the frequency of each modality. It may be defined by a variable with a suitable length.
 #' @param text.size defines the size of the labels
-#' @param colour defines the colour of both label and the line of the points. The fill is set to a standard grey.
+#' @param color defines the color of both label and the line of the points. The fill is set to a standard grey.
 #' @examples
 #' example(soc.mca)
 #' map.ctr(result)
 #' map.ctr(result, ctr.dim=c(1,2))
 #' @export 
 
-map.ctr        <- function(object, ctr.dim=1, dim=c(1,2), map.title="ctr", labelx=NULL, labely=NULL, point.label=TRUE, point.shape="variable", point.size="freq", text.size=3.3, colour="black"){
-
-gg.proc     <- round(object$adj.inertia[,4]) # Adjusted inertia
-gg.data     <- data.plot(object, plot.type="ctr", dim, ctr.dim=ctr.dim, point.size=point.size) # Data selection
-
-axis.labels <- plot.axis(labelx=labelx, labely=labely, gg.proc=gg.proc, dim=dim) # Axis labels
-map.title   <- plot.title(map.title=map.title, ctr.dim=ctr.dim) # Plot title
-scales      <- breaksandscales(gg.data) # Scales og breaks
-
-gg.input    <- list(gg.data=gg.data, axis.inertia=gg.proc,
-                  map.title=map.title, labelx=axis.labels$x, labely=axis.labels$y,
-                  scales=scales, point.label=point.label, point.size=point.size)
-
-b.plot      <- basic.plot(gg.input, text.size=text.size, point.shape=point.shape, colour=colour) # Plot
-t.plot      <- b.plot + theme_min() # Theme
-t.plot$dimensions <- dim 
-return(t.plot)
+map.ctr         <- function(object, dim=c(1,2), ctr.dim=1,
+                            point.shape="variable", point.alpha = 0.8, point.fill="grey80", point.color="black", point.size="freq",
+                            text=TRUE, text.alpha = 0.8, text.color = "black", text.size = 3.3,
+                            map.title="ctr", labelx=NULL, labely=NULL, legend=NULL){
+  
+  plot.type   <- "ctr"
+  
+  plot.flow(object, dim=dim, ctr.dim=ctr.dim,
+            point.shape=point.shape, point.alpha = point.alpha, point.fill=point.fill, point.color=point.color, point.size=point.size,
+            text=text, text.alpha = text.alpha, text.color = text.color, text.size = text.size,
+            map.title=plot.type, labelx=labelx, labely=labely, legend=legend,
+            plot.type=plot.type)
+  
 }
 
 #' Map the active modalities
@@ -100,7 +93,7 @@ return(t.plot)
 #' @param point.shape is a numerical value defining the shape of the points. If set to its default, the default scale is used. It may be defined by a variable with a suitable length.
 #' @param point.size is a numerical value defining the size of the points. If set to its default, the size is determined by the frequency of each modality. It may be defined by a variable with a suitable length.
 #' @param text.size defines the size of the labels
-#' @param colour defines the colour of both label and the line of the points. The fill is set to a standard grey.
+#' @param color defines the color of both label and the line of the points. The fill is set to a standard grey.
 #' @examples
 #' example(soc.mca)
 #' map.active(result)
@@ -108,23 +101,21 @@ return(t.plot)
 #' map.active(result, point.size=result$ctr.mod[,1], map.title="All active modalities with size according to contribution")
 #' @export 
 
-map.active     <- function(object, dim=c(1,2), map.title="active", labelx=NULL, labely=NULL, point.label=TRUE, point.shape="variable", point.size="freq", text.size=3.3, colour="black"){
-
-gg.proc 	<- round(object$adj.inertia[,4]) # Adjusted inertia
-gg.data     <- data.plot(object, plot.type="active", dim, ctr.dim=NULL, point.size=point.size) # Data selection
-axis.labels <- plot.axis(labelx=labelx, labely=labely, gg.proc=gg.proc, dim=dim) # Axis labels
-map.title   <- plot.title(map.title=map.title) # Plot title
-scales      <- breaksandscales(gg.data) # Scales og breaks
-
-gg.input    <- list(gg.data=gg.data, axis.inertia=gg.proc,
-                  map.title=map.title, labelx=axis.labels$x, labely=axis.labels$y,
-                  scales=scales, point.label=point.label, point.size=point.size)
-
-b.plot      <- basic.plot(gg.input, text.size=text.size, point.shape=point.shape, colour=colour) # Plot
-t.plot      <- b.plot + theme_min() # Theme
-t.plot$dimensions <- dim
-return(t.plot)
+map.active         <- function(object, dim=c(1,2),
+                               point.shape="variable", point.alpha = 0.8, point.fill="grey80", point.color="black", point.size="freq",
+                               text=TRUE, text.alpha = 0.8, text.color = "black", text.size = 3.3,
+                               map.title="active", labelx=NULL, labely=NULL, legend=NULL){
+  
+  plot.type   <- "active"
+  
+  plot.flow(object, dim=dim,
+            point.shape=point.shape, point.alpha = point.alpha, point.fill=point.fill, point.color=point.color, point.size=point.size,
+            text=text, text.alpha = text.alpha, text.color = text.color, text.size = text.size,
+            map.title=plot.type, labelx=labelx, labely=labely, legend=legend,
+            plot.type=plot.type)
+  
 }
+
 
 #' Map the supplementary modalities
 #' 
@@ -138,28 +129,27 @@ return(t.plot)
 #' @param point.shape is a numerical value defining the shape of the points. If set to its default, the default scale is used. It may be defined by a variable with a suitable length.
 #' @param point.size is a numerical value defining the size of the points. If set to its default, the size is determined by the frequency of each modality. It may be defined by a variable with a suitable length.
 #' @param text.size defines the size of the labels
-#' @param colour defines the colour of both label and the line of the points. The fill is set to a standard grey.
+#' @param color defines the color of both label and the line of the points. The fill is set to a standard grey.
 #' @examples
 #' example(soc.mca)
 #' map.sup(result)
 #' map.sup(result, dim=c(2,1))
 #' map.sup(result, point.size=result$coord.sup[,4], map.title="All supplementary modalities with size according to coordinate on the 4th dimension")
 #' @export 
-map.sup     	<- function(object, dim=c(1,2), map.title="sup", labelx=NULL, labely=NULL, point.label=TRUE, point.shape="variable", point.size="freq", text.size=3.3, colour="black"){
-gg.proc 	<- round(object$adj.inertia[,4]) # Adjusted inertia
-gg.data     <- data.plot(object, plot.type="sup", dim, ctr.dim=NULL, point.size=point.size) # Data selection
-axis.labels <- plot.axis(labelx=labelx, labely=labely, gg.proc=gg.proc, dim=dim) # Axis labels
-map.title   <- plot.title(map.title=map.title) # Plot title
-scales      <- breaksandscales(gg.data) # Scales og breaks
 
-gg.input    <- list(gg.data=gg.data, axis.inertia=gg.proc,
-                  map.title=map.title, labelx=axis.labels$x, labely=axis.labels$y,
-                  scales=scales, point.label=point.label, point.size=point.size)
-
-b.plot      <- basic.plot(gg.input, text.size=text.size, point.shape=point.shape, colour=colour) # Plot
-t.plot      <- b.plot + theme_min() # Theme
-t.plot$dimensions <- dim
-return(t.plot)
+map.sup         <- function(object, dim=c(1,2),
+                            point.shape="variable", point.alpha = 0.8, point.fill="grey80", point.color="black", point.size="freq",
+                            text=TRUE, text.alpha = 0.8, text.color = "black", text.size = 3.3,
+                            map.title="sup", labelx=NULL, labely=NULL, legend=NULL){
+  
+  plot.type   <- "sup"
+  
+  plot.flow(object, dim=dim,
+            point.shape=point.shape, point.alpha = point.alpha, point.fill=point.fill, point.color=point.color, point.size=point.size,
+            text=text, text.alpha = text.alpha, text.color = text.color, text.size = text.size,
+            map.title=plot.type, labelx=labelx, labely=labely, legend=legend,
+            plot.type=plot.type)
+  
 }
 
 #' Map the individuals of a soc.mca analysis
@@ -172,38 +162,33 @@ return(t.plot)
 #' @param labely is the label of the vertical axis. If set to NULL a standard label is used.
 #' @param point.label if set to TRUE each point is assigned its label, defined in the soc.mca object. See \link{assign.label} and \link{add.to.label} for ways to alter the labels.
 #' @param point.shape is a numerical value defining the shape of the points. If set to its default, the default scale is used. It may be defined by a variable with a suitable length.
-#' @param point.variable is a factor of the samel length and order as the ones used for the soc.mca object. Each level is given its own shape.
 #' @param point.size is a numerical value defining the size of the points. If set to its default, the size is determined by the frequency of each modality. It may be defined by a variable with a suitable length.
 #' @param text.size defines the size of the labels
 #' @param legend if set to TRUE a legend is provided
-#' @param colour defines the colour of the text labels
-#' @param point.colour is a factor of the same length and order as the ones used for the soc.mca object. 
+#' @param color defines the color of the text labels
+#' @param point.color is a factor of the same length and order as the ones used for the soc.mca object. 
 #' @examples
 #' example(soc.mca)
 #' map.ind(result)
-#' map.ind(result, map.title="Each individual is given its shape according to a value in a factor", point.variable=active[,1], legend=TRUE)
-#' map.ind(result, map.title="The contribution of the individuals with a new color scale defined by ggplot2", point.colour=result$ctr.ind[,1], point.shape=18) + scale_color_continuous(low="white", high="red")
+#' map.ind(result, map.title="Each individual is given its shape according to a value in a factor", point.shape=active[,1], legend=TRUE)
+#' map.ind(result, map.title="The contribution of the individuals with a new color scale defined by ggplot2", point.color=result$ctr.ind[,1], point.shape=18) + scale_color_continuous(low="white", high="red")
 #' quad   <- create.quadrant(result)
-#' map.ind(result, map.title="Individuals in the space given shape and colour by their quadrant", point.variable=quad, point.colour=quad)
+#' map.ind(result, map.title="Individuals in the space given shape and color by their quadrant", point.shape=quad, point.color=quad)
 #' @export
-map.ind         <- function(object, dim=c(1,2), map.title="ind", labelx=NULL, labely=NULL, point.label=FALSE, point.shape="variable", point.variable=NULL, point.colour=NULL, point.size=3, text.size=3.3, colour="black", legend=NULL){
 
-gg.proc 	  <- round(object$adj.inertia[,4]) # Adjusted inertia
-gg.data     <- data.plot(object, plot.type="ind", dim, ctr.dim=NULL, point.size=point.size, point.variable=point.variable, point.colour=point.colour) # Data selection
-axis.labels <- plot.axis(labelx=labelx, labely=labely, gg.proc=gg.proc, dim=dim) # Axis labels
-map.title   <- plot.title(map.title=map.title) # Plot title
-scales      <- breaksandscales(gg.data) # Scales og breaks
-
-gg.input    <- list(gg.data=gg.data, axis.inertia=gg.proc,
-                  map.title=map.title, labelx=axis.labels$x, labely=axis.labels$y,
-                  scales=scales, point.label=point.label, point.size=point.size)
-b.plot      <- basic.plot(gg.input, text.size=text.size, point.shape=point.shape, colour=colour, point.colour=point.colour) # Plot
-t.plot      <- b.plot + theme_min() # Theme
-
-if(is.null(legend)) t.plot <- t.plot + theme(legend.position="none")
-
-t.plot$dimensions <- dim
-return(t.plot)
+map.ind         <- function(object, dim=c(1,2),
+                            point.shape=21, point.alpha = 0.8, point.fill="grey80", point.color="black", point.size=3,
+                            text=FALSE, text.alpha = 0.8, text.color = "black", text.size = 3.3,
+                            map.title="ind", labelx=NULL, labely=NULL, legend=NULL){
+  
+  plot.type   <- "ind"
+  
+  plot.flow(object, dim=dim,
+            point.shape=point.shape, point.alpha = point.alpha, point.fill=point.fill, point.color=point.color, point.size=point.size,
+            text=text, text.alpha = text.alpha, text.color = text.color, text.size = text.size,
+            map.title=plot.type, labelx=labelx, labely=labely, legend=legend,
+            plot.type=plot.type)
+  
 }
 
 ############################### List map
@@ -219,7 +204,7 @@ return(t.plot)
 #' @param point.shape is a numerical value defining the shape of the points. If set to its default, the default scale is used. It may be defined by a variable with a suitable length.
 #' @param point.size is a numerical value defining the size of the points. If set to "freq", the size is determined by the frequency of each modality. It may be defined by a variable with a suitable length.
 #' @param text.size defines the size of the labels
-#' @param colour defines the colour of the text labels
+#' @param color defines the color of the text labels
 #' @param list.mod is a numerical vector indicating which active modalities to plot. It may also be a logical vector of the same length and order as the modalities in object$names.mod.
 #' @param list.sup is a numerical vector indicating which supplementary modalities to plot. It may also be a logical vector of the same length and order as the modalities in object$names.sup.
 #' @param list.ind is a numerical vector indicating which individuals to plot. It may also be a logical vector of the same length and order as the modalities in object$names.ind.
@@ -231,26 +216,23 @@ return(t.plot)
 #' map.select(result, map.title="Map of all individuals sharing a particular value", list.ind=select, point.size=3)
 #' map.select(result, map.title="Map of both select individuals and modalities", list.ind=select, list.mod=1:10)
 #' @export
-map.select    <- function(object, list.mod=NULL, list.sup=NULL, list.ind=NULL, dim=c(1,2), map.title="select", labelx=NULL, labely=NULL, point.label=TRUE, point.shape="variable", point.size=3, text.size=3.3, colour="black"){
+
+map.select         <- function(object, dim=c(1,2), ctr.dim=1, list.mod=NULL, list.sup=NULL, list.ind=NULL,
+                               point.shape="variable", point.alpha = 0.8, point.fill="grey80", point.color="black", point.size="freq",
+                               text=TRUE, text.alpha = 0.8, text.color = "black", text.size = 3.3,
+                               map.title="select", labelx=NULL, labely=NULL, legend=NULL){
   
   modal.list  <- list(list.mod=list.mod, list.sup=list.sup, list.ind=list.ind)
   
-  gg.proc     <- round(object$adj.inertia[,4]) # Adjusted inertia
-  gg.data     <- data.plot(object, plot.type="select", dim, ctr.dim=NULL, modal.list=modal.list, point.size=point.size) # Data selection
-  axis.labels <- plot.axis(labelx=labelx, labely=labely, gg.proc=gg.proc, dim=dim) # Axis labels
-  map.title   <- plot.title(map.title=map.title) # Plot title
-  scales      <- breaksandscales(gg.data) # Scales og breaks
+  plot.type   <- "select"
   
-  gg.input    <- list(gg.data=gg.data, axis.inertia=gg.proc,
-                      map.title=map.title, labelx=axis.labels$x, labely=axis.labels$y,
-                      scales=scales, point.label=point.label, point.size=point.size)
+  plot.flow(object, dim=dim, ctr.dim=ctr.dim, modal.list=modal.list,
+            point.shape=point.shape, point.alpha = point.alpha, point.fill=point.fill, point.color=point.color, point.size=point.size,
+            text=text, text.alpha = text.alpha, text.color = text.color, text.size = text.size,
+            map.title=plot.type, labelx=labelx, labely=labely, legend=legend,
+            plot.type=plot.type)
   
-  b.plot      <- basic.plot(gg.input, text.size=text.size, point.shape=point.shape, colour=colour) # Plot
-  t.plot      <- b.plot + theme_min() # Theme
-  t.plot$dimensions <- dim
-  return(t.plot)
 }
-
 
 
 #' Add points to an existing map
@@ -265,99 +247,154 @@ map.select    <- function(object, list.mod=NULL, list.sup=NULL, list.ind=NULL, d
 #' @param point.shape is a numerical value defining the shape of the points. If set to its default, the default scale is used. It may be defined by a variable with a suitable length.
 #' @param point.size is a numerical value defining the size of the points. If set to its default, the size is determined by the frequency of each modality. It may be defined by a variable with a suitable length.
 #' @param text.size defines the size of the labels
-#' @param colour defines the colour of the text labels
+#' @param color defines the color of the text labels
 #' @examples
 #' example(soc.mca)
 #' original.map    <- map.sup(result)
-#' map.add(result, original.map, data.type="ctr", ctr.dim=2)
-#' map.add(result, map.ind(result), data.type="ind",list.ind=1:50, colour="red", point.label=FALSE, point.size=12)
+#' map.add(result, original.map, plot.type="ctr", ctr.dim=2)
+#' map.add(result, map.ind(result), plot.type="select",list.ind=1:50, point.color="red", text=FALSE, point.size=result$ctr.ind[1:50, 1]*2000)
 #' @export
-map.add        <- function(object, ca.map, data.type=NULL, list.mod=NULL, list.sup=NULL, list.ind=NULL, ctr.dim=NULL, point.label=TRUE, point.shape="variable", point.size="freq", text.size=3.3, colour="black"){
-  
+
+map.add         <- function(object, ca.map, plot.type=NULL, ctr.dim=1, list.mod=NULL, list.sup=NULL, list.ind=NULL,
+                            point.shape="variable", point.alpha = 0.8, point.fill="grey80", point.color="black", point.size="freq",
+                            text=TRUE, text.alpha = 0.8, text.color = "black", text.size = 3.3,
+                            labelx=NULL, labely=NULL, legend=NULL){
   p           <- ca.map
   dim         <- ca.map$dimensions
   org.scales  <- ca.map$ca.scales
   modal.list  <- list(list.mod=list.mod, list.sup=list.sup, list.ind=list.ind)
-  add.data    <- data.plot(object, plot.type=data.type, dim, ctr.dim=ctr.dim, modal.list=modal.list, point.size=point.size)
+  gg.data     <- data.plot(object, plot.type=plot.type, dim=dim, ctr.dim=ctr.dim, modal.list=modal.list, point.size=point.size, point.variable=point.shape)
   
+  if(identical(point.shape,"variable")) point.shape <- gg.data$variable
+  if(identical(point.size,"freq"))      point.size  <- gg.data$freq
+  
+  point.l           <- list(x=gg.data$x, y=gg.data$y, shape=point.shape, alpha=point.alpha, fill=point.fill, color=point.color, size=point.size)
+  p.i               <- unlist(lapply(point.l, length)) == 1
+  point.attributes  <- point.l[p.i==TRUE]
+  point.aes         <- point.l[p.i==FALSE]
+  
+  text.l            <- list(x=gg.data$x, y=gg.data$y, label=gg.data$names, alpha=text.alpha, color=text.color, size=text.size)
+  t.i               <- unlist(lapply(text.l, length)) == 1
+  text.attributes   <- text.l[t.i==TRUE]
+  text.aes          <- text.l[t.i==FALSE]
+  
+  gg.input          <- list(gg.data=gg.data, text=text, point.aes=point.aes, point.attributes=point.attributes, text.aes=text.aes, text.attributes=text.attributes)
+  
+  # Plot
   # Points
-  p           <- p + geom_point(data=add.data, aes(x=x, y=y, size=freq, shape=variable), colour=colour, fill=alpha("white", 0.5))
+  point.attributes             <- gg.input$point.attributes
+  point.attributes$mapping     <- do.call("aes", gg.input$point.aes)
+  p                            <- p + do.call("geom_point", point.attributes, quote=TRUE)
+  shapes                       <- c(21, 22, 23, 24, 25, 6, 0, 1, 2, 3, 4, 5, 7, 8, 9, 10, 12, 15, 16, 17, 18, 42, 45, 61, 48, 50:120)   
+  p                            <- p + scale_shape_manual(values=shapes)   
   
-  # Point size
-  if (length(add.data$point.size)==1 & is.numeric(add.data$point.size)==TRUE){
-    p         <- p + scale_size_identity(guide="none")  }else{
-    p         <- p + scale_size(guide="none")      
-    }
-  
-  # Point shape scale
-  if (identical(point.shape, "variable")==FALSE){
-    p         <- p + scale_shape_manual(guide="none", values=point.shape)  }else{
-    shapes    <- c(21, 22, 23, 0, 3, 1, 2, 5, 4, 10, 14, 12, 35, 64,  36:120)   
-    p         <- p + scale_shape_manual(guide="none", values=shapes)   
-   }
-  
-  
-  if (identical(point.label, TRUE)==TRUE){
-    p         <- p + geom_text(data=add.data, aes(x=x, y=y, label=names), size=text.size, vjust=1.4, colour=colour, lineheight=0.9)
+  # Text
+  if (gg.input$text==TRUE){
+    text.attributes             <- gg.input$text.attributes
+    text.attributes$vjust       <- 1.4
+    text.attributes$family      <- "sans"
+    text.attributes$lineheight  <- 0.9
+    text.attributes$mapping     <- do.call("aes", gg.input$text.aes)
+    p                           <- p + do.call("geom_text", text.attributes, quote=TRUE)
+    
   }
   
   # Scales and labels
   
   org.max     <- org.scales$lim.max
   org.min     <- org.scales$lim.min
-  n.max       <- max(c(max(add.data[,1:2]), org.max))
-  n.min       <- (c(min(add.data[,1:2]), org.min))
-  tscales <- add.data
+  n.max       <- max(c(max(gg.data[,1:2]), org.max))
+  n.min       <- (c(min(gg.data[,1:2]), org.min))
+  tscales     <- gg.data
   tscales[1,1:2] <- n.max
   tscales[2,1:2] <- n.min
   scales <- breaksandscales(tscales)
   
   p     <- p + scale_x_continuous(breaks=scales$scalebreaks, labels= scales$breaklabel)
-  p   	<- p + scale_y_continuous(breaks=scales$scalebreaks, labels= scales$breaklabel)
+  p     <- p + scale_y_continuous(breaks=scales$scalebreaks, labels= scales$breaklabel)
   p$ca.scales <- scales
-  return(p)
+  
+  #### Legend
+  if(is.null(legend))            p  <- p + theme(legend.position="none")
+  if(identical(legend,"bottom")) p  <- p + theme(legend.position='bottom', legend.direction="horizontal", legend.box="horizontal")
+  
+  p
 }
 
 ############################## Plot delfunktioner ########################################
 
+########################################################
+## plot.flow
 
-############################# basic.plot 
-basic.plot <- function(gg.input, point.shape="variable", text.size=3.3, colour="black", fill="grey80", point.colour=NULL){ 
+plot.flow   <- function(object, dim=c(1,2), ctr.dim=NULL, modal.list=NULL,
+                        point.shape=21, point.alpha = 0.8, point.fill="grey80", point.color="black", point.size=3,
+                        text=FALSE, text.alpha = 0.8, text.color = "black", text.size = 3.3,
+                        map.title=plot.type, labelx=NULL, labely=NULL, legend=NULL,
+                        plot.type=plot.type){
+  gg.proc     <- round(object$adj.inertia[,4]) # Adjusted inertia
+  gg.data     <- data.plot(object, plot.type=plot.type, dim, ctr.dim=ctr.dim, modal.list=modal.list, point.size=point.size, point.color=point.color) # Data selection
+  axis.labels <- plot.axis(labelx=labelx, labely=labely, gg.proc=gg.proc, dim=dim) # Axis labels
+  map.title   <- plot.title(map.title=map.title, ctr.dim=ctr.dim) # Plot title
+  scales      <- breaksandscales(gg.data) # Scales og breaks
+  
+  if(identical(point.shape,"variable")) point.shape <- gg.data$variable
+  if(identical(point.size,"freq"))      point.size  <- gg.data$freq
+  
+  point.l           <- list(x=gg.data$x, y=gg.data$y, shape=point.shape, alpha=point.alpha, fill=point.fill, color=point.color, size=point.size)
+  p.i               <- unlist(lapply(point.l, length)) == 1
+  point.attributes  <- point.l[p.i==TRUE]
+  point.aes         <- point.l[p.i==FALSE]
+  
+  text.l            <- list(x=gg.data$x, y=gg.data$y, label=gg.data$names, alpha=text.alpha, color=text.color, size=text.size)
+  t.i               <- unlist(lapply(text.l, length)) == 1
+  text.attributes   <- text.l[t.i==TRUE]
+  text.aes          <- text.l[t.i==FALSE]
+  
+  gg.input    <- list(gg.data=gg.data, axis.inertia=gg.proc,
+                      map.title=map.title, labelx=axis.labels$x, labely=axis.labels$y,
+                      scales=scales, text=text, point.aes=point.aes, point.attributes=point.attributes, text.aes=text.aes, text.attributes=text.attributes)
+  b.plot      <- basic.plot(gg.input) # Plot
+  t.plot      <- b.plot + theme_min() # Theme
+  
+  if(is.null(legend)) t.plot   <- t.plot + theme(legend.position="none")
+  if(identical(legend,"bottom")) t.plot  <- t.plot + theme(legend.position='bottom', legend.direction="horizontal", legend.box="horizontal")
+  t.plot$dimensions <- dim
+  return(t.plot)
+}
+
+
+#################################################################################
+## basic.plot 
+basic.plot <- function(gg.input){ 
   # Defining point.size
   p       <- ggplot()   
   # The middle plot axis
-  p       <- p + geom_hline(yintercept = 0, colour = "grey50", size = 0.5, linetype="solid")
-  p       <- p + geom_vline(xintercept = 0, colour = "grey50", size = 0.5, linetype="solid")
+  p       <- p + geom_hline(yintercept = 0, color = "grey50", size = 0.5, linetype="solid")
+  p       <- p + geom_vline(xintercept = 0, color = "grey50", size = 0.5, linetype="solid")
   
   # Points
-  if (is.null(point.colour)){
-  p         <- p + geom_point(data=gg.input$gg.data, aes(x=x, y=y, size=freq, shape=variable), colour=colour, fill=alpha(fill, 0.5)) 
-  }
-  # Points for a colour variable
-  if (is.null(point.colour)==FALSE){
-  p         <- p + geom_point(data=gg.input$gg.data, aes(x=x, y=y, size=freq, shape=variable, colour=point.colour), fill=alpha(fill, 0.5)) 
-  }
-  # Point size scale
-  if (length(gg.input$point.size)==1 & is.numeric(gg.input$point.size)==TRUE){
-    p         <- p + scale_size_identity(guide="none")  }else{
-    p         <- p + scale_size(guide="none", range=c(2,12)) 
-    }
-  # Point shape scale
-  if (identical(point.shape, "variable")==FALSE){
-    p         <- p + scale_shape_manual(guide="none", values=point.shape)  }else{
-    shapes    <- c(21, 22, 23, 24, 25, 6, 0, 1, 2, 3, 4, 5, 7, 8, 9, 10, 12, 15, 16, 17, 18, 42, 45, 61, 48, 50:120)   
-    p         <- p + scale_shape_manual(guide="none", values=shapes)   
+  point.attributes             <- gg.input$point.attributes
+  point.attributes$mapping     <- do.call("aes", gg.input$point.aes)
+  p                            <- p + do.call("geom_point", point.attributes, quote=TRUE)
+  shapes                       <- c(21, 22, 23, 24, 25, 6, 0, 1, 2, 3, 4, 5, 7, 8, 9, 10, 12, 15, 16, 17, 18, 42, 45, 61, 48, 50:120)   
+  p                            <- p + scale_shape_manual(values=shapes)   
+  
+  # Text
+  if (gg.input$text==TRUE){
+    text.attributes             <- gg.input$text.attributes
+    text.attributes$vjust       <- 1.4
+    text.attributes$family      <- "sans"
+    text.attributes$lineheight  <- 0.9
+    text.attributes$mapping     <- do.call("aes", gg.input$text.aes)
+    p                           <- p + do.call("geom_text", text.attributes, quote=TRUE)
+    
   }
   
-    # Text labels for all points
-  if (identical(gg.input$point.label, TRUE)==TRUE){
-    p       <- p + geom_text(data=gg.input$gg.data, aes(x=x, y=y, label=names),size=text.size, vjust=1.4, colour=colour, family="sans", lineheight=0.9)
-  }
   # Title and axis labels
-  p   	<- p + ggtitle(label=gg.input$map.title)
-  p 		<- p + xlab(gg.input$labelx) + ylab(gg.input$labely)
+  p     <- p + ggtitle(label=gg.input$map.title)
+  p     <- p + xlab(gg.input$labelx) + ylab(gg.input$labely)
+  p     <- p + labs(alpha="Alpha", shape="Shape", color="Color", linetype="Linetype", size="Size", fill="Fill")
   # Scales and breaks
-  
   p     <- p + scale_x_continuous(breaks=gg.input$scales$scalebreaks, labels=gg.input$scales$breaklabel)
   p 		<- p + scale_y_continuous(breaks=gg.input$scales$scalebreaks, labels=gg.input$scales$breaklabel)
   p     <- p + coord_fixed()
@@ -365,6 +402,10 @@ basic.plot <- function(gg.input, point.shape="variable", text.size=3.3, colour="
   
   return(p)
 }
+
+
+
+
 ####################### Plot title
 
 plot.title  <- function(map.title=NULL, ctr.dim=NULL){
@@ -436,7 +477,7 @@ breaksandscales <- function(gg.data){
 
 #################### data.plot v.2
 
-data.plot   <- function(object, plot.type, dim, ctr.dim=NULL, modal.list=NULL, point.size="freq", point.variable=NULL, point.colour=NULL){
+data.plot   <- function(object, plot.type, dim, ctr.dim=NULL, modal.list=NULL, point.size="freq", point.variable=NULL, point.color=NULL){
   # Types: mod, active, sup, ctr, ind, list
   
   # mod
@@ -479,8 +520,8 @@ data.plot   <- function(object, plot.type, dim, ctr.dim=NULL, modal.list=NULL, p
      }else{ 
        variable  <- point.variable
     }
-    if(identical(point.colour, NULL)==FALSE)
-    point.colour <- point.colour
+    if(identical(point.color, NULL)==FALSE)
+    point.color <- point.color
   }
   
   # select
@@ -505,10 +546,54 @@ data.plot   <- function(object, plot.type, dim, ctr.dim=NULL, modal.list=NULL, p
   }
   
   if(is.numeric(point.size))  freq         <- rep(point.size, length.out=nrow(coord))
-  if(is.null(point.colour))   point.colour <- rep("Nothing", length.out=nrow(coord))
+  if(is.null(point.color))   point.color <- rep("Nothing", length.out=nrow(coord))
   
   
-  gg.data             <- data.frame(cbind(coord[,dim[1]], coord[,dim[2]]), mnames, freq, variable, point.colour)
-  colnames(gg.data)   <- c("x", "y", "names", "freq", "variable", "point.colour")
+  gg.data             <- data.frame(cbind(coord[,dim[1]], coord[,dim[2]]), mnames, freq, variable, point.color)
+  colnames(gg.data)   <- c("x", "y", "names", "freq", "variable", "point.color")
   return(gg.data)
 }
+
+#############################################################################################
+### Add path
+
+
+#' Add a new layer of points on top of an existing plot with output from the cut.min function
+#' @param x a matrix created by the cut.min function
+#' @param p is a ggplot object, preferably from one of the mapping functions in soc.ca
+#' @param label if TRUE the labels of points will be shown
+
+add.count <- function(x, p=map.ind(object), label=TRUE, ...){
+  p <- p + geom_point(data=x, x=x$X, y=x$Y, ...) + geom_path(data=x, x=x$X, y=x$Y, ...)
+  if (identical(label, TRUE)) p <- p + geom_text(data=x, x=x$X, y=x$Y, label=x$label, vjust=0.2, ...)
+}
+
+#' Add a path along an ordered variable onto a map
+#'
+#' Plot a path along an ordered variable. If the variable is numerical it is cut into groups by the \link{cut.min} function.
+#'  
+#' @param object is a soc.ca result object
+#' @param x is an ordered vector, either numerical or factor
+#' @param map is a plot object created with one of the mapping functions in the soc.ca package
+#' @param dim is the two dimensions plotted
+#' @param label if TRUE the label of the points are shown
+#' @param min.size is the minimum size given to the groups of a numerical variable, see \link{cut.min}.
+#' @param ... further arguments are passed onto geom_path, geom_point and geom_text from the ggplot2 package
+#' @export
+#' @examples
+#' example(soc.mca)
+#' map <- map.ind(result, point.color=as.numeric(sup$Age)) + scale_color_continuous(high="red", low="yellow")
+#' add.path(result, sup$Age, map)
+
+# Find ud af om ... kan give forskellige argumenter til forskellige funktioner.
+add.path  <- function(object, x, map = map.ind(object, dim), dim=c(1,2), label=TRUE, min.size=length(x)/10, ...){
+  
+  x.c                        <- x
+  if (is.numeric(x)) x.c     <- cut.min(x, min.size=min.size) 
+  
+  x.av    <- average.coord(object=object, x=x.c, dim=dim)  
+  map.p   <- add.count(x.av, map, label, ...) 
+  map.p
+}
+
+

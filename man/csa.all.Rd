@@ -2,7 +2,7 @@
 \alias{csa.all}
 \title{csa.all}
 \usage{
-  csa.all(object, variable, dim = 1:5)
+  csa.all(object, variable, dim = 1:5, ...)
 }
 \arguments{
   \item{object}{is a soc.mca class object created with

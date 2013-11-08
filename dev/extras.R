@@ -1,7 +1,7 @@
 
 #' Add a new layer of points on top of an existing plot with output from the cut.min function
 #' @param x a matrix created by the cut.min function
-#' @param p is a ggplot object, preferably a from one of the mapping functions in soc.ca
+#' @param p is a ggplot object, preferably from one of the mapping functions in soc.ca
 #' @param label if TRUE the labels of points will be shown
 
 add.count <- function(x, p=map.ind(object), label=TRUE, ...){

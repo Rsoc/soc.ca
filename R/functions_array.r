@@ -10,12 +10,12 @@
 # x <- list(a,b,c)
 
 
-#' Facetplot from list
+#' Array of maps
 #'
-#' This function takes a list of plot objects and arranges them into a grid
-#' @param x is a plot object, created by one of the mapping functions in the soc.ca package or any other ggplot2 created plot
+#' This function takes a list of map objects and arranges them into an array
+#' @param x is list of objects created by one of the mapping functions in the soc.ca package or any other ggplot2 created plot
 #' @param ncol is the number of columns the plots are arranged into
-#' @param title is the main title of all the plots
+#' @param title is the main title of the array
 #' @param fixed.coord if TRUE the limits of all plots are set to the same as the largest plot
 #' @param padding is the distance between the most extreme position and the axis limit
 #' @examples
@@ -74,16 +74,16 @@ map.ellipse.array <- function(object, variable, dim=c(1,2), draw.ellipses=TRUE, 
 }
 
 #################################################################################################
-#' Array of several CSA
+#' Array of several CSA maps
 #' 
 #' Creates an array of Class Specific Mulitple Correspondence analysis's
 #' 
 #' @param object is a \link{soc.mca} result object
 #' @param variable is a factor with the same order and length as those used for the active modalities in object
-#' @param dim indicates what dimensions to plot and in which order to plot them
-#' @param ncol is the number of columns the plots are arranged into
+#' @param dim indicates what dimensions to map and in which order to plot them
+#' @param ncol is the number of columns the maps are arranged into
 #' @param titles is a vector of the same length as the number of levels in variable. These are the titles given to each subplot
-#' @param main.title is the main title for all the plots
+#' @param main.title is the main title for all the maps
 #' @param FUN is the mapping function used for the plots; \link{map.active}, \link{map.ctr}, \link{map.ind}, \link{map.select}
 #' @param fixed.coord if TRUE the limits of all plots are set to the same as the largest plot
 #' @param ... sends any further arguments to the mapping functions
@@ -147,30 +147,52 @@ return(plot.list)
 
 #' Map the coordinates of the individuals in a CSA and its MCA
 #'
-#'@export
-map.csa.mca <- function(csa.object, mca.dim=1, csa.dim=1){
+#' @param csa.object is a result object created by the \link{soc.csa} function
+#' @param mca.dim is the dimension from the original MCA
+#' @param csa.dim is the dimension from the CSA
+#' @param smooth if TRUE a line is added to the plot
+#' @param method is the method used by ggplot to set the line see \link{geom_smooth}
+#' @export
+#' @examples
+#' example(soc.csa)
+#' csa.res <- soc.csa(result, class.age)
+#' map.csa.mca(csa.res, mca.dim=2, csa.dim=1)
+map.csa.mca <- function(csa.object, mca.dim=1, csa.dim=1, smooth=TRUE, method="auto"){
   mca.res           <- csa.object$original.result
-  class.indicator  <- csa.object$original.class.indicator
+  class.indicator   <- csa.object$original.class.indicator
   mca.coord         <- mca.res$coord.ind[class.indicator, mca.dim]
   ggdata            <- data.frame(mca=mca.coord, csa=csa.object$coord.ind[,csa.dim])
   titles            <- paste(c("CSA Dim:", "MCA Dim:"), c(csa.dim, mca.dim))
   
-  p                 <- ggplot(ggdata, aes(x=mca, y=csa)) + geom_smooth(fill="grey90", color="red") + geom_point(shape=21, size=3, alpha=0.8) + theme_min() + xlab(titles[2]) + ylab(titles[1])
+  p                 <- ggplot(ggdata, aes(x=mca, y=csa))
+  if(smooth == TRUE) p  <- p +  geom_smooth(fill="grey90", color="red", method=method)
+  p                 <- p + geom_point(shape=21, size=3, alpha=0.8) + theme_min() + xlab(titles[2]) + ylab(titles[1])
+  
   p$ca.scales       <- breaksandscales(ggdata)
   p
 }
 
-#' Map an array of map.csa.mca
+#' CSA-MCA array
 #' 
+#' Create an array of \link{map.csa.mca} maps.
+#' 
+#' @param csa.object is a result object created by the \link{soc.csa} function
+#' @param ndim is the number of dimensions to include in the array, starting from 1
+#' @param fixed.coord if TRUE the limits of all plots are set to the same as the largest plot
+#' @param ... for further arguments see \link{map.csa.mca}
 #' @export
-map.csa.mca.array <- function(csa.object, ndim=3, fixed.coord=TRUE){
+#' @examples
+#' example(soc.csa)
+#' csa.res <- soc.csa(result, class.age)
+#' map.csa.mca.array(csa.res, ndim=3)
+map.csa.mca.array <- function(csa.object, ndim=3, fixed.coord=TRUE, ...){
   
   plot.list <- list()
   
   count <- 1
   for(j in 1:ndim){
     for (i in 1:ndim){
-      plot.list[[count]] <- map.csa.mca(csa.object, mca.dim=i, csa.dim=j)
+      plot.list[[count]] <- map.csa.mca(csa.object, mca.dim=i, csa.dim=j, ...)
       count <- count+1
     }
   }

@@ -2,11 +2,14 @@
 \alias{map.select}
 \title{Map select modalities and individuals}
 \usage{
-  map.select(object, list.mod = NULL, list.sup = NULL,
-    list.ind = NULL, dim = c(1, 2), map.title = "select",
-    labelx = NULL, labely = NULL, point.label = TRUE,
-    point.shape = "variable", point.size = 3,
-    text.size = 3.3, colour = "black")
+  map.select(object, dim = c(1, 2), ctr.dim = 1,
+    list.mod = NULL, list.sup = NULL, list.ind = NULL,
+    point.shape = "variable", point.alpha = 0.8,
+    point.fill = "grey80", point.color = "black",
+    point.size = "freq", text = TRUE, text.alpha = 0.8,
+    text.color = "black", text.size = 3.3,
+    map.title = "select", labelx = NULL, labely = NULL,
+    legend = NULL)
 }
 \arguments{
   \item{object}{is a soc.mca class object as created by
@@ -42,7 +45,7 @@
 
   \item{text.size}{defines the size of the labels}
 
-  \item{colour}{defines the colour of the text labels}
+  \item{color}{defines the color of the text labels}
 
   \item{list.mod}{is a numerical vector indicating which
   active modalities to plot. It may also be a logical

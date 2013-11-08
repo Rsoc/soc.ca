@@ -53,9 +53,12 @@ print.soc.mca  <- function(x){
   adj	         <- paste(formatC(adj,format="f",digits=1), sep="", collide="%")
   
   ## Output
-  cat(format("Specific Correspondence Analysis:", 	width=90, justify="centre"),"\n", "\n", 
-      format("Statistics", 					width=50, justify="centre"), format("Scree plot", width=40, justify="centre"),"\n",
-      
+  # Soc.csa title
+  if (inherits(x, "soc.csa")==TRUE) cat(format("Class Specific Multiple Correspondence Analysis:", 	width=90, justify="centre"),"\n", "\n")
+  # Soc.mca title
+  if (inherits(x, "soc.csa")==FALSE) cat(format("Specific Multiple Correspondence Analysis:",   width=90, justify="centre"),"\n", "\n")
+  cat(format("Statistics", 					width=50, justify="centre"), format("Scree plot", width=40, justify="centre"),"\n",
+                                        
       format("	Active dimensions: ", 			width=40,), format(act.dim, 	width=10, justify="right"),
       format("|  1.", width=10, justify="centre" ), format(adj[1], width=10, justify="centre"), format(paste(stars[[1]]), width=1), "\n",
       
@@ -447,3 +450,118 @@ average.coord <- function(object, x, dim=c(1,2)){
   point.coord
 }
 
+#' CSA Independence
+#' 
+#' Several measures for the evaluation of the relative independence of the CSA from the original MCA
+#' 
+#' @param csa.object is a "soc.csa" class object created by the \link{soc.csa} function
+#' @param correlations if TRUE correlations calculated by the \link{cor} function is returned
+#' @param cosines if TRUE cosine similarities are returned
+#' @param cosine.angles if TRUE angles are calculated in the basis of the cosine values
+#' @param dim is the dimensions included
+#' @param if TRUE results are formatted, rounded and printed for screen reading, if FALSE the raw numbers are returned
+#' @param ... furhter arguments are send to the \link{cor} function
+#' @return A list of measures in either formatted or raw form.
+#' @export
+#' @examples
+#' example(soc.csa)
+#' csa.independence(res.csa)
+#' csa.independence(res.csa, correlations = FALSE, cosine.angles = FALSE, dim=1:10, format = FALSE)
+
+csa.independence <- function(csa.object, correlations=TRUE, cosines=TRUE, cosine.angles=TRUE, dim=1:5, format=TRUE, ...){
+  
+  csca.coord    <- csa.object$coord.ind
+  object        <- csa.object$original.result
+  class.indicator <- csa.object$original.class.indicator
+  ca.coord      <- object$coord.ind[class.indicator,]
+  
+  csca.coord    <- csca.coord[,dim]
+  ca.coord      <- ca.coord[,dim]
+  
+  ##################################
+  # Correlations
+  cor.mat       <- cor(csca.coord, ca.coord, ...)
+  rownames(cor.mat)   <- paste("CSA:", dim)
+  colnames(cor.mat)   <- paste("MCA:", dim)
+  
+  
+  
+  ####################################
+  # Cosines similarity
+  cosine.similarity      <- function(x,y) x %*% y / sqrt(x%*%x * y%*%y)
+  cosine.mat             <- matrix(ncol=ncol(ca.coord), nrow=ncol(ca.coord))
+  rownames(cosine.mat)   <- paste("CSA:", dim)
+  colnames(cosine.mat)   <- paste("MCA:", dim)
+    
+    for (i in 1:ncol(ca.coord)){
+      cosine.mat[i,]       <- apply(ca.coord, 2, cosine.similarity, csca.coord[,i])
+    }
+    
+  
+  
+  #####################################
+  # Angles
+  cosine.to.angle       <- function(x) acos(x)/pi * 180 
+  angles                <- cosine.to.angle(cosine.mat)
+  
+  
+  ####################################
+  # Out.list
+  out.list              <- list() 
+  if(cosine.angles == TRUE)  out.list$angles       <- angles
+  if(correlations == TRUE)   out.list$cor          <- cor.mat
+  if(cosines == TRUE)        out.list$cosines      <- cosine.mat
+  
+  if (identical(format, FALSE)) return(out.list)
+  
+  ###################################
+  # Formatted output
+  if (identical(format, TRUE)){
+    
+    cat("\n", format("Independence of Class Specific Multiple Correspondence Analysis:",   width=90, justify="centre"), "\n", "\n")
+    
+    ##############
+    # Correlations
+    if(correlations == TRUE){
+    
+    cat("\n", format("Correlations:",   width=10, justify="right"), "\n", "\n")
+    
+    cor.fat           <- round(cor.mat, 2) 
+    rownames(cor.fat) <- format(rownames(cor.mat), width=10, justify="centre")
+    colnames(cor.fat) <- format(colnames(cor.mat), width=8, justify="right")
+    cor.fat           <- format(cor.fat, width=8, justify="left")
+    print(noquote(cor.fat))
+    cat("\n", "\n")
+    
+    }
+    
+    #############
+    # Cosines
+    if(cosines == TRUE){
+    
+    cat("\n", format("Cosine similarity:",   width=10, justify="right"), "\n", "\n")
+    
+    cosine.fat           <- round(cosine.mat, 2) 
+    rownames(cosine.fat) <- format(rownames(cosine.fat), width=10, justify="centre")
+    colnames(cosine.fat) <- format(colnames(cosine.fat), width=8, justify="right")
+    cosine.fat           <- format(cosine.fat, width=8, justify="left")
+    print(noquote(cosine.fat))
+    cat("\n", "\n")
+    }
+  
+    
+    #############
+    # Angles
+    if(cosine.angles == TRUE){
+    cat("\n", format("Cosine angles:",   width=10, justify="right"), "\n", "\n")
+    
+    angles.fat           <- round(angles, 1) 
+    rownames(angles.fat) <- format(rownames(angles.fat), width=10, justify="centre")
+    colnames(angles.fat) <- format(colnames(angles.fat), width=8, justify="right")
+    angles.fat           <- format(angles.fat, width=8, justify="left")
+    print(noquote(angles.fat))
+    cat("\n", "\n")
+      
+    }
+  }
+}
