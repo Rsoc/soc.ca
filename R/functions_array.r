@@ -70,8 +70,8 @@ map.ellipse.array <- function(object, variable, dim=c(1,2), draw.ellipses=TRUE, 
   # Standardize the coordinates
   list.of.maps <- fix.coords(list.of.maps)
   # Plot the maps
-  return(invisible(list.of.maps))
   map.array(list.of.maps, ncol=ncol, title=main.title)
+  return(invisible(list.of.maps))
 }
 
 #################################################################################################
