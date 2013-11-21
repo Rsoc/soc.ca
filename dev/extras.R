@@ -35,3 +35,50 @@ add.path  <- function(object, x, map = map.ind(object, dim), dim=c(1,2), label=T
   map.p   <- add.count(x.av, map, label, ...) 
   map.p
 }
+
+######################################################################
+## Interactive plot
+
+
+### Googlevis
+library(googleVis)
+library(soc.ca)
+
+example(soc.mca)
+
+gdat <- data.frame(result$names.mod, result$coord.mod[,1:2], result$freq.mod , result$variable, result$ctr.mod[,1])
+rownames(gdat) <- result$names.mod
+colnames(gdat) <- c("Names", "Dim1", "Dim2", "Freq", "Variable", "Ctr.1")
+
+gopt <- list(gvis.editor="Edit")
+
+nif <- gvisBubbleChart(gdat, idvar="Names", xvar="Dim1", yvar="Dim2", sizevar="Freq", colorvar="Variable", options=gopt)
+
+plot(nif)
+
+#### Gridsvg
+
+#### Animint
+library(soc.ca)
+library(reshape)
+example(soc.mca)
+p  <- map.ind(result)
+
+interactive.points <- data.plot(result, "ind", dim=c(1,2))
+
+des.data <- data.frame(names=result$names.ind, result$ctr.ind[,1:5])
+
+des.data <- melt(des.data, id.vars="names")
+
+q <- ggplot() + geom_line(data=des.data, aes(x=value, y=variable, showSelected=names)) + coord_flip()
+
+q <- q + make_text(des.data, max(des.data$value) * 1.1, 3, "names")
+
+p <- p  + geom_point(data=interactive.points, aes(x=x, y=y, clickSelects=names))
+p <- p  + geom_point(data=interactive.points, aes(x=x, y=y, showSelected=names), color="red")
+
+gg2animint(list(plot1=p, plot2=q), out.dir = "test.p")
+
+
+
+

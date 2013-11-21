@@ -38,10 +38,11 @@ map.mod         <- function(object, dim=c(1,2),
   
   plot.type   <- "mod"
   
+  
   plot.flow(object, dim=dim,
             point.shape=point.shape, point.alpha = point.alpha, point.fill=point.fill, point.color=point.color, point.size=point.size,
             text=text, text.alpha = text.alpha, text.color = text.color, text.size = text.size,
-            map.title=plot.type, labelx=labelx, labely=labely, legend=legend,
+            map.title=map.title, labelx=labelx, labely=labely, legend=legend,
             plot.type=plot.type)
   
 }
@@ -73,10 +74,11 @@ map.ctr         <- function(object, dim=c(1,2), ctr.dim=1,
   
   plot.type   <- "ctr"
   
+  
   plot.flow(object, dim=dim, ctr.dim=ctr.dim,
             point.shape=point.shape, point.alpha = point.alpha, point.fill=point.fill, point.color=point.color, point.size=point.size,
             text=text, text.alpha = text.alpha, text.color = text.color, text.size = text.size,
-            map.title=plot.type, labelx=labelx, labely=labely, legend=legend,
+            map.title=map.title, labelx=labelx, labely=labely, legend=legend,
             plot.type=plot.type)
   
 }
@@ -111,7 +113,7 @@ map.active         <- function(object, dim=c(1,2),
   plot.flow(object, dim=dim,
             point.shape=point.shape, point.alpha = point.alpha, point.fill=point.fill, point.color=point.color, point.size=point.size,
             text=text, text.alpha = text.alpha, text.color = text.color, text.size = text.size,
-            map.title=plot.type, labelx=labelx, labely=labely, legend=legend,
+            map.title=map.title, labelx=labelx, labely=labely, legend=legend,
             plot.type=plot.type)
   
 }
@@ -143,11 +145,11 @@ map.sup         <- function(object, dim=c(1,2),
                             map.title="sup", labelx=NULL, labely=NULL, legend=NULL){
   
   plot.type   <- "sup"
-  
+    
   plot.flow(object, dim=dim,
             point.shape=point.shape, point.alpha = point.alpha, point.fill=point.fill, point.color=point.color, point.size=point.size,
             text=text, text.alpha = text.alpha, text.color = text.color, text.size = text.size,
-            map.title=plot.type, labelx=labelx, labely=labely, legend=legend,
+            map.title=map.title, labelx=labelx, labely=labely, legend=legend,
             plot.type=plot.type)
   
 }
@@ -186,7 +188,7 @@ map.ind         <- function(object, dim=c(1,2),
   plot.flow(object, dim=dim,
             point.shape=point.shape, point.alpha = point.alpha, point.fill=point.fill, point.color=point.color, point.size=point.size,
             text=text, text.alpha = text.alpha, text.color = text.color, text.size = text.size,
-            map.title=plot.type, labelx=labelx, labely=labely, legend=legend,
+            map.title=map.title, labelx=labelx, labely=labely, legend=legend,
             plot.type=plot.type)
   
 }
@@ -229,7 +231,7 @@ map.select         <- function(object, dim=c(1,2), ctr.dim=1, list.mod=NULL, lis
   plot.flow(object, dim=dim, ctr.dim=ctr.dim, modal.list=modal.list,
             point.shape=point.shape, point.alpha = point.alpha, point.fill=point.fill, point.color=point.color, point.size=point.size,
             text=text, text.alpha = text.alpha, text.color = text.color, text.size = text.size,
-            map.title=plot.type, labelx=labelx, labely=labely, legend=legend,
+            map.title=map.title, labelx=labelx, labely=labely, legend=legend,
             plot.type=plot.type)
   
 }
@@ -329,7 +331,7 @@ map.add         <- function(object, ca.map, plot.type=NULL, ctr.dim=1, list.mod=
 plot.flow   <- function(object, dim=c(1,2), ctr.dim=NULL, modal.list=NULL,
                         point.shape=21, point.alpha = 0.8, point.fill="grey80", point.color="black", point.size=3,
                         text=FALSE, text.alpha = 0.8, text.color = "black", text.size = 3.3,
-                        map.title=plot.type, labelx=NULL, labely=NULL, legend=NULL,
+                        map.title=map.title, labelx=NULL, labely=NULL, legend=NULL,
                         plot.type=plot.type){
   gg.proc     <- round(object$adj.inertia[,4]) # Adjusted inertia
   gg.data     <- data.plot(object, plot.type=plot.type, dim, ctr.dim=ctr.dim, modal.list=modal.list, point.size=point.size, point.color=point.color) # Data selection
