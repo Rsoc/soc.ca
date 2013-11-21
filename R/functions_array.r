@@ -60,7 +60,7 @@ map.ellipse.array <- function(object, variable, dim=c(1,2), draw.ellipses=TRUE, 
   ellipse.ind <- variable == var.levels[i]
   ellipse.ind[ellipse.ind == FALSE] <- NA 
   
-  p          <- map.select(object, dim=c(1,2), list.ind=ind.ind, map.title=titles[i], text=FALSE, ...)
+  p          <- map.select(object, dim=dim, list.ind=ind.ind, map.title=titles[i], text=FALSE, ...)
   
   if(identical(draw.ellipses, TRUE)) p    <- map.ellipse(object, p, ellipse.ind, label=FALSE)
   list.of.maps[[i]] <- p
