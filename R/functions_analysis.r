@@ -645,7 +645,7 @@ create.quadrant <- function(object, dim=c(1,2), cut.min=-0.125, cut.max=0.125, c
 #' @examples
 #' example(soc.mca)
 #' csa.all(result, taste$Age)
-#' @seealso \link{soc.mca}, \link{soc.csa}, \link{cor}
+#' @seealso \link{soc.mca}, \link{soc.csa}, \link{cor}, \link{csa.measures}
 
 csa.all <- function(object, variable, dim=1:5, ...){
   lev.variable <- levels(variable)
@@ -657,7 +657,7 @@ csa.all <- function(object, variable, dim=1:5, ...){
   
   names(result.list) <- lev.variable
   
-  measure.list <- lapply(result.list, csa.independence, format=FALSE, ...)
+  measure.list <- lapply(result.list, csa.measures, format=FALSE, ...)
   
   list(results=result.list, measures=measure.list)
 }

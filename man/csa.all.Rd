@@ -33,6 +33,7 @@ example(soc.mca)
 csa.all(result, taste$Age)
 }
 \seealso{
-  \link{soc.mca}, \link{soc.csa}, \link{cor}
+  \link{soc.mca}, \link{soc.csa}, \link{cor},
+  \link{csa.measures}
 }
 

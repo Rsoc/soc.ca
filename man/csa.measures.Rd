@@ -1,8 +1,8 @@
-\name{csa.independence}
-\alias{csa.independence}
-\title{CSA Independence}
+\name{csa.measures}
+\alias{csa.measures}
+\title{CSA measures}
 \usage{
-  csa.independence(csa.object, correlations = TRUE,
+  csa.measures(csa.object, correlations = TRUE,
     cosines = TRUE, cosine.angles = TRUE, dim = 1:5,
     format = TRUE, ...)
 }
@@ -31,12 +31,13 @@
   A list of measures in either formatted or raw form.
 }
 \description{
-  Several measures for the evaluation of the relative
-  independence of the CSA from the original MCA
+  Several measures for the evaluation of the relations
+  between the dimensions of the CSA and the dimensions the
+  of original MCA
 }
 \examples{
 example(soc.csa)
-csa.independence(res.csa)
-csa.independence(res.csa, correlations = FALSE, cosine.angles = FALSE, dim=1:10, format = FALSE)
+csa.measures(res.csa)
+csa.measures(res.csa, correlations = FALSE, cosine.angles = FALSE, dim=1:10, format = FALSE)
 }
 

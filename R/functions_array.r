@@ -92,10 +92,8 @@ map.ellipse.array <- function(object, variable, dim=c(1,2), draw.ellipses=TRUE, 
 #' @examples
 #' \dontrun{
 #' example(soc.csa)
-#' object   <- result
-#' variable <-  active[,1]
-#' map.csa.all(object, variable)
-#' map.csa.all(object, variable, FUN=map.ctr, ctr.dim=1)
+#' map.csa.all(result, active[,1])
+#' map.csa.all(result, active[,1], FUN=map.ctr, ctr.dim=1)
 #' }
 
 map.csa.all <- function(object, variable, dim=c(1,2), ncol=2, FUN=map.ind, fixed.coord=TRUE, main.title="", titles=levels(variable),...){

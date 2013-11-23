@@ -41,10 +41,8 @@
 \examples{
 \dontrun{
 example(soc.csa)
-object   <- result
-variable <-  active[,1]
-map.csa.all(object, variable)
-map.csa.all(object, variable, FUN=map.ctr, ctr.dim=1)
+map.csa.all(result, active[,1])
+map.csa.all(result, active[,1], FUN=map.ctr, ctr.dim=1)
 }
 }
 

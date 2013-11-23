@@ -450,9 +450,9 @@ average.coord <- function(object, x, dim=c(1,2)){
   point.coord
 }
 
-#' CSA Independence
+#' CSA measures
 #' 
-#' Several measures for the evaluation of the relative independence of the CSA from the original MCA
+#' Several measures for the evaluation of the relations between the dimensions of the CSA and the dimensions the of original MCA
 #' 
 #' @param csa.object is a "soc.csa" class object created by the \link{soc.csa} function
 #' @param correlations if TRUE correlations calculated by the \link{cor} function is returned
@@ -465,10 +465,10 @@ average.coord <- function(object, x, dim=c(1,2)){
 #' @export
 #' @examples
 #' example(soc.csa)
-#' csa.independence(res.csa)
-#' csa.independence(res.csa, correlations = FALSE, cosine.angles = FALSE, dim=1:10, format = FALSE)
+#' csa.measures(res.csa)
+#' csa.measures(res.csa, correlations = FALSE, cosine.angles = FALSE, dim=1:10, format = FALSE)
 
-csa.independence <- function(csa.object, correlations=TRUE, cosines=TRUE, cosine.angles=TRUE, dim=1:5, format=TRUE, ...){
+csa.measures <- function(csa.object, correlations=TRUE, cosines=TRUE, cosine.angles=TRUE, dim=1:5, format=TRUE, ...){
   
   csca.coord    <- csa.object$coord.ind
   object        <- csa.object$original.result
@@ -520,21 +520,7 @@ csa.independence <- function(csa.object, correlations=TRUE, cosines=TRUE, cosine
     
     cat("\n", format("Independence of Class Specific Multiple Correspondence Analysis:",   width=90, justify="centre"), "\n", "\n")
     
-    ##############
-    # Correlations
-    if(correlations == TRUE){
-    
-    cat("\n", format("Correlations:",   width=10, justify="right"), "\n", "\n")
-    
-    cor.fat           <- round(cor.mat, 2) 
-    rownames(cor.fat) <- format(rownames(cor.mat), width=10, justify="centre")
-    colnames(cor.fat) <- format(colnames(cor.mat), width=8, justify="right")
-    cor.fat           <- format(cor.fat, width=8, justify="left")
-    print(noquote(cor.fat))
-    cat("\n", "\n")
-    
-    }
-    
+
     #############
     # Cosines
     if(cosines == TRUE){
@@ -563,5 +549,21 @@ csa.independence <- function(csa.object, correlations=TRUE, cosines=TRUE, cosine
     cat("\n", "\n")
       
     }
+
+    ##############
+    # Correlations
+    if(correlations == TRUE){
+      
+      cat("\n", format("Correlations:",   width=10, justify="right"), "\n", "\n")
+      
+      cor.fat           <- round(cor.mat, 2) 
+      rownames(cor.fat) <- format(rownames(cor.mat), width=10, justify="centre")
+      colnames(cor.fat) <- format(colnames(cor.mat), width=8, justify="right")
+      cor.fat           <- format(cor.fat, width=8, justify="left")
+      print(noquote(cor.fat))
+      cat("\n", "\n")
+      
+    }
+      
   }
 }
