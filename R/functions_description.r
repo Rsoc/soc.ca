@@ -518,7 +518,7 @@ csa.measures <- function(csa.object, correlations=TRUE, cosines=TRUE, cosine.ang
   # Formatted output
   if (identical(format, TRUE)){
     
-    cat("\n", format("Independence of Class Specific Multiple Correspondence Analysis:",   width=90, justify="centre"), "\n", "\n")
+    cat("\n", format("Measures for Class Specific Multiple Correspondence Analysis:",   width=90, justify="centre"), "\n", "\n")
     
 
     #############
