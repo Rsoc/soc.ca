@@ -6,8 +6,10 @@
 #' @param object is a soc.mca class object
 #' @param ca.plot is a plot made from a soc.mca object
 #' @param variable is a factor of the same length and in the same order as the active varibles used for the soc.mca object.
-#' @param label if TRUE the labels are included in the map
-#' @return a plot with a concentration ellipse containing 80% of the individuals for each modality
+#' @param ellipse.label if TRUE the labels are included in the map
+#' @param line.color defines the color of the ellipses
+#' @param label.size defines the size of the labels
+#' @return a plot with a concentration ellipse containing 80\% of the individuals for each modality
 #' @seealso \link{map.ind}, \link{map.ctr}, \link{soc.mca}
 #' @examples
 #' example(soc.mca)
@@ -15,8 +17,8 @@
 #' map.ellipse(result, map, active[,2])
 #' @export
 
-map.ellipse <- function(object, ca.plot, variable, label=TRUE){ 
-# De indledende øvelser
+map.ellipse <- function(object, ca.plot=map.ind(object), variable, ellipse.label=TRUE, line.color="black", label.size=4){ 
+
 variable    <- as.factor(variable) 
 dim         <- ca.plot$dimensions 
 id.coord    <- object$coord.ind[, dim]
@@ -46,15 +48,15 @@ ellipse.data      <- ellipse.data
 
 for (i in 1:nlevels(variable)){
 # Ellipserne
-ca.plot <- ca.plot + geom_path(data=ellipse.data[[i]]$el.coord, aes(x=x, y=y), colour="grey70", size=0.33)
+ca.plot <- ca.plot + geom_path(data=ellipse.data[[i]]$el.coord, aes(x=x, y=y), colour=line.color, size=0.33)
 # Akserne
-ca.plot <- ca.plot + geom_path(data=ellipse.data[[i]]$el.axis[[1]],aes(x=x, y=y), colour="grey70", size=0.33, linetype=2, na.rm=TRUE) # Det er muligt at vi kan tegne med aes istedet og undgå at det der rækkeshit
-ca.plot <- ca.plot + geom_path(data=ellipse.data[[i]]$el.axis[[2]],aes(x=x, y=y), colour="grey70", size=0.33, linetype=2, na.rm=TRUE)
+ca.plot <- ca.plot + geom_path(data=ellipse.data[[i]]$el.axis[[1]],aes(x=x, y=y), colour=line.color, size=0.33, linetype=2, na.rm=TRUE) # Det er muligt at vi kan tegne med aes istedet og undgå at det der rækkeshit
+ca.plot <- ca.plot + geom_path(data=ellipse.data[[i]]$el.axis[[2]],aes(x=x, y=y), colour=line.color, size=0.33, linetype=2, na.rm=TRUE)
 # Origo
-ca.plot <- ca.plot + geom_point(data=ellipse.data[[i]]$el.origo, aes(x=x, y=y), size=2, shape=21, fill="white", colour="grey70", na.rm=TRUE)
+ca.plot <- ca.plot + geom_point(data=ellipse.data[[i]]$el.origo, aes(x=x, y=y), size=3, shape=21, fill="white", colour=line.color, na.rm=TRUE)
 # Origo label
 #! Måske annotate ville være en god funktion??
-if(identical(label, TRUE)) ca.plot <- ca.plot + geom_text(aes(x=x, y=y, label=label), data=ellipse.data[[i]]$el.origo, size=3.3, hjust=-0.15, fontface="italic")
+if(identical(ellipse.label, TRUE)) ca.plot <- ca.plot + geom_text(aes(x=x, y=y, label=label), data=ellipse.data[[i]]$el.origo, size=label.size, hjust=-0.15, fontface="italic")
 }
 
 ca.plot
