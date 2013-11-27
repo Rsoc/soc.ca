@@ -13,6 +13,9 @@
 
   \item{dim}{is the dimensions included in the correlation
   matrixes}
+
+  \item{...}{further arguments are directed to
+  \link{csa.measures}}
 }
 \value{
   \item{results}{a list of \link{soc.csa} result objects}

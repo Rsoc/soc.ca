@@ -162,6 +162,7 @@ contribution <- function(object, dim=1, all=FALSE, indices=FALSE, mode="sort"){
   
   # Modalities
   if(identical(mode, "mod")){
+    if(length(dim) >1 ) stop("This mode does not support more than 1 dimension")
     ctr <- round(100*object$ctr.mod[,dim], digits=1)
     cor <- round(100*object$cor.mod[,dim], digits=1)
     coord <- round(object$coord.mod[,dim], digits=2)
@@ -186,10 +187,11 @@ contribution <- function(object, dim=1, all=FALSE, indices=FALSE, mode="sort"){
   }
   # Individuals  
   if(identical(mode, "ind")){
-    print(individuals(object, dim, indices=indices))
+    individuals(object, dim, indices=indices, all=FALSE)
   }
   # Side sorted modalities
   if(identical(mode, "sort")){
+    if(length(dim) >1 ) stop("Sort mode does not support more than 1 dimension")
     tab.dim(object, dim)
   }
   # Variables
@@ -216,26 +218,28 @@ individuals <- function(object, dim=1, all=FALSE, indices=FALSE){
     ctr     <- object$ctr.ind[,dim]
     av.ctr  <- as.vector(apply(as.matrix(ctr), 2, function(x) which(x >= mean(x, na.rm=TRUE))))
     if(is.list(av.ctr)==TRUE) av.ctr  <- unlist(av.ctr[dim], use.names=FALSE)
-    av.ctr     <- av.ctr[duplicated(av.ctr)==FALSE]    
+    av.ctr     <- unique(av.ctr)
     return(av.ctr)
   }else{
-    ctr <- round(100*object$ctr.ind[,dim], digits=1)
+    ctr <- object$ctr.ind[,dim]
+    ctr.round <- round(100*object$ctr.ind[,dim],2)
     # cor <- round(1000*object$cor.ind[,dim])
-    coord <- round(object$coord.ind[,dim], digits=2)
+    coord <- round(object$coord.ind[,dim],2)
     names <- object$names.ind
     if (identical(all, FALSE)==TRUE){
-      av.ctr<- individuals(object, dim=dim, indices=TRUE)    
-      header <- paste("The individuals contributing above average to dimension: ", dim, ".", sep="")
+      av.ctr <- individuals(object, dim=dim, indices=TRUE, all=FALSE)    
+      header <- paste("The individuals contributing above average to dimension: ", paste(dim, collapse=", "), ".", sep="")
     }
     if (identical(all, TRUE)==TRUE){
       av.ctr <- 1:length(ctr)
-      header <- paste("The contribution of all individuals to dimension: ", dim, ".", sep="")
+      header <- paste("The contribution of all individuals to dimension: ", paste(dim, collapse=", "), ".", sep="")
     }
     #out <- data.frame(ctr[av.ctr], cor[av.ctr], coord[av.ctr])
-    out <- data.frame(ctr[av.ctr], coord[av.ctr])
+    out <- data.frame(ctr.round, coord)[av.ctr,]
     rownames(out) <- names[av.ctr]
-    colnames(out) <- c("   Ctr.", "   Coord")
+    colnames(out) <- c(paste("   Ctr.", dim), paste("   Coord.", dim))
     out <- out[order(-out[,1]), ]
+    
     maxwidth <- max(nchar(names))+sum(nchar(colnames(out)))
     cat("\n", format(header, width=maxwidth, justify="centre"), "\n", "\n")
     print(out)
@@ -508,9 +512,9 @@ csa.measures <- function(csa.object, correlations=TRUE, cosines=TRUE, cosine.ang
   ####################################
   # Out.list
   out.list              <- list() 
+  if(cosines == TRUE)        out.list$cosines      <- cosine.mat
   if(cosine.angles == TRUE)  out.list$angles       <- angles
   if(correlations == TRUE)   out.list$cor          <- cor.mat
-  if(cosines == TRUE)        out.list$cosines      <- cosine.mat
   
   if (identical(format, FALSE)) return(out.list)
   

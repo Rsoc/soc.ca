@@ -637,6 +637,7 @@ create.quadrant <- function(object, dim=c(1,2), cut.min=-0.125, cut.max=0.125, c
 #' @param object  is a soc.mca class object created with \link{soc.mca}
 #' @param variable a factor with the same length and order as the active variables that created the soc.mca object
 #' @param dim is the dimensions included in the correlation matrixes
+#' @param ... further arguments are directed to \link{csa.measures}
 #' @return \item{results}{a list of \link{soc.csa} result objects}
 #' @return \item{cor}{a list of correlation matrixes}
 #' @return \item{cosines}{a list of matrixes with cosine values}
@@ -657,7 +658,7 @@ csa.all <- function(object, variable, dim=1:5, ...){
   
   names(result.list) <- lev.variable
   
-  measure.list <- lapply(result.list, csa.measures, format=FALSE, ...)
+  measure.list <- lapply(result.list, csa.measures, format=FALSE, dim=dim, ...)
   
   list(results=result.list, measures=measure.list)
 }

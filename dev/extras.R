@@ -58,27 +58,51 @@ plot(nif)
 
 #### Gridsvg
 
-#### Animint
-library(soc.ca)
-library(reshape)
-example(soc.mca)
-p  <- map.ind(result)
-
-interactive.points <- data.plot(result, "ind", dim=c(1,2))
-
-des.data <- data.frame(names=result$names.ind, result$ctr.ind[,1:5])
-
-des.data <- melt(des.data, id.vars="names")
-
-q <- ggplot() + geom_line(data=des.data, aes(x=value, y=variable, showSelected=names)) + coord_flip()
-
-q <- q + make_text(des.data, max(des.data$value) * 1.1, 3, "names")
-
-p <- p  + geom_point(data=interactive.points, aes(x=x, y=y, clickSelects=names))
-p <- p  + geom_point(data=interactive.points, aes(x=x, y=y, showSelected=names), color="red")
-
-gg2animint(list(plot1=p, plot2=q), out.dir = "test.p")
-
-
-
-
+# #### Animint
+# library(soc.ca)
+# library(reshape)
+# library(animint)
+# example(soc.mca)
+# p  <- map.ind(result)
+# 
+# interactive.points <- data.plot(result, "ind", dim=c(1,2))
+# 
+# # Cloud of modalities
+# 
+# mod.coord <- data.plot(result, "active", dim=c(1,2))
+# 
+# im        <- indicator(active)
+# im        <- im == 1
+# names.mod <- as.character(mod.coord$names)
+# out.mat   <- matrix(ncol=ncol(mod.coord))
+# colnames(out.mat) <- colnames(mod.coord)
+# id.name   <- as.character(interactive.points$names)
+# id.name.coord <- vector()
+# 
+# for ( i in 1:length(id.name)){
+# ind.mat        <- rbind(mod.coord[im[i,],])
+# id.name.coord  <- c(id.name.coord, rep(id.name[i], nrow(ind.mat)))
+# out.mat        <- rbind(out.mat, ind.mat)
+# }
+# mod.coord.all  <- cbind(out.mat[-1,], names=id.name.coord)
+# colnames(mod.coord.all) <- c("x", "y", "label", "freq", "variable", "point.color", "names")
+# 
+# 
+# des.data <- data.frame(names=result$names.ind, result$ctr.ind[,1:5])
+# 
+# des.data <- melt(des.data, id.vars="names")
+# 
+# q <- ggplot() + geom_line(data=des.data, aes(x=value, y=variable, showSelected=names)) + coord_flip()
+# q <- q + make_text(des.data, max(des.data$value) * 1.1, 3, "names")
+# 
+# p <- p  + geom_point(data=interactive.points, aes(x=x, y=y, clickSelects=names))
+# p <- p  + geom_point(data=interactive.points, aes(x=x, y=y, showSelected=names), color="red")
+# 
+# z <- ggplot() + geom_point(data=mod.coord.all, aes(x=x, y=y, showSelected=names))
+# z <- z + geom_text(data=mod.coord.all, aes(x=x, y=y, label=label, showSelected=names), vjust=0.5)
+# 
+# gg2animint(list(plot1=p, plot2=q, plot3=z), out.dir = "test.p")
+# 
+# 
+# 
+# 

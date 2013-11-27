@@ -570,8 +570,8 @@ add.count <- function(x, p=map.ind(object), label=TRUE, ...){
   if (identical(label, TRUE)) p <- p + geom_text(data=x, x=x$X, y=x$Y, label=x$label, vjust=0.2, ...)
 }
 
-#' Add a path along an ordered variable onto a map
-#'
+#' Map path along an ordered variable
+#' 
 #' Plot a path along an ordered variable. If the variable is numerical it is cut into groups by the \link{cut.min} function.
 #'  
 #' @param object is a soc.ca result object
@@ -585,10 +585,9 @@ add.count <- function(x, p=map.ind(object), label=TRUE, ...){
 #' @examples
 #' example(soc.mca)
 #' map <- map.ind(result, point.color=as.numeric(sup$Age)) + scale_color_continuous(high="red", low="yellow")
-#' add.path(result, sup$Age, map)
+#' map.path(result, sup$Age, map)
 
-# Find ud af om ... kan give forskellige argumenter til forskellige funktioner.
-add.path  <- function(object, x, map = map.ind(object, dim), dim=c(1,2), label=TRUE, min.size=length(x)/10, ...){
+map.path  <- function(object, x, map = map.ind(object, dim), dim=c(1,2), label=TRUE, min.size=length(x)/10, ...){
   
   x.c                        <- x
   if (is.numeric(x)) x.c     <- cut.min(x, min.size=min.size) 
