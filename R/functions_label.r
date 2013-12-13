@@ -1,25 +1,68 @@
 ## Labels 
 
-#' Add to label
-#'
+#' Add values to label
+#' 
 #' Adds values to the end of the label of each modality.
-#' @param  object is a soc.mca object
-#' @param  text is the prefix used to construct the added text.
-#' @return a soc.mca object with altered labels in names.mod and names.sup.
+#' @param  object is a soc.ca object
+#' @param  value the type of values added to the labels. "freq" adds
+#'   frequencies, "mass" adds mass values to the active modalities, "ctr" adds contribution values to the active modalities, "cor" adds correlation values.
+#'   value also accepts any vector with the length of the number of active
+#'   modalities.
+#' @param  prefix if "default" an appropriate prefix is used
+#' @param  suffix the suffix
+#' @param  dim the dimension from which values are retrieved
+#' @return a soc.ca object with altered labels in names.mod and names.sup
 #' @export
+#' @examples
+#' example(soc.mca)
+#' result.label  <- add.to.label(result)
+#' result.label$names.mod
+#' result.label  <- add.to.label(result, value="ctr", dim=2)
+#' result.label$names.mod
+#' result.label  <- add.to.label(result, value=result$variable, prefix=" - ", suffix="")
+#' result.label$names.mod
 
-add.to.label <- function(object, text=" (n:"){
+add.to.label <- function(object, value="freq", prefix="default", suffix=")", dim=1){
   
-  freq.mod  <- object$freq.mod
-  freq.sup  <- object$freq.sup
+  # Names
   names.mod <- object$names.mod
   names.sup <- object$names.sup
   
-  names.mod <- paste(names.mod, text, freq.mod, ")", sep="")
-  names.sup <- paste(names.sup, text, freq.sup, ")", sep="")
+  # Prefix
+  if (identical(prefix, "default") & identical(value, "freq")) prefix   <- " (n:"
+  if (identical(prefix, "default") & identical(value, "mass")) prefix   <- " (mass:"
+  if (identical(prefix, "default") & identical(value, "ctr")) prefix    <- " (ctr:"
+  if (identical(prefix, "default") & identical(value, "cor")) prefix    <- " (cor:"
+  if (identical(prefix, "default") & length(value) >1 )       prefix    <- " ("
   
-  object$names.mod <- names.mod
-  object$names.sup <- names.sup
+  # Values
+  if (identical(value, "freq")){
+  val.mod  <- object$freq.mod
+  val.sup  <- object$freq.sup
+  object$names.mod <- paste(names.mod, prefix, val.mod, suffix, sep="")
+  object$names.sup <- paste(names.sup, prefix, val.sup, suffix, sep="")
+  }
+  
+  if (identical(value, "ctr")){
+  val.mod  <- round(object$ctr.mod[dim,]*100,1)
+  object$names.mod <- paste(names.mod, prefix, val.mod, suffix, sep="")
+  }
+  
+  if (identical(value, "mass")){
+    val.mod  <- round(object$mass.mod[dim,]*100,1)
+    object$names.mod <- paste(names.mod, prefix, val.mod, suffix, sep="")
+  }
+  
+  if (identical(value, "cor")){
+    val.mod  <- round(object$cor.mod[,dim],2)
+    val.sup  <- round(object$cor.sup[,dim],2)
+    object$names.mod <- paste(names.mod, prefix, val.mod, suffix, sep="")
+    object$names.sup <- paste(names.sup, prefix, val.sup, suffix, sep="")
+  }
+  
+  if (length(value) > 1){
+    object$names.mod <- paste(names.mod, prefix, value, suffix, sep="")
+  }
   
   return(object)
 }
