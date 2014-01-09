@@ -109,7 +109,7 @@ NULL
 #' # Export and assign label
 #' export.label(result)
 #' 
-#' result      <- assign.label(result, file = "https://raw.github.com/Rsoc/soc.ca/master/data/wiki_labels.csv")
+#' result      <- assign.label(result, file = "https://raw.github.com/Rsoc/soc.ca/master/extra/director_labels.csv")
 #' 
 #' 
 #' 
