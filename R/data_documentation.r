@@ -37,24 +37,25 @@ NULL
 #'  from 82 corporations were selected according to their position as CEO in 
 #'  December 2007. 18 executives are included on other criteria, taking into 
 #'  account the magnitude of the corporations and issues regarding ownership and
-#'  control, resulting in a final population of 100 CEOs. The 82 corporations
-#'  have formal ownership and management located in Denmark and were selected
+#'  control, resulting in a final population of 100 CEOs. The 82 corporations 
+#'  have formal ownership and management located in Denmark and were selected 
 #'  through either financial capital, measured as having a turnover of over five
 #'  billion DKK (650 million Eur.), or organizational capital, defined as having
-#'  at least 5000 employees; 34 corporations were included on both criteria, 45
-#'  on financial capital and three on organizational capital alone. To avoid
-#'  including investors, rather than executives, a minimum of 500 employees was
-#'  also required, excluding 12 firms. Companies acting only as subsidiaries
-#'  were also excluded. Data is for public use  and no author permission is needed, but we
-#'  would love to hear from you if you find the data useful.
-#'  The following example is based on the analysis from the article: "A Very Economic Elite: The Case of the Danish Top CEOs".
+#'  at least 5000 employees; 34 corporations were included on both criteria, 45 
+#'  on financial capital and three on organizational capital alone. To avoid 
+#'  including investors, rather than executives, a minimum of 500 employees was 
+#'  also required, excluding 12 firms. Companies acting only as subsidiaries 
+#'  were also excluded. Data is for public use  and no author permission is
+#'  needed, but we would love to hear from you if you find the data useful. The
+#'  following example is based on the analysis from the article: "A Very
+#'  Economic Elite: The Case of the Danish Top CEOs".
 #'  
 #'@name directors
 #'@docType data
 #'@author Christoph Ellersgaard
 #'@author Anton Grau Larsen
 #'@references Ellersgaard, Christoph, Anton Grau Larsen, og Martin D. Munk. 
-#'  2012. "A Very Economic Elite: The Case of the Danish Top CEOs". Sociology. 
+#'  2012. "A Very Economic Elite: The Case of the Danish Top CEOs". Sociology.
 #'@references Ellersgaard, Christoph Houman, og Anton Grau Larsen. 2010. 
 #'  "Firmaets Maend". Master Thesis, Copenhagen: University of Copenhagen.
 #'@references Ellersgaard, Christoph Houman, og Anton Grau Larsen. 2011. 
@@ -109,7 +110,8 @@ NULL
 #' # Export and assign label
 #' export.label(result)
 #' 
-#' result      <- assign.label(result, file = "https://raw.github.com/Rsoc/soc.ca/master/extra/director_labels.csv")
+#' result      <- assign.label(result,
+#'  file = "https://raw.github.com/Rsoc/soc.ca/master/extra/director_labels.csv")
 #' 
 #' 
 #' 
@@ -134,9 +136,11 @@ NULL
 #' map.ind(result)
 #' map.ind(result, dim = c(2,1), point.label = TRUE)
 #' map.ind(result, dim = c(2,1), point.size = 3, point.shape = 2)
-#' map.ind(result, dim = c(2,1), map.title = "The top 100 Danish CEO's", point.variable = quad, point.colour = quad)
+#' map.ind(result, dim = c(2,1), map.title = "The top 100 Danish CEO's",
+#'  point.variable = quad, point.colour = quad)
 #' # Map of the individuals colored by contribution
-#' map.ind(result, point.colour = result$ctr.ind[,1], point.shape = 18) + scale_color_continuous(low = "white", high = "red")
+#' map.ind(result, point.colour = result$ctr.ind[,1],
+#'  point.shape = 18) + scale_color_continuous(low = "white", high = "red")
 #' 
 #' 
 #' # Map of contributing modalities
@@ -237,15 +241,21 @@ NULL
 #' contribution(result.mca, 1:3, mode="variable")
 #' 
 #' map.active(result.mca, point.fill=result.mca$variable)
-#' map.active(result.mca, map.title="Map of active modalities with size of contribution to 1. dimension", point.size=result.mca$ctr.mod[,1])
-#' map.active(result.mca, map.title="Map of active modalities with size of contribution to 2. dimension", point.size=result.mca$ctr.mod[,2])
+#' map.active(result.mca,
+#'  map.title="Map of active modalities with size of contribution to 1. dimension",
+#'  point.size=result.mca$ctr.mod[,1])
+#' map.active(result.mca, 
+#'  map.title="Map of active modalities with size of contribution to 2. dimension",
+#'  point.size=result.mca$ctr.mod[,2])
 #' 
 #' map.ind(result.mca)
-#' map.ind(result.mca, dim=c(1,2), point.color=result.mca$ctr.ind[,1], point.shape=18) + scale_color_continuous(low="white", high="black")
+#' map.ind(result.mca, dim=c(1,2), point.color=result.mca$ctr.ind[,1],
+#'  point.shape=18) + scale_color_continuous(low="white", high="black")
 #' 
 #' # Plot of all dublets
 #' map.ind(result.mca, map.title="Map of all unique individuals", point.color=duplicated(active))
-#' map.ind(result.mca, map.title="Map with individuals colored by the TV variable", point.color=active$TV)
+#' map.ind(result.mca, map.title="Map with individuals colored by the TV variable",
+#'  point.color=active$TV)
 #' 
 #' # Ellipse 
 #' map        <- map.ind(result.mca)

@@ -164,7 +164,8 @@ map.ctr         <- function(object, dim = c(1,2), ctr.dim = 1,
 #' example(soc.mca)
 #' map.active(result)
 #' map.active(result, dim = c(2,1))
-#' map.active(result, point.size = result$ctr.mod[,1], map.title = "All active modalities with size according to contribution")
+#' map.active(result, point.size = result$ctr.mod[,1],
+#'  map.title = "All active modalities with size according to contribution")
 #' @export
 
 map.active         <- function(object, dim = c(1,2),
@@ -221,7 +222,8 @@ map.active         <- function(object, dim = c(1,2),
 #' example(soc.mca)
 #' map.sup(result)
 #' map.sup(result, dim = c(2,1))
-#' map.sup(result, point.size = result$coord.sup[,4], map.title = "All supplementary modalities with size according to coordinate on the 4th dimension")
+#' map.sup(result, point.size = result$coord.sup[,4],
+#'  map.title = "All supplementary modalities with size according to coordinate on the 4th dimension")
 #' @export
 
 map.sup         <- function(object, dim = c(1,2),
@@ -273,10 +275,14 @@ map.sup         <- function(object, dim = c(1,2),
 #' @examples
 #' example(soc.mca)
 #' map.ind(result)
-#' map.ind(result, map.title = "Each individual is given its shape according to a value in a factor", point.shape = active[,1], legend = TRUE)
-#' map.ind(result, map.title = "The contribution of the individuals with a new color scale defined by ggplot2", point.color = result$ctr.ind[,1], point.shape = 18) + scale_color_continuous(low = "white", high = "red")
+#' map.ind(result, map.title = "Each individual is given its shape according to a value in a factor",
+#'  point.shape = active[,1], legend = TRUE)
+#'  map <- map.ind(result, map.title = "The contribution of the individuals with new scale",
+#'  point.color = result$ctr.ind[,1], point.shape = 18) 
+#' map + scale_color_continuous(low = "white", high = "red")
 #' quad   <- create.quadrant(result)
-#' map.ind(result, map.title = "Individuals in the space given shape and color by their quadrant", point.shape = quad, point.color = quad)
+#' map.ind(result, map.title = "Individuals in the space given shape and color by their quadrant",
+#'  point.shape = quad, point.color = quad)
 #' @export
 
 map.ind         <- function(object, dim = c(1,2),
@@ -343,8 +349,10 @@ map.ind         <- function(object, dim = c(1,2),
 #' map.select(result, map.title = "Map of the first ten modalities",list.mod = 1:10)
 #' select   <- active[,3]
 #' select   <- select == levels(select)[2]
-#' map.select(result, map.title = "Map of all individuals sharing a particular value", list.ind = select, point.size = 3)
-#' map.select(result, map.title = "Map of both select individuals and modalities", list.ind = select, list.mod = 1:10)
+#' map.select(result, map.title = "Map of all individuals sharing a particular value",
+#'  list.ind = select, point.size = 3)
+#' map.select(result, map.title = "Map of both select individuals and modalities",
+#'  list.ind = select, list.mod = 1:10)
 #' @export
 
 map.select         <- function(object, dim = c(1,2), ctr.dim = 1, list.mod = NULL, list.sup = NULL, list.ind = NULL,
@@ -414,7 +422,8 @@ map.select         <- function(object, dim = c(1,2), ctr.dim = 1, list.mod = NUL
 #' example(soc.mca)
 #' original.map    <- map.sup(result)
 #' map.add(result, original.map, plot.type = "ctr", ctr.dim = 2)
-#' map.add(result, map.ind(result), plot.type = "select",list.ind = 1:50, point.color = "red", label = FALSE, point.size = result$ctr.ind[1:50, 1]*2000)
+#' map.add(result, map.ind(result), plot.type = "select",list.ind = 1:50,
+#'  point.color = "red", label = FALSE, point.size = result$ctr.ind[1:50, 1]*2000)
 #' @export
 
 map.add         <- function(object, ca.map, plot.type = NULL, ctr.dim = 1, list.mod = NULL, list.sup = NULL, list.ind = NULL,
@@ -721,13 +730,14 @@ data.plot   <- function(object, plot.type, dim, ctr.dim = NULL, modal.list = NUL
 
 
 #' Add a new layer of points on top of an existing plot with output from the
-#' cut.min function
-#' @param x a matrix created by the cut.min function
+#' min.cut function
+#' @param x a matrix created by the min.cut function
 #' @param p is a ggplot object, preferably from one of the mapping functions in
 #'   soc.ca
 #' @param label if TRUE the labels of points will be shown
+#' @param ... further arguments are passed on to geom_path, geom_point and geom_text
 
-add.count <- function(x, p = map.ind(object), label = TRUE, ...){
+add.count <- function(x, p, label = TRUE, ...){
   p <- p + geom_point(data = x, x = x$X, y = x$Y, ...) + geom_path(data = x, x = x$X, y = x$Y, ...)
   if (identical(label, TRUE)) p <- p + geom_text(data = x, x = x$X, y = x$Y, label = x$label, vjust = 0.2, ...)
 }
@@ -735,7 +745,7 @@ add.count <- function(x, p = map.ind(object), label = TRUE, ...){
 #' Map path along an ordered variable
 #' 
 #' Plot a path along an ordered variable. If the variable is numerical it is cut
-#' into groups by the \link{cut.min} function.
+#' into groups by the \link{min.cut} function.
 #' 
 #' @param object is a soc.ca result object
 #' @param x is an ordered vector, either numerical or factor
@@ -746,19 +756,20 @@ add.count <- function(x, p = map.ind(object), label = TRUE, ...){
 #'   vertical axis.
 #' @param label if TRUE the label of the points are shown
 #' @param min.size is the minimum size given to the groups of a numerical
-#'   variable, see \link{cut.min}.
+#'   variable, see \link{min.cut}.
 #' @param ... further arguments are passed onto \link{geom_path}, \link{geom_point} and
 #'   \link{geom_text} from the ggplot2 package
 #' @export
 #' @examples
 #' example(soc.mca)
-#' map <- map.ind(result, point.color = as.numeric(sup$Age)) + scale_color_continuous(high = "red", low = "yellow")
+#' map <- map.ind(result, point.color = as.numeric(sup$Age))
+#' map <- map + scale_color_continuous(high = "red", low = "yellow")
 #' map.path(result, sup$Age, map)
 
 map.path  <- function(object, x, map = map.ind(object, dim), dim = c(1,2), label = TRUE, min.size = length(x)/10, ...){
   
   x.c                        <- x
-  if (is.numeric(x)) x.c     <- cut.min(x, min.size = min.size) 
+  if (is.numeric(x)) x.c     <- min.cut(x, min.size = min.size) 
   
   x.av    <- average.coord(object = object, x = x.c, dim = dim)  
   map.p   <- add.count(x.av, map, label, ...) 

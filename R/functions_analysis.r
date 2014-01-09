@@ -42,11 +42,10 @@
 #' @author Stefan Bastholm Andrade, University of Copenhagen
 #' @author Christoph Ellersgaard, University of Copenhagen
 #' @seealso \link{soc.csa}, \link{contribution}
-#' @examples # This example can be found in further detail at our wiki on github - https://github.com/Rsoc/soc.mca/wiki/How-to-use-soc.mca
-#'
-#'# Loads the "taste" dataset included in this package
-#'data(taste)
-#'attach(taste)
+#' @examples
+#' # Loads the "taste" dataset included in this package
+#' data(taste)
+#' attach(taste)
 #' # Create a data frame of factors containing all the active variables 
 #' taste          <- taste[which(taste$Isup =='Active'),]
 #'

@@ -3,7 +3,7 @@
 #' Print soc.ca objects
 #'
 #' Prints commonly used measures used in the analysis of multiple correspondence analysis
-#' @param object is a soc.ca class object
+#' @param x is a soc.ca class object
 #' @return Active dimensions is the number of dimensions remaining after the reduction of the dimensionality of the analysis.
 #' @return Active modalities is the number of modalities that are not set as passive.
 #' @return Share of passive mass is the percentage of the total mass that is represented by the passive modalities.
@@ -15,48 +15,48 @@
 #' print(result)
 #' @export
 
-print.soc.mca  <- function(object){
+print.soc.mca  <- function(x){
   
   # Help functions
-  scree       <- function(object, dim = 6){
+  scree       <- function(x, dim = 6){
     set.dim   <- dim
-    dim       <- ifelse((nrow(object$adj.inertia)<dim)==TRUE, nrow(object$adj.inertia), dim)
-    adj       <- round(object$adj.inertia[1:dim,4], digits = 1)
+    dim       <- ifelse((nrow(x$adj.inertia)<dim)==TRUE, nrow(x$adj.inertia), dim)
+    adj       <- round(x$adj.inertia[1:dim,4], digits = 1)
     stars     <- round(round(adj)/2)
     starscree <- vector("list", set.dim)
     for (i in 1:length(stars)){
       starscree[[i]] <- noquote(rep("*", stars[i]))
     }
     return(starscree)
-    # object is a soc.ca class object
+    # x is a soc.ca class object
     # Dim is the number of dimensions included in the plot
   }
     
-  Nmodal       <- object$n.mod
-  Nsup         <- sum(object$freq.sup != 0)
-  Nid          <- object$n.ind
-  Share.of.var <- round((object$modal[,3]-1)/ (length(object$names.passive)+Nmodal- nrow(object$modal)),2)*100
-  #Vnames   	   <- paste(rownames(object$modal), " (",object$modal[,3], " - ", format(Share.of.var),")", sep = "")
-  Vnames        <- paste(rownames(object$modal), " [",object$modal[,3], " - ", format(Share.of.var),"%]", sep = "")
+  Nmodal       <- x$n.mod
+  Nsup         <- sum(x$freq.sup != 0)
+  Nid          <- x$n.ind
+  Share.of.var <- round((x$modal[,3]-1)/ (length(x$names.passive)+Nmodal- nrow(x$modal)),2)*100
+  #Vnames   	   <- paste(rownames(x$modal), " (",x$modal[,3], " - ", format(Share.of.var),")", sep = "")
+  Vnames        <- paste(rownames(x$modal), " [",x$modal[,3], " - ", format(Share.of.var),"%]", sep = "")
   Vnames       <- Vnames[order(Share.of.var, decreasing = TRUE)]
-  Submass 	   <- 1-round(sum(object$mass.mod), digits = 2) 
-  act.dim 	   <- nrow(object$adj.inertia)
-  dim80 		   <- which.min(object$adj.inertia[,5] < 80)
+  Submass 	   <- 1-round(sum(x$mass.mod), digits = 2) 
+  act.dim 	   <- nrow(x$adj.inertia)
+  dim80 		   <- which.min(x$adj.inertia[,5] < 80)
   scree.dim	   <- 7
-  N.pas.mod    <- length(object$names.passive)
-  stars 		   <- scree(object, scree.dim)
+  N.pas.mod    <- length(x$names.passive)
+  stars 		   <- scree(x, scree.dim)
   adj.dim      <- 1:scree.dim
   
-  dim.a        <- ifelse((scree.dim<nrow(object$adj.inertia)), scree.dim, nrow(object$adj.inertia))
+  dim.a        <- ifelse((scree.dim<nrow(x$adj.inertia)), scree.dim, nrow(x$adj.inertia))
   adj          <- vector(mode = "numeric", length = scree.dim) # Måske skal den ikke smide 0 som output men noget bedre, når der ikke er flere dim end 6
-  adj[1:dim.a] <- object$adj.inertia[1:dim.a,4]
+  adj[1:dim.a] <- x$adj.inertia[1:dim.a,4]
   adj	         <- paste(formatC(adj,format = "f",digits = 1), sep = "", collide = "%")
   
   ## Output
   # Soc.csa title
-  if (inherits(object, "soc.csa")==TRUE) cat(format("Class Specific Multiple Correspondence Analysis:", 	width = 90, justify = "centre"),"\n", "\n")
+  if (inherits(x, "soc.csa")==TRUE) cat(format("Class Specific Multiple Correspondence Analysis:", 	width = 90, justify = "centre"),"\n", "\n")
   # Soc.mca title
-  if (inherits(object, "soc.csa")==FALSE) cat(format("Specific Multiple Correspondence Analysis:",   width = 90, justify = "centre"),"\n", "\n")
+  if (inherits(x, "soc.csa")==FALSE) cat(format("Specific Multiple Correspondence Analysis:",   width = 90, justify = "centre"),"\n", "\n")
   cat(format("Statistics", 					width = 50, justify = "centre"), format("Scree plot", width = 40, justify = "centre"),"\n",
                                         
       format("	Active dimensions: ", 			width = 40,), format(act.dim, 	width = 10, justify = "right"),

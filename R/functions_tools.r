@@ -13,12 +13,12 @@
 #' @export
 #' @examples
 #' a <- 1:1000
-#' table(cut.min(a))
+#' table(min.cut(a))
 #' b <- c(rep(0, 50), 1:500)
-#' table(cut.min(b, min.size = 20))
+#' table(min.cut(b, min.size = 20))
 #' 
 
-cut.min <- function(x, min.size = length(x)/10){
+min.cut <- function(x, min.size = length(x)/10){
   
   x.na <- x[is.na(x) == FALSE]
   p.x <- cumsum(prop.table(table(x.na)))
