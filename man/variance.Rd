@@ -5,7 +5,7 @@
   variance(object, dim = NULL)
 }
 \arguments{
-  \item{object}{is a soc.mca object}
+  \item{object}{is a soc.ca object}
 
   \item{dim}{is the included dimensions, if set to NULL,
   then only the dimensions explaining approx. 90% of the
@@ -22,7 +22,7 @@
 \examples{
 example(soc.mca)
 variance(result)
-variance(result, dim=1:4)
+variance(result, dim = 1:4)
 }
 \seealso{
   \link{soc.mca}, \link{print.soc.mca}

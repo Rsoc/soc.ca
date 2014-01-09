@@ -9,10 +9,11 @@
   \item{object}{is a soc.ca object}
 
   \item{value}{the type of values added to the labels.
-  "freq" adds frequencies, "ctr" adds contribution values,
-  "cor" adds correlation values.  value also accepts any
-  vector with the length of the number of active
-  modalities.}
+  "freq" adds frequencies, "mass" adds mass values to the
+  active modalities, "ctr" adds contribution values to the
+  active modalities, "cor" adds correlation values.  value
+  also accepts any vector with the length of the number of
+  active modalities.}
 
   \item{prefix}{if "default" an appropriate prefix is used}
 
@@ -31,9 +32,9 @@
 example(soc.mca)
 result.label  <- add.to.label(result)
 result.label$names.mod
-result.label  <- add.to.label(result, value="ctr", dim=2)
+result.label  <- add.to.label(result, value = "ctr", dim = 2)
 result.label$names.mod
-result.label  <- add.to.label(result, value=result$variable, prefix=" - ", suffix="")
+result.label  <- add.to.label(result, value = result$variable, prefix = " - ", suffix = "")
 result.label$names.mod
 }
 

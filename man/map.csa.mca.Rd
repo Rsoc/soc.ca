@@ -6,17 +6,17 @@
     smooth = TRUE, method = "auto")
 }
 \arguments{
-  \item{csa.object}{is a result object created by the
+  \item{csa.object}{a result object created by the
   \link{soc.csa} function}
 
-  \item{mca.dim}{is the dimension from the original MCA}
+  \item{mca.dim}{the dimension from the original MCA}
 
-  \item{csa.dim}{is the dimension from the CSA}
+  \item{csa.dim}{the dimension from the CSA}
 
   \item{smooth}{if TRUE a line is added to the plot}
 
-  \item{method}{is the method used by ggplot to set the
-  line see \link{geom_smooth}}
+  \item{method}{the method used by ggplot to set the line
+  see \link{geom_smooth}}
 }
 \description{
   Map the coordinates of the individuals in a CSA and its
@@ -25,6 +25,10 @@
 \examples{
 example(soc.csa)
 csa.res <- soc.csa(result, class.age)
-map.csa.mca(csa.res, mca.dim=2, csa.dim=1)
+map.csa.mca(csa.res, mca.dim = 2, csa.dim = 1)
+}
+\seealso{
+  \link{soc.csa}, \link{map.csa.all},
+  link{map.csa.mca.array}
 }
 

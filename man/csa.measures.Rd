@@ -20,8 +20,8 @@
 
   \item{dim}{is the dimensions included}
 
-  \item{if}{TRUE results are formatted, rounded and printed
-  for screen reading, if FALSE the raw numbers are
+  \item{format}{if TRUE results are formatted, rounded and
+  printed for screen reading, if FALSE the raw numbers are
   returned}
 
   \item{...}{furhter arguments are send to the \link{cor}
@@ -38,6 +38,6 @@
 \examples{
 example(soc.csa)
 csa.measures(res.csa)
-csa.measures(res.csa, correlations = FALSE, cosine.angles = FALSE, dim=1:10, format = FALSE)
+csa.measures(res.csa, correlations = FALSE, cosine.angles = FALSE, dim = 1:10, format = FALSE)
 }
 

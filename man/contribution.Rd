@@ -1,46 +1,54 @@
 \name{contribution}
 \alias{contribution}
-\title{The modalities or individuals with contributions above average}
+\title{Summaries of contribution values}
 \usage{
   contribution(object, dim = 1, all = FALSE,
     indices = FALSE, mode = "sort")
 }
 \arguments{
-  \item{object}{is a soc.mca object}
+  \item{object}{a \link{soc.ca} object}
 
-  \item{dim}{is the included dimensions}
+  \item{dim}{the included dimensions}
 
   \item{all}{If TRUE returns all modalities instead of just
   those that contribute above average}
 
   \item{indices}{If TRUE; returns a vector with the row
-  indices of the modalities}
+  indices of the modalities or individuals}
 
   \item{mode}{indicates which form of output. Possible
-  values: "sort", "mod", "ind", "variable". If the mode is
-  "variable", dim can be a sequence of dimensions:
-  \code{1:5}}
+  values: \code{"sort"}, \code{"mod"}, \code{"ind"},
+  \code{"variable"}. If the mode is \code{"variable"},
+  \code{dim} can be a sequence of dimensions: \code{1:5}}
 }
 \value{
-  Ctr is the contribution in percentage
+  Each mode prints different results:
 
-  Cor is the correlation with the dimension
+  \item{"mod"}{Ranks all modalities according to their
+  contribution} \item{"sort"}{Ranks all modalities
+  according to their contribution and and then sorts them
+  according to their coordinates} \item{"ind"}{Ranks all
+  individuals according to their contribution}
+  \item{"variable"}{Sorts all modalities according to their
+  variable and sums the contributions per variable}
 
-  Coord is the principal coordinate
-
-  Contribution values for individuals are in permille.
+  The values reported: \item{Ctr}{Contribution values in
+  percentage. Contribution values for individuals are
+  reported in permille} \item{Coord}{Principal coordinates}
+  \item{Cor}{The correlation with the dimension}
 }
 \description{
-  Returns the modalities with above average contribution to
-  the selected dimension
+  Different forms of contribution summaries for
+  \link{soc.ca} objects. Results are presented according to
+  the specified \code{mode}
 }
 \examples{
 example(soc.mca)
 contribution(result)
 contribution(result, 2)
-contribution(result, dim=3, all=TRUE)
-contribution(result, indices=TRUE)
-contribution(result, 1:2, mode="variable")
+contribution(result, dim = 3, all = TRUE)
+contribution(result, indices = TRUE)
+contribution(result, 1:2, mode = "variable")
 }
 \seealso{
   \link{map.ctr}

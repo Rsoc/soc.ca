@@ -1,14 +1,14 @@
 \name{average.coord}
 \alias{average.coord}
-\title{Find the average.coordinate for each category in a variable on two dimensions}
+\title{Average coordinates}
 \usage{
   average.coord(object, x, dim = c(1, 2))
 }
 \arguments{
   \item{object}{is soc.ca result object}
 
-  \item{x}{is a variable of the same length as the active
-  variables used to construct the soc.ca object}
+  \item{x}{is a variable of the same length and order as
+  the active variables used to construct the soc.ca object}
 
   \item{dim}{is the two dimensions used}
 }
@@ -17,11 +17,11 @@
   given variable
 }
 \description{
-  Find the average.coordinate for each category in a
-  variable on two dimensions
+  Find the average coordinates for each category in a
+  variable on two dimensions.
 }
 \examples{
 example(soc.mca)
-average.coord(result, taste$Income)
+average.coord(result, sup$Income)
 }
 

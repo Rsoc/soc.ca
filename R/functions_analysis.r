@@ -19,12 +19,12 @@
 #'  \item{eigen}{Eigenvectors}
 #'  \item{total.inertia}{The sum of inertia}
 #'  \item{adj.inertia}{A matrix with all active dimensions, adjusted and unadjusted inertias. See \link{variance}}
-#'  \item{freq.mod}{Frequencies for the active modalities. See also \link{add.to.label}}
-#'  \item{freq.sup}{Frequencies for the supplementary modalities. See also \link{add.to.label}}
+#'  \item{freq.mod}{Frequencies for the active modalities. See \link{add.to.label}}
+#'  \item{freq.sup}{Frequencies for the supplementary modalities. See \link{add.to.label}}
 #'  \item{ctr.mod}{A matrix with the contribution values of the active modalities per dimension. See \link{contribution}}
 #'  \item{ctr.ind}{A matrix with the contribution values of the individuals per dimension.}
 #'  \item{cor.mod}{The correlation or quality of each modality per dimension.}
-#'  \item{cor.ind}{The correlation or quality of each individual per dimension. # This may be defunct!}
+#'  \item{cor.ind}{The correlation or quality of each individual per dimension.}
 #'  \item{mass.mod}{The mass of each modality}
 #'  \item{coord.mod}{A matrix with the principal coordinates of each active modality per dimension.}
 #'  \item{coord.ind}{A matrix with the principal coordinates of each individual per dimension.}
@@ -63,11 +63,11 @@
 #' 
 #' # A specific multiple correspondence analysis
 #' # options defines what words or phrases that are looked for in the labels of the active modalities.
-#' options(passive= c("Film: CostumeDrama", "TV: Tv-Sport"))
+#' options(passive = c("Film: CostumeDrama", "TV: Tv-Sport"))
 #' soc.mca(active, sup)
-#' options(passive=NULL)
+#' options(passive = NULL)
 
-soc.mca <- function(active, sup=NULL, identifier=NULL, passive=getOption("passive", default="Missing")){
+soc.mca <- function(active, sup = NULL, identifier = NULL, passive = getOption("passive", default = "Missing")){
   
   active  <- data.frame(lapply(active, factor))               # Turn active variables into factor ## Slet det her og sæt en advarsel ind i stedet
   sup     <- data.frame(lapply(sup, factor))                  # Turn sup variables into factor    ## Slet det her og sæt en advarsel ind i stedet
@@ -76,7 +76,7 @@ soc.mca <- function(active, sup=NULL, identifier=NULL, passive=getOption("passiv
   sup.n   <- sum(unlist(lapply(as.data.frame(sup), nlevels))) # Number of supplementary modalities
   
   if ((nrow(sup)==0)==TRUE){                                  
-    sup             <- matrix(0, nrow=nrow(active), ncol=2)
+    sup             <- matrix(0, nrow = nrow(active), ncol = 2)
     sup[,1:2]       <- cbind(rep(0, nrow(active)), rep(0, nrow(active)))
     colnames(sup)   <- c("No supplementary points defined 1", "No supplementary points defined 2")
     ind.sup         <- sup
@@ -88,7 +88,7 @@ soc.mca <- function(active, sup=NULL, identifier=NULL, passive=getOption("passiv
   ind.act <- indicator(active)
       
   # Finding the subset
-  sub         <- grepl(paste(passive, collapse="|"), colnames(ind.act))
+  sub         <- grepl(paste(passive, collapse = "|"), colnames(ind.act))
   set         <- 1:ncol(ind.act)
   subset      <- set[!sub]
   
@@ -96,13 +96,13 @@ soc.mca <- function(active, sup=NULL, identifier=NULL, passive=getOption("passiv
   Qm    <- Q
   for (i in seq(Q)){
     lev <- levels(active[,i])
-    pasQ <- grepl(paste(passive, collapse="|"), lev)
+    pasQ <- grepl(paste(passive, collapse = "|"), lev)
     if (any(pasQ==TRUE)==TRUE){
       Qm <- Qm - 1
     }
   }
   
-  result      <- subset.ca.indicator(ind.act, ind.sup, subset, Q=Q , Qm=Qm)
+  result      <- subset.ca.indicator(ind.act, ind.sup, subset, Q = Q , Qm = Qm)
   
   if (identical(identifier, NULL)==TRUE){
     identifier <- 1:nrow(active)
@@ -126,7 +126,7 @@ soc.mca <- function(active, sup=NULL, identifier=NULL, passive=getOption("passiv
   }
   ml          <- ml[!sub]
   mm          <- as.matrix(cbind(ml, 1:length(ml)))
-  md          <- matrix(, nrow=ncol(active), ncol=3)
+  md          <- matrix(, nrow = ncol(active), ncol = 3)
   rownames(md) <- varnames
   colnames(md) <- c("Start", "End", "Modalities")
   md          <- as.data.frame(md)
@@ -268,15 +268,15 @@ subset.ca.indicator <- function(indicator.act, indicator.sup, subset, Q, Qm){
   R1.eigen.val  <- eigen[1:R1.dim]
   
   # Second reduction of dimensionality
-  Mean.r.eigen  <- mean(R1.eigen.val, na.rm=TRUE)
-  R2.eigen.val  <- eigen[eigen>=Mean.r.eigen]
+  Mean.r.eigen  <- mean(R1.eigen.val, na.rm = TRUE)
+  R2.eigen.val  <- eigen[eigen >= Mean.r.eigen]
   R2.dim        <- which(R2.eigen.val >= Mean.r.eigen)
   
   # Explained variance
   unadj.var     <- 100*(eigen[1:R1.dim])/sum(eigen[1:R1.dim]) # Unadjusted rates of variance
   sum.adj.var.mod <- (eigen[R2.dim]-Mean.r.eigen)^2
   sum.adj.var   <- sum(sum.adj.var.mod)
-  adj.var       <- round(((sum.adj.var.mod/sum.adj.var)*100), digits=1) # The adjusted rates of variance
+  adj.var       <- round(((sum.adj.var.mod/sum.adj.var)*100), digits = 1) # The adjusted rates of variance
   cumpercent    <- cumsum(adj.var)
   adj.inertia   <- cbind(R2.dim, round(eigen[R2.dim], 3), round(unadj.var[R2.dim], 1), adj.var ,cumpercent) # De Rouanet adjustede inertier - skal nok rykkes ned.
   colnames(adj.inertia) <- c("Dim", "Eigen", "Var" ,"Adj.Var", "Cum%")
@@ -285,14 +285,22 @@ subset.ca.indicator <- function(indicator.act, indicator.sup, subset, Q, Qm){
   freq.sup <- colSums(Z.sup)
   
   # Output
-  ca.output <- list(nd = max(R2.dim), n.ind = nrow(Z.act), n.mod = length(subset),
-                    eigen = eigen[R2.dim], total.inertia = sum(eigen[R2.dim]),
-                    adj.inertia=adj.inertia,
-                    freq.mod = freq.mod, freq.sup = freq.sup,
-                    ctr.mod = ctr.mod[, R2.dim], ctr.ind = ctr.ind[, R2.dim],
-                    cor.mod = cor.mod[, R2.dim], cor.ind = cor.ind[, R2.dim],
+  ca.output <- list(nd = max(R2.dim),
+                    n.ind = nrow(Z.act),
+                    n.mod = length(subset),
+                    eigen = eigen[R2.dim],
+                    total.inertia = sum(eigen[R2.dim]),
+                    adj.inertia = adj.inertia,
+                    freq.mod = freq.mod,
+                    freq.sup = freq.sup,
+                    ctr.mod = ctr.mod[, R2.dim],
+                    ctr.ind = ctr.ind[, R2.dim],
+                    cor.mod = cor.mod[, R2.dim],
+                    cor.ind = cor.ind[, R2.dim],
                     mass.mod = cm, 
-                    coord.mod = pc.mod[, R2.dim], coord.ind = pc.ind[, R2.dim], coord.sup = pc.sup[, R2.dim]
+                    coord.mod = pc.mod[, R2.dim],
+                    coord.ind = pc.ind[, R2.dim],
+                    coord.sup = pc.sup[, R2.dim]
                     )
   # Cleanup
   names(ca.output$mass.mod)         <- NULL
@@ -326,7 +334,7 @@ subset.ca.indicator <- function(indicator.act, indicator.sup, subset, Q, Qm){
 #' @export
 
 
-indicator <- function(x, id=NULL, ps=": "){
+indicator <- function(x, id = NULL, ps = ": "){
 obj     <- x
 #obj     <- data.frame(lapply(data.frame(obj), as.factor)) # Gør hele analyse objektet til factor - kan sættes ind et andet sted.
 I       <- nrow(obj)                                      # Number of individuals
@@ -354,35 +362,36 @@ return(Z)
 
 #' Class Specific Multiple Correspondence Analysis
 #'
-#' \code{soc.csa} performs a class specific multiple correspondence analysis on a data.frame of factors, where cases are rows and columns are variabels. Most descriptive and analytical functions that work for \link{soc.mca}, also work for \code{soc.csa}
-#' @param object  is a soc.mca class object created with \link{soc.mca}
+#' \code{soc.csa} performs a class specific multiple correspondence analysis on a data.frame of factors, where cases are rows and columns are variables. Most descriptive and analytical functions that work for \link{soc.mca}, also work for \code{soc.csa}
+#' @param object  is a soc.ca class object created with \link{soc.mca}
 #' @param class.indicator the row indices of the class specific individuals
 #' @param sup          Defines the supplementary modalities in a data.frame with rows of individuals and columns of factors, without NA's 
-#' @return \item{nd}{Number of active dimensions: # Check the actual definition and make a reference to le roux}
+#' @return \item{nd}{Number of active dimensions}
 #'  \item{n.ind}{The number of active individuals}
 #'  \item{n.mod}{The number of active modalities}
 #'  \item{eigen}{Eigenvectors}
 #'  \item{total.inertia}{The sum of inertia}
 #'  \item{adj.inertia}{A matrix with all active dimensions, adjusted and unadjusted inertias. See \link{variance}}
-#'  \item{freq.mod}{Frequencies for the active modalities. See also \link{add.to.label}}
-#'  \item{freq.sup}{Frequencies for the supplementary modalities. See also \link{add.to.label}}
+#'  \item{freq.mod}{Frequencies for the active modalities. See \link{add.to.label}}
+#'  \item{freq.sup}{Frequencies for the supplementary modalities. See \link{add.to.label}}
 #'  \item{ctr.mod}{A matrix with the contribution values of the active modalities per dimension. See \link{contribution}}
 #'  \item{ctr.ind}{A matrix with the contribution values of the individuals per dimension.}
 #'  \item{cor.mod}{The correlation or quality of each modality per dimension.}
-#'  \item{cor.ind}{The correlation or quality of each individual per dimension. # This may be defunct!}
+#'  \item{cor.ind}{The correlation or quality of each individual per dimension.}
 #'  \item{mass.mod}{The mass of each modality}
 #'  \item{coord.mod}{A matrix with the principal coordinates of each active modality per dimension.}
 #'  \item{coord.ind}{A matrix with the principal coordinates of each individual per dimension.}
 #'  \item{coord.sup}{A matrix with the principal coordinates of each supplementary modality per dimension. Notice that the position of the supplementary modalities in class specific analysis is the mean point of the individuals, which is not directly comparable with the cloud of the active modalities.}
+#'  \item{indicator.matrix}{A indicator matrix. See \link{indicator}}
 #'  \item{names.mod}{The names of the active modalities}
 #'  \item{names.ind}{The names of the individuals}
 #'  \item{names.sup}{The names of the supplementary modalities}
 #'  \item{names.passive}{The names of the passive modalities}
 #'  \item{modal}{A matrix with the number of modalities per variable and their location}
-#'  \item{variable}{A vector with the name of the variable of the active modalities}
-#'  \item{cor.dim}{A correlation matrix with the correlations between the original dimensions and the class specific dimensions. Correlations are Spearman correlations, see \link{cor}}
-#'  \item{cosines}{A matrix of cosine similiarites between the original dimensions and the class specific dimensions}
-#'  \item{angles}{A matrix of angles between the original dimensions and the class specific dimensions calculated on the basis of the cosine matrix}
+#'  \item{variable}{A vector with the name of the variable for each of the active modalities}
+#'  \item{variable.sup}{A vector with the name of the variable for each of the supplementary modalities}
+#'  \item{original.class.indicator}{The class indicator}
+#'  \item{original.result}{The original soc.ca object used for the CSA}
 #' @name soc.csa
 #' @export
 #' @author Anton Grau Larsen, University of Copenhagen
@@ -390,13 +399,13 @@ return(Z)
 #' @author Christoph Ellersgaard, University of Copenhagen
 #' @seealso \link{add.to.label}, \link{contribution}
 #' @references Le Roux, B., og H. Rouanet. 2010. Multiple correspondence analysis. Thousand Oaks: Sage.
-#' @examples # This example can be found in further detail at our wiki on github - https://github.com/Rsoc/soc.mca/wiki/How-to-use-soc.mca
+#' @examples 
 #' example(soc.mca)
 #' class.age    <- which(taste$Age =='55-64')
 #' res.csa      <- soc.csa(result, class.age)
 #' res.csa
 
-soc.csa <- function(object, class.indicator, sup=NULL){
+soc.csa <- function(object, class.indicator, sup = NULL){
   
   
   Z.act  <- object$indicator.matrix             # Original indicator matrix
@@ -413,7 +422,7 @@ soc.csa <- function(object, class.indicator, sup=NULL){
   rmpc <- rowSums(P)  
   
   # Nu gør vi det i et loop, men det kan nok gøres med apply
-  H.hat <- matrix(,nrow=i, ncol=length(cm))
+  H.hat <- matrix(,nrow = i, ncol = length(cm))
   for (k in seq(cm)){
     H.hat[,k] <- (1/sqrt(Q)) * (sqrt(I/i)) * (Z.hat[, k]-(cm[k]/i)) * (1/sqrt(CM[k]))
   }
@@ -424,25 +433,24 @@ soc.csa <- function(object, class.indicator, sup=NULL){
   H.svd             <- svd(H.hat)
   dec               <- H.svd
   ### Modalitetskoordinater
-  csa.m.coord     <- matrix(nrow=nrow(H.svd$v), ncol=ncol(H.svd$v))
+  csa.m.coord       <- matrix(nrow = nrow(H.svd$v), ncol = ncol(H.svd$v))
   for (ff in 1:length(H.svd$d)){
-    csa.m.coord[,ff]         = H.svd$d[ff] * H.svd$v[,ff] * (1/sqrt(CM )) * (sqrt(Q*I))
+    csa.m.coord[,ff]    <- H.svd$d[ff] * H.svd$v[,ff] * (1/sqrt(CM )) * (sqrt(Q*I))
   } 
   rownames(csa.m.coord) <- modal.names
   
   ### Individkoordinater
-  csa.i.coord     <- matrix(nrow=nrow(H.svd$u), ncol=ncol(H.svd$u))
+  csa.i.coord            <- matrix(nrow = nrow(H.svd$u), ncol = ncol(H.svd$u))
   for (ff in 1:length(H.svd$d)){
-    csa.i.coord[,ff]     = sqrt(i) * H.svd$u[,ff] * H.svd$d[ff]
+    csa.i.coord[,ff]     <- sqrt(i) * H.svd$u[,ff] * H.svd$d[ff]
   }
   
   ### Modalitetsbidrag
   
-  csa.m.ctr = (((CM/I)/Q) * (csa.m.coord)^2)/(H.svd$d[1]^2)
-  
-  csa.m.ctr     <- matrix(nrow=nrow(H.svd$v), ncol=ncol(H.svd$v))
+  #csa.m.ctr              <- (((CM/I)/Q) * (csa.m.coord)^2)/(H.svd$d[1]^2)
+  csa.m.ctr              <- matrix(nrow = nrow(H.svd$v), ncol = ncol(H.svd$v))
   for (ff in 1:length(H.svd$d)){
-    csa.m.ctr[,ff]     = (((CM/I)/Q) * (csa.m.coord[,ff])^2)/(H.svd$d[ff]^2)
+    csa.m.ctr[,ff]       <- (((CM/I)/Q) * (csa.m.coord[,ff])^2)/(H.svd$d[ff]^2)
   }
   
   # Eigenvectors
@@ -458,15 +466,15 @@ soc.csa <- function(object, class.indicator, sup=NULL){
   R1.eigen.val     <- eigen[1:R1.dim]
   
   # Second reduction of dimensionality
-  Mean.r.eigen     <- mean(R1.eigen.val, na.rm=TRUE)
-  R2.eigen.val     <- eigen[eigen>=Mean.r.eigen]
+  Mean.r.eigen     <- mean(R1.eigen.val, na.rm = TRUE)
+  R2.eigen.val     <- eigen[eigen >= Mean.r.eigen]
   R2.dim           <- which(R2.eigen.val >= Mean.r.eigen)
   
   # Explained variance
   unadj.var        <- 100*(eigen[1:R1.dim])/sum(eigen[1:R1.dim]) # Unadjusted rates of variance
   sum.adj.var.mod  <- (eigen[R2.dim]-Mean.r.eigen)^2
   sum.adj.var      <- sum(sum.adj.var.mod)
-  adj.var          <- round(((sum.adj.var.mod/sum.adj.var)*100), digits=1) # The adjusted rates of variance
+  adj.var          <- round(((sum.adj.var.mod/sum.adj.var)*100), digits = 1) # The adjusted rates of variance
   cumpercent       <- cumsum(adj.var)
   adj.inertia      <- cbind(R2.dim, round(eigen[R2.dim], 3), round(unadj.var[R2.dim], 1), adj.var ,cumpercent) # De Rouanet adjustede inertier - skal nok rykkes ned.
   colnames(adj.inertia) <- c("Dim", "Eigen", "Var" ,"Adj.Var", "Cum%")
@@ -508,17 +516,17 @@ soc.csa <- function(object, class.indicator, sup=NULL){
   if(identical(sup,NULL)==FALSE){
     
     sup.ind                 <- indicator(sup)[class.indicator,]
-    sup.coord               <- matrix(nrow=ncol(sup.ind), ncol=ncol(pc.ind))
+    sup.coord               <- matrix(nrow = ncol(sup.ind), ncol = ncol(pc.ind))
     rownames(sup.coord)     <- colnames(sup.ind)
     freq.sup                <- colSums(sup.ind)
     
     for (j in 1:ncol(pc.ind)){
       d1                      <- pc.ind[,j]
-      Sup.mat                 <- matrix(nrow=nrow(sup.ind), ncol=ncol(sup.ind))
+      Sup.mat                 <- matrix(nrow = nrow(sup.ind), ncol = ncol(sup.ind))
       colnames(Sup.mat)       <- colnames(sup.ind)
       Sup.mat[sup.ind == 1]   <- 0
       Sup.mat                 <- Sup.mat + d1
-      sup.coord[,j]           <- apply(Sup.mat, 2, mean, na.rm=TRUE)
+      sup.coord[,j]           <- apply(Sup.mat, 2, mean, na.rm = TRUE)
     }
   }
   names.sup               <-  rownames(sup.coord)
@@ -526,14 +534,14 @@ soc.csa <- function(object, class.indicator, sup=NULL){
   # Result object
   
   csca.result <- list(
-    nd=object$nd,
-    n.ind=i, 
-    n.mod=ncol(Z.hat),
-    eigen=eigen,
+    nd = object$nd,
+    n.ind = i, 
+    n.mod = ncol(Z.hat),
+    eigen = eigen,
     total.inertia = sum(eigen[R2.dim]),
-    adj.inertia=adj.inertia,
+    adj.inertia = adj.inertia,
     freq.mod = freq.mod,
-    freq.sup = freq.sup, # Supplementary variables are as of yet not supported
+    freq.sup = freq.sup,
     ctr.mod = csa.m.ctr[, R2.dim],
     #ctr.ind = ctr.ind[, R2.dim], # Not implemented
     #cor.mod = cor.mod[, R2.dim], cor.ind = cor.ind[, R2.dim], # Not implemented
@@ -582,25 +590,27 @@ soc.csa <- function(object, class.indicator, sup=NULL){
 ####################################################
 #### Create Quadrant
 
-#' Create quadrants
+#' Create categories according to the quadrant position of each individual
 #' 
-#' Creates a vector from two dimensions from a soc.mca object. Labels are the cardinal directions with the first designated dimension running East - West.
+#' Creates a vector from two dimensions from a soc.ca object. Labels are the 
+#' cardinal directions with the first designated dimension running East - West.
+#' The center category is a circle defined by \code{cut.radius}.
 #' 
-#' @param object  is a soc.mca class object created with \link{soc.mca}
+#' 
+#' @param object a soc.ca class object
 #' @param dim  the dimensions
 #' @param cut.min  Minimum cut value
 #' @param cut.max  Maximum cut value
 #' @param cut.radius  Radius of the center category
-#' 
-#' @return Returns a character vector
+#' @return Returns a character vector with category memberships
 #' @seealso \link{soc.mca}
 #' @examples 
 #' example(soc.mca)
-#' create.quadrant(result, dim=c(2,1))
-#' table(create.quadrant(result, dim=c(1,3), cut.radius=0.5))
+#' create.quadrant(result, dim = c(2,1))
+#' table(create.quadrant(result, dim = c(1,3), cut.radius = 0.5))
 #' @export
 
-create.quadrant <- function(object, dim=c(1,2), cut.min=-0.125, cut.max=0.125, cut.radius=0.25){
+create.quadrant <- function(object, dim = c(1,2), cut.min = -0.125, cut.max = 0.125, cut.radius = 0.25){
   
   coord                    <- object$coord.ind
   coord.cut                <- coord
@@ -631,36 +641,41 @@ create.quadrant <- function(object, dim=c(1,2), cut.min=-0.125, cut.max=0.125, c
 }
 
 
-#' csa.all 
-#'
-#' \code{csa.all} performs a class specific correspondence analysis for each level in a factor variable
-#' @param object  is a soc.mca class object created with \link{soc.mca}
-#' @param variable a factor with the same length and order as the active variables that created the soc.mca object
-#' @param dim is the dimensions included in the correlation matrixes
+#' Multiple Class Specific Correspondence Analysis on all values in a factor
+#' 
+#' \code{csa.all} performs a class specific correspondence analysis for each
+#' level in a factor variable. Returns a list with soc.csa objects and a list of
+#' measures defined by \link{csa.measures}
+#' @param object  is a soc.ca class object created with \link{soc.mca}
+#' @param variable a factor with the same length and order as the active
+#'   variables that created the soc.ca object
+#' @param dim is the dimension analyzed
 #' @param ... further arguments are directed to \link{csa.measures}
 #' @return \item{results}{a list of \link{soc.csa} result objects}
 #' @return \item{cor}{a list of correlation matrixes}
 #' @return \item{cosines}{a list of matrixes with cosine values}
-#' @return \item{angles}{a list of correlation matrixes with angles between dimensions}
+#' @return \item{angles}{a list of matrixes with cosine angles between
+#'   dimensions}
 #' @export
 #' @examples
 #' example(soc.mca)
 #' csa.all(result, taste$Age)
-#' @seealso \link{soc.mca}, \link{soc.csa}, \link{cor}, \link{csa.measures}
+#' csa.all(result, taste$Age)$measures
+#' @seealso \link{soc.csa}, \link{cor}, \link{csa.measures}
 
-csa.all <- function(object, variable, dim=1:5, ...){
+csa.all <- function(object, variable, dim = 1:5, ...){
   lev.variable <- levels(variable)
   result.list     <- list()
   for (i in 1:length(lev.variable)){
     dummy.class         <- which(variable == lev.variable[i])
-    result.list[[i]]    <- soc.csa(object, class.indicator=dummy.class)
+    result.list[[i]]    <- soc.csa(object, class.indicator = dummy.class)
   }
   
   names(result.list) <- lev.variable
   
-  measure.list <- lapply(result.list, csa.measures, format=FALSE, dim=dim, ...)
+  measure.list <- lapply(result.list, csa.measures, format = FALSE, dim = dim, ...)
   
-  list(results=result.list, measures=measure.list)
+  list(results = result.list, measures = measure.list)
 }
 
 

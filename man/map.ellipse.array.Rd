@@ -7,24 +7,25 @@
     titles = levels(variable), main.title = "", ...)
 }
 \arguments{
-  \item{object}{is a soc.mca or soc.csa class object}
+  \item{object}{a soc.ca class object}
 
-  \item{variable}{is a factor of the same length as the
+  \item{variable}{a factor of the same length as the
   data.frame used to create object}
 
-  \item{dim}{indicates what dimensions to plot and in which
-  order to plot them}
+  \item{dim}{the dimensions in the order they are to be
+  plotted. The first number defines the horizontal axis and
+  the second number defines the vertical axis.}
 
-  \item{draw.ellipses}{if set as TRUE ellipses are drawn}
+  \item{draw.ellipses}{if TRUE ellipses are drawn}
 
-  \item{ncol}{is the number of columns the plots are
-  arranged into}
+  \item{ncol}{the number of columns the plots are arranged
+  into}
 
-  \item{titles}{is a vector of the same length as the
-  number of levels in variable. These are the titles given
-  to each subplot}
+  \item{titles}{a vector of the same length as the number
+  of levels in variable. These are the titles given to each
+  subplot}
 
-  \item{main.title}{is the main title for all the plots}
+  \item{main.title}{the main title for all the plots}
 
   \item{...}{sends any further arguments to
   \link{map.select}.}

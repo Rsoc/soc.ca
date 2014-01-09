@@ -2,22 +2,22 @@
 
 #' Concentration ellipses
 #'
-#' Add ellipses for each level in a factor to a plot made from a soc.mca object.
-#' @param object is a soc.mca class object
-#' @param ca.plot is a plot made from a soc.mca object
-#' @param variable is a factor of the same length and in the same order as the active varibles used for the soc.mca object.
+#' Add ellipses for each level in a factor to a plot made from a \link{soc.ca} object.
+#' @param object is a \link{soc.ca} class object
+#' @param ca.plot is a plot made from a \link{soc.ca} object
+#' @param variable is a factor of the same length and in the same order as the active varibles used for the \link{soc.ca} object.
 #' @param ellipse.label if TRUE the labels are included in the map
 #' @param line.color defines the color of the ellipses
 #' @param label.size defines the size of the labels
 #' @return a plot with a concentration ellipse containing 80\% of the individuals for each modality
-#' @seealso \link{map.ind}, \link{map.ctr}, \link{soc.mca}
+#' @seealso \link{map.ind}, \link{map.ctr}
 #' @examples
 #' example(soc.mca)
 #' map <- map.ind(result)
 #' map.ellipse(result, map, active[,2])
 #' @export
 
-map.ellipse <- function(object, ca.plot=map.ind(object), variable, ellipse.label=TRUE, line.color="black", label.size=4){ 
+map.ellipse <- function(object, ca.plot = map.ind(object), variable, ellipse.label = TRUE, line.color = "black", label.size = 4){ 
 
 variable    <- as.factor(variable) 
 dim         <- ca.plot$dimensions 
@@ -38,8 +38,8 @@ label             <- lev.var[i]
 el.coord          <- ellipse.coord(id, id.coord.var)
 el.axis           <- ellipse.axis(el.coord)
 el.origo          <- ellipse.origo(el.axis)
-el.origo          <- data.frame(x=el.origo[1], y=el.origo[2], label)
-ellipse.data[[i]] <- list(label=label, el.coord=el.coord, el.axis=el.axis, el.origo=el.origo)
+el.origo          <- data.frame(x = el.origo[1], y = el.origo[2], label)
+ellipse.data[[i]] <- list(label = label, el.coord = el.coord, el.axis = el.axis, el.origo = el.origo)
 }
 
 ellipse.data      <- ellipse.data
@@ -48,15 +48,15 @@ ellipse.data      <- ellipse.data
 
 for (i in 1:nlevels(variable)){
 # Ellipserne
-ca.plot <- ca.plot + geom_path(data=ellipse.data[[i]]$el.coord, aes(x=x, y=y), colour=line.color, size=0.33)
+ca.plot <- ca.plot + geom_path(data = ellipse.data[[i]]$el.coord, aes(x = x, y = y), colour = line.color, size = 0.33)
 # Akserne
-ca.plot <- ca.plot + geom_path(data=ellipse.data[[i]]$el.axis[[1]],aes(x=x, y=y), colour=line.color, size=0.33, linetype=2, na.rm=TRUE) # Det er muligt at vi kan tegne med aes istedet og undgå at det der rækkeshit
-ca.plot <- ca.plot + geom_path(data=ellipse.data[[i]]$el.axis[[2]],aes(x=x, y=y), colour=line.color, size=0.33, linetype=2, na.rm=TRUE)
+ca.plot <- ca.plot + geom_path(data = ellipse.data[[i]]$el.axis[[1]],aes(x = x, y = y), colour = line.color, size = 0.33, linetype = 2, na.rm = TRUE) # Det er muligt at vi kan tegne med aes istedet og undgå at det der rækkeshit
+ca.plot <- ca.plot + geom_path(data = ellipse.data[[i]]$el.axis[[2]],aes(x = x, y = y), colour = line.color, size = 0.33, linetype = 2, na.rm = TRUE)
 # Origo
-ca.plot <- ca.plot + geom_point(data=ellipse.data[[i]]$el.origo, aes(x=x, y=y), size=3, shape=21, fill="white", colour=line.color, na.rm=TRUE)
+ca.plot <- ca.plot + geom_point(data = ellipse.data[[i]]$el.origo, aes(x = x, y = y), size = 3, shape = 21, fill = "white", colour = line.color, na.rm = TRUE)
 # Origo label
 #! Måske annotate ville være en god funktion??
-if(identical(ellipse.label, TRUE)) ca.plot <- ca.plot + geom_text(aes(x=x, y=y, label=label), data=ellipse.data[[i]]$el.origo, size=label.size, hjust=-0.15, fontface="italic")
+if(identical(ellipse.label, TRUE)) ca.plot <- ca.plot + geom_text(aes(x = x, y = y, label = label), data = ellipse.data[[i]]$el.origo, size = label.size, hjust = -0.15, fontface = "italic")
 }
 
 ca.plot
@@ -87,11 +87,11 @@ p.max   <- which.max(p.pairs[,3])
 
 #l.id <- 3:nrow(gg.input)
 mintemp <- p.pairs[p.min, 1:2]
-minpath <- as.data.frame(el.dat[c(mintemp$x, mintemp$y),], row.names=c("1","2"))
+minpath <- as.data.frame(el.dat[c(mintemp$x, mintemp$y),], row.names = c("1","2"))
 #minpath[l.id,] <- NA
 
 maxtemp <- p.pairs[p.max, 1:2]
-maxpath <- as.data.frame(el.dat[c(maxtemp$x, maxtemp$y),], row.names=c("1","2"))
+maxpath <- as.data.frame(el.dat[c(maxtemp$x, maxtemp$y),], row.names = c("1","2"))
 #maxpath[l.id,] <- NA
 ellipse.axis.points <- list(maxpath, minpath)
 ellipse.axis.points
@@ -105,10 +105,10 @@ id.var    <- as.data.frame(id.coord.var)
 colnames(id.var) <- c("x","y")
 
 xdata     <- with(as.data.frame(id.var), xyTable(x,y))# Her laves en bestemt binning - det er uklart for mig hvad det faktisk er.
-xframe    <- cbind.data.frame(x=xdata$x, y=xdata$y, n=xdata$number)
+xframe    <- cbind.data.frame(x = xdata$x, y = xdata$y, n = xdata$number)
 data.ell  <- as.data.frame(with(id.var, ellipse(cor(x, y), 
-                                         scale=c(sd(x),sd(y)), 
-                                         centre=c(mean(x),mean(y)), npoints = 1000)))
+                                         scale = c(sd(x),sd(y)), 
+                                         centre = c(mean(x),mean(y)), npoints = 1000)))
 # if ((length(id)>360)==TRUE){
 # l.id <- 361:length(id)
 # data.ell[l.id,] <- NA

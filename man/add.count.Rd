@@ -1,6 +1,7 @@
 \name{add.count}
 \alias{add.count}
-\title{Add a new layer of points on top of an existing plot with output from the cut.min function}
+\title{Add a new layer of points on top of an existing plot with output from the
+cut.min function}
 \usage{
   add.count(x, p = map.ind(object), label = TRUE, ...)
 }

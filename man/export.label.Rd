@@ -1,12 +1,12 @@
 \name{export.label}
 \alias{export.label}
-\title{Exports the labels of a soc.mca object into a csv file.}
+\title{Exports the labels of a soc.ca object into a csv file.}
 \usage{
   export.label(object, file = FALSE, encoding = "UTF-8",
     overwrite = FALSE)
 }
 \arguments{
-  \item{object}{is a soc.mca object}
+  \item{object}{is a soc.ca object}
 
   \item{file}{is the name and path of the exported file}
 

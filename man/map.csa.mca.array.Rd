@@ -6,10 +6,10 @@
     fixed.coord = TRUE, ...)
 }
 \arguments{
-  \item{csa.object}{is a result object created by the
+  \item{csa.object}{a result object created by the
   \link{soc.csa} function}
 
-  \item{ndim}{is the number of dimensions to include in the
+  \item{ndim}{the number of dimensions to include in the
   array, starting from 1}
 
   \item{fixed.coord}{if TRUE the limits of all plots are
@@ -18,11 +18,11 @@
   \item{...}{for further arguments see \link{map.csa.mca}}
 }
 \description{
-  Create an array of \link{map.csa.mca} maps.
+  Create an array of \link{map.csa.mca} maps
 }
 \examples{
 example(soc.csa)
 csa.res <- soc.csa(result, class.age)
-map.csa.mca.array(csa.res, ndim=3)
+map.csa.mca.array(csa.res, ndim = 3)
 }
 

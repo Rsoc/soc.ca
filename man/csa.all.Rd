@@ -1,18 +1,17 @@
 \name{csa.all}
 \alias{csa.all}
-\title{csa.all}
+\title{Multiple Class Specific Correspondence Analysis on all values in a factor}
 \usage{
   csa.all(object, variable, dim = 1:5, ...)
 }
 \arguments{
-  \item{object}{is a soc.mca class object created with
+  \item{object}{is a soc.ca class object created with
   \link{soc.mca}}
 
   \item{variable}{a factor with the same length and order
-  as the active variables that created the soc.mca object}
+  as the active variables that created the soc.ca object}
 
-  \item{dim}{is the dimensions included in the correlation
-  matrixes}
+  \item{dim}{is the dimension analyzed}
 
   \item{...}{further arguments are directed to
   \link{csa.measures}}
@@ -24,19 +23,21 @@
 
   \item{cosines}{a list of matrixes with cosine values}
 
-  \item{angles}{a list of correlation matrixes with angles
+  \item{angles}{a list of matrixes with cosine angles
   between dimensions}
 }
 \description{
   \code{csa.all} performs a class specific correspondence
-  analysis for each level in a factor variable
+  analysis for each level in a factor variable. Returns a
+  list with soc.csa objects and a list of measures defined
+  by \link{csa.measures}
 }
 \examples{
 example(soc.mca)
 csa.all(result, taste$Age)
+csa.all(result, taste$Age)$measures
 }
 \seealso{
-  \link{soc.mca}, \link{soc.csa}, \link{cor},
-  \link{csa.measures}
+  \link{soc.csa}, \link{cor}, \link{csa.measures}
 }
 

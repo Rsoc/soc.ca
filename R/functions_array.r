@@ -12,37 +12,39 @@
 
 #' Array of maps
 #'
-#' This function takes a list of map objects and arranges them into an array
-#' @param x is list of objects created by one of the mapping functions in the soc.ca package or any other ggplot2 created plot
-#' @param ncol is the number of columns the plots are arranged into
-#' @param title is the main title of the array
+#' This function takes a list of map objects and arranges them into an array.
+#' @param x a list of objects created by one of the mapping functions in the soc.ca package or any other ggplot2 plot
+#' @param ncol the number of columns the plots are arranged into
+#' @param title the main title of the array
 #' @param fixed.coord if TRUE the limits of all plots are set to the same as the largest plot
-#' @param padding is the distance between the most extreme position and the axis limit
+#' @param padding the distance between the most extreme position and the axis limit
 #' @examples
 #' \dontrun{
 #' example(soc.mca)
-#' map.array(list(map.ind(result), map.mod(result)), ncol=2)
+#' map.array(list(map.ind(result), map.mod(result)), ncol = 2)
 #' }
 #' @export
-map.array <- function(x, ncol=1, title="", fixed.coord=TRUE, padding=0.15){
+map.array <- function(x, ncol = 1, title = "", fixed.coord = TRUE, padding = 0.15){
 
-  if (identical(fixed.coord,TRUE)) x <- fix.coords(x, padding=padding)
+  if (identical(fixed.coord,TRUE)) x <- fix.coords(x, padding = padding)
   
   
-do.call(grid.arrange, c(x, ncol=ncol, main=title))
+do.call(grid.arrange, c(x, ncol = ncol, main = title))
 }
 
 
 #' Ellipse array
 #'
 #' Create seperate maps with ellipses for each level in a factor arranged in an array.
-#' @param object is a soc.mca or soc.csa class object
-#' @param variable is a factor of the same length as the data.frame used to create object
-#' @param dim indicates what dimensions to plot and in which order to plot them
-#' @param draw.ellipses if set as TRUE ellipses are drawn
-#' @param ncol is the number of columns the plots are arranged into
-#' @param titles is a vector of the same length as the number of levels in variable. These are the titles given to each subplot
-#' @param main.title is the main title for all the plots
+#' @param object a soc.ca class object
+#' @param variable a factor of the same length as the data.frame used to create object
+#' @param dim the dimensions in the order they are to be plotted. The first
+#'   number defines the horizontal axis and the second number defines the
+#'   vertical axis.
+#' @param draw.ellipses if TRUE ellipses are drawn
+#' @param ncol the number of columns the plots are arranged into
+#' @param titles a vector of the same length as the number of levels in variable. These are the titles given to each subplot
+#' @param main.title the main title for all the plots
 #' @param ... sends any further arguments to \link{map.select}. 
 #' @examples
 #' \dontrun{
@@ -50,7 +52,7 @@ do.call(grid.arrange, c(x, ncol=ncol, main=title))
 #' map.ellipse.array(result, active[,1])
 #' }
 #' @export
-map.ellipse.array <- function(object, variable, dim=c(1,2), draw.ellipses=TRUE, ncol=2, titles=levels(variable), main.title="",  ...){
+map.ellipse.array <- function(object, variable, dim = c(1,2), draw.ellipses = TRUE, ncol = 2, titles = levels(variable), main.title = "",  ...){
   
   var.levels    <- levels(variable)
   list.of.maps  <- list()
@@ -60,9 +62,9 @@ map.ellipse.array <- function(object, variable, dim=c(1,2), draw.ellipses=TRUE, 
   ellipse.ind <- variable == var.levels[i]
   ellipse.ind[ellipse.ind == FALSE] <- NA 
   
-  p          <- map.select(object, dim=dim, list.ind=ind.ind, map.title=titles[i], text=FALSE, ...)
+  p          <- map.select(object, dim = dim, list.ind = ind.ind, map.title = titles[i], label = FALSE, ...)
   
-  if(identical(draw.ellipses, TRUE)) p    <- map.ellipse(object, p, ellipse.ind, label=FALSE)
+  if(identical(draw.ellipses, TRUE)) p    <- map.ellipse(object, p, ellipse.ind, label = FALSE)
   list.of.maps[[i]] <- p
   
   }
@@ -70,22 +72,22 @@ map.ellipse.array <- function(object, variable, dim=c(1,2), draw.ellipses=TRUE, 
   # Standardize the coordinates
   list.of.maps <- fix.coords(list.of.maps)
   # Plot the maps
-  map.array(list.of.maps, ncol=ncol, title=main.title)
+  map.array(list.of.maps, ncol = ncol, title = main.title)
   return(invisible(list.of.maps))
 }
 
 #################################################################################################
 #' Array of several CSA maps
 #' 
-#' Creates an array of Class Specific Mulitple Correspondence analysis's
+#' Creates an array of Class Specific Mulitple Correspondence analysises
 #' 
-#' @param object is a \link{soc.mca} result object
-#' @param variable is a factor with the same order and length as those used for the active modalities in object
+#' @param object a \link{soc.ca} result object
+#' @param variable a factor with the same order and length as those used for the active modalities in object
 #' @param dim indicates what dimensions to map and in which order to plot them
-#' @param ncol is the number of columns the maps are arranged into
-#' @param titles is a vector of the same length as the number of levels in variable. These are the titles given to each subplot
-#' @param main.title is the main title for all the maps
-#' @param FUN is the mapping function used for the plots; \link{map.active}, \link{map.ctr}, \link{map.ind}, \link{map.select}
+#' @param ncol the number of columns the maps are arranged into
+#' @param titles a vector of the same length as the number of levels in \code{variable}. These are the titles given to each subplot
+#' @param main.title the main title for all the maps
+#' @param FUN the mapping function used for the plots; \link{map.active}, \link{map.ctr}, \link{map.ind}, \link{map.select} or \link{map.sup}
 #' @param fixed.coord if TRUE the limits of all plots are set to the same as the largest plot
 #' @param ... sends any further arguments to the mapping functions
 #' @export  
@@ -93,14 +95,14 @@ map.ellipse.array <- function(object, variable, dim=c(1,2), draw.ellipses=TRUE, 
 #' \dontrun{
 #' example(soc.csa)
 #' map.csa.all(result, active[,1])
-#' map.csa.all(result, active[,1], FUN=map.ctr, ctr.dim=1)
+#' map.csa.all(result, active[,1], FUN = map.ctr, ctr.dim = 1)
 #' }
 
-map.csa.all <- function(object, variable, dim=c(1,2), ncol=2, FUN=map.ind, fixed.coord=TRUE, main.title="", titles=levels(variable),...){
+map.csa.all <- function(object, variable, dim = c(1,2), ncol = 2, FUN = map.ind, fixed.coord = TRUE, main.title = "", titles = levels(variable),...){
   
   csa.list    <- csa.all(object, variable)
   csa.results  <- csa.list$results
-  plot.list    <- lapply(csa.results, FUN, dim=dim, ...) 
+  plot.list    <- lapply(csa.results, FUN, dim = dim, ...) 
   
   # Map titles
   
@@ -113,18 +115,18 @@ map.csa.all <- function(object, variable, dim=c(1,2), ncol=2, FUN=map.ind, fixed
   # Coord standardization
   if (identical(fixed.coord, TRUE)) plot.list <- fix.coords(plot.list)  
     
-  map.array(plot.list, ncol=2, title=main.title)
+  map.array(plot.list, ncol = 2, title = main.title)
 }
 
 #######################################################################3
 ### Standardize coordinates
 
-fix.coords <- function(plot.list, padding=0.15){
+fix.coords <- function(plot.list, padding = 0.15){
 
-minimums.x    <- vector(, length=length(plot.list)) 
-minimums.y    <- vector(, length=length(plot.list))
-maximums.x    <- vector(, length=length(plot.list))
-maximums.y    <- vector(, length=length(plot.list))
+minimums.x    <- vector(, length = length(plot.list)) 
+minimums.y    <- vector(, length = length(plot.list))
+maximums.x    <- vector(, length = length(plot.list))
+maximums.y    <- vector(, length = length(plot.list))
 
 for ( i in 1:length(plot.list)){
 p                <- plot.list[[i]]
@@ -139,33 +141,34 @@ xlim <- c(max(maximums.x)+padding, min(minimums.x)-padding)
 ylim <- c(max(maximums.y)+padding, min(minimums.y)-padding) 
 
 for ( i in 1:length(plot.list)){
-  plot.list[[i]]  <- plot.list[[i]] + coord_fixed(xlim=xlim, ylim=ylim)
+  plot.list[[i]]  <- plot.list[[i]] + coord_fixed(xlim = xlim, ylim = ylim)
 }
 return(plot.list)
 }
 
 #' Map the coordinates of the individuals in a CSA and its MCA
 #'
-#' @param csa.object is a result object created by the \link{soc.csa} function
-#' @param mca.dim is the dimension from the original MCA
-#' @param csa.dim is the dimension from the CSA
+#' @param csa.object a result object created by the \link{soc.csa} function
+#' @param mca.dim the dimension from the original MCA
+#' @param csa.dim the dimension from the CSA
 #' @param smooth if TRUE a line is added to the plot
-#' @param method is the method used by ggplot to set the line see \link{geom_smooth}
+#' @param method the method used by ggplot to set the line see \link{geom_smooth}
+#' @seealso \link{soc.csa}, \link{map.csa.all}, link{map.csa.mca.array}
 #' @export
 #' @examples
 #' example(soc.csa)
 #' csa.res <- soc.csa(result, class.age)
-#' map.csa.mca(csa.res, mca.dim=2, csa.dim=1)
-map.csa.mca <- function(csa.object, mca.dim=1, csa.dim=1, smooth=TRUE, method="auto"){
+#' map.csa.mca(csa.res, mca.dim = 2, csa.dim = 1)
+map.csa.mca <- function(csa.object, mca.dim = 1, csa.dim = 1, smooth = TRUE, method = "auto"){
   mca.res           <- csa.object$original.result
   class.indicator   <- csa.object$original.class.indicator
   mca.coord         <- mca.res$coord.ind[class.indicator, mca.dim]
-  ggdata            <- data.frame(mca=mca.coord, csa=csa.object$coord.ind[,csa.dim])
+  ggdata            <- data.frame(mca = mca.coord, csa = csa.object$coord.ind[,csa.dim])
   titles            <- paste(c("CSA Dim:", "MCA Dim:"), c(csa.dim, mca.dim))
   
-  p                 <- ggplot(ggdata, aes(x=mca, y=csa))
-  if(smooth == TRUE) p  <- p +  geom_smooth(fill="grey90", color="red", method=method)
-  p                 <- p + geom_point(shape=21, size=3, alpha=0.8) + theme_min() + xlab(titles[2]) + ylab(titles[1])
+  p                 <- ggplot(ggdata, aes(x = mca, y = csa))
+  if(smooth == TRUE) p  <- p +  geom_smooth(fill = "grey90", color = "red", method = method)
+  p                 <- p + geom_point(shape = 21, size = 3, alpha = 0.8) + theme_min() + xlab(titles[2]) + ylab(titles[1])
   
   p$ca.scales       <- breaksandscales(ggdata)
   p
@@ -173,29 +176,29 @@ map.csa.mca <- function(csa.object, mca.dim=1, csa.dim=1, smooth=TRUE, method="a
 
 #' CSA-MCA array
 #' 
-#' Create an array of \link{map.csa.mca} maps.
+#' Create an array of \link{map.csa.mca} maps
 #' 
-#' @param csa.object is a result object created by the \link{soc.csa} function
-#' @param ndim is the number of dimensions to include in the array, starting from 1
+#' @param csa.object a result object created by the \link{soc.csa} function
+#' @param ndim the number of dimensions to include in the array, starting from 1
 #' @param fixed.coord if TRUE the limits of all plots are set to the same as the largest plot
 #' @param ... for further arguments see \link{map.csa.mca}
 #' @export
 #' @examples
 #' example(soc.csa)
 #' csa.res <- soc.csa(result, class.age)
-#' map.csa.mca.array(csa.res, ndim=3)
-map.csa.mca.array <- function(csa.object, ndim=3, fixed.coord=TRUE, ...){
+#' map.csa.mca.array(csa.res, ndim = 3)
+map.csa.mca.array <- function(csa.object, ndim = 3, fixed.coord = TRUE, ...){
   
   plot.list <- list()
   
   count <- 1
   for(j in 1:ndim){
     for (i in 1:ndim){
-      plot.list[[count]] <- map.csa.mca(csa.object, mca.dim=i, csa.dim=j, ...)
+      plot.list[[count]] <- map.csa.mca(csa.object, mca.dim = i, csa.dim = j, ...)
       count <- count+1
     }
   }
   
-  suppressMessages(print(map.array(plot.list, ncol=ndim, fixed.coord=fixed.coord)))
+  suppressMessages(print(map.array(plot.list, ncol = ndim, fixed.coord = fixed.coord)))
 }
 

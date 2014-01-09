@@ -7,13 +7,14 @@
     label.size = 4)
 }
 \arguments{
-  \item{object}{is a soc.mca class object}
+  \item{object}{is a \link{soc.ca} class object}
 
-  \item{ca.plot}{is a plot made from a soc.mca object}
+  \item{ca.plot}{is a plot made from a \link{soc.ca}
+  object}
 
   \item{variable}{is a factor of the same length and in the
-  same order as the active varibles used for the soc.mca
-  object.}
+  same order as the active varibles used for the
+  \link{soc.ca} object.}
 
   \item{ellipse.label}{if TRUE the labels are included in
   the map}
@@ -28,7 +29,7 @@
 }
 \description{
   Add ellipses for each level in a factor to a plot made
-  from a soc.mca object.
+  from a \link{soc.ca} object.
 }
 \examples{
 example(soc.mca)
@@ -36,6 +37,6 @@ map <- map.ind(result)
 map.ellipse(result, map, active[,2])
 }
 \seealso{
-  \link{map.ind}, \link{map.ctr}, \link{soc.mca}
+  \link{map.ind}, \link{map.ctr}
 }
 

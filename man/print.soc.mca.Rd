@@ -1,12 +1,11 @@
 \name{print.soc.mca}
 \alias{print.soc.mca}
-\title{Print soc.mca objects}
+\title{Print soc.ca objects}
 \usage{
-  print.soc.mca(x)
+  print.soc.mca(object)
 }
 \arguments{
-  \item{x}{is a soc.mca class object created with
-  \link{soc.mca}}
+  \item{object}{is a soc.ca class object}
 }
 \value{
   Active dimensions is the number of dimensions remaining
@@ -28,7 +27,7 @@
 }
 \description{
   Prints commonly used measures used in the analysis of
-  specific correspondence analysis
+  multiple correspondence analysis
 }
 \examples{
 example(soc.mca)

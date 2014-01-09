@@ -1,12 +1,11 @@
 \name{export}
 \alias{export}
-\title{Export from soc.mca}
+\title{Export results from soc.ca}
 \usage{
   export(object, file = "export.csv", dim = 1:5)
 }
 \arguments{
-  \item{object}{is a soc.mca class object or a contribution
-  class object}
+  \item{object}{is a soc.ca class object}
 
   \item{dim}{is the dimensions to be exported}
 
