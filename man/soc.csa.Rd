@@ -64,7 +64,7 @@ work for \code{soc.csa}
 }
 \examples{
 example(soc.mca)
-class.age    <- which(taste$Age =='55-64')
+class.age    <- which(taste$Age == '55-64')
 res.csa      <- soc.csa(result, class.age)
 res.csa
 }

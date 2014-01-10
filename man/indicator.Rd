@@ -21,8 +21,8 @@ Creates an indicator matrix from a data.frame with
 questions as columns and individuals as rows.
 }
 \examples{
-a <- rep(c("A","B"), 5)
-b <- rep(c("C", "D"), 5)
+a  <- rep(c("A","B"), 5)
+b  <- rep(c("C", "D"), 5)
 indicator(data.frame(a,b))
 }
 \seealso{

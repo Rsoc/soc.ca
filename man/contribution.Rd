@@ -26,7 +26,7 @@ Each mode prints different results:
 
 \item{"mod"}{Ranks all modalities according to their
 contribution} \item{"sort"}{Ranks all modalities according
-to their contribution and and then sorts them according to
+to their contribution and then sorts them according to
 their coordinates} \item{"ind"}{Ranks all individuals
 according to their contribution} \item{"variable"}{Sorts
 all modalities according to their variable and sums the

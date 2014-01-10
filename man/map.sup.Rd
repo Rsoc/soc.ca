@@ -31,7 +31,7 @@ map.sup(object, dim = c(1, 2), point.shape = "variable",
   length and order.}
 
   \item{point.alpha}{defines the alpha of the points.
-  Values range from 0 to 1. It may be mapped to a variable
+  Values range from 0 to 1.  It may be mapped to a variable
   with a suitable length and order.}
 
   \item{point.fill}{defines the fill color of the points.
@@ -52,7 +52,7 @@ map.sup(object, dim = c(1, 2), point.shape = "variable",
   \link{add.to.label} for ways to alter the labels.}
 
   \item{label.alpha}{defines the alpha of the labels.
-  Values range from 0 to 1. It may be mapped to a variable
+  Values range from 0 to 1.  It may be mapped to a variable
   with a suitable length and order.}
 
   \item{label.color}{defines the color of the labels. It
@@ -74,8 +74,8 @@ selected dimension.
 \examples{
 example(soc.mca)
 map.sup(result)
-map.sup(result, dim = c(2,1))
-map.sup(result, point.size = result$coord.sup[,4],
+map.sup(result, dim = c(2, 1))
+map.sup(result, point.size = result$coord.sup[, 4],
  map.title = "All supplementary modalities with size according to coordinate on the 4th dimension")
 }
 

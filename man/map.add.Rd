@@ -53,7 +53,7 @@ map.add(object, ca.map, plot.type = NULL, ctr.dim = 1, list.mod = NULL,
   length and order.}
 
   \item{point.alpha}{defines the alpha of the points.
-  Values range from 0 to 1. It may be mapped to a variable
+  Values range from 0 to 1.  It may be mapped to a variable
   with a suitable length and order.}
 
   \item{point.fill}{defines the fill color of the points.
@@ -74,7 +74,7 @@ map.add(object, ca.map, plot.type = NULL, ctr.dim = 1, list.mod = NULL,
   \link{add.to.label} for ways to alter the labels.}
 
   \item{label.alpha}{defines the alpha of the labels.
-  Values range from 0 to 1. It may be mapped to a variable
+  Values range from 0 to 1.  It may be mapped to a variable
   with a suitable length and order.}
 
   \item{label.color}{defines the color of the labels. It

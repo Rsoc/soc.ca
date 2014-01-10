@@ -23,7 +23,7 @@ Map the coordinates of the individuals in a CSA and its MCA
 }
 \examples{
 example(soc.csa)
-csa.res <- soc.csa(result, class.age)
+csa.res  <- soc.csa(result, class.age)
 map.csa.mca(csa.res, mca.dim = 2, csa.dim = 1)
 }
 \seealso{

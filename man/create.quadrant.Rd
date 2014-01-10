@@ -27,8 +27,8 @@ category is a circle defined by \code{cut.radius}.
 }
 \examples{
 example(soc.mca)
-create.quadrant(result, dim = c(2,1))
-table(create.quadrant(result, dim = c(1,3), cut.radius = 0.5))
+create.quadrant(result, dim = c(2, 1))
+table(create.quadrant(result, dim = c(1, 3), cut.radius = 0.5))
 }
 \seealso{
 \link{soc.mca}

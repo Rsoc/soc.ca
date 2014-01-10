@@ -31,7 +31,7 @@ map.mod(object, dim = c(1, 2), point.shape = "variable",
   length and order.}
 
   \item{point.alpha}{defines the alpha of the points.
-  Values range from 0 to 1. It may be mapped to a variable
+  Values range from 0 to 1.  It may be mapped to a variable
   with a suitable length and order.}
 
   \item{point.fill}{defines the fill color of the points.
@@ -52,7 +52,7 @@ map.mod(object, dim = c(1, 2), point.shape = "variable",
   \link{add.to.label} for ways to alter the labels.}
 
   \item{label.alpha}{defines the alpha of the labels.
-  Values range from 0 to 1. It may be mapped to a variable
+  Values range from 0 to 1.  It may be mapped to a variable
   with a suitable length and order.}
 
   \item{label.color}{defines the color of the labels. It
@@ -74,6 +74,6 @@ two selected dimension.
 \examples{
 example(soc.mca)
 map.mod(result)
-map.mod(result, dim = c(3,2), point.size = 2)
+map.mod(result, dim = c(3, 2), point.size = 2)
 }
 

@@ -188,7 +188,7 @@ map.csa.mca.array <- function(csa.object, ndim = 3, fixed.coord = TRUE, ...){
   for(j in 1:ndim){
     for (i in 1:ndim){
       plot.list[[count]]  <- map.csa.mca(csa.object, mca.dim = i, csa.dim = j, ...)
-      count  <- count+1
+      count  <- count + 1
     }
   }
   

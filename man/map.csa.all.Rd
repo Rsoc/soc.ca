@@ -40,8 +40,8 @@ analysises
 \examples{
 \dontrun{
 example(soc.csa)
-map.csa.all(result, active[,1])
-map.csa.all(result, active[,1], FUN = map.ctr, ctr.dim = 1)
+map.csa.all(result, active[, 1])
+map.csa.all(result, active[, 1], FUN = map.ctr, ctr.dim = 1)
 }
 }
 

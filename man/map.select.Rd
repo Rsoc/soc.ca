@@ -49,7 +49,7 @@ map.select(object, dim = c(1, 2), ctr.dim = 1, list.mod = NULL,
   length and order.}
 
   \item{point.alpha}{defines the alpha of the points.
-  Values range from 0 to 1. It may be mapped to a variable
+  Values range from 0 to 1.  It may be mapped to a variable
   with a suitable length and order.}
 
   \item{point.fill}{defines the fill color of the points.
@@ -70,7 +70,7 @@ map.select(object, dim = c(1, 2), ctr.dim = 1, list.mod = NULL,
   \link{add.to.label} for ways to alter the labels.}
 
   \item{label.alpha}{defines the alpha of the labels.
-  Values range from 0 to 1. It may be mapped to a variable
+  Values range from 0 to 1.  It may be mapped to a variable
   with a suitable length and order.}
 
   \item{label.color}{defines the color of the labels. It
@@ -91,7 +91,7 @@ Creates a map of selected modalities or individuals
 \examples{
 example(soc.mca)
 map.select(result, map.title = "Map of the first ten modalities",list.mod = 1:10)
-select   <- active[,3]
+select   <- active[, 3]
 select   <- select == levels(select)[2]
 map.select(result, map.title = "Map of all individuals sharing a particular value",
  list.ind = select, point.size = 3)

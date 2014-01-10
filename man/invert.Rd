@@ -23,9 +23,9 @@ coord.mod, coord.ind and coord.sup in the soc.ca object.
 }
 \examples{
 example(soc.mca)
-inverted.result <- invert(result, 1:2)
-result$coord.ind[1,1:2]
-inverted.result$coord.ind[1,1:2]
+inverted.result  <- invert(result, 1:2)
+result$coord.ind[1, 1:2]
+inverted.result$coord.ind[1, 1:2]
 }
 \seealso{
 \link{soc.mca}, \link{add.to.label}

@@ -30,7 +30,7 @@ map.ind(object, dim = c(1, 2), point.shape = 21, point.alpha = 0.8,
   suitable length and order.}
 
   \item{point.alpha}{defines the alpha of the points.
-  Values range from 0 to 1. It may be mapped to a variable
+  Values range from 0 to 1.  It may be mapped to a variable
   with a suitable length and order.}
 
   \item{point.fill}{defines the fill color of the points.
@@ -50,7 +50,7 @@ map.ind(object, dim = c(1, 2), point.shape = 21, point.alpha = 0.8,
   \link{add.to.label} for ways to alter the labels.}
 
   \item{label.alpha}{defines the alpha of the labels.
-  Values range from 0 to 1. It may be mapped to a variable
+  Values range from 0 to 1.  It may be mapped to a variable
   with a suitable length and order.}
 
   \item{label.color}{defines the color of the labels. It
@@ -72,9 +72,9 @@ Creates a map of the individuals on two selected dimension.
 example(soc.mca)
 map.ind(result)
 map.ind(result, map.title = "Each individual is given its shape according to a value in a factor",
- point.shape = active[,1], legend = TRUE)
- map <- map.ind(result, map.title = "The contribution of the individuals with new scale",
- point.color = result$ctr.ind[,1], point.shape = 18)
+ point.shape = active[, 1], legend = TRUE)
+map  <- map.ind(result, map.title = "The contribution of the individuals with new scale",
+ point.color = result$ctr.ind[, 1], point.shape = 18)
 map + scale_color_continuous(low = "white", high = "red")
 quad   <- create.quadrant(result)
 map.ind(result, map.title = "Individuals in the space given shape and color by their quadrant",
