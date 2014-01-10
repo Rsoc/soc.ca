@@ -2,8 +2,7 @@
 \alias{map.csa.mca.array}
 \title{CSA-MCA array}
 \usage{
-  map.csa.mca.array(csa.object, ndim = 3,
-    fixed.coord = TRUE, ...)
+map.csa.mca.array(csa.object, ndim = 3, fixed.coord = TRUE, ...)
 }
 \arguments{
   \item{csa.object}{a result object created by the
@@ -18,7 +17,7 @@
   \item{...}{for further arguments see \link{map.csa.mca}}
 }
 \description{
-  Create an array of \link{map.csa.mca} maps
+Create an array of \link{map.csa.mca} maps
 }
 \examples{
 example(soc.csa)

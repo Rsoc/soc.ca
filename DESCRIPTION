@@ -7,9 +7,10 @@ Description: soc.ca is a package optimized to the needs of scientists within
     analysis. Seperate functions exists for near publication-ready plots and
     tables.
 URL: https://github.com/Rsoc/soc.ca
-Version: 0.1
+Version: 0.7
 Maintainer: Anton Grau Larsen <alar@soc.ku.dk>
-Author: Anton Grau Larsen <alar@soc.ku.dk>
+Author: Anton Grau Larsen, with contributions from Christoph Ellersgaard and
+    Stefan Andrade
 Depends:
     R (>= 2.15.0),
     ggplot2,
@@ -18,13 +19,3 @@ Depends:
     scales,
     grid
 License: GPL-3
-Collate:
-    'data_documentation.r'
-    'functions_analysis.r'
-    'functions_description.r'
-    'functions_ellipse.r'
-    'functions_label.r'
-    'functions_plot.r'
-    'functions_tools.r'
-    'plot_theme.r'
-    'functions_array.r'

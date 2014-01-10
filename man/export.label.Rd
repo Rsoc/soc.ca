@@ -2,8 +2,7 @@
 \alias{export.label}
 \title{Exports the labels of a soc.ca object into a csv file.}
 \usage{
-  export.label(object, file = FALSE, encoding = "UTF-8",
-    overwrite = FALSE)
+export.label(object, file = FALSE, encoding = "UTF-8", overwrite = FALSE)
 }
 \arguments{
   \item{object}{is a soc.ca object}
@@ -17,23 +16,23 @@
   existing files}
 }
 \value{
-  A .csv with two columns and preferably UTF-8 encoding.
+A .csv with two columns and preferably UTF-8 encoding.
 }
 \description{
-  This function allows easy translation and renaming of
-  modalities by exporting the labels into a .csv file that
-  is easier to work with.
+This function allows easy translation and renaming of
+modalities by exporting the labels into a .csv file that is
+easier to work with.
 }
 \details{
-  Two columns are created within the .csv: 'New label' and
-  'Old label'. In the 'New label' column you write the new
-  labels. Remember to leave 'Old label' unchanged as this
-  column is used for matching.
+Two columns are created within the .csv: 'New label' and
+'Old label'. In the 'New label' column you write the new
+labels. Remember to leave 'Old label' unchanged as this
+column is used for matching.
 
-  If you want to add frequencies to the labels with the
-  \link{add.to.label} function you should do this after
-  exporting and assigning labels with the
-  \link{assign.label} function. Otherwise the matching of
-  the labels is likely to fail.
+If you want to add frequencies to the labels with the
+\link{add.to.label} function you should do this after
+exporting and assigning labels with the \link{assign.label}
+function. Otherwise the matching of the labels is likely to
+fail.
 }
 

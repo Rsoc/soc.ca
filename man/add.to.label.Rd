@@ -2,8 +2,8 @@
 \alias{add.to.label}
 \title{Add values to label}
 \usage{
-  add.to.label(object, value = "freq", prefix = "default",
-    suffix = ")", dim = 1)
+add.to.label(object, value = "freq", prefix = "default", suffix = ")",
+  dim = 1)
 }
 \arguments{
   \item{object}{is a soc.ca object}
@@ -22,11 +22,11 @@
   \item{dim}{the dimension from which values are retrieved}
 }
 \value{
-  a soc.ca object with altered labels in names.mod and
-  names.sup
+a soc.ca object with altered labels in names.mod and
+names.sup
 }
 \description{
-  Adds values to the end of the label of each modality.
+Adds values to the end of the label of each modality.
 }
 \examples{
 example(soc.mca)

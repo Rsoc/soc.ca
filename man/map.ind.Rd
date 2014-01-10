@@ -2,12 +2,11 @@
 \alias{map.ind}
 \title{Map the individuals of a soc.ca analysis}
 \usage{
-  map.ind(object, dim = c(1, 2), point.shape = 21,
-    point.alpha = 0.8, point.fill = "grey80",
-    point.color = "black", point.size = 3, label = FALSE,
-    label.alpha = 0.8, label.color = "black",
-    label.size = 3.3, map.title = "ind",
-    labelx = "default", labely = "default", legend = NULL)
+map.ind(object, dim = c(1, 2), point.shape = 21, point.alpha = 0.8,
+  point.fill = "grey80", point.color = "black", point.size = 3,
+  label = FALSE, label.alpha = 0.8, label.color = "black",
+  label.size = 3.3, map.title = "ind", labelx = "default",
+  labely = "default", legend = NULL)
 }
 \arguments{
   \item{object}{a soc.ca class object as created by
@@ -67,15 +66,18 @@
   link{guide_legend} functions from the ggplot2 package.}
 }
 \description{
-  Creates a map of the individuals on two selected
-  dimension.
+Creates a map of the individuals on two selected dimension.
 }
 \examples{
 example(soc.mca)
 map.ind(result)
-map.ind(result, map.title = "Each individual is given its shape according to a value in a factor", point.shape = active[,1], legend = TRUE)
-map.ind(result, map.title = "The contribution of the individuals with a new color scale defined by ggplot2", point.color = result$ctr.ind[,1], point.shape = 18) + scale_color_continuous(low = "white", high = "red")
+map.ind(result, map.title = "Each individual is given its shape according to a value in a factor",
+ point.shape = active[,1], legend = TRUE)
+ map <- map.ind(result, map.title = "The contribution of the individuals with new scale",
+ point.color = result$ctr.ind[,1], point.shape = 18)
+map + scale_color_continuous(low = "white", high = "red")
 quad   <- create.quadrant(result)
-map.ind(result, map.title = "Individuals in the space given shape and color by their quadrant", point.shape = quad, point.color = quad)
+map.ind(result, map.title = "Individuals in the space given shape and color by their quadrant",
+ point.shape = quad, point.color = quad)
 }
 

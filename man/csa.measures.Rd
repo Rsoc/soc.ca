@@ -2,9 +2,8 @@
 \alias{csa.measures}
 \title{CSA measures}
 \usage{
-  csa.measures(csa.object, correlations = TRUE,
-    cosines = TRUE, cosine.angles = TRUE, dim = 1:5,
-    format = TRUE, ...)
+csa.measures(csa.object, correlations = TRUE, cosines = TRUE,
+  cosine.angles = TRUE, dim = 1:5, format = TRUE, ...)
 }
 \arguments{
   \item{csa.object}{is a "soc.csa" class object created by
@@ -28,12 +27,12 @@
   function}
 }
 \value{
-  A list of measures in either formatted or raw form.
+A list of measures in either formatted or raw form.
 }
 \description{
-  Several measures for the evaluation of the relations
-  between the dimensions of the CSA and the dimensions the
-  of original MCA
+Several measures for the evaluation of the relations
+between the dimensions of the CSA and the dimensions the of
+original MCA
 }
 \examples{
 example(soc.csa)

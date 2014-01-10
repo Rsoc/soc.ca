@@ -1,0 +1,33 @@
+\name{min_cut}
+\alias{min_cut}
+\title{Cut a continuous variable into categories with a specified minimum}
+\usage{
+min_cut(x, min.size = length(x)/10)
+}
+\arguments{
+  \item{x}{is a continuous numerical variable}
+
+  \item{min.size}{is the minimum number of individuals in
+  each category}
+}
+\value{
+a numerical vector with the number of each category
+}
+\description{
+Many continuous variables are very unequally distributed,
+often with many individuals in the lower categories and
+fewer in the top. As a result it is often difficult to
+create groups of equal size, with unique cut-points. By
+defining the wanted minimum of individuals in each
+category, but still allowing this minimum to be surpassed,
+it is easy to create ordinal variables from continuous
+variables. The last category will not neccessarily have the
+minimum number of individuals.
+}
+\examples{
+a <- 1:1000
+table(min_cut(a))
+b <- c(rep(0, 50), 1:500)
+table(min_cut(b, min.size = 20))
+}
+

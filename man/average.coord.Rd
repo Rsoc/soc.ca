@@ -2,7 +2,7 @@
 \alias{average.coord}
 \title{Average coordinates}
 \usage{
-  average.coord(object, x, dim = c(1, 2))
+average.coord(object, x, dim = c(1, 2))
 }
 \arguments{
   \item{object}{is soc.ca result object}
@@ -13,12 +13,12 @@
   \item{dim}{is the two dimensions used}
 }
 \value{
-  a matrix with the mean points and frequencies of the
-  given variable
+a matrix with the mean points and frequencies of the given
+variable
 }
 \description{
-  Find the average coordinates for each category in a
-  variable on two dimensions.
+Find the average coordinates for each category in a
+variable on two dimensions.
 }
 \examples{
 example(soc.mca)

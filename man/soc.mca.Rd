@@ -2,8 +2,8 @@
 \alias{soc.mca}
 \title{Specific Multiple Correspondence Analysis}
 \usage{
-  soc.mca(active, sup = NULL, identifier = NULL,
-    passive = getOption("passive", default = "Missing"))
+soc.mca(active, sup = NULL, identifier = NULL,
+  passive = getOption("passive", default = "Missing"))
 }
 \arguments{
   \item{active}{Defines the active modalities in a
@@ -23,46 +23,42 @@
   have a full or partial match will be set as passive.}
 }
 \value{
-  \item{nd}{Number of active dimensions} \item{n.ind}{The
-  number of active individuals} \item{n.mod}{The number of
-  active modalities} \item{eigen}{Eigenvectors}
-  \item{total.inertia}{The sum of inertia}
-  \item{adj.inertia}{A matrix with all active dimensions,
-  adjusted and unadjusted inertias. See \link{variance}}
-  \item{freq.mod}{Frequencies for the active modalities.
-  See \link{add.to.label}} \item{freq.sup}{Frequencies for
-  the supplementary modalities. See \link{add.to.label}}
-  \item{ctr.mod}{A matrix with the contribution values of
-  the active modalities per dimension. See
-  \link{contribution}} \item{ctr.ind}{A matrix with the
-  contribution values of the individuals per dimension.}
-  \item{cor.mod}{The correlation or quality of each
-  modality per dimension.} \item{cor.ind}{The correlation
-  or quality of each individual per dimension.}
-  \item{mass.mod}{The mass of each modality}
-  \item{coord.mod}{A matrix with the principal coordinates
-  of each active modality per dimension.}
-  \item{coord.ind}{A matrix with the principal coordinates
-  of each individual per dimension.} \item{coord.sup}{A
-  matrix with the principal coordinates of each
-  supplementary modality per dimension.}
-  \item{names.mod}{The names of the active modalities}
-  \item{names.ind}{The names of the individuals}
-  \item{names.sup}{The names of the supplementary
-  modalities} \item{names.passive}{The names of the passive
-  modalities} \item{modal}{A matrix with the number of
-  modalities per variable and their location}
-  \item{variable}{A vector with the name of the variable of
-  the active modalities}
+\item{nd}{Number of active dimensions} \item{n.ind}{The
+number of active individuals} \item{n.mod}{The number of
+active modalities} \item{eigen}{Eigenvectors}
+\item{total.inertia}{The sum of inertia}
+\item{adj.inertia}{A matrix with all active dimensions,
+adjusted and unadjusted inertias. See \link{variance}}
+\item{freq.mod}{Frequencies for the active modalities. See
+\link{add.to.label}} \item{freq.sup}{Frequencies for the
+supplementary modalities. See \link{add.to.label}}
+\item{ctr.mod}{A matrix with the contribution values of the
+active modalities per dimension. See \link{contribution}}
+\item{ctr.ind}{A matrix with the contribution values of the
+individuals per dimension.} \item{cor.mod}{The correlation
+or quality of each modality per dimension.}
+\item{cor.ind}{The correlation or quality of each
+individual per dimension.} \item{mass.mod}{The mass of each
+modality} \item{coord.mod}{A matrix with the principal
+coordinates of each active modality per dimension.}
+\item{coord.ind}{A matrix with the principal coordinates of
+each individual per dimension.} \item{coord.sup}{A matrix
+with the principal coordinates of each supplementary
+modality per dimension.} \item{names.mod}{The names of the
+active modalities} \item{names.ind}{The names of the
+individuals} \item{names.sup}{The names of the
+supplementary modalities} \item{names.passive}{The names of
+the passive modalities} \item{modal}{A matrix with the
+number of modalities per variable and their location}
+\item{variable}{A vector with the name of the variable of
+the active modalities}
 }
 \description{
-  \code{soc.mca} performs a specific multiple
-  correspondence analysis on a data.frame of factors, where
-  cases are rows and columns are variables.
+\code{soc.mca} performs a specific multiple correspondence
+analysis on a data.frame of factors, where cases are rows
+and columns are variables.
 }
 \examples{
-# This example can be found in further detail at our wiki on github - https://github.com/Rsoc/soc.mca/wiki/How-to-use-soc.mca
-
 # Loads the "taste" dataset included in this package
 data(taste)
 attach(taste)
@@ -87,17 +83,17 @@ soc.mca(active, sup)
 options(passive = NULL)
 }
 \author{
-  Anton Grau Larsen, University of Copenhagen
+Anton Grau Larsen, University of Copenhagen
 
-  Stefan Bastholm Andrade, University of Copenhagen
+Stefan Bastholm Andrade, University of Copenhagen
 
-  Christoph Ellersgaard, University of Copenhagen
+Christoph Ellersgaard, University of Copenhagen
 }
 \references{
-  Le Roux, B., og H. Rouanet. 2010. Multiple correspondence
-  analysis. Thousand Oaks: Sage.
+Le Roux, B., og H. Rouanet. 2010. Multiple correspondence
+analysis. Thousand Oaks: Sage.
 }
 \seealso{
-  \link{soc.csa}, \link{contribution}
+\link{soc.csa}, \link{contribution}
 }
 

@@ -2,9 +2,8 @@
 \alias{map.path}
 \title{Map path along an ordered variable}
 \usage{
-  map.path(object, x, map = map.ind(object, dim),
-    dim = c(1, 2), label = TRUE, min.size = length(x)/10,
-    ...)
+map.path(object, x, map = map.ind(object, dim), dim = c(1, 2),
+  label = TRUE, min.size = length(x)/10, ...)
 }
 \arguments{
   \item{object}{is a soc.ca result object}
@@ -22,20 +21,21 @@
   \item{label}{if TRUE the label of the points are shown}
 
   \item{min.size}{is the minimum size given to the groups
-  of a numerical variable, see \link{cut.min}.}
+  of a numerical variable, see \link{min_cut}.}
 
   \item{...}{further arguments are passed onto
   \link{geom_path}, \link{geom_point} and \link{geom_text}
   from the ggplot2 package}
 }
 \description{
-  Plot a path along an ordered variable. If the variable is
-  numerical it is cut into groups by the \link{cut.min}
-  function.
+Plot a path along an ordered variable. If the variable is
+numerical it is cut into groups by the \link{min_cut}
+function.
 }
 \examples{
 example(soc.mca)
-map <- map.ind(result, point.color = as.numeric(sup$Age)) + scale_color_continuous(high = "red", low = "yellow")
+map <- map.ind(result, point.color = as.numeric(sup$Age))
+map <- map + scale_color_continuous(high = "red", low = "yellow")
 map.path(result, sup$Age, map)
 }
 

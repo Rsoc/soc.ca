@@ -2,12 +2,11 @@
 \alias{map.sup}
 \title{Map the supplementary modalities}
 \usage{
-  map.sup(object, dim = c(1, 2), point.shape = "variable",
-    point.alpha = 0.8, point.fill = "grey80",
-    point.color = "black", point.size = "freq",
-    label = TRUE, label.alpha = 0.8, label.color = "black",
-    label.size = 3.3, map.title = "sup",
-    labelx = "default", labely = "default", legend = NULL)
+map.sup(object, dim = c(1, 2), point.shape = "variable",
+  point.alpha = 0.8, point.fill = "grey80", point.color = "black",
+  point.size = "freq", label = TRUE, label.alpha = 0.8,
+  label.color = "black", label.size = 3.3, map.title = "sup",
+  labelx = "default", labely = "default", legend = NULL)
 }
 \arguments{
   \item{object}{a soc.ca class object as created by
@@ -69,13 +68,14 @@
   link{guide_legend} functions from the ggplot2 package.}
 }
 \description{
-  Creates a map of the supplementary modalities on two
-  selected dimension.
+Creates a map of the supplementary modalities on two
+selected dimension.
 }
 \examples{
 example(soc.mca)
 map.sup(result)
 map.sup(result, dim = c(2,1))
-map.sup(result, point.size = result$coord.sup[,4], map.title = "All supplementary modalities with size according to coordinate on the 4th dimension")
+map.sup(result, point.size = result$coord.sup[,4],
+ map.title = "All supplementary modalities with size according to coordinate on the 4th dimension")
 }
 

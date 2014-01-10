@@ -44,12 +44,12 @@ add.to.label <- function(object, value = "freq", prefix = "default", suffix = ")
   }
   
   if (identical(value, "ctr")){
-  val.mod  <- round(object$ctr.mod[dim,]*100,1)
+  val.mod  <- round(object$ctr.mod[dim, ]*100,1)
   object$names.mod <- paste(names.mod, prefix, val.mod, suffix, sep = "")
   }
   
   if (identical(value, "mass")){
-    val.mod  <- round(object$mass.mod[dim,]*100,1)
+    val.mod  <- round(object$mass.mod[dim, ]*100,1)
     object$names.mod <- paste(names.mod, prefix, val.mod, suffix, sep = "")
   }
   
@@ -93,10 +93,10 @@ export.label    <- function(object, file = FALSE, encoding = "UTF-8", overwrite 
   ca.label      <- cbind(names, names)
   colnames(ca.label)  <- c("New label", "Old label")
   
-  if (identical(file, FALSE)==TRUE){
+  if (identical(file, FALSE) == TRUE){
     file    <- paste("label_",deparse(substitute(object)), ".csv", sep = "")
   }
-  if(file.exists(file)==TRUE & identical(overwrite, FALSE)) stop("File already exists")
+  if(file.exists(file) == TRUE & identical(overwrite, FALSE)) stop("File already exists")
   write.csv(ca.label, file = file, fileEncoding = encoding)
 
 }
@@ -123,7 +123,7 @@ export.label    <- function(object, file = FALSE, encoding = "UTF-8", overwrite 
 #' @export
 
 assign.label <- function(object, file = FALSE, encoding = "UTF-8", sep = ","){
-  if (identical(file, FALSE)==TRUE){
+  if (identical(file, FALSE) == TRUE){
     file <- paste("label_", deparse(substitute(object)), ".csv", sep = "")
   }
   label     <- read.csv(file, encoding = encoding, sep  =  sep)
@@ -136,17 +136,17 @@ assign.label <- function(object, file = FALSE, encoding = "UTF-8", sep = ","){
   old.label <- as.character(label$Old.label)
   
   for (i in 1:length(old.label)){
-    indices   <- which(old.label[i]==names.mod)
+    indices   <- which(old.label[i] == names.mod)
     names.mod[indices] <- new.label[i]
   }
   
   for (i in 1:length(old.label)){
-    indices   <- which(old.label[i]==names.sup)
+    indices   <- which(old.label[i] == names.sup)
     names.sup[indices] <- new.label[i]
   }
   
   for (i in 1:length(old.label)){
-    indices   <- which(old.label[i]==names.ind)
+    indices   <- which(old.label[i] == names.ind)
     names.ind[indices] <- new.label[i]
   }
   

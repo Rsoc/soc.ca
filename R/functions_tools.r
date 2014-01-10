@@ -13,12 +13,12 @@
 #' @export
 #' @examples
 #' a <- 1:1000
-#' table(min.cut(a))
+#' table(min_cut(a))
 #' b <- c(rep(0, 50), 1:500)
-#' table(min.cut(b, min.size = 20))
+#' table(min_cut(b, min.size = 20))
 #' 
 
-min.cut <- function(x, min.size = length(x)/10){
+min_cut <- function(x, min.size = length(x)/10){
   
   x.na <- x[is.na(x) == FALSE]
   p.x <- cumsum(prop.table(table(x.na)))
@@ -33,7 +33,7 @@ min.cut <- function(x, min.size = length(x)/10){
   g <- 1 
   collect <- 0
   for (i in 1:nrow(bm)){
-    if (dif[i] >= min.size | collect >= min.size-1){ # collect skal måske være mindre end min.size
+    if (dif[i] >= min.size | collect >= min.size-1){
       group[i] <- g
       g <- g + 1
       collect <- 0
@@ -70,11 +70,10 @@ min.cut <- function(x, min.size = length(x)/10){
 #' @export
 
 export <- function(object, file = "export.csv", dim = 1:5) {
-  if (is.matrix(object)==TRUE|is.data.frame(object)==TRUE){
+  if (is.matrix(object) == TRUE|is.data.frame(object) == TRUE){
     write.csv(object, file, fileEncoding = "UTF-8")}
-    
-  # Export soc.ca
-    if ((class(object)=="tab.variable")==TRUE){
+
+    if ((class(object) == "tab.variable") == TRUE){
       
       ll    <- length(object)
       nam   <- names(object)
@@ -90,13 +89,13 @@ export <- function(object, file = "export.csv", dim = 1:5) {
       a <- rbind(a,line, object[[i]], line2)
       line2  <- c(rep("", coln))
     }
-    rownames(a)[rownames(a)=="line"] <- nam
-    rownames(a)[rownames(a)=="line2"] <- ""
+    rownames(a)[rownames(a) == "line"] <- nam
+    rownames(a)[rownames(a) == "line2"] <- ""
     out <- a
     write.csv(out, file, fileEncoding = "UTF-8")  
     }
-    # Export soc.ca
-    if ((class(object)=="soc.mca")==TRUE){
+
+    if ((class(object) == "soc.mca") == TRUE){
     coord.mod     <- object$coord.mod[,dim]
     coord.sup     <- object$coord.sup[,dim]
     coord.ind     <- object$coord.ind[,dim]
@@ -136,18 +135,14 @@ export <- function(object, file = "export.csv", dim = 1:5) {
 #' @seealso \link{soc.mca}, \link{add.to.label}
 #' @examples
 #' example(soc.mca)
-#' inverted.result <- invert(result, 1:2)
-#' result$coord.ind[1,1:2]
-#' inverted.result$coord.ind[1,1:2]
+#' inverted.result  <- invert(result, 1:2)
+#' result$coord.ind[1, 1:2]
+#' inverted.result$coord.ind[1, 1:2]
 #' @export
 
 invert <- function(x, dim = 1) {
   x$coord.mod[,dim] <- x$coord.mod[,dim] * -1
   x$coord.ind[,dim] <- x$coord.ind[,dim] * -1
   x$coord.sup[,dim] <- x$coord.sup[,dim] * -1
-#   if(inherits(x, "soc.csa")==TRUE) {
-#     x$cor.dim[dim,] <- x$cor.dim[dim,] * -1
-#     x$cosines[dim,] <- x$cosines[dim,] * -1
-#   }
   return(x)
 }

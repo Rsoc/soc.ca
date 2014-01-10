@@ -2,13 +2,11 @@
 \alias{map.ctr}
 \title{Map the most contributing modalities}
 \usage{
-  map.ctr(object, dim = c(1, 2), ctr.dim = 1,
-    point.shape = "variable", point.alpha = 0.8,
-    point.fill = "grey80", point.color = "black",
-    point.size = "freq", label = TRUE, label.alpha = 0.8,
-    label.color = "black", label.size = 3.3,
-    map.title = "ctr", labelx = "default",
-    labely = "default", legend = NULL)
+map.ctr(object, dim = c(1, 2), ctr.dim = 1, point.shape = "variable",
+  point.alpha = 0.8, point.fill = "grey80", point.color = "black",
+  point.size = "freq", label = TRUE, label.alpha = 0.8,
+  label.color = "black", label.size = 3.3, map.title = "ctr",
+  labelx = "default", labely = "default", legend = NULL)
 }
 \arguments{
   \item{object}{a soc.ca class object as created by
@@ -72,9 +70,8 @@
   link{guide_legend} functions from the ggplot2 package.}
 }
 \description{
-  Creates a map of the modalities contributing above
-  average to one or more dimensions on two selected
-  dimension.
+Creates a map of the modalities contributing above average
+to one or more dimensions on two selected dimension.
 }
 \examples{
 example(soc.mca)

@@ -2,14 +2,12 @@
 \alias{map.select}
 \title{Map select modalities and individuals}
 \usage{
-  map.select(object, dim = c(1, 2), ctr.dim = 1,
-    list.mod = NULL, list.sup = NULL, list.ind = NULL,
-    point.shape = "variable", point.alpha = 0.8,
-    point.fill = "grey80", point.color = "black",
-    point.size = "freq", label = TRUE, label.alpha = 0.8,
-    label.color = "black", label.size = 3.3,
-    map.title = "select", labelx = "default",
-    labely = "default", legend = NULL)
+map.select(object, dim = c(1, 2), ctr.dim = 1, list.mod = NULL,
+  list.sup = NULL, list.ind = NULL, point.shape = "variable",
+  point.alpha = 0.8, point.fill = "grey80", point.color = "black",
+  point.size = "freq", label = TRUE, label.alpha = 0.8,
+  label.color = "black", label.size = 3.3, map.title = "select",
+  labelx = "default", labely = "default", legend = NULL)
 }
 \arguments{
   \item{object}{a soc.ca class object as created by
@@ -88,14 +86,16 @@
   link{guide_legend} functions from the ggplot2 package.}
 }
 \description{
-  Creates a map of selected modalities or individuals
+Creates a map of selected modalities or individuals
 }
 \examples{
 example(soc.mca)
 map.select(result, map.title = "Map of the first ten modalities",list.mod = 1:10)
 select   <- active[,3]
 select   <- select == levels(select)[2]
-map.select(result, map.title = "Map of all individuals sharing a particular value", list.ind = select, point.size = 3)
-map.select(result, map.title = "Map of both select individuals and modalities", list.ind = select, list.mod = 1:10)
+map.select(result, map.title = "Map of all individuals sharing a particular value",
+ list.ind = select, point.size = 3)
+map.select(result, map.title = "Map of both select individuals and modalities",
+ list.ind = select, list.mod = 1:10)
 }
 

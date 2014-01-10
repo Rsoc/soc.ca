@@ -2,7 +2,7 @@
 \alias{export}
 \title{Export results from soc.ca}
 \usage{
-  export(object, file = "export.csv", dim = 1:5)
+export(object, file = "export.csv", dim = 1:5)
 }
 \arguments{
   \item{object}{is a soc.ca class object}
@@ -13,12 +13,12 @@
   to be exported to}
 }
 \value{
-  A .csv file with various values in UTF-8 encoding
+A .csv file with various values in UTF-8 encoding
 }
 \description{
-  Export objects from the soc.ca package to csv files.
+Export objects from the soc.ca package to csv files.
 }
 \seealso{
-  \link{soc.mca}, \link{contribution}
+\link{soc.mca}, \link{contribution}
 }
 

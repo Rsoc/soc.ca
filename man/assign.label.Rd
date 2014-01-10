@@ -2,8 +2,7 @@
 \alias{assign.label}
 \title{Assign new labels}
 \usage{
-  assign.label(object, file = FALSE, encoding = "UTF-8",
-    sep = ",")
+assign.label(object, file = FALSE, encoding = "UTF-8", sep = ",")
 }
 \arguments{
   \item{object}{is a soc.ca object}
@@ -18,26 +17,25 @@
   .csv file}
 }
 \value{
-  a soc.ca object with altered labels in
-  \code{object$names.mod}, \code{object$names.ind} and
-  \code{object$names.sup}
+a soc.ca object with altered labels in
+\code{object$names.mod}, \code{object$names.ind} and
+\code{object$names.sup}
 }
 \description{
-  Assigns new labels to a soc.ca object. The input labels
-  are defined in a .csv file created by the
-  \link{export.label} function.
+Assigns new labels to a soc.ca object. The input labels are
+defined in a .csv file created by the \link{export.label}
+function.
 }
 \details{
-  To use this function first export the labels from your
-  soc.mca analysis with the \link{export.label} function.
-  Then open and edit the created file with your favorite
-  spreadsheet editor, like LibreOffice Calc.  Change labels
-  in the "new.label" column to the desired values and save.
-  Use the assign.label function but remember to assign the
-  results into a new object or overwrite the existing
-  object.
+To use this function first export the labels from your
+soc.mca analysis with the \link{export.label} function.
+Then open and edit the created file with your favorite
+spreadsheet editor, like LibreOffice Calc.  Change labels
+in the "new.label" column to the desired values and save.
+Use the assign.label function but remember to assign the
+results into a new object or overwrite the existing object.
 }
 \seealso{
-  \link{export.label}, \link{add.to.label}
+\link{export.label}, \link{add.to.label}
 }
 

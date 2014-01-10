@@ -2,7 +2,7 @@
 \alias{soc.csa}
 \title{Class Specific Multiple Correspondence Analysis}
 \usage{
-  soc.csa(object, class.indicator, sup = NULL)
+soc.csa(object, class.indicator, sup = NULL)
 }
 \arguments{
   \item{object}{is a soc.ca class object created with
@@ -16,53 +16,51 @@
   factors, without NA's}
 }
 \value{
-  \item{nd}{Number of active dimensions} \item{n.ind}{The
-  number of active individuals} \item{n.mod}{The number of
-  active modalities} \item{eigen}{Eigenvectors}
-  \item{total.inertia}{The sum of inertia}
-  \item{adj.inertia}{A matrix with all active dimensions,
-  adjusted and unadjusted inertias. See \link{variance}}
-  \item{freq.mod}{Frequencies for the active modalities.
-  See \link{add.to.label}} \item{freq.sup}{Frequencies for
-  the supplementary modalities. See \link{add.to.label}}
-  \item{ctr.mod}{A matrix with the contribution values of
-  the active modalities per dimension. See
-  \link{contribution}} \item{ctr.ind}{A matrix with the
-  contribution values of the individuals per dimension.}
-  \item{cor.mod}{The correlation or quality of each
-  modality per dimension.} \item{cor.ind}{The correlation
-  or quality of each individual per dimension.}
-  \item{mass.mod}{The mass of each modality}
-  \item{coord.mod}{A matrix with the principal coordinates
-  of each active modality per dimension.}
-  \item{coord.ind}{A matrix with the principal coordinates
-  of each individual per dimension.} \item{coord.sup}{A
-  matrix with the principal coordinates of each
-  supplementary modality per dimension. Notice that the
-  position of the supplementary modalities in class
-  specific analysis is the mean point of the individuals,
-  which is not directly comparable with the cloud of the
-  active modalities.} \item{indicator.matrix}{A indicator
-  matrix. See \link{indicator}} \item{names.mod}{The names
-  of the active modalities} \item{names.ind}{The names of
-  the individuals} \item{names.sup}{The names of the
-  supplementary modalities} \item{names.passive}{The names
-  of the passive modalities} \item{modal}{A matrix with the
-  number of modalities per variable and their location}
-  \item{variable}{A vector with the name of the variable
-  for each of the active modalities} \item{variable.sup}{A
-  vector with the name of the variable for each of the
-  supplementary modalities}
-  \item{original.class.indicator}{The class indicator}
-  \item{original.result}{The original soc.ca object used
-  for the CSA}
+\item{nd}{Number of active dimensions} \item{n.ind}{The
+number of active individuals} \item{n.mod}{The number of
+active modalities} \item{eigen}{Eigenvectors}
+\item{total.inertia}{The sum of inertia}
+\item{adj.inertia}{A matrix with all active dimensions,
+adjusted and unadjusted inertias. See \link{variance}}
+\item{freq.mod}{Frequencies for the active modalities. See
+\link{add.to.label}} \item{freq.sup}{Frequencies for the
+supplementary modalities. See \link{add.to.label}}
+\item{ctr.mod}{A matrix with the contribution values of the
+active modalities per dimension. See \link{contribution}}
+\item{ctr.ind}{A matrix with the contribution values of the
+individuals per dimension.} \item{cor.mod}{The correlation
+or quality of each modality per dimension.}
+\item{cor.ind}{The correlation or quality of each
+individual per dimension.} \item{mass.mod}{The mass of each
+modality} \item{coord.mod}{A matrix with the principal
+coordinates of each active modality per dimension.}
+\item{coord.ind}{A matrix with the principal coordinates of
+each individual per dimension.} \item{coord.sup}{A matrix
+with the principal coordinates of each supplementary
+modality per dimension. Notice that the position of the
+supplementary modalities in class specific analysis is the
+mean point of the individuals, which is not directly
+comparable with the cloud of the active modalities.}
+\item{indicator.matrix}{A indicator matrix. See
+\link{indicator}} \item{names.mod}{The names of the active
+modalities} \item{names.ind}{The names of the individuals}
+\item{names.sup}{The names of the supplementary modalities}
+\item{names.passive}{The names of the passive modalities}
+\item{modal}{A matrix with the number of modalities per
+variable and their location} \item{variable}{A vector with
+the name of the variable for each of the active modalities}
+\item{variable.sup}{A vector with the name of the variable
+for each of the supplementary modalities}
+\item{original.class.indicator}{The class indicator}
+\item{original.result}{The original soc.ca object used for
+the CSA}
 }
 \description{
-  \code{soc.csa} performs a class specific multiple
-  correspondence analysis on a data.frame of factors, where
-  cases are rows and columns are variables. Most
-  descriptive and analytical functions that work for
-  \link{soc.mca}, also work for \code{soc.csa}
+\code{soc.csa} performs a class specific multiple
+correspondence analysis on a data.frame of factors, where
+cases are rows and columns are variables. Most descriptive
+and analytical functions that work for \link{soc.mca}, also
+work for \code{soc.csa}
 }
 \examples{
 example(soc.mca)
@@ -71,17 +69,17 @@ res.csa      <- soc.csa(result, class.age)
 res.csa
 }
 \author{
-  Anton Grau Larsen, University of Copenhagen
+Anton Grau Larsen, University of Copenhagen
 
-  Stefan Bastholm Andrade, University of Copenhagen
+Stefan Bastholm Andrade, University of Copenhagen
 
-  Christoph Ellersgaard, University of Copenhagen
+Christoph Ellersgaard, University of Copenhagen
 }
 \references{
-  Le Roux, B., og H. Rouanet. 2010. Multiple correspondence
-  analysis. Thousand Oaks: Sage.
+Le Roux, B., og H. Rouanet. 2010. Multiple correspondence
+analysis. Thousand Oaks: Sage.
 }
 \seealso{
-  \link{add.to.label}, \link{contribution}
+\link{add.to.label}, \link{contribution}
 }
 

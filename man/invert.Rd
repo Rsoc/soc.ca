@@ -2,7 +2,7 @@
 \alias{invert}
 \title{Invert the direction of coordinates}
 \usage{
-  invert(x, dim = 1)
+invert(x, dim = 1)
 }
 \arguments{
   \item{x}{is a soc.ca object}
@@ -10,18 +10,16 @@
   \item{dim}{is the dimensions to be inverted}
 }
 \value{
-  a soc.ca object with inverted coordinates on the
-  specified dimensions
+a soc.ca object with inverted coordinates on the specified
+dimensions
 }
 \description{
-  Invert one or more axes of a correspondence analysis. The
-  principal coordinates of the analysis are multiplied by
-  -1.
+Invert one or more axes of a correspondence analysis. The
+principal coordinates of the analysis are multiplied by -1.
 }
 \details{
-  This is a convieniency function as you would have to
-  modify coord.mod, coord.ind and coord.sup in the soc.ca
-  object.
+This is a convieniency function as you would have to modify
+coord.mod, coord.ind and coord.sup in the soc.ca object.
 }
 \examples{
 example(soc.mca)
@@ -30,6 +28,6 @@ result$coord.ind[1,1:2]
 inverted.result$coord.ind[1,1:2]
 }
 \seealso{
-  \link{soc.mca}, \link{add.to.label}
+\link{soc.mca}, \link{add.to.label}
 }
 

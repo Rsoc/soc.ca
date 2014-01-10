@@ -2,8 +2,8 @@
 \alias{map.csa.mca}
 \title{Map the coordinates of the individuals in a CSA and its MCA}
 \usage{
-  map.csa.mca(csa.object, mca.dim = 1, csa.dim = 1,
-    smooth = TRUE, method = "auto")
+map.csa.mca(csa.object, mca.dim = 1, csa.dim = 1, smooth = TRUE,
+  method = "auto")
 }
 \arguments{
   \item{csa.object}{a result object created by the
@@ -19,8 +19,7 @@
   see \link{geom_smooth}}
 }
 \description{
-  Map the coordinates of the individuals in a CSA and its
-  MCA
+Map the coordinates of the individuals in a CSA and its MCA
 }
 \examples{
 example(soc.csa)
@@ -28,7 +27,6 @@ csa.res <- soc.csa(result, class.age)
 map.csa.mca(csa.res, mca.dim = 2, csa.dim = 1)
 }
 \seealso{
-  \link{soc.csa}, \link{map.csa.all},
-  link{map.csa.mca.array}
+\link{soc.csa}, \link{map.csa.all}, link{map.csa.mca.array}
 }
 

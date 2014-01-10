@@ -3,37 +3,36 @@
 \alias{directors}
 \title{Directors dataset}
 \description{
-  Prosopographical data on the top 100 CEO's from the 82
-  largest Danish corporations.
+Prosopographical data on the top 100 CEO's from the 82
+largest Danish corporations.
 }
 \details{
-  The directors dataset is prosopographical data collected
-  from a wide array of sources on biographic and corporate
-  information. Sources include the Danish variant of Who's
-  Who (Blaa Bog), a private business information database
-  (Greens Erhvervsinformation), journalistic portrait
-  articles, article search engines, bibliographic databases
-  and financial reports. CEOs from 82 corporations were
-  selected according to their position as CEO in December
-  2007. 18 executives are included on other criteria,
-  taking into account the magnitude of the corporations and
-  issues regarding ownership and control, resulting in a
-  final population of 100 CEOs. The 82 corporations have
-  formal ownership and management located in Denmark and
-  were selected through either financial capital, measured
-  as having a turnover of over five billion DKK (650
-  million Eur.), or organizational capital, defined as
-  having at least 5000 employees; 34 corporations were
-  included on both criteria, 45 on financial capital and
-  three on organizational capital alone. To avoid including
-  investors, rather than executives, a minimum of 500
-  employees was also required, excluding 12 firms.
-  Companies acting only as subsidiaries were also excluded.
-  Data is for public use and no author permission is
-  needed, but we would love to hear from you if you find
-  the data useful.  The following example is based on the
-  analysis from the article: "A Very Economic Elite: The
-  Case of the Danish Top CEOs".
+The directors dataset is prosopographical data collected
+from a wide array of sources on biographic and corporate
+information. Sources include the Danish variant of Who's
+Who (Blaa Bog), a private business information database
+(Greens Erhvervsinformation), journalistic portrait
+articles, article search engines, bibliographic databases
+and financial reports. CEOs from 82 corporations were
+selected according to their position as CEO in December
+2007. 18 executives are included on other criteria, taking
+into account the magnitude of the corporations and issues
+regarding ownership and control, resulting in a final
+population of 100 CEOs. The 82 corporations have formal
+ownership and management located in Denmark and were
+selected through either financial capital, measured as
+having a turnover of over five billion DKK (650 million
+Eur.), or organizational capital, defined as having at
+least 5000 employees; 34 corporations were included on both
+criteria, 45 on financial capital and three on
+organizational capital alone. To avoid including investors,
+rather than executives, a minimum of 500 employees was also
+required, excluding 12 firms. Companies acting only as
+subsidiaries were also excluded. Data is for public use and
+no author permission is needed, but we would love to hear
+from you if you find the data useful. The following example
+is based on the analysis from the article: "A Very Economic
+Elite: The Case of the Danish Top CEOs".
 }
 \examples{
 \dontrun{
@@ -80,7 +79,8 @@ result      <- invert(result, c(1,2,3))
 # Export and assign label
 export.label(result)
 
-result      <- assign.label(result, file = "https://raw.github.com/Rsoc/soc.ca/master/data/wiki_labels.csv")
+result      <- assign.label(result,
+ file = "https://raw.github.com/Rsoc/soc.ca/master/extra/director_labels.csv")
 
 
 
@@ -105,9 +105,11 @@ table(quad)
 map.ind(result)
 map.ind(result, dim = c(2,1), point.label = TRUE)
 map.ind(result, dim = c(2,1), point.size = 3, point.shape = 2)
-map.ind(result, dim = c(2,1), map.title = "The top 100 Danish CEO's", point.variable = quad, point.colour = quad)
+map.ind(result, dim = c(2,1), map.title = "The top 100 Danish CEO's",
+ point.variable = quad, point.colour = quad)
 # Map of the individuals colored by contribution
-map.ind(result, point.colour = result$ctr.ind[,1], point.shape = 18) + scale_color_continuous(low = "white", high = "red")
+map.ind(result, point.colour = result$ctr.ind[,1],
+ point.shape = 18) + scale_color_continuous(low = "white", high = "red")
 
 
 # Map of contributing modalities
@@ -173,28 +175,27 @@ el.forfatter
 }
 }
 \author{
-  Christoph Ellersgaard
+Christoph Ellersgaard
 
-  Anton Grau Larsen
+Anton Grau Larsen
 }
 \references{
-  Ellersgaard, Christoph, Anton Grau Larsen, og Martin D.
-  Munk.  2012. "A Very Economic Elite: The Case of the
-  Danish Top CEOs". Sociology.
+Ellersgaard, Christoph, Anton Grau Larsen, og Martin D.
+Munk.  2012. "A Very Economic Elite: The Case of the Danish
+Top CEOs". Sociology.
 
-  Ellersgaard, Christoph Houman, og Anton Grau Larsen.
-  2010.  "Firmaets Maend". Master Thesis, Copenhagen:
-  University of Copenhagen.
+Ellersgaard, Christoph Houman, og Anton Grau Larsen. 2010.
+"Firmaets Maend". Master Thesis, Copenhagen: University of
+Copenhagen.
 
-  Ellersgaard, Christoph Houman, og Anton Grau Larsen.
-  2011.  "Kulturel kapital blandt topdirektoerer i Danmark
-  - En domineret kapitalform?" Dansk Sociologi 22(3):9-29.
+Ellersgaard, Christoph Houman, og Anton Grau Larsen. 2011.
+"Kulturel kapital blandt topdirektoerer i Danmark - En
+domineret kapitalform?" Dansk Sociologi 22(3):9-29.
 
-  Larsen, Anton Grau, og Christoph Houman Ellersgaard.
-  2012. "Status og integration paa magtens felt for danske
-  topdirektoerer". Praktiske Grunde. Nordisk tidsskrift for
-  kultur- og samfundsvidenskab 2012(2-3).
+Larsen, Anton Grau, og Christoph Houman Ellersgaard. 2012.
+"Status og integration paa magtens felt for danske
+topdirektoerer". Praktiske Grunde. Nordisk tidsskrift for
+kultur- og samfundsvidenskab 2012(2-3).
 }
 \keyword{data}
-\keyword{datasets}
 

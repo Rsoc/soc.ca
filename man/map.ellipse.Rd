@@ -2,9 +2,8 @@
 \alias{map.ellipse}
 \title{Concentration ellipses}
 \usage{
-  map.ellipse(object, ca.plot = map.ind(object), variable,
-    ellipse.label = TRUE, line.color = "black",
-    label.size = 4)
+map.ellipse(object, ca.plot = map.ind(object), variable,
+  ellipse.label = TRUE, line.color = "black", label.size = 4)
 }
 \arguments{
   \item{object}{is a \link{soc.ca} class object}
@@ -24,12 +23,12 @@
   \item{label.size}{defines the size of the labels}
 }
 \value{
-  a plot with a concentration ellipse containing 80\% of
-  the individuals for each modality
+a plot with a concentration ellipse containing 80\% of the
+individuals for each modality
 }
 \description{
-  Add ellipses for each level in a factor to a plot made
-  from a \link{soc.ca} object.
+Add ellipses for each level in a factor to a plot made from
+a \link{soc.ca} object.
 }
 \examples{
 example(soc.mca)
@@ -37,6 +36,6 @@ map <- map.ind(result)
 map.ellipse(result, map, active[,2])
 }
 \seealso{
-  \link{map.ind}, \link{map.ctr}
+\link{map.ind}, \link{map.ctr}
 }
 

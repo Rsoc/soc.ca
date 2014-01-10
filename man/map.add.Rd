@@ -2,13 +2,12 @@
 \alias{map.add}
 \title{Add points to an existing map created by one of the soc.ca mapping functions.}
 \usage{
-  map.add(object, ca.map, plot.type = NULL, ctr.dim = 1,
-    list.mod = NULL, list.sup = NULL, list.ind = NULL,
-    point.shape = "variable", point.alpha = 0.8,
-    point.fill = "grey80", point.color = "black",
-    point.size = "freq", label = TRUE, label.alpha = 0.8,
-    label.color = "black", label.size = 3.3,
-    labelx = "default", labely = "default", legend = NULL)
+map.add(object, ca.map, plot.type = NULL, ctr.dim = 1, list.mod = NULL,
+  list.sup = NULL, list.ind = NULL, point.shape = "variable",
+  point.alpha = 0.8, point.fill = "grey80", point.color = "black",
+  point.size = "freq", label = TRUE, label.alpha = 0.8,
+  label.color = "black", label.size = 3.3, labelx = "default",
+  labely = "default", legend = NULL)
 }
 \arguments{
   \item{object}{a soc.ca class object as created by
@@ -91,13 +90,14 @@
   link{guide_legend} functions from the ggplot2 package.}
 }
 \description{
-  Add points to an existing map created by one of the
-  soc.ca mapping functions.
+Add points to an existing map created by one of the soc.ca
+mapping functions.
 }
 \examples{
 example(soc.mca)
 original.map    <- map.sup(result)
 map.add(result, original.map, plot.type = "ctr", ctr.dim = 2)
-map.add(result, map.ind(result), plot.type = "select",list.ind = 1:50, point.color = "red", label = FALSE, point.size = result$ctr.ind[1:50, 1]*2000)
+map.add(result, map.ind(result), plot.type = "select",list.ind = 1:50,
+ point.color = "red", label = FALSE, point.size = result$ctr.ind[1:50, 1]*2000)
 }
 

@@ -2,8 +2,7 @@
 \alias{map.array}
 \title{Array of maps}
 \usage{
-  map.array(x, ncol = 1, title = "", fixed.coord = TRUE,
-    padding = 0.15)
+map.array(x, ncol = 1, title = "", fixed.coord = TRUE, padding = 0.15)
 }
 \arguments{
   \item{x}{a list of objects created by one of the mapping
@@ -22,8 +21,8 @@
   position and the axis limit}
 }
 \description{
-  This function takes a list of map objects and arranges
-  them into an array.
+This function takes a list of map objects and arranges them
+into an array.
 }
 \examples{
 \dontrun{

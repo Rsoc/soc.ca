@@ -3,20 +3,19 @@
 \alias{taste}
 \title{Taste dataset}
 \value{
-  The variables included in the dataset: \item{Preferred TV
-  program}{(8 categories): news, comedy, police, nature,
-  sport, films, drama, soap operas} \item{Preferred
-  Film}{(8 categories): action, comedy, costume drama,
-  documentary, horror, musical, romance, SciFi}
-  \item{Preferred type of Art}{(7 categories): performance,
-  landscape, renaissance, still life, portrait, modern,
-  impressionsism} \item{Preferred place to Eat out}{(6
-  categories): fish & chips, pub, Indian restuarant,
-  Italian restaurant, French restaurant, steak house}
+The variables included in the dataset: \item{Preferred TV
+program}{(8 categories): news, comedy, police, nature,
+sport, films, drama, soap operas} \item{Preferred Film}{(8
+categories): action, comedy, costume drama, documentary,
+horror, musical, romance, SciFi} \item{Preferred type of
+Art}{(7 categories): performance, landscape, renaissance,
+still life, portrait, modern, impressionsism}
+\item{Preferred place to Eat out}{(6 categories): fish &
+chips, pub, Indian restuarant, Italian restaurant, French
+restaurant, steak house}
 }
 \description{
-  The taste example dataset used by Le Roux &
-  Rouanet(2010):
+The taste example dataset used by Le Roux & Rouanet(2010):
 }
 \examples{
 \dontrun{
@@ -38,15 +37,21 @@ contribution(result.mca, 2)
 contribution(result.mca, 1:3, mode="variable")
 
 map.active(result.mca, point.fill=result.mca$variable)
-map.active(result.mca, map.title="Map of active modalities with size of contribution to 1. dimension", point.size=result.mca$ctr.mod[,1])
-map.active(result.mca, map.title="Map of active modalities with size of contribution to 2. dimension", point.size=result.mca$ctr.mod[,2])
+map.active(result.mca,
+ map.title="Map of active modalities with size of contribution to 1. dimension",
+ point.size=result.mca$ctr.mod[,1])
+map.active(result.mca,
+ map.title="Map of active modalities with size of contribution to 2. dimension",
+ point.size=result.mca$ctr.mod[,2])
 
 map.ind(result.mca)
-map.ind(result.mca, dim=c(1,2), point.color=result.mca$ctr.ind[,1], point.shape=18) + scale_color_continuous(low="white", high="black")
+map.ind(result.mca, dim=c(1,2), point.color=result.mca$ctr.ind[,1],
+ point.shape=18) + scale_color_continuous(low="white", high="black")
 
 # Plot of all dublets
 map.ind(result.mca, map.title="Map of all unique individuals", point.color=duplicated(active))
-map.ind(result.mca, map.title="Map with individuals colored by the TV variable", point.color=active$TV)
+map.ind(result.mca, map.title="Map with individuals colored by the TV variable",
+ point.color=active$TV)
 
 # Ellipse
 map        <- map.ind(result.mca)
@@ -79,17 +84,16 @@ map.csa.mca.array(result.csca)
 }
 }
 \author{
-  Brigitte Le Roux
+Brigitte Le Roux
 }
 \references{
-  Le Roux, Brigitte, Henry Rouanet, Mike Savage, og Alan
-  Warde. 2008. "Class and Cultural Division in the UK".
-  Sociology 42(6):1049-1071.
+Le Roux, Brigitte, Henry Rouanet, Mike Savage, og Alan
+Warde. 2008. "Class and Cultural Division in the UK".
+Sociology 42(6):1049-1071.
 
-  Le Roux, B., og H. Rouanet. 2010. Multiple correspondence
-  analysis. Thousand Oaks: Sage.
+Le Roux, B., og H. Rouanet. 2010. Multiple correspondence
+analysis. Thousand Oaks: Sage.
 }
 \keyword{#'}
 \keyword{data}
-\keyword{datasets}
 

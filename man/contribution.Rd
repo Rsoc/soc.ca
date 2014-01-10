@@ -2,8 +2,8 @@
 \alias{contribution}
 \title{Summaries of contribution values}
 \usage{
-  contribution(object, dim = 1, all = FALSE,
-    indices = FALSE, mode = "sort")
+contribution(object, dim = 1, all = FALSE, indices = FALSE,
+  mode = "sort")
 }
 \arguments{
   \item{object}{a \link{soc.ca} object}
@@ -22,25 +22,25 @@
   \code{dim} can be a sequence of dimensions: \code{1:5}}
 }
 \value{
-  Each mode prints different results:
+Each mode prints different results:
 
-  \item{"mod"}{Ranks all modalities according to their
-  contribution} \item{"sort"}{Ranks all modalities
-  according to their contribution and and then sorts them
-  according to their coordinates} \item{"ind"}{Ranks all
-  individuals according to their contribution}
-  \item{"variable"}{Sorts all modalities according to their
-  variable and sums the contributions per variable}
+\item{"mod"}{Ranks all modalities according to their
+contribution} \item{"sort"}{Ranks all modalities according
+to their contribution and and then sorts them according to
+their coordinates} \item{"ind"}{Ranks all individuals
+according to their contribution} \item{"variable"}{Sorts
+all modalities according to their variable and sums the
+contributions per variable}
 
-  The values reported: \item{Ctr}{Contribution values in
-  percentage. Contribution values for individuals are
-  reported in permille} \item{Coord}{Principal coordinates}
-  \item{Cor}{The correlation with the dimension}
+The values reported: \item{Ctr}{Contribution values in
+percentage. Contribution values for individuals are
+reported in permille} \item{Coord}{Principal coordinates}
+\item{Cor}{The correlation with the dimension}
 }
 \description{
-  Different forms of contribution summaries for
-  \link{soc.ca} objects. Results are presented according to
-  the specified \code{mode}
+Different forms of contribution summaries for \link{soc.ca}
+objects. Results are presented according to the specified
+\code{mode}
 }
 \examples{
 example(soc.mca)
@@ -51,6 +51,6 @@ contribution(result, indices = TRUE)
 contribution(result, 1:2, mode = "variable")
 }
 \seealso{
-  \link{map.ctr}
+\link{map.ctr}
 }
 
