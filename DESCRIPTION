@@ -4,7 +4,8 @@ Description: soc.ca is a package optimized to the needs of scientists within
     the social sciences producing specific and class specific multiple
     correspondence analysis on survey-like data. Soc.ca is optimized to only
     give the most essential statistical output values sorted so as to help in
-    analysis. A diverse set of plotting functions create plots of near publication ready quality.
+    analysis. A diverse set of plotting functions create plots of near
+    publication ready quality.
 URL: https://github.com/Rsoc/soc.ca
 Version: 0.7
 Maintainer: Anton Grau Larsen <alar@soc.ku.dk>

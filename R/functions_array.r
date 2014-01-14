@@ -59,7 +59,7 @@ map.ellipse.array <- function(object, variable, dim = c(1,2),
   
   p               <- map.select(object, dim = dim, list.ind = ind.ind, map.title = titles[i], label = FALSE, ...)
   
-  if(identical(draw.ellipses, TRUE)) p  <- map.ellipse(object, p, ellipse.ind, label = FALSE)
+  if(identical(draw.ellipses, TRUE)) p  <- map.ellipse(object, p, ellipse.ind, ellipse.label = FALSE, label.size = 4)
   list.of.maps[[i]]  <- p
   }
   
@@ -156,7 +156,9 @@ map.csa.mca <- function(csa.object, mca.dim = 1, csa.dim = 1, smooth = TRUE, met
   mca.res           <- csa.object$original.result
   class.indicator   <- csa.object$original.class.indicator
   mca.coord         <- mca.res$coord.ind[class.indicator, mca.dim]
-  ggdata            <- data.frame(mca = mca.coord, csa = csa.object$coord.ind[, csa.dim])
+  mca               <- mca.coord
+  csa               <- csa.object$coord.ind[, csa.dim]
+  ggdata            <- data.frame(mca = mca, csa = csa)
   titles            <- paste(c("CSA Dim:", "MCA Dim:"), c(csa.dim, mca.dim))
   
   p                 <- ggplot(ggdata, aes(x = mca, y = csa))

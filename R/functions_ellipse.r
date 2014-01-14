@@ -37,7 +37,9 @@ label             <- lev.var[i]
 el.coord          <- ellipse.coord(id, id.coord.var)
 el.axis           <- ellipse.axis(el.coord)
 el.origo          <- ellipse.origo(el.axis)
-el.origo          <- data.frame(x = el.origo[1], y = el.origo[2], label)
+x                 <- el.origo[1]
+y                 <- el.origo[2]
+el.origo          <- data.frame(x = x, y = y, label)
 ellipse.data[[i]] <- list(label = label, el.coord = el.coord, el.axis = el.axis, el.origo = el.origo)
 }
 
