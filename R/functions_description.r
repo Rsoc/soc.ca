@@ -16,7 +16,7 @@
 #'   see \link{variance}
 #' @return The active variables are represented with their number of active
 #'   modalities and their share of the total variance/inertia.
-#' @S3method print soc.ca
+#' @S3method print soc.mca
 #' @seealso \link{soc.mca}, \link{contribution}
 #'   
 #' @examples
@@ -24,7 +24,7 @@
 #' print(result)
 #' @export
 
-print.soc.ca  <- function(x, ...){
+print.soc.mca  <- function(x, ...){
   
   # Help functions
   scree       <- function(x, dim = 6){
@@ -422,7 +422,7 @@ tab.variable    <- function(object, dim = 1:3, sup = FALSE){
 #'   dimensions explaining approx. 90% of the adjusted variance are included
 #' @return If assigned using <- variance returns a matrix version of the table
 #'   of variance
-#' @seealso \link{soc.mca}, \link{print.soc.ca}
+#' @seealso \link{soc.mca}, \link{print.soc.mca}
 #' @examples
 #' example(soc.mca)
 #' variance(result)

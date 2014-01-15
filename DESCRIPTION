@@ -13,7 +13,8 @@ Author: Anton Grau Larsen, with contributions from Christoph Ellersgaard and
     Stefan Andrade
 Depends:
     R (>= 2.15.0),
-    ggplot2,
+    ggplot2
+Imports:
     gridExtra,
     ellipse,
     scales,

@@ -23,6 +23,11 @@
 #'   
 #' @docType package
 #' @name soc.ca
+#' @import ggplot2
+#' @import grid
+#' @import scales
+#' @import gridExtra
+#' @import ellipse
 NULL
 
 #'Directors dataset

@@ -1,3 +1,4 @@
+
 theme_min   <- function (size = 10, font = "sans", face = 'plain',
                          backgroundColor = 'white', panelColor = 'white', 
                          axisColor = 'black', gridColor = 'grey70', textColor = 'black'){

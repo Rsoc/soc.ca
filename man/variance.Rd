@@ -25,6 +25,6 @@ variance(result)
 variance(result, dim = 1:4)
 }
 \seealso{
-\link{soc.mca}, \link{print.soc.ca}
+\link{soc.mca}, \link{print.soc.mca}
 }
 
