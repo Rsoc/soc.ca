@@ -619,6 +619,67 @@ map.add         <- function(object, ca.map, plot.type = NULL,
   p
 }
 
+
+#' Density plot for the cloud of individuals
+#' 
+#' Draws a 2d density plot on top of an existing soc.ca map. The density is 
+#' calculated by the \link{kde2d} function from MASS and plotted by
+#' \link{geom_density2d} from \link{ggplot2} \code{map.density} uses the
+#' coordinates of the individuals as a basis for the density calculation. 
+#' Borders are arbitrary.
+#' 
+#' @param object a soc.ca class object
+#' @param map a soc.ca map object created by one of the soc.ca mapping functions
+#' @param group a factor determining group membership. Density is mapped for
+#'   each group individually.
+#' @param color a single value or vector determining the color. See the scale
+#'   functions of \link{ggplot2} for ways to alter the scales.
+#' @param alpha a single value or vector determining the alpha.
+#' @param size a single value or vector determining the size of the lines.
+#' @param linetype a single value or vector determining the linetype
+#' @param bins the number of borders. If NULL the default from
+#'   \link{geom_density2d} is used.
+#' @export
+#' @examples
+#' example(soc.mca)
+#' map.density(result, map.ind(result, dim = 2:3, point.alpha = 0.2))
+#' map.density(result, map.ind(result, legend = TRUE, point.alpha = 0.2),
+#'  group = duplicated(active), color = duplicated(active),
+#'  linetype = duplicated(active))
+#' map.density(result, map.ctr(result))
+#' map.density(result, bins = 50)
+
+
+map.density  <- function(object, map = map.ind(object), group = NULL, bins = NULL,
+                         color = "red", alpha = 0.8, size = 0.5, linetype = "solid"){
+  
+  dim                        <- map$dimensions 
+  dens.data                  <- as.data.frame(object$coord.ind[, dim])
+  colnames(dens.data)        <- c("x", "y")
+  
+  density.l                  <- list(color = color,
+                                     alpha = alpha,
+                                     size  = size,
+                                     linetype = linetype,
+                                     group = group,
+                                     bins  = bins)
+  
+  d.i                        <- unlist(lapply(density.l, length)) == 1
+  density.attributes         <- density.l[d.i]
+  density.aes                <- density.l[unlist(lapply(density.l, length)) > 1]
+  density.aes$x              <- dens.data$x
+  density.aes$y              <- dens.data$y
+  
+  
+  density.attributes$mapping <- do.call("aes", density.aes)
+  p     <- map + do.call("geom_density2d", density.attributes, quote = TRUE)
+  p
+}
+
+
+
+
+
 ############################## Plot delfunktioner ########################################
 
 ########################################################
@@ -639,6 +700,7 @@ plot.flow   <- function(object, dim = c(1, 2), ctr.dim = NULL, modal.list = NULL
                            modal.list  = modal.list,
                            point.size  = point.size,
                            point.color = point.color)                 # Data selection
+  
   axis.labels <- plot.axis(labelx = labelx, labely = labely, gg.proc = gg.proc, dim = dim) # Axis labels
   map.title   <- plot.title(map.title = map.title, ctr.dim = ctr.dim) # Plot title
   scales      <- breaksandscales(gg.data)                             # Scales og breaks
@@ -770,10 +832,10 @@ plot.title  <- function(map.title = NULL, ctr.dim = NULL){
 
 ############# Axis labels
 plot.axis       <- function(labelx = "default", labely = "default", gg.proc = NA, dim = NULL){
-    if (identical(labelx, NULL) == TRUE) {
+    if (identical(labelx, "default") == TRUE) {
 labelx         <- paste(dim[1], ". Dimension: ", gg.proc[dim[1]], "%", sep = "")
 }
-    if (identical(labely, NULL) == TRUE) {
+    if (identical(labely, "default") == TRUE) {
 labely         <- paste(dim[2], ". Dimension: ", gg.proc[dim[2]], "%", sep = "")
 }
 axis.labels <- list(x = labelx, y = labely)

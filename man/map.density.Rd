@@ -1,0 +1,50 @@
+\name{map.density}
+\alias{map.density}
+\title{Density plot for the cloud of individuals}
+\usage{
+map.density(object, map = map.ind(object), group = NULL, bins = NULL,
+  color = "red", alpha = 0.8, size = 0.5, linetype = "solid")
+}
+\arguments{
+  \item{object}{a soc.ca class object}
+
+  \item{map}{a soc.ca map object created by one of the
+  soc.ca mapping functions}
+
+  \item{group}{a factor determining group membership.
+  Density is mapped for each group individually.}
+
+  \item{color}{a single value or vector determining the
+  color. See the scale functions of \link{ggplot2} for ways
+  to alter the scales.}
+
+  \item{alpha}{a single value or vector determining the
+  alpha.}
+
+  \item{size}{a single value or vector determining the size
+  of the lines.}
+
+  \item{linetype}{a single value or vector determining the
+  linetype}
+
+  \item{bins}{the number of borders. If NULL the default
+  from \link{geom_density2d} is used.}
+}
+\description{
+Draws a 2d density plot on top of an existing soc.ca map.
+The density is calculated by the \link{kde2d} function from
+MASS and plotted by \link{geom_density2d} from
+\link{ggplot2} \code{map.density} uses the coordinates of
+the individuals as a basis for the density calculation.
+Borders are arbitrary.
+}
+\examples{
+example(soc.mca)
+map.density(result, map.ind(result, dim = 2:3, point.alpha = 0.2))
+map.density(result, map.ind(result, legend = TRUE, point.alpha = 0.2),
+ group = duplicated(active), color = duplicated(active),
+ linetype = duplicated(active))
+map.density(result, map.ctr(result))
+map.density(result, bins = 50)
+}
+
