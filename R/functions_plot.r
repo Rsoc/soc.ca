@@ -48,8 +48,8 @@
 #' @export
 map.mod         <- function(object, dim = c(1, 2),
                             point.shape = "variable", point.alpha = 0.8,
-                            point.fill = "grey80", point.color = "black", point.size = "freq",
-                            label = TRUE, label.alpha = 0.8, label.color = "black", label.size = 3.3,
+                            point.fill = "whitesmoke", point.color = "black", point.size = "freq",
+                            label = TRUE, label.alpha = 0.8, label.color = "black", label.size = 4,
                             map.title = "mod", labelx = "default", labely = "default", legend = NULL){
   
   plot.type   <- "mod"
@@ -121,9 +121,9 @@ map.mod         <- function(object, dim = c(1, 2),
 #' @export
 
 map.ctr         <- function(object, dim = c(1, 2), ctr.dim = 1,
-                            point.shape = "variable", point.alpha = 0.8, point.fill = "grey80",
+                            point.shape = "variable", point.alpha = 0.8, point.fill = "whitesmoke",
                             point.color = "black", point.size = "freq",
-                            label = TRUE, label.alpha = 0.8, label.color = "black", label.size = 3.3,
+                            label = TRUE, label.alpha = 0.8, label.color = "black", label.size = 4,
                             map.title = "ctr", labelx = "default", labely = "default", legend = NULL){
   
   plot.type   <- "ctr"
@@ -197,9 +197,9 @@ map.ctr         <- function(object, dim = c(1, 2), ctr.dim = 1,
 #' @export
 
 map.active         <- function(object, dim = c(1, 2),
-                               point.shape = "variable", point.alpha = 0.8, point.fill = "grey80",
+                               point.shape = "variable", point.alpha = 0.8, point.fill = "whitesmoke",
                                point.color = "black", point.size = "freq",
-                               label = TRUE, label.alpha = 0.8, label.color = "black", label.size = 3.3,
+                               label = TRUE, label.alpha = 0.8, label.color = "black", label.size = 4,
                                map.title = "active", labelx = "default", labely = "default", legend = NULL){
   
   plot.type   <- "active"
@@ -272,9 +272,9 @@ map.active         <- function(object, dim = c(1, 2),
 #' @export
 
 map.sup         <- function(object, dim = c(1, 2),
-                            point.shape = "variable", point.alpha = 0.8, point.fill = "grey80",
+                            point.shape = "variable", point.alpha = 0.8, point.fill = "whitesmoke",
                             point.color = "black", point.size = "freq",
-                            label = TRUE, label.alpha = 0.8, label.color = "black", label.size = 3.3,
+                            label = TRUE, label.alpha = 0.8, label.color = "black", label.size = 4,
                             map.title = "sup", labelx = "default", labely = "default", legend = NULL){
   
   plot.type     <- "sup"
@@ -349,9 +349,9 @@ map.sup         <- function(object, dim = c(1, 2),
 #' @export
 
 map.ind         <- function(object, dim = c(1, 2),
-                            point.shape = 21, point.alpha = 0.8, point.fill = "grey80",
+                            point.shape = 21, point.alpha = 0.8, point.fill = "whitesmoke",
                             point.color = "black", point.size = 3,
-                            label = FALSE, label.alpha = 0.8, label.color = "black", label.size = 3.3,
+                            label = FALSE, label.alpha = 0.8, label.color = "black", label.size = 4,
                             map.title = "ind", labelx = "default", labely = "default", legend = NULL){
   
   plot.type   <- "ind"
@@ -437,9 +437,9 @@ map.ind         <- function(object, dim = c(1, 2),
 
 map.select         <- function(object, dim = c(1, 2), ctr.dim = 1,
                                list.mod = NULL, list.sup = NULL, list.ind = NULL,
-                               point.shape = "variable", point.alpha = 0.8, point.fill = "grey80",
+                               point.shape = "variable", point.alpha = 0.8, point.fill = "whitesmoke",
                                point.color = "black", point.size = "freq",
-                               label = TRUE, label.alpha = 0.8, label.color = "black", label.size = 3.3,
+                               label = TRUE, label.alpha = 0.8, label.color = "black", label.size = 4,
                                map.title = "select", labelx = "default", labely = "default", legend = NULL){
   
   modal.list  <- list(list.mod = list.mod, list.sup = list.sup, list.ind = list.ind)
@@ -528,9 +528,9 @@ map.select         <- function(object, dim = c(1, 2), ctr.dim = 1,
 
 map.add         <- function(object, ca.map, plot.type = NULL,
                             ctr.dim = 1, list.mod = NULL, list.sup = NULL, list.ind = NULL,
-                            point.shape = "variable", point.alpha = 0.8, point.fill = "grey80",
+                            point.shape = "variable", point.alpha = 0.8, point.fill = "whitesmoke",
                             point.color = "black", point.size = "freq",
-                            label = TRUE, label.alpha = 0.8, label.color = "black", label.size = 3.3,
+                            label = TRUE, label.alpha = 0.8, label.color = "black", label.size = 4,
                             labelx = "default", labely = "default", legend = NULL){
   p           <- ca.map
   dim         <- ca.map$dimensions
@@ -686,9 +686,9 @@ map.density  <- function(object, map = map.ind(object), group = NULL, bins = NUL
 ## plot.flow
 
 plot.flow   <- function(object, dim = c(1, 2), ctr.dim = NULL, modal.list = NULL,
-                        point.shape = 21, point.alpha = 0.8, point.fill = "grey80",
+                        point.shape = 21, point.alpha = 0.8, point.fill = "whitesmoke",
                         point.color = "black", point.size = 3,
-                        label = FALSE, label.alpha = 0.8, label.color = "black", label.size = 3.3,
+                        label = FALSE, label.alpha = 0.8, label.color = "black", label.size = 4,
                         map.title = map.title, labelx = "default", labely = "default", legend = NULL,
                         plot.type = plot.type){
   
@@ -774,7 +774,7 @@ basic.plot <- function(gg.input){
   # label
   if (gg.input$label == TRUE){
     label.attributes             <- gg.input$label.attributes
-    label.attributes$vjust       <- 1.4
+    label.attributes$vjust       <- 1.8
     label.attributes$family      <- "sans"
     label.attributes$lineheight  <- 0.9
     label.attributes$mapping     <- do.call("aes", gg.input$label.aes)

@@ -3,9 +3,9 @@
 \title{Map the individuals of a soc.ca analysis}
 \usage{
 map.ind(object, dim = c(1, 2), point.shape = 21, point.alpha = 0.8,
-  point.fill = "grey80", point.color = "black", point.size = 3,
+  point.fill = "whitesmoke", point.color = "black", point.size = 3,
   label = FALSE, label.alpha = 0.8, label.color = "black",
-  label.size = 3.3, map.title = "ind", labelx = "default",
+  label.size = 4, map.title = "ind", labelx = "default",
   labely = "default", legend = NULL)
 }
 \arguments{

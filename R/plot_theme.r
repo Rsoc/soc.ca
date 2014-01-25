@@ -1,13 +1,13 @@
 
-theme_min   <- function (size = 10, font = "sans", face = 'plain',
+theme_min   <- function (size = 11, font = "sans", face = 'plain',
                          backgroundColor = 'white', panelColor = 'white', 
                          axisColor = 'black', gridColor = 'grey70', textColor = 'black'){
     theme(
         panel.border        = element_rect(colour = gridColor, linetype = "solid", fill = NA),
         axis.text.x         = element_text(vjust = 1, hjust = 0.5,
-                                           colour = axisColor, family = font, face = face, size = 8),
+                                           colour = axisColor, family = font, face = face, size = 9),
         axis.text.y         = element_text(hjust = 1, vjust = 0.5,
-                                           colour = axisColor, family = font, face = face, size = 8),
+                                           colour = axisColor, family = font, face = face, size = 9),
 	      #axis.text.x        = theme_text(vjust = 1, hjust = 0.5,
         #                                colour = axisColor, family = font, face = face, size = size),
         #axis.text.y        = theme_text(hjust = 1, vjust = 0.5,
@@ -31,6 +31,6 @@ theme_min   <- function (size = 10, font = "sans", face = 'plain',
         strip.background    = element_rect(fill = NA, colour = NA),
         strip.text.x        = element_text(hjust = 0, family = font, face = face, colour = textColor, size = size),
         strip.text.y        = element_text(angle = -90, family = font, face = face, colour = textColor, size = size),
-        plot.title          = element_text(hjust = 0, vjust = 1, family = font, face = face, colour = textColor, size = 12),
+        plot.title          = element_text(hjust = 0, vjust = 1, family = font, face = face, colour = textColor, size = 15),
         plot.margin         = unit(c(0.3, 0.1, 0.1, 0.1), 'lines'))
 }

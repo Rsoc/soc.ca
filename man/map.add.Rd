@@ -4,9 +4,9 @@
 \usage{
 map.add(object, ca.map, plot.type = NULL, ctr.dim = 1, list.mod = NULL,
   list.sup = NULL, list.ind = NULL, point.shape = "variable",
-  point.alpha = 0.8, point.fill = "grey80", point.color = "black",
+  point.alpha = 0.8, point.fill = "whitesmoke", point.color = "black",
   point.size = "freq", label = TRUE, label.alpha = 0.8,
-  label.color = "black", label.size = 3.3, labelx = "default",
+  label.color = "black", label.size = 4, labelx = "default",
   labely = "default", legend = NULL)
 }
 \arguments{
