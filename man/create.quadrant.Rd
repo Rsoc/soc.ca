@@ -26,7 +26,7 @@ designated dimension running East - West. The center
 category is a circle defined by \code{cut.radius}.
 }
 \examples{
-example(soc.mca)
+example(soc.ca)
 create.quadrant(result, dim = c(2, 1))
 table(create.quadrant(result, dim = c(1, 3), cut.radius = 0.5))
 }

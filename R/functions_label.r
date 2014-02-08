@@ -7,61 +7,70 @@
 #' @param  value the type of values added to the labels. "freq" adds
 #'   frequencies, "mass" adds mass values to the active modalities, "ctr" adds contribution values to the active modalities, "cor" adds correlation values.
 #'   value also accepts any vector with the length of the number of active
-#'   modalities.
+#'   modalities. "linebreak" adds a linebreak \code{\\n} after the first ":" in the label.
 #' @param  prefix if "default" an appropriate prefix is used
 #' @param  suffix the suffix
 #' @param  dim the dimension from which values are retrieved
 #' @return a soc.ca object with altered labels in names.mod and names.sup
 #' @export
 #' @examples
-#' example(soc.mca)
+#' example(soc.ca)
 #' result.label  <- add.to.label(result)
 #' result.label$names.mod
 #' result.label  <- add.to.label(result, value = "ctr", dim = 2)
 #' result.label$names.mod
 #' result.label  <- add.to.label(result, value = result$variable, prefix = " - ", suffix = "")
 #' result.label$names.mod
+#' result.label  <- add.to.label(result, value = "linebreak")
+#' result.label$names.mod
+#' map.ctr(result.label)
 
 add.to.label <- function(object, value = "freq", prefix = "default", suffix = ")", dim = 1){
   
   # Names
-  names.mod <- object$names.mod
-  names.sup <- object$names.sup
+  names.mod           <- object$names.mod
+  names.sup           <- object$names.sup
   
   # Prefix
   if (identical(prefix, "default") & identical(value, "freq")) prefix   <- " (n:"
   if (identical(prefix, "default") & identical(value, "mass")) prefix   <- " (mass:"
   if (identical(prefix, "default") & identical(value, "ctr")) prefix    <- " (ctr:"
   if (identical(prefix, "default") & identical(value, "cor")) prefix    <- " (cor:"
-  if (identical(prefix, "default") & length(value) >1 )       prefix    <- " ("
+  if (identical(prefix, "default") & length(value) > 1 )       prefix   <- " ("
   
   # Values
   if (identical(value, "freq")){
-  val.mod  <- object$freq.mod
-  val.sup  <- object$freq.sup
-  object$names.mod <- paste(names.mod, prefix, val.mod, suffix, sep = "")
-  object$names.sup <- paste(names.sup, prefix, val.sup, suffix, sep = "")
+  val.mod             <- object$freq.mod
+  val.sup             <- object$freq.sup
+  object$names.mod    <- paste(names.mod, prefix, val.mod, suffix, sep = "")
+  object$names.sup    <- paste(names.sup, prefix, val.sup, suffix, sep = "")
   }
   
   if (identical(value, "ctr")){
-  val.mod  <- round(object$ctr.mod[dim, ]*100,1)
-  object$names.mod <- paste(names.mod, prefix, val.mod, suffix, sep = "")
+  val.mod             <- round(object$ctr.mod[dim, ] * 100, 1)
+  object$names.mod    <- paste(names.mod, prefix, val.mod, suffix, sep = "")
   }
   
   if (identical(value, "mass")){
-    val.mod  <- round(object$mass.mod[dim, ]*100,1)
-    object$names.mod <- paste(names.mod, prefix, val.mod, suffix, sep = "")
+    val.mod           <- round(object$mass.mod * 100, 1)
+    object$names.mod  <- paste(names.mod, prefix, val.mod, suffix, sep = "")
   }
   
   if (identical(value, "cor")){
-    val.mod  <- round(object$cor.mod[,dim],2)
-    val.sup  <- round(object$cor.sup[,dim],2)
-    object$names.mod <- paste(names.mod, prefix, val.mod, suffix, sep = "")
-    object$names.sup <- paste(names.sup, prefix, val.sup, suffix, sep = "")
+    val.mod           <- round(object$cor.mod[, dim], 2)
+    val.sup           <- round(object$cor.sup[, dim], 2)
+    object$names.mod  <- paste(names.mod, prefix, val.mod, suffix, sep = "")
+    object$names.sup  <- paste(names.sup, prefix, val.sup, suffix, sep = "")
   }
   
   if (length(value) > 1){
-    object$names.mod <- paste(names.mod, prefix, value, suffix, sep = "")
+    object$names.mod  <- paste(names.mod, prefix, value, suffix, sep = "")
+  }
+
+  if (identical(value, "linebreak")){
+    object$names.mod  <- sub(":", ":\n", names.mod)
+    object$names.sup  <- sub(":", ":\n", names.sup)
+    
   }
   
   return(object)

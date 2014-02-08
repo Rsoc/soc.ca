@@ -89,7 +89,7 @@ map.select(object, dim = c(1, 2), ctr.dim = 1, list.mod = NULL,
 Creates a map of selected modalities or individuals
 }
 \examples{
-example(soc.mca)
+example(soc.ca)
 map.select(result, map.title = "Map of the first ten modalities",list.mod = 1:10)
 select   <- active[, 3]
 select   <- select == levels(select)[2]

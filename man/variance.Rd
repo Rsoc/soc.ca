@@ -20,7 +20,7 @@ variance returns a table of variance for the selected
 dimensions.
 }
 \examples{
-example(soc.mca)
+example(soc.ca)
 variance(result)
 variance(result, dim = 1:4)
 }

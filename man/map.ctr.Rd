@@ -74,7 +74,7 @@ Creates a map of the modalities contributing above average
 to one or more dimensions on two selected dimension.
 }
 \examples{
-example(soc.mca)
+example(soc.ca)
 map.ctr(result)
 map.ctr(result, ctr.dim = c(1, 2))
 }

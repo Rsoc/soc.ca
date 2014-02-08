@@ -94,7 +94,7 @@ Add points to an existing map created by one of the soc.ca
 mapping functions.
 }
 \examples{
-example(soc.mca)
+example(soc.ca)
 original.map    <- map.sup(result)
 map.add(result, original.map, plot.type = "ctr", ctr.dim = 2)
 map.add(result, map.ind(result), plot.type = "select",list.ind = 1:50,

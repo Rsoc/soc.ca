@@ -11,7 +11,7 @@
 #'   limit
 #' @examples
 #' \dontrun{
-#' example(soc.mca)
+#' example(soc.ca)
 #' map.array(list(map.ind(result), map.mod(result)), ncol = 2)
 #' }
 #' @export
@@ -41,7 +41,7 @@ do.call(grid.arrange, c(x, ncol = ncol, main = title))
 #' @param ... sends any further arguments to \link{map.select}.
 #' @examples
 #' \dontrun{
-#' example(soc.mca)
+#' example(soc.ca)
 #' map.ellipse.array(result, active[, 1])
 #' }
 #' @export

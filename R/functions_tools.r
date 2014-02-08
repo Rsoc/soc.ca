@@ -134,7 +134,7 @@ export <- function(object, file = "export.csv", dim = 1:5) {
 #' @return a soc.ca object with inverted coordinates on the specified dimensions
 #' @seealso \link{soc.mca}, \link{add.to.label}
 #' @examples
-#' example(soc.mca)
+#' example(soc.ca)
 #' inverted.result  <- invert(result, 1:2)
 #' result$coord.ind[1, 1:2]
 #' inverted.result$coord.ind[1, 1:2]

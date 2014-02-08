@@ -31,7 +31,7 @@ Prints commonly used measures used in the analysis of
 multiple correspondence analysis
 }
 \examples{
-example(soc.mca)
+example(soc.ca)
 print(result)
 }
 \seealso{

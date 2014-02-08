@@ -69,7 +69,7 @@ map.ind(object, dim = c(1, 2), point.shape = 21, point.alpha = 0.8,
 Creates a map of the individuals on two selected dimension.
 }
 \examples{
-example(soc.mca)
+example(soc.ca)
 map.ind(result)
 map.ind(result, map.title = "Each individual is given its shape according to a value in a factor",
  point.shape = active[, 1], legend = TRUE)

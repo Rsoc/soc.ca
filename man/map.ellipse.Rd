@@ -31,7 +31,7 @@ Add ellipses for each level in a factor to a plot made from
 a \link{soc.ca} object.
 }
 \examples{
-example(soc.mca)
+example(soc.ca)
 map <- map.ind(result)
 map.ellipse(result, map, active[,2])
 }

@@ -72,7 +72,7 @@ Creates a map of all active and supplementary modalities on
 two selected dimension.
 }
 \examples{
-example(soc.mca)
+example(soc.ca)
 map.mod(result)
 map.mod(result, dim = c(3, 2), point.size = 2)
 }

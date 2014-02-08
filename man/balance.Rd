@@ -21,7 +21,7 @@ dimensions contribution is placed on either the + or - side
 of the dimension.
 }
 \examples{
-example(soc.mca)
+example(soc.ca)
 balance(result)
 balance(result, act.dim = 3)
 }

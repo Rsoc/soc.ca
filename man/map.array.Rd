@@ -26,7 +26,7 @@ into an array.
 }
 \examples{
 \dontrun{
-example(soc.mca)
+example(soc.ca)
 map.array(list(map.ind(result), map.mod(result)), ncol = 2)
 }
 }

@@ -43,7 +43,7 @@ objects. Results are presented according to the specified
 \code{mode}
 }
 \examples{
-example(soc.mca)
+example(soc.ca)
 contribution(result)
 contribution(result, 2)
 contribution(result, dim = 3, all = TRUE)

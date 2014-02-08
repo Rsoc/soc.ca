@@ -72,7 +72,7 @@ Creates a map of the supplementary modalities on two
 selected dimension.
 }
 \examples{
-example(soc.mca)
+example(soc.ca)
 map.sup(result)
 map.sup(result, dim = c(2, 1))
 map.sup(result, point.size = result$coord.sup[, 4],

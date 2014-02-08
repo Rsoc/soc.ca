@@ -72,7 +72,7 @@ Creates a map of the active modalities on two selected
 dimensions.
 }
 \examples{
-example(soc.mca)
+example(soc.ca)
 map.active(result)
 map.active(result, dim = c(2, 1))
 map.active(result, point.size = result$ctr.mod[, 1],

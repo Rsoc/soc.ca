@@ -63,7 +63,7 @@ and analytical functions that work for \link{soc.mca}, also
 work for \code{soc.csa}
 }
 \examples{
-example(soc.mca)
+example(soc.ca)
 class.age    <- which(taste$Age == '55-64')
 res.csa      <- soc.csa(result, class.age)
 res.csa

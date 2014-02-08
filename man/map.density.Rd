@@ -39,7 +39,7 @@ the individuals as a basis for the density calculation.
 Borders are arbitrary.
 }
 \examples{
-example(soc.mca)
+example(soc.ca)
 map.density(result, map.ind(result, dim = 2:3, point.alpha = 0.2))
 map.density(result, map.ind(result, legend = TRUE, point.alpha = 0.2),
  group = duplicated(active), color = duplicated(active),

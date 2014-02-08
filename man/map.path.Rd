@@ -33,7 +33,7 @@ numerical it is cut into groups by the \link{min_cut}
 function.
 }
 \examples{
-example(soc.mca)
+example(soc.ca)
 map <- map.ind(result, point.color = as.numeric(sup$Age))
 map <- map + scale_color_continuous(high = "red", low = "yellow")
 map.path(result, sup$Age, map)

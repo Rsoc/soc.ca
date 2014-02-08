@@ -22,7 +22,7 @@ This is a convieniency function as you would have to modify
 coord.mod, coord.ind and coord.sup in the soc.ca object.
 }
 \examples{
-example(soc.mca)
+example(soc.ca)
 inverted.result  <- invert(result, 1:2)
 result$coord.ind[1, 1:2]
 inverted.result$coord.ind[1, 1:2]

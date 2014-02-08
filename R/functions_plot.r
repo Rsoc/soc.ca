@@ -42,7 +42,7 @@
 #'   \link{guides}, \link{theme} and link{guide_legend} functions from the
 #'   ggplot2 package.
 #' @examples
-#' example(soc.mca)
+#' example(soc.ca)
 #' map.mod(result)
 #' map.mod(result, dim = c(3, 2), point.size = 2)
 #' @export
@@ -115,7 +115,7 @@ map.mod         <- function(object, dim = c(1, 2),
 #'   \link{guides}, \link{theme} and link{guide_legend} functions from the
 #'   ggplot2 package.
 #' @examples
-#' example(soc.mca)
+#' example(soc.ca)
 #' map.ctr(result)
 #' map.ctr(result, ctr.dim = c(1, 2))
 #' @export
@@ -189,7 +189,7 @@ map.ctr         <- function(object, dim = c(1, 2), ctr.dim = 1,
 #'   \link{guides}, \link{theme} and link{guide_legend} functions from the
 #'   ggplot2 package.
 #' @examples
-#' example(soc.mca)
+#' example(soc.ca)
 #' map.active(result)
 #' map.active(result, dim = c(2, 1))
 #' map.active(result, point.size = result$ctr.mod[, 1],
@@ -264,7 +264,7 @@ map.active         <- function(object, dim = c(1, 2),
 #'   \link{guides}, \link{theme} and link{guide_legend} functions from the
 #'   ggplot2 package.
 #' @examples
-#' example(soc.mca)
+#' example(soc.ca)
 #' map.sup(result)
 #' map.sup(result, dim = c(2, 1))
 #' map.sup(result, point.size = result$coord.sup[, 4],
@@ -336,7 +336,7 @@ map.sup         <- function(object, dim = c(1, 2),
 #'   \link{guides}, \link{theme} and link{guide_legend} functions from the
 #'   ggplot2 package.
 #' @examples
-#' example(soc.mca)
+#' example(soc.ca)
 #' map.ind(result)
 #' map.ind(result, map.title = "Each individual is given its shape according to a value in a factor",
 #'  point.shape = active[, 1], legend = TRUE)
@@ -425,7 +425,7 @@ map.ind         <- function(object, dim = c(1, 2),
 #'   \link{guides}, \link{theme} and link{guide_legend} functions from the
 #'   ggplot2 package.
 #' @examples
-#' example(soc.mca)
+#' example(soc.ca)
 #' map.select(result, map.title = "Map of the first ten modalities",list.mod = 1:10)
 #' select   <- active[, 3]
 #' select   <- select == levels(select)[2]
@@ -519,7 +519,7 @@ map.select         <- function(object, dim = c(1, 2), ctr.dim = 1,
 #'   \link{guides}, \link{theme} and link{guide_legend} functions from the
 #'   ggplot2 package.
 #' @examples
-#' example(soc.mca)
+#' example(soc.ca)
 #' original.map    <- map.sup(result)
 #' map.add(result, original.map, plot.type = "ctr", ctr.dim = 2)
 #' map.add(result, map.ind(result), plot.type = "select",list.ind = 1:50,
@@ -641,7 +641,7 @@ map.add         <- function(object, ca.map, plot.type = NULL,
 #'   \link{geom_density2d} is used.
 #' @export
 #' @examples
-#' example(soc.mca)
+#' example(soc.ca)
 #' map.density(result, map.ind(result, dim = 2:3, point.alpha = 0.2))
 #' map.density(result, map.ind(result, legend = TRUE, point.alpha = 0.2),
 #'  group = duplicated(active), color = duplicated(active),
@@ -992,7 +992,7 @@ add.count <- function(x, p, label = TRUE, ...){
 #'   \link{geom_point} and \link{geom_text} from the ggplot2 package
 #' @export
 #' @examples
-#' example(soc.mca)
+#' example(soc.ca)
 #' map <- map.ind(result, point.color = as.numeric(sup$Age))
 #' map <- map + scale_color_continuous(high = "red", low = "yellow")
 #' map.path(result, sup$Age, map)

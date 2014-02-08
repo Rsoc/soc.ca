@@ -20,7 +20,7 @@
 #' @seealso \link{soc.mca}, \link{contribution}
 #'   
 #' @examples
-#' example(soc.mca)
+#' example(soc.ca)
 #' print(result)
 #' @export
 
@@ -109,7 +109,7 @@ print.soc.mca  <- function(x, ...){
 #'   balance (+/-)
 #' @seealso \link{soc.mca}, \link{contribution}
 #' @examples
-#' example(soc.mca)
+#' example(soc.ca)
 #' balance(result)
 #' balance(result, act.dim = 3)
 #' @export
@@ -158,7 +158,7 @@ balance   <- function(object, act.dim = object$nd){
 #' @seealso \link{map.ctr}
 #' @examples
 #' 
-#' example(soc.mca)
+#' example(soc.ca)
 #' contribution(result)
 #' contribution(result, 2)
 #' contribution(result, dim = 3, all = TRUE)
@@ -274,7 +274,7 @@ individuals <- function(object, dim = 1, all = FALSE, indices = FALSE){
 # ' @param all defines whether all modalities are to be printed
 # ' @seealso \link{contribution}, \link{soc.mca}, \link{p.ctr}
 # ' @examples
-# ' example(soc.mca)
+# ' example(soc.ca)
 # ' tab.dim(result, 2)
 # ' tab.dim(result, 2, label.plus = "Technical capital", label.minus = "Organizational capital")
 # ' @export
@@ -337,7 +337,7 @@ tab.dim <- function(x, dim = 1, label.plus = NULL, label.minus = NULL, all = FAL
 # ' @return The returned list is a tab.variable class object and can be exported with the \link{export} function included in the soc.mca package.  
 # ' @seealso \link{export}, \link{contribution}
 # ' @examples
-# ' example(soc.mca)
+# ' example(soc.ca)
 # ' tab.variable(result)
 # ' tab.variable(result, dim = c(1, 3))
 # ' tab.variable(result, sup = TRUE)
@@ -424,7 +424,7 @@ tab.variable    <- function(object, dim = 1:3, sup = FALSE){
 #'   of variance
 #' @seealso \link{soc.mca}, \link{print.soc.mca}
 #' @examples
-#' example(soc.mca)
+#' example(soc.ca)
 #' variance(result)
 #' variance(result, dim = 1:4)
 #' @export
@@ -458,7 +458,7 @@ variance    <- function(object, dim = NULL){
 #' @return a matrix with the mean points and frequencies of the given variable
 #' @export
 #' @examples
-#' example(soc.mca)
+#' example(soc.ca)
 #' average.coord(result, sup$Income)
 
 average.coord <- function(object, x, dim = c(1, 2)){

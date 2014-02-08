@@ -13,7 +13,8 @@ add.to.label(object, value = "freq", prefix = "default", suffix = ")",
   active modalities, "ctr" adds contribution values to the
   active modalities, "cor" adds correlation values.  value
   also accepts any vector with the length of the number of
-  active modalities.}
+  active modalities. "linebreak" adds a linebreak
+  \code{\\n} after the first ":" in the label.}
 
   \item{prefix}{if "default" an appropriate prefix is used}
 
@@ -29,12 +30,15 @@ names.sup
 Adds values to the end of the label of each modality.
 }
 \examples{
-example(soc.mca)
+example(soc.ca)
 result.label  <- add.to.label(result)
 result.label$names.mod
 result.label  <- add.to.label(result, value = "ctr", dim = 2)
 result.label$names.mod
 result.label  <- add.to.label(result, value = result$variable, prefix = " - ", suffix = "")
 result.label$names.mod
+result.label  <- add.to.label(result, value = "linebreak")
+result.label$names.mod
+map.ctr(result.label)
 }
 

@@ -15,7 +15,7 @@
 #'   individuals for each modality
 #' @seealso \link{map.ind}, \link{map.ctr}
 #' @examples
-#' example(soc.mca)
+#' example(soc.ca)
 #' map <- map.ind(result)
 #' map.ellipse(result, map, active[,2])
 #' @export

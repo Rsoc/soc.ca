@@ -33,7 +33,7 @@ list with soc.csa objects and a list of measures defined by
 \link{csa.measures}
 }
 \examples{
-example(soc.mca)
+example(soc.ca)
 csa.all(result, taste$Age)
 csa.all(result, taste$Age)$measures
 }

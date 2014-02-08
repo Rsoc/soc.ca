@@ -35,7 +35,7 @@ factor arranged in an array.
 }
 \examples{
 \dontrun{
-example(soc.mca)
+example(soc.ca)
 map.ellipse.array(result, active[, 1])
 }
 }

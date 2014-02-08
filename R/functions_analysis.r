@@ -392,7 +392,7 @@ return(Z)
 #' @seealso \link{add.to.label}, \link{contribution}
 #' @references Le Roux, B., og H. Rouanet. 2010. Multiple correspondence analysis. Thousand Oaks: Sage.
 #' @examples 
-#' example(soc.mca)
+#' example(soc.ca)
 #' class.age    <- which(taste$Age == '55-64')
 #' res.csa      <- soc.csa(result, class.age)
 #' res.csa
@@ -594,7 +594,7 @@ soc.csa <- function(object, class.indicator, sup = NULL){
 #' @return Returns a character vector with category memberships
 #' @seealso \link{soc.mca}
 #' @examples 
-#' example(soc.mca)
+#' example(soc.ca)
 #' create.quadrant(result, dim = c(2, 1))
 #' table(create.quadrant(result, dim = c(1, 3), cut.radius = 0.5))
 #' @export
@@ -647,7 +647,7 @@ create.quadrant <- function(object, dim = c(1,2), cut.min = -0.125, cut.max = 0.
 #'   dimensions}
 #' @export
 #' @examples
-#' example(soc.mca)
+#' example(soc.ca)
 #' csa.all(result, taste$Age)
 #' csa.all(result, taste$Age)$measures
 #' @seealso \link{soc.csa}, \link{cor}, \link{csa.measures}
