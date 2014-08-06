@@ -1,5 +1,4 @@
 ### Plot for all modalitites
-
 #' Map all modalities
 #' 
 #' Creates a map of all active and supplementary modalities on two selected 
@@ -424,6 +423,7 @@ map.ind         <- function(object, dim = c(1, 2),
 #' @param legend if set to TRUE a legend is provided. Change the legend with the
 #'   \link{guides}, \link{theme} and link{guide_legend} functions from the
 #'   ggplot2 package.
+#' @param ... further arguments are currently ignored.
 #' @examples
 #' example(soc.ca)
 #' map.select(result, map.title = "Map of the first ten modalities",list.mod = 1:10)
@@ -440,7 +440,7 @@ map.select         <- function(object, dim = c(1, 2), ctr.dim = 1,
                                point.shape = "variable", point.alpha = 0.8, point.fill = "whitesmoke",
                                point.color = "black", point.size = "freq",
                                label = TRUE, label.alpha = 0.8, label.color = "black", label.size = 4,
-                               map.title = "select", labelx = "default", labely = "default", legend = NULL){
+                               map.title = "select", labelx = "default", labely = "default", legend = NULL, ...){
   
   modal.list  <- list(list.mod = list.mod, list.sup = list.sup, list.ind = list.ind)
   
@@ -692,6 +692,7 @@ plot.flow   <- function(object, dim = c(1, 2), ctr.dim = NULL, modal.list = NULL
                         map.title = map.title, labelx = "default", labely = "default", legend = NULL,
                         plot.type = plot.type){
   
+  
   gg.proc     <- round(object$adj.inertia[,4])                        # Adjusted inertia
   gg.data     <- data.plot(object,
                            plot.type   = plot.type,
@@ -753,10 +754,35 @@ plot.flow   <- function(object, dim = c(1, 2), ctr.dim = NULL, modal.list = NULL
   return(t.plot)
 }
 
+#################################################################################
+# Soc.ca.graphics environment
+
+# soc.ca.scales                  <- function(...){
+# soc.ca.graphics                <- new.env()
+# assign("scale_colour_continuous", function(...) ggplot2::scale_colour_continuous(..., low = getOption("soc.ca.gradient")[1], high = getOption("soc.ca.gradient")[2]), envir = soc.ca.graphics)
+# assign("scale_color_continuous",  function(...) ggplot2::scale_colour_continuous(..., low = getOption("soc.ca.gradient")[1], high = getOption("soc.ca.gradient")[2]), envir = soc.ca.graphics)
+# assign("scale_fill_continuous",   function(...) ggplot2::scale_fill_continuous(...,   low = getOption("soc.ca.gradient")[1], high = getOption("soc.ca.gradient")[2]), envir = soc.ca.graphics)
+# 
+# assign("scale_colour_gradient",   function(...) ggplot2::scale_colour_continuous(..., low = getOption("soc.ca.gradient")[1], high = getOption("soc.ca.gradient")[2]), envir = soc.ca.graphics)
+# assign("scale_color_gradient",    function(...) ggplot2::scale_colour_continuous(..., low = getOption("soc.ca.gradient")[1], high = getOption("soc.ca.gradient")[2]), envir = soc.ca.graphics)
+# assign("scale_fill_gradient",     function(...) ggplot2::scale_fill_continuous(...,   low = getOption("soc.ca.gradient")[1], high = getOption("soc.ca.gradient")[2]), envir = soc.ca.graphics)
+# 
+# assign("scale_colour_discrete",   function(...) ggplot2::scale_colour_manual(..., values = getOption("soc.ca.colors")), envir = soc.ca.graphics)
+# assign("scale_color_discrete",    function(...) ggplot2::scale_colour_manual(..., values = getOption("soc.ca.colors")), envir = soc.ca.graphics)
+# assign("scale_fill_discrete",     function(...) ggplot2::scale_fill_manual(...,   values = getOption("soc.ca.colors")), envir = soc.ca.graphics)
+# if(("soc.ca.graphics" %in% search()) == FALSE) attach(soc.ca.graphics)
+# 
+# 
+# }
 
 #################################################################################
 ## basic.plot 
 basic.plot <- function(gg.input){ 
+  
+  #####################
+  # Changing default ggplot2 behaviour
+ # soc.ca.scales() # When loading the soc.ca.graphics environment, certain functions are masked from ggplot2. This is intended.
+  # Her skal der måske en on.exit på
   # Defining point.size
   p       <- ggplot()   
   # The middle plot axis
@@ -793,7 +819,9 @@ basic.plot <- function(gg.input){
   p     <- p + coord_fixed()
   p$ca.scales <- gg.input$scales
   
-  return(p)
+ # detach(soc.ca.graphics) # Detaches the environment containing the soc.ca version of the scales, see(soc.ca.scales)
+  
+  p
 }
 
 

@@ -7,7 +7,7 @@ Description: soc.ca is a package optimized to the needs of scientists within
     analysis. A diverse set of plotting functions create plots of near
     publication ready quality.
 URL: https://github.com/Rsoc/soc.ca
-Version: 0.7.1
+Version: 0.7.2
 Maintainer: Anton Grau Larsen <alar@soc.ku.dk>
 Author: Anton Grau Larsen, with contributions from Christoph Ellersgaard and
     Stefan Andrade

@@ -38,7 +38,7 @@ do.call(grid.arrange, c(x, ncol = ncol, main = title))
 #' @param titles a vector of the same length as the number of levels in
 #'   variable. These are the titles given to each subplot
 #' @param main.title the main title for all the plots
-#' @param ... sends any further arguments to \link{map.select}.
+#' @param ... sends any further arguments to \link{map.select} and \link{map.ellipse}.
 #' @examples
 #' \dontrun{
 #' example(soc.ca)
@@ -59,7 +59,7 @@ map.ellipse.array <- function(object, variable, dim = c(1,2),
   
   p               <- map.select(object, dim = dim, list.ind = ind.ind, map.title = titles[i], label = FALSE, ...)
   
-  if(identical(draw.ellipses, TRUE)) p  <- map.ellipse(object, p, ellipse.ind, ellipse.label = FALSE, label.size = 4)
+  if(identical(draw.ellipses, TRUE)) p  <- map.ellipse(object, p, ellipse.ind, ellipse.label = FALSE, label.size = 4, ...)
   list.of.maps[[i]]  <- p
   }
   
