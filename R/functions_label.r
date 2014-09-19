@@ -100,7 +100,7 @@ export.label    <- function(object, file = FALSE, encoding = "UTF-8", overwrite 
   
   names         <- c(object$names.mod, object$names.sup, object$names.ind)
   ca.label      <- cbind(names, names)
-  colnames(ca.label)  <- c("New label", "Old label")
+  colnames(ca.label)  <- c("New.label", "Old.label")
   
   if (identical(file, FALSE) == TRUE){
     file    <- paste("label_",deparse(substitute(object)), ".csv", sep = "")

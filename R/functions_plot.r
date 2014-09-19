@@ -421,7 +421,7 @@ map.ind         <- function(object, dim = c(1, 2),
 #' @param label.size defines the size of the labels. It may be mapped to a
 #'   variable with a suitable length and order.
 #' @param legend if set to TRUE a legend is provided. Change the legend with the
-#'   \link{guides}, \link{theme} and link{guide_legend} functions from the
+#'   \link{guides}, \link{theme} and \link{guide_legend} functions from the
 #'   ggplot2 package.
 #' @param ... further arguments are currently ignored.
 #' @examples
@@ -793,8 +793,7 @@ basic.plot <- function(gg.input){
   point.attributes             <- gg.input$point.attributes
   point.attributes$mapping     <- do.call("aes", gg.input$point.aes)
   p                            <- p + do.call("geom_point", point.attributes, quote = TRUE)
-  shapes                       <- c(21, 22, 23, 24, 25, 6, 0, 1, 2, 3, 4, 5, 7, 8, 9, 10,
-                                    12, 15, 16, 17, 18, 42, 45, 61, 48, 50:120)   
+  shapes                       <- getOption("soc.ca.shape")  
   p                            <- p + scale_shape_manual(values = shapes)   
   
   # label
