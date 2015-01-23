@@ -84,7 +84,7 @@ soc.mca <- function(active, sup = NULL, identifier = NULL, passive = getOption("
     
   # Creating the indicatormatrix for active and supplementary variables
   ind.act     <- indicator(active)
-      
+  
   # Finding the subset
   sub         <- grepl(paste(passive, collapse = "|"), colnames(ind.act))
   set         <- 1:ncol(ind.act)
@@ -666,3 +666,97 @@ csa.all <- function(object, variable, dim = 1:5, ...){
   
   list(results = result.list, measures = measure.list)
 }
+
+#' Add supplementary individuals to a result object
+#' 
+#' @param object  is a soc.ca class object created with \link{soc.mca}
+#' @param sup.indicator is a indicator matrix for the supplementary individuals with the same columns as the active variables in object.
+#' @return a matrix with coordinates
+#' @export
+#' @examples
+#' example(soc.mca)
+#' res.pas   <- soc.mca(active, passive = "Costume")
+#' res.sup   <- supplementary.individuals(res.pas, sup.indicator = indicator(active))
+#' a         <- res.sup$coord.ind[res.sup$supplementary.individuals == "Supplementary",]
+#' b         <- res.pas$coord.ind
+#' all.equal(as.vector(a), as.vector(b))
+#' map.ind(res.sup)
+
+supplementary.individuals <- function(object, sup.indicator, replace = FALSE){
+  
+  if (length(object$names.passive) > 0) sup.indicator   <- sup.indicator[, -which(colnames(sup.indicator) %in% object$names.passive)]
+  
+#   sup.ind.dim     <- function(object, sup.indicator, dim){
+#     Q             <- length(table(object$variable))
+#     yk            <- t(object$coord.mod[, dim] * t(sup.indicator))
+#     #Q.ind         <- yk / rowSums(sup.indicator)
+#     Q.ind         <- yk / Q
+#     out           <- 1/sqrt(object$eigen[dim]) * rowSums(Q.ind)
+#     out
+#   }
+  
+  sup.ind.dim     <- function(object, sup.indicator, dim){
+    Q             <- length(table(object$variable))
+    yk            <- t(object$coord.mod[, dim] * t(sup.indicator))
+    pk            <- (colSums(object$indicator.matrix)/object$n.ind) / Q
+    sas           <- pk * object$coord.mod[, dim]
+    Q.ind         <- yk / Q
+    out           <- 1/sqrt(object$eigen[dim]) * (rowSums(Q.ind) - sum(sas))
+    out
+  }
+
+  
+  ndim            <- 1:ncol(object$coord.ind)
+  sup.ind.coord   <- sapply(ndim, sup.ind.dim, object = object, sup.indicator = sup.indicator)
+  
+  if(identical(replace, FALSE)){
+  object$coord.ind                 <- rbind(object$coord.ind, sup.ind.coord)
+  rownames(object$coord.ind)       <- NULL
+  object$supplementary.individuals <- c(rep("Active", object$n.ind), rep("Supplementary", nrow(sup.indicator)))
+  object$names.ind                 <- c(object$names.ind, rownames(sup.indicator))
+  }
+  
+  if(identical(replace, TRUE)){
+    object$coord.ind                 <- sup.ind.coord
+    rownames(object$coord.ind)       <- NULL
+    object$names.ind                 <- rownames(sup.indicator)
+  }
+ object
+}
+ 
+# # Test of supplementary individuals
+# example(soc.mca)
+# 
+# # Ingen passive modaliteter
+# res.sup   <- supplementary.individuals(result, sup.indicator = indicator(active))
+# a         <- res.sup$coord.ind[res.sup$supplementary.individuals == "Supplementary",]
+# b         <- result$coord.ind
+# all.equal(as.vector(a), as.vector(b))
+# map.ind(res.sup)
+# 
+# # Med passive modaliteter
+# res.pas   <- soc.mca(active, passive = "Costume")
+# res.sup   <- supplementary.individuals(res.pas, sup.indicator = indicator(active))
+# a         <- res.sup$coord.ind[res.sup$supplementary.individuals == "Supplementary",]
+# b         <- res.pas$coord.ind
+# all.equal(as.vector(a), as.vector(b))
+# map.ind(res.sup)
+# 
+# # Med passive modaliteter og kun de 10 første individer
+# res.pas   <- soc.mca(active, passive = "Costume")
+# res.sup   <- supplementary.individuals(res.pas, sup.indicator = indicator(active)[1:10,])
+# a         <- res.sup$coord.ind[res.sup$supplementary.individuals == "Supplementary",]
+# b         <- res.pas$coord.ind[1:10,]
+# all.equal(as.vector(a), as.vector(b))
+# map.ind(res.sup, point.fill = res.sup$supplementary.individuals, label = T)
+# 
+# # Med passive modaliteter og kun de 10 første individer
+# sup.indicator <- indicator(active)[1:10,]
+# rownames(sup.indicator) <- paste("Sup", 1:10)
+# res.pas   <- soc.mca(active, passive = "Costume")
+# res.sup   <- supplementary.individuals(res.pas, sup.indicator = sup.indicator)
+# a         <- res.sup$coord.ind[res.sup$supplementary.individuals == "Supplementary",]
+# b         <- res.pas$coord.ind[1:10,]
+# all.equal(as.vector(a), as.vector(b))
+# map.ind(res.sup, point.fill = res.sup$supplementary.individuals, label = T)
+

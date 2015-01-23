@@ -1,6 +1,4 @@
 ## Diverse ubrugte funktioner
-
-
 # Balancemål for mass
 balance.mass <- function(object, act.dim=object$nd){
 aktive <- object$analyse

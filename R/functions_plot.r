@@ -944,7 +944,7 @@ data.plot   <- function(object, plot.type, dim, ctr.dim = NULL,
     mnames		<- object$names.ind
     freq      <- rep(1, object$n.ind)
      if(identical(point.variable, NULL)){
-       variable  <- rep("ind",object$n.ind)
+       variable  <- rep("ind", nrow(object$coord.ind))
      }else{ 
        variable  <- point.variable
     }
