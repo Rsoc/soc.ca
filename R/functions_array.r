@@ -19,7 +19,7 @@ map.array   <- function(x, ncol = 1, title = "", fixed.coord = TRUE, padding = 0
 
 if (identical(fixed.coord, TRUE))  x  <- fix.coords(x, padding = padding)
 
-do.call(grid.arrange, c(x, ncol = ncol, main = title))
+do.call(grid.arrange, c(x, ncol = ncol, top = title))
 }
 
 
