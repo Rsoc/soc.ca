@@ -60,64 +60,91 @@ for (i in 1:nrow(modal)){
 
 
 ##################### Test.data 
+library(soc.ca)
+example(soc.ca)
 
-test.data <- function(x, sup=NULL, identifier=NULL, passive="default"){
-  
-  # Defining the passive modalities
-  if (identical(passive, "default")==TRUE){
-    passive <-  formals(soc.ca)$passive
-  }
+# When test.data is done - remove the forced conversions to factor in soc.mca - it affects the order of the levels.
+
+
+
+x             <- active
+x[, 2]        <- as.character(x[, 2])   # Fail: Not a factor
+x[5:6, 1:3]   <- NA                     # Fail: NA's
+levels(x[,3]) <- c(levels(x[,3]), "Empty") # Tomme levels 
+identifier    <- 1:nrow(active)
+identifier[3:4] <- 1:2                  # Fail: Not unique
+
+sup[,2]       <- as.character(sup[,2])  # Fail: Not a factor
+
+
+nrow(x)
+soc.mca(x, sup, identifier)
+
+test.data <- function(x, identifier = 1:nrow(x), passive = getOption("passive", default = "Missing")){
   
   # Factor test
-  active.names <- colnames(x)    
-  fact <- unlist(lapply(x, is.factor))
-  fact <- active.names[which(fact==FALSE)]
-  
-  if (identical(sup, NULL)==FALSE){
-    sup.names <- colnames(sup)    
-    fact.sup <- unlist(lapply(sup, is.factor))
-    fact.sup <- active.names[which(fact.sup==FALSE)]
+  not.factor             <- function(x){
+    
+  active.names           <- colnames(x)    
+  fact                   <- unlist(lapply(x, is.factor))
+  fact                   <- active.names[which(fact==FALSE)]
+  fact
   }
+
   
   # Test unique identifier
-  
-  if (identical(identifier, NULL)==FALSE){
-    n.dup <- length(identifier[duplicated(identifier)])
+unique.identifier        <- function(identifier){
+      tab.id             <- table(identifier)
+      mat.id             <- as.matrix(tab.id[tab.id > 1])
+      mat.id             <- data.frame("Id" = rownames(mat.id),  "Duplicates" = mat.id)
+      rownames(mat.id)   <- NULL
+      if (sum(tab.id > 1) == 0) mat.id <- "No duplicated identifiers"
+      mat.id
   }
-  
+
   # Test for rare modalities
   # This test only makes sense if all active modalities are factors.
-  n5test      <- integer(0) 
-  if (length(fact)==0){
+x <- active
+n.cut = 5
+share.cut = 0.05
+passive = getOption("passive", default = "Missing")
+
+ too.small     <- function(x, n.cut = 5, share.cut = 0.05, passive = getOption("passive", default = "Missing")){
+
     act.ind     <- indicator(x)
-    
     sub         <- grepl(paste(passive, collapse="|"), colnames(act.ind)) 
-    sub.ind     <- act.ind[, sub==TRUE]
-    act.ind     <- act.ind[, sub==FALSE] # Subsetting
-    
+    sub.ind     <- act.ind[, sub == TRUE]
+    act.ind     <- act.ind[, sub == FALSE] # Subsetting
     modal.names <- colnames(act.ind)
     n           <- nrow(x)
     col.sum     <- apply(act.ind, 2, sum)
     col.per     <- col.sum/n
-    n5          <- which(col.sum <= 4)     
-    n5per       <- which(col.per <= 0.05)
-    n5test      <- unique(c(n5, n5per))
-    n5names     <- modal.names[n5test] 
-  }
+    
+    out         <- data.frame("Name" = modal.names,"N" = col.sum, "Share" = round(col.per, 2), row.names = NULL)
+    out[col.sum < n.cut | col.per < share.cut,]
+    }
   
   
   ######### Number of passive modalities per. individual
-  sub.mat     <- integer(0) 
-  if (length(fact)==0){
-    row.freq    <- table(apply(sub.ind, 1, sum))
-    row.prop    <- round(prop.table(row.freq), 2)
-    row.cum     <- cumsum(row.prop)
-    sub.mat     <- matrix(nrow=length(row.prop), ncol=3) 
-    rownames(sub.mat) <- dimnames(row.freq)[[1]]
-    sub.mat[,1] <- row.freq
-    sub.mat[,2] <- row.prop
-    sub.mat[,3] <- row.cum
-    colnames(sub.mat) <- c("Freq.", "%", "Cum.%" )
+ passive.categories.per.individual <- function(x, identifier, share.cut = 1/3, passive = getOption("passive", default = "Missing")) 
+ 
+   act.ind     <- indicator(x)
+   sub         <- grepl(paste(passive, collapse="|"), colnames(act.ind)) 
+   sub.ind     <- act.ind[, sub]
+   n.passive   <- rowSums(sub.ind)
+   share.passive <- n.passive / ncol(x)
+   passive.mat   <- data.frame("Id" = identifier, "Passive" = n.passive, "Share" = round(share.passive, 2))
+   passive.mat[share.passive > share.cut, ]
+   
+  }
+  
+  overlapping.categories <- function(x, passive = passive = getOption("passive", default = "Missing")){
+   ind.all               <- indicator(x)
+   sub                   <- grepl(paste(passive, collapse="|"), colnames(act.ind)) 
+   ind.act               <- ind.all[, -sub]
+   burt                  <- t(ind.act) %*% ind.act  
+   View(burt / diag(burt))
+    
   }
   
   
@@ -151,45 +178,18 @@ test.data <- function(x, sup=NULL, identifier=NULL, passive="default"){
   ######### Print test-results
   
   # Factor test
-  if (length(fact)>=1){
-    cat("\n",format("Following active variables are not factors: ", width=100, justify="centre"), "\n", "\n")
-    cat(format(fact, width=25, justify="right"), fill=100)
-    cat("\n", "\n",format("The active variables were not tested for rare modalities or strong correlations; make them factors and try again.", width=100, justify="centre"), "\n")
-  }
+  not.factor(x)
   
-  if (length(fact)==0){
-    cat("\n",format("All active variables are factors", width=100, justify="centre"), "\n")
-  }
+  # Unique identifier
+  unique.identifier(identifier)
   
-  if (length(fact.sup)>=1){
-    cat("\n",format("Following supplementary variables are not factors: ", width=100, justify="centre"), "\n", "\n")
-    cat(format(fact.sup, width=25, justify="right"), fill=100)
-  }
+  # Too small categories
+  too.small(x.factor, n.cut = 5, share.cut = 0.05, passive = passive)
   
-  if (length(fact.sup)==0 & (identical(sup, NULL)==FALSE)){
-    cat("\n",format("All supplementary variables are factors", width=100, justify="centre"), "\n")
-  }
+  # Too many passive categories for an individual
+  passive.categories.per.individual(x.factor, share.cut = 1/3, passive = passive)
   
-  # Print rare modalities
-  
-  if (((length(fact)==0) & (length(n5test)>=1))==TRUE){
-    cat("\n",format("Following modalities are rarer than 5% or 5 individuals: ", width=100, justify="centre"), "\n", "\n")
-    cat(format(n5names, width=25, justify="right"), fill=100)
-  }    
-  
-  if ((length(n5test)==0) & (length(fact)==0)) {
-    cat("\n",format("No modalities are rarer than 5% or 5 individuals.", width=100, justify="centre"), "\n")
-  }    
-  
-  # Print duplicated
-  if ((identical(identifier, NULL)==FALSE) & (length(n.dup)>=1)){
-    cat("\n",format(paste("There are ", n.dup, " duplicates in the identifier variable", sep="") , width=100, justify="centre"), "\n")
-  }
-  
-  if ((identical(identifier, NULL)==FALSE) & (length(n.dup)==0)){
-    cat("\n", format("There are no duplicates in the identifier variable", width=100, justify="left"), "\n")
-  }
-  
+ 
   # Print correlation
   
   if (nrow(var.test)>=1){
@@ -201,14 +201,7 @@ test.data <- function(x, sup=NULL, identifier=NULL, passive="default"){
     cat("\n",format("No modalities are too strongly related.", width=100, justify="centre"), "\n")
   }    
   
-  # Print number of passive modalities
-  
-  if (identical(sub.mat, integer(0))==FALSE) {
-    cat("\n",format("Number of individuals per amount of passive modalities:", width=100, justify="centre"), "\n")
-    print(sub.mat, quote=FALSE, right=TRUE, print.gap=3) # Bedre layout
-  }
-  
-  # End of function - insert documentation
+
 }
 
 
