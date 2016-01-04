@@ -24,10 +24,10 @@
 #' @docType package
 #' @name soc.ca
 #' @import ggplot2
-#' @import grid
-#' @import scales
 #' @import gridExtra
 #' @import ellipse
+#' @import stats
+#' @import utils
 #' @examples
 #' data(taste)
 #' # Create a data frame of factors containing all the active variables 
@@ -238,7 +238,7 @@ NULL
 #' @references Le Roux, Brigitte, Henry Rouanet, Mike Savage, og Alan Warde. 2008. "Class and Cultural Division in the UK". Sociology 42(6):1049-1071.
 #' @references Le Roux, B., og H. Rouanet. 2010. Multiple correspondence analysis. Thousand Oaks: Sage.
 #' @keywords data
-#' #' @examples
+#' @examples
 #' \dontrun{
 #' # The taste example
 #' data(taste)

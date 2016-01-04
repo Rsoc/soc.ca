@@ -413,7 +413,7 @@ soc.csa <- function(object, class.indicator, sup = NULL){
   cmpc    <- colSums(P)              # Column (modality) mass
   rmpc    <- rowSums(P)  
   
-  # Nu gør vi det i et loop, men det kan nok gøres med apply
+  
   H.hat   <- matrix(, nrow = i, ncol = length(cm))
   for (k in seq(cm)){
     H.hat[,k] <- (1/sqrt(Q)) * (sqrt(I/i)) * (Z.hat[, k]-(cm[k]/i)) * (1/sqrt(CM[k]))
@@ -669,9 +669,10 @@ csa.all <- function(object, variable, dim = 1:5, ...){
 
 #' Add supplementary individuals to a result object
 #' 
-#' @param object  is a soc.ca class object created with \link{soc.mca}
+#' @param object is a soc.ca class object created with \link{soc.mca}
 #' @param sup.indicator is a indicator matrix for the supplementary individuals with the same columns as the active variables in object.
-#' @return a matrix with coordinates
+#' @param replace if TRUE the coordinates of the active individuals are discarded. If FALSE the coordinates of the supplementary and active individuals are combined. The factor \code{object$supplementary.individuals} marks the supplementary individuals.
+#' @return  a soc.ca class object created with \link{soc.mca}
 #' @export
 #' @examples
 #' example(soc.mca)
@@ -742,7 +743,7 @@ supplementary.individuals <- function(object, sup.indicator, replace = FALSE){
 # all.equal(as.vector(a), as.vector(b))
 # map.ind(res.sup)
 # 
-# # Med passive modaliteter og kun de 10 første individer
+# # Med passive modaliteter 
 # res.pas   <- soc.mca(active, passive = "Costume")
 # res.sup   <- supplementary.individuals(res.pas, sup.indicator = indicator(active)[1:10,])
 # a         <- res.sup$coord.ind[res.sup$supplementary.individuals == "Supplementary",]
@@ -750,7 +751,7 @@ supplementary.individuals <- function(object, sup.indicator, replace = FALSE){
 # all.equal(as.vector(a), as.vector(b))
 # map.ind(res.sup, point.fill = res.sup$supplementary.individuals, label = T)
 # 
-# # Med passive modaliteter og kun de 10 første individer
+# # Med passive modaliteter
 # sup.indicator <- indicator(active)[1:10,]
 # rownames(sup.indicator) <- paste("Sup", 1:10)
 # res.pas   <- soc.mca(active, passive = "Costume")

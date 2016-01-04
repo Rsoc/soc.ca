@@ -623,8 +623,8 @@ map.add         <- function(object, ca.map, plot.type = NULL,
 #' Density plot for the cloud of individuals
 #' 
 #' Draws a 2d density plot on top of an existing soc.ca map. The density is 
-#' calculated by the \link{kde2d} function from MASS and plotted by
-#' \link{geom_density2d} from \link{ggplot2} \code{map.density} uses the
+#' calculated by the \link[MASS]{kde2d} function from MASS and plotted by
+#' \link[ggplot2]{geom_density2d} from \code{ggplot2} \code{map.density} uses the
 #' coordinates of the individuals as a basis for the density calculation. 
 #' Borders are arbitrary.
 #' 
@@ -633,12 +633,10 @@ map.add         <- function(object, ca.map, plot.type = NULL,
 #' @param group a factor determining group membership. Density is mapped for
 #'   each group individually.
 #' @param color a single value or vector determining the color. See the scale
-#'   functions of \link{ggplot2} for ways to alter the scales.
+#'   functions of \code{ggplot2} for ways to alter the scales.
 #' @param alpha a single value or vector determining the alpha.
 #' @param size a single value or vector determining the size of the lines.
 #' @param linetype a single value or vector determining the linetype
-#' @param bins the number of borders. If NULL the default from
-#'   \link{geom_density2d} is used.
 #' @export
 #' @examples
 #' example(soc.ca)
@@ -647,10 +645,8 @@ map.add         <- function(object, ca.map, plot.type = NULL,
 #'  group = duplicated(active), color = duplicated(active),
 #'  linetype = duplicated(active))
 #' map.density(result, map.ctr(result))
-#' map.density(result, bins = 50)
 
-
-map.density  <- function(object, map = map.ind(object), group = NULL, bins = NULL,
+map.density  <- function(object, map = map.ind(object), group = NULL,
                          color = "red", alpha = 0.8, size = 0.5, linetype = "solid"){
   
   dim                        <- map$dimensions 
@@ -661,8 +657,9 @@ map.density  <- function(object, map = map.ind(object), group = NULL, bins = NUL
                                      alpha = alpha,
                                      size  = size,
                                      linetype = linetype,
+                                     n  = 100,
                                      group = group,
-                                     bins  = bins)
+                                     na.rm = TRUE)
   
   d.i                        <- unlist(lapply(density.l, length)) == 1
   density.attributes         <- density.l[d.i]
@@ -782,7 +779,7 @@ basic.plot <- function(gg.input){
   #####################
   # Changing default ggplot2 behaviour
  # soc.ca.scales() # When loading the soc.ca.graphics environment, certain functions are masked from ggplot2. This is intended.
-  # Her skal der måske en on.exit på
+  # Her skal der perhaps en on.exit
   # Defining point.size
   p       <- ggplot()   
   # The middle plot axis
@@ -871,8 +868,7 @@ return(axis.labels)
 
 ####################### breaksandscales
 breaksandscales <- function(gg.data){
-  # Hjælpe funktion
-  mround <- function(x, base){
+    mround <- function(x, base){
     base*round(x/base)
   }
   
