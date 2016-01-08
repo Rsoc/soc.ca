@@ -28,6 +28,8 @@
 #' @import ellipse
 #' @import stats
 #' @import utils
+#' @import shiny
+#' @import reshape2
 #' @examples
 #' data(taste)
 #' # Create a data frame of factors containing all the active variables 
