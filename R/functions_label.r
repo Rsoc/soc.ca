@@ -73,6 +73,8 @@ add.to.label <- function(object, value = "freq", prefix = "default", suffix = ")
     
   }
   
+  colnames(object$indicator.matrix) <- object$names.mod
+  
   return(object)
 }
 

@@ -10,11 +10,13 @@
 #'
 #' @examples
 #' \dontrun{
-#' examples(soc.mca)
+#' example(soc.mca)
 #' ind.explorer(result, active, sup)
 #' }
 
 ind.explorer     <- function(object, active, sup = NULL){
+  
+  # Smid modalitetsskyen ind i den her og ryk data udtrækket ned - dog må der kun være et enkelt punkt til modalitetsskyen
   
   # -----------
   # Creating data
@@ -39,19 +41,19 @@ ind.explorer     <- function(object, active, sup = NULL){
                   selectInput("fill", "Fill", choices = colnames(indicator.matrix), width = 150),
                   checkboxInput(inputId = "ellipse", "Draw ellipse", value = FALSE),
                   checkboxInput(inputId = "density", "Draw density", value = FALSE),
-                  checkboxInput(inputId = "csa", "Calculate CSA", value = FALSE)
+                  checkboxInput(inputId = "labels", "Modality labels", value = FALSE)
                ),
         column(8, plotOutput("map.ind", click = "plot_click"))# Se hvad vi kan gøre ved størrelsen på plottet
         
       ),
       fluidRow(
         column(3),
-        column(8, tableOutput("info"))
-        ),
+        column(8, plotOutput("map.mod"))
+      ),
       fluidRow(
         column(3),
-      column(5, plotOutput("ind.plot"))
-    )
+        column(8, tableOutput("info"))
+        )
   )
   )
   
@@ -81,11 +83,16 @@ ind.explorer     <- function(object, active, sup = NULL){
       t(np[, -(1:object$nd)])
     })
     
-    output$ind.plot <- renderPlot({
+    output$map.mod <- renderPlot({
       np <- nearPoints(data, input$plot_click, xvar = "Dimension.1", yvar = "Dimension.2", threshold = 10)
       if(is.null(input$plot_click)) np <- data[1,]
       ind           <- which(object$names.ind %in% rownames(np))
-      coords.ind.plot(object, ind, dim = 1:5)
+      mod.names     <- colnames(indicator.matrix)
+      mod.names.ind <- mod.names[colSums(indicator.matrix[ind, , drop = FALSE] == 1) > 0]
+      active.mod.ind <- object$names.mod %in% mod.names.ind
+      sup.mod.ind   <- object$names.sup %in% mod.names.ind
+      map.title     <- paste(rownames(np), collapse = " & ")
+      map.select(object, dim = dim.plot, list.mod = active.mod.ind, list.sup = sup.mod.ind, map.title = map.title, label = input$labels)
     })
   })
   
@@ -97,21 +104,21 @@ ind.explorer     <- function(object, active, sup = NULL){
   runApp(app)
 }
 
-coords.ind.plot <- function(object, ind, dim = 1:9){
-             
-Name       <- object$names.ind[ind]  
-coords     <- data.frame(Name, Dimension = object$coord.ind[ind, dim])
-coords     <- melt(coords, id.vars = "Name")
-if(length(ind) == 1) coords$variable <- dim
-
-ctr        <- data.frame(Name, Ctr = object$ctr.ind[ind, dim])
-ctr        <- melt(ctr, id.vars = "Name")
-gd         <- data.frame(coords, Contribution = ctr$value)
-gd$Name    <- as.factor(gd$Name)
-
-levels(gd$variable) <- dim
-
-p <- ggplot(gd, aes(x = variable, y = value, size = Contribution, fill = Name, group = Name)) 
-p <- p + geom_line(aes(color = Name), size = 0.5) + geom_point(shape = 21)
-p + xlab(label = "Dimension") + ylab(label = "Coordinate") + theme_minimal()
-}
+# coords.ind.plot <- function(object, ind, dim = 1:9){
+#              
+# Name       <- object$names.ind[ind]  
+# coords     <- data.frame(Name, Dimension = object$coord.ind[ind, dim])
+# coords     <- melt(coords, id.vars = "Name")
+# if(length(ind) == 1) coords$variable <- dim
+# 
+# ctr        <- data.frame(Name, Ctr = object$ctr.ind[ind, dim])
+# ctr        <- melt(ctr, id.vars = "Name")
+# gd         <- data.frame(coords, Contribution = ctr$value)
+# gd$Name    <- as.factor(gd$Name)
+# 
+# levels(gd$variable) <- dim
+# 
+# p <- ggplot(gd, aes(x = variable, y = value, size = Contribution, fill = Name, group = Name)) 
+# p <- p + geom_line(aes(color = Name), size = 0.5) + geom_point(shape = 21)
+# p + xlab(label = "Dimension") + ylab(label = "Coordinate") + theme_minimal()
+# }

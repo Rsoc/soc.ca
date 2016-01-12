@@ -22,7 +22,7 @@ Explore the cloud of individuals
 }
 \examples{
 \dontrun{
-examples(soc.mca)
+example(soc.mca)
 ind.explorer(result, active, sup)
 }
 }
