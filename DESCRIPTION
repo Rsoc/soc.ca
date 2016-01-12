@@ -17,6 +17,7 @@ Imports:
     stats,
     utils,
     shiny,
-    reshape2
+    reshape2,
+    ggrepel
 License: GPL-3
 RoxygenNote: 5.0.1

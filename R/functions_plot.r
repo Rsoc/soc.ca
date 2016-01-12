@@ -30,6 +30,7 @@
 #' @param label if TRUE each point is assigned its label, defined in the soc.ca 
 #'   object. See \link{assign.label} and \link{add.to.label} for ways to alter 
 #'   the labels.
+#' @param label.repel if TRUE overlapping labels are rearranged, see \link{geom_text_repel} or \link{geom_label_repel}.
 #' @param label.alpha defines the alpha of the labels. Values range from 0 to 1.
 #'   It may be mapped to a variable with a suitable length and order.
 #' @param label.color defines the color of the labels. It may be mapped to a
@@ -37,6 +38,8 @@
 #'   the valid values.
 #' @param label.size defines the size of the labels. It may be mapped to a
 #'   variable with a suitable length and order.
+#' @param label.fill defines the color of the box behind the labels. It may be mapped to a
+#'   variable with a suitable length and order. This only works if label.repel is TRUE. See \link{geom_label_repel}.
 #' @param legend if set to TRUE a legend is provided. Change the legend with the
 #'   \link{guides}, \link{theme} and link{guide_legend} functions from the
 #'   ggplot2 package.
@@ -48,7 +51,7 @@
 map.mod         <- function(object, dim = c(1, 2),
                             point.shape = "variable", point.alpha = 0.8,
                             point.fill = "whitesmoke", point.color = "black", point.size = "freq",
-                            label = TRUE, label.alpha = 0.8, label.color = "black", label.size = 4,
+                            label = TRUE, label.repel = FALSE, label.alpha = 0.8, label.color = "black", label.size = 4, label.fill = NULL,
                             map.title = "mod", labelx = "default", labely = "default", legend = NULL){
   
   plot.type   <- "mod"
@@ -59,11 +62,13 @@ map.mod         <- function(object, dim = c(1, 2),
             point.alpha = point.alpha,
             point.fill  = point.fill,
             point.color = point.color,
-            point.size  = point.size,        
+            point.size  = point.size,
             label       = label,
+            label.repel = label.repel,
             label.alpha = label.alpha,
-            label.color = label.color,
+            label.color = label.color, 
             label.size  = label.size,
+            label.fill  = label.fill,
             map.title   = map.title,
             labelx      = labelx,
             labely      = labely,
@@ -103,6 +108,7 @@ map.mod         <- function(object, dim = c(1, 2),
 #' @param label if TRUE each point is assigned its label, defined in the soc.ca 
 #'   object. See \link{assign.label} and \link{add.to.label} for ways to alter 
 #'   the labels.
+#' @param label.repel if TRUE overlapping labels are rearranged, see \link{geom_text_repel} or \link{geom_label_repel}.
 #' @param label.alpha defines the alpha of the labels. Values range from 0 to 1.
 #'   It may be mapped to a variable with a suitable length and order.
 #' @param label.color defines the color of the labels. It may be mapped to a
@@ -110,6 +116,8 @@ map.mod         <- function(object, dim = c(1, 2),
 #'   the valid values.
 #' @param label.size defines the size of the labels. It may be mapped to a
 #'   variable with a suitable length and order.
+#' @param label.fill defines the color of the box behind the labels. It may be mapped to a
+#'   variable with a suitable length and order. This only works if label.repel is TRUE. See \link{geom_label_repel}.   
 #' @param legend if set to TRUE a legend is provided. Change the legend with the
 #'   \link{guides}, \link{theme} and link{guide_legend} functions from the
 #'   ggplot2 package.
@@ -122,7 +130,7 @@ map.mod         <- function(object, dim = c(1, 2),
 map.ctr         <- function(object, dim = c(1, 2), ctr.dim = 1,
                             point.shape = "variable", point.alpha = 0.8, point.fill = "whitesmoke",
                             point.color = "black", point.size = "freq",
-                            label = TRUE, label.alpha = 0.8, label.color = "black", label.size = 4,
+                            label = TRUE, label.repel = TRUE, label.alpha = 0.8, label.color = "black", label.size = 4, label.fill = NULL,
                             map.title = "ctr", labelx = "default", labely = "default", legend = NULL){
   
   plot.type   <- "ctr"
@@ -137,9 +145,11 @@ map.ctr         <- function(object, dim = c(1, 2), ctr.dim = 1,
             point.color = point.color,
             point.size  = point.size,
             label       = label,
+            label.repel = label.repel,
             label.alpha = label.alpha,
-            label.color = label.color,
+            label.color = label.color, 
             label.size  = label.size,
+            label.fill  = label.fill,
             map.title   = map.title,
             labelx      = labelx,
             labely      = labely,
@@ -177,6 +187,7 @@ map.ctr         <- function(object, dim = c(1, 2), ctr.dim = 1,
 #' @param label if TRUE each point is assigned its label, defined in the soc.ca 
 #'   object. See \link{assign.label} and \link{add.to.label} for ways to alter 
 #'   the labels.
+#' @param label.repel if TRUE overlapping labels are rearranged, see \link{geom_text_repel} or \link{geom_label_repel}.
 #' @param label.alpha defines the alpha of the labels. Values range from 0 to 1.
 #'   It may be mapped to a variable with a suitable length and order.
 #' @param label.color defines the color of the labels. It may be mapped to a
@@ -184,6 +195,8 @@ map.ctr         <- function(object, dim = c(1, 2), ctr.dim = 1,
 #'   the valid values.
 #' @param label.size defines the size of the labels. It may be mapped to a
 #'   variable with a suitable length and order.
+#' @param label.fill defines the color of the box behind the labels. It may be mapped to a
+#'   variable with a suitable length and order. This only works if label.repel is TRUE. See \link{geom_label_repel}.
 #' @param legend if set to TRUE a legend is provided. Change the legend with the
 #'   \link{guides}, \link{theme} and link{guide_legend} functions from the
 #'   ggplot2 package.
@@ -198,7 +211,7 @@ map.ctr         <- function(object, dim = c(1, 2), ctr.dim = 1,
 map.active         <- function(object, dim = c(1, 2),
                                point.shape = "variable", point.alpha = 0.8, point.fill = "whitesmoke",
                                point.color = "black", point.size = "freq",
-                               label = TRUE, label.alpha = 0.8, label.color = "black", label.size = 4,
+                               label = TRUE, label.repel = FALSE, label.alpha = 0.8, label.color = "black", label.size = 4, label.fill = NULL,
                                map.title = "active", labelx = "default", labely = "default", legend = NULL){
   
   plot.type   <- "active"
@@ -211,9 +224,11 @@ map.active         <- function(object, dim = c(1, 2),
             point.color = point.color,
             point.size  = point.size,
             label       = label,
+            label.repel = label.repel,
             label.alpha = label.alpha,
             label.color = label.color, 
             label.size  = label.size,
+            label.fill  = label.fill,
             map.title   = map.title,
             labelx      = labelx,
             labely      = labely,
@@ -252,6 +267,7 @@ map.active         <- function(object, dim = c(1, 2),
 #' @param label if TRUE each point is assigned its label, defined in the soc.ca 
 #'   object. See \link{assign.label} and \link{add.to.label} for ways to alter 
 #'   the labels.
+#' @param label.repel if TRUE overlapping labels are rearranged, see \link{geom_text_repel} or \link{geom_label_repel}.
 #' @param label.alpha defines the alpha of the labels. Values range from 0 to 1.
 #'   It may be mapped to a variable with a suitable length and order.
 #' @param label.color defines the color of the labels. It may be mapped to a
@@ -259,6 +275,8 @@ map.active         <- function(object, dim = c(1, 2),
 #'   the valid values.
 #' @param label.size defines the size of the labels. It may be mapped to a
 #'   variable with a suitable length and order.
+#' @param label.fill defines the color of the box behind the labels. It may be mapped to a
+#'   variable with a suitable length and order. This only works if label.repel is TRUE. See \link{geom_label_repel}.
 #' @param legend if set to TRUE a legend is provided. Change the legend with the
 #'   \link{guides}, \link{theme} and link{guide_legend} functions from the
 #'   ggplot2 package.
@@ -273,7 +291,7 @@ map.active         <- function(object, dim = c(1, 2),
 map.sup         <- function(object, dim = c(1, 2),
                             point.shape = "variable", point.alpha = 0.8, point.fill = "whitesmoke",
                             point.color = "black", point.size = "freq",
-                            label = TRUE, label.alpha = 0.8, label.color = "black", label.size = 4,
+                            label = TRUE, label.repel = TRUE, label.alpha = 0.8, label.color = "black", label.size = 4, label.fill = NULL,
                             map.title = "sup", labelx = "default", labely = "default", legend = NULL){
   
   plot.type     <- "sup"
@@ -286,9 +304,11 @@ map.sup         <- function(object, dim = c(1, 2),
             point.color = point.color,
             point.size  = point.size,
             label       = label,
+            label.repel = label.repel,
             label.alpha = label.alpha,
-            label.color = label.color,
+            label.color = label.color, 
             label.size  = label.size,
+            label.fill  = label.fill,
             map.title   = map.title,
             labelx      = labelx,
             labely      = labely,
@@ -324,6 +344,7 @@ map.sup         <- function(object, dim = c(1, 2),
 #' @param label if TRUE each point is assigned its label, defined in the soc.ca 
 #'   object. See \link{assign.label} and \link{add.to.label} for ways to alter 
 #'   the labels.
+#' @param label.repel if TRUE overlapping labels are rearranged, see \link{geom_text_repel} or \link{geom_label_repel}.
 #' @param label.alpha defines the alpha of the labels. Values range from 0 to 1.
 #'   It may be mapped to a variable with a suitable length and order.
 #' @param label.color defines the color of the labels. It may be mapped to a
@@ -331,6 +352,8 @@ map.sup         <- function(object, dim = c(1, 2),
 #'   the valid values.
 #' @param label.size defines the size of the labels. It may be mapped to a
 #'   variable with a suitable length and order.
+#' @param label.fill defines the color of the box behind the labels. It may be mapped to a
+#'   variable with a suitable length and order. This only works if label.repel is TRUE. See \link{geom_label_repel}.
 #' @param legend if set to TRUE a legend is provided. Change the legend with the
 #'   \link{guides}, \link{theme} and link{guide_legend} functions from the
 #'   ggplot2 package.
@@ -350,7 +373,7 @@ map.sup         <- function(object, dim = c(1, 2),
 map.ind         <- function(object, dim = c(1, 2),
                             point.shape = 21, point.alpha = 0.8, point.fill = "whitesmoke",
                             point.color = "black", point.size = 3,
-                            label = FALSE, label.alpha = 0.8, label.color = "black", label.size = 4,
+                            label = FALSE, label.repel = FALSE, label.alpha = 0.8, label.color = "black", label.size = 4, label.fill = NULL,
                             map.title = "ind", labelx = "default", labely = "default", legend = NULL){
   
   plot.type   <- "ind"
@@ -363,9 +386,11 @@ map.ind         <- function(object, dim = c(1, 2),
             point.color = point.color,
             point.size  = point.size,
             label       = label,
+            label.repel = label.repel,
             label.alpha = label.alpha,
-            label.color = label.color,
+            label.color = label.color, 
             label.size  = label.size,
+            label.fill  = label.fill,
             map.title   = map.title,
             labelx      = labelx,
             labely      = labely,
@@ -413,6 +438,7 @@ map.ind         <- function(object, dim = c(1, 2),
 #' @param label if TRUE each point is assigned its label, defined in the soc.ca 
 #'   object. See \link{assign.label} and \link{add.to.label} for ways to alter 
 #'   the labels.
+#' @param label.repel if TRUE overlapping labels are rearranged, see \link{geom_text_repel} or \link{geom_label_repel}.
 #' @param label.alpha defines the alpha of the labels. Values range from 0 to 1.
 #'   It may be mapped to a variable with a suitable length and order.
 #' @param label.color defines the color of the labels. It may be mapped to a
@@ -420,13 +446,15 @@ map.ind         <- function(object, dim = c(1, 2),
 #'   the valid values.
 #' @param label.size defines the size of the labels. It may be mapped to a
 #'   variable with a suitable length and order.
+#' @param label.fill defines the color of the box behind the labels. It may be mapped to a
+#'   variable with a suitable length and order. This only works if label.repel is TRUE. See \link{geom_label_repel}.
 #' @param legend if set to TRUE a legend is provided. Change the legend with the
 #'   \link{guides}, \link{theme} and \link{guide_legend} functions from the
 #'   ggplot2 package.
 #' @param ... further arguments are currently ignored.
 #' @examples
 #' example(soc.ca)
-#' map.select(result, map.title = "Map of the first ten modalities",list.mod = 1:10)
+#' map.select(result, map.title = "Map of the first ten modalities", list.mod = 1:10)
 #' select   <- active[, 3]
 #' select   <- select == levels(select)[2]
 #' map.select(result, map.title = "Map of all individuals sharing a particular value",
@@ -439,7 +467,7 @@ map.select         <- function(object, dim = c(1, 2), ctr.dim = 1,
                                list.mod = NULL, list.sup = NULL, list.ind = NULL,
                                point.shape = "variable", point.alpha = 0.8, point.fill = "whitesmoke",
                                point.color = "black", point.size = "freq",
-                               label = TRUE, label.alpha = 0.8, label.color = "black", label.size = 4,
+                               label = TRUE, label.repel = FALSE, label.alpha = 0.8, label.color = "black", label.size = 4, label.fill = NULL,
                                map.title = "select", labelx = "default", labely = "default", legend = NULL, ...){
   
   modal.list  <- list(list.mod = list.mod, list.sup = list.sup, list.ind = list.ind)
@@ -449,16 +477,18 @@ map.select         <- function(object, dim = c(1, 2), ctr.dim = 1,
   plot.flow(object,
             dim         = dim,
             ctr.dim     = ctr.dim,
-            modal.list  = modal.list,
+            modal.list = modal.list,
             point.shape = point.shape,
             point.alpha = point.alpha,
             point.fill  = point.fill,
             point.color = point.color,
             point.size  = point.size,
             label       = label,
+            label.repel = label.repel,
             label.alpha = label.alpha,
-            label.color = label.color,
+            label.color = label.color, 
             label.size  = label.size,
+            label.fill  = label.fill,
             map.title   = map.title,
             labelx      = labelx,
             labely      = labely,
@@ -508,6 +538,7 @@ map.select         <- function(object, dim = c(1, 2), ctr.dim = 1,
 #' @param label if TRUE each point is assigned its label, defined in the soc.ca 
 #'   object. See \link{assign.label} and \link{add.to.label} for ways to alter 
 #'   the labels.
+#' @param label.repel if TRUE overlapping labels are rearranged, see \link{geom_text_repel} or \link{geom_label_repel}.
 #' @param label.alpha defines the alpha of the labels. Values range from 0 to 1.
 #'   It may be mapped to a variable with a suitable length and order.
 #' @param label.color defines the color of the labels. It may be mapped to a
@@ -515,6 +546,8 @@ map.select         <- function(object, dim = c(1, 2), ctr.dim = 1,
 #'   the valid values.
 #' @param label.size defines the size of the labels. It may be mapped to a
 #'   variable with a suitable length and order.
+#' @param label.fill defines the color of the box behind the labels. It may be mapped to a
+#'   variable with a suitable length and order. This only works if label.repel is TRUE. See \link{geom_label_repel}.
 #' @param legend if set to TRUE a legend is provided. Change the legend with the
 #'   \link{guides}, \link{theme} and link{guide_legend} functions from the
 #'   ggplot2 package.
@@ -530,7 +563,7 @@ map.add         <- function(object, ca.map, plot.type = NULL,
                             ctr.dim = 1, list.mod = NULL, list.sup = NULL, list.ind = NULL,
                             point.shape = "variable", point.alpha = 0.8, point.fill = "whitesmoke",
                             point.color = "black", point.size = "freq",
-                            label = TRUE, label.alpha = 0.8, label.color = "black", label.size = 4,
+                            label = TRUE, label.repel = TRUE, label.alpha = 0.8, label.color = "black", label.size = 4, label.fill = NULL,
                             labelx = "default", labely = "default", legend = NULL){
   p           <- ca.map
   dim         <- ca.map$dimensions
@@ -565,6 +598,7 @@ map.add         <- function(object, ca.map, plot.type = NULL,
                              label = gg.data$names,
                              alpha = label.alpha,
                              color = label.color,
+                             fill  = label.fill,
                              size  = label.size)
   
   t.i                <- unlist(lapply(label.l, length)) == 1
@@ -573,6 +607,7 @@ map.add         <- function(object, ca.map, plot.type = NULL,
   
   gg.input           <- list(gg.data     = gg.data,
                              label       = label,
+                             repel         = label.repel,
                              point.aes   = point.aes,
                              point.attributes = point.attributes,
                              label.aes    = label.aes,
@@ -590,11 +625,25 @@ map.add         <- function(object, ca.map, plot.type = NULL,
   # label
   if (gg.input$label == TRUE){
     label.attributes             <- gg.input$label.attributes
-    label.attributes$vjust       <- 1.4
+    label.attributes$vjust       <- 1.8
     label.attributes$family      <- "sans"
     label.attributes$lineheight  <- 0.9
     label.attributes$mapping     <- do.call("aes", gg.input$label.aes)
-    p                            <- p + do.call("geom_text", label.attributes, quote = TRUE)
+    
+    if(is.null(gg.input$label.aes$fill) & gg.input$repel == TRUE & is.null(label.attributes$fill)){
+      label.attributes$vjust       <- NULL
+      p                            <- p + do.call("geom_text_repel", label.attributes, quote = TRUE)
+    }
+    
+    if(is.null(gg.input$label.aes$fill) == FALSE | is.null(label.attributes$fill) == FALSE){
+      label.attributes$vjust       <- NULL
+      p                            <- p + do.call("geom_label_repel", label.attributes, quote = TRUE)
+    }
+    
+    if(is.null(gg.input$label.aes$fill) & gg.input$repel == FALSE){
+      p                            <- p + do.call("geom_text", label.attributes, quote = TRUE)
+    }
+    
   }
   
   # Scales and labels
@@ -679,13 +728,10 @@ map.density  <- function(object, map = map.ind(object), group = NULL,
 
 ############################## Plot delfunktioner ########################################
 
-########################################################
-## plot.flow
-
 plot.flow   <- function(object, dim = c(1, 2), ctr.dim = NULL, modal.list = NULL,
                         point.shape = 21, point.alpha = 0.8, point.fill = "whitesmoke",
                         point.color = "black", point.size = 3,
-                        label = FALSE, label.alpha = 0.8, label.color = "black", label.size = 4,
+                        label = FALSE, label.repel = FALSE, label.alpha = 0.8, label.color = "black", label.size = 4, label.fill = NULL,
                         map.title = map.title, labelx = "default", labely = "default", legend = NULL,
                         plot.type = plot.type){
   
@@ -723,6 +769,7 @@ plot.flow   <- function(object, dim = c(1, 2), ctr.dim = NULL, modal.list = NULL
                              label = gg.data$names,
                              alpha = label.alpha,
                              color = label.color,
+                             fill  = label.fill,
                              size  = label.size)
   
   t.i                <- unlist(lapply(label.l, length)) == 1
@@ -736,6 +783,7 @@ plot.flow   <- function(object, dim = c(1, 2), ctr.dim = NULL, modal.list = NULL
                              labely        = axis.labels$y,
                              scales        = scales,
                              label         = label,
+                             repel         = label.repel,
                              point.aes     = point.aes,
                              point.attributes = point.attributes,
                              label.aes     = label.aes,
@@ -772,8 +820,6 @@ plot.flow   <- function(object, dim = c(1, 2), ctr.dim = NULL, modal.list = NULL
 # 
 # }
 
-#################################################################################
-## basic.plot 
 basic.plot <- function(gg.input){ 
   
   #####################
@@ -800,7 +846,22 @@ basic.plot <- function(gg.input){
     label.attributes$family      <- "sans"
     label.attributes$lineheight  <- 0.9
     label.attributes$mapping     <- do.call("aes", gg.input$label.aes)
-    p                            <- p + do.call("geom_text", label.attributes, quote = TRUE)
+    
+    if(is.null(gg.input$label.aes$fill) & gg.input$repel == TRUE & is.null(label.attributes$fill)){
+    label.attributes$vjust       <- NULL
+    label.attributes$max.iter    <- 1000
+    p                            <- p + do.call("geom_text_repel", label.attributes, quote = TRUE)
+    }
+    
+    if(is.null(gg.input$label.aes$fill) == FALSE | is.null(label.attributes$fill) == FALSE){
+      label.attributes$vjust       <- NULL
+      label.attributes$max.iter    <- 1000
+      p                            <- p + do.call("geom_label_repel", label.attributes, quote = TRUE)
+    }
+    
+    if(is.null(gg.input$label.aes$fill) & gg.input$repel == FALSE){
+      p                            <- p + do.call("geom_text", label.attributes, quote = TRUE)
+    }
     
   }
   
@@ -977,10 +1038,6 @@ data.plot   <- function(object, plot.type, dim, ctr.dim = NULL,
   colnames(gg.data)   <- c("x", "y", "names", "freq", "variable", "point.color")
   return(gg.data)
 }
-
-#############################################################################################
-### Add path
-
 
 #' Add a new layer of points on top of an existing plot with output from the 
 #' min_cut function

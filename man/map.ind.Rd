@@ -6,9 +6,10 @@
 \usage{
 map.ind(object, dim = c(1, 2), point.shape = 21, point.alpha = 0.8,
   point.fill = "whitesmoke", point.color = "black", point.size = 3,
-  label = FALSE, label.alpha = 0.8, label.color = "black",
-  label.size = 4, map.title = "ind", labelx = "default",
-  labely = "default", legend = NULL)
+  label = FALSE, label.repel = FALSE, label.alpha = 0.8,
+  label.color = "black", label.size = 4, label.fill = NULL,
+  map.title = "ind", labelx = "default", labely = "default",
+  legend = NULL)
 }
 \arguments{
 \item{object}{a soc.ca class object as created by \link{soc.mca} and 
@@ -38,6 +39,8 @@ be defined by a variable with a suitable length.}
 object. See \link{assign.label} and \link{add.to.label} for ways to alter 
 the labels.}
 
+\item{label.repel}{if TRUE overlapping labels are rearranged, see \link{geom_text_repel} or \link{geom_label_repel}.}
+
 \item{label.alpha}{defines the alpha of the labels. Values range from 0 to 1.
 It may be mapped to a variable with a suitable length and order.}
 
@@ -47,6 +50,9 @@ the valid values.}
 
 \item{label.size}{defines the size of the labels. It may be mapped to a
 variable with a suitable length and order.}
+
+\item{label.fill}{defines the color of the box behind the labels. It may be mapped to a
+variable with a suitable length and order. This only works if label.repel is TRUE. See \link{geom_label_repel}.}
 
 \item{map.title}{the title of the map. If set to its default the standard 
 title is used.}

@@ -30,6 +30,7 @@
 #' @import utils
 #' @import shiny
 #' @import reshape2
+#' @import ggrepel
 #' @examples
 #' data(taste)
 #' # Create a data frame of factors containing all the active variables 
@@ -153,7 +154,7 @@ NULL
 #' 
 #' # Map of individuals
 #' map.ind(result)
-#' map.ind(result, dim = c(2, 1), point.label = TRUE)
+#' map.ind(result, dim = c(2, 1), label = TRUE)
 #' map.ind(result, dim = c(2, 1), point.size = 3, point.shape = 2)
 #' map.ind(result, dim = c(2, 1), map.title = "The top 100 Danish CEO's",
 #'  point.variable = quad, point.colour = quad)
@@ -204,7 +205,7 @@ NULL
 #' # Using the list option in add.points to add labels to only a part of the cloud of individuals
 #' forfatter     <- author == "Forfatter"
 #' notforfatter  <- author != "Forfatter"
-#' map.forfatter <- map.select(result, list.ind = notforfatter, point.label = FALSE)
+#' map.forfatter <- map.select(result, list.ind = notforfatter, label = FALSE)
 #' map.forfatter
 #' map.forfatter <- map.add(result, map.forfatter, data.type = "select", list.ind = forfatter)
 #' map.forfatter
