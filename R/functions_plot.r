@@ -849,13 +849,13 @@ basic.plot <- function(gg.input){
     
     if(is.null(gg.input$label.aes$fill) & gg.input$repel == TRUE & is.null(label.attributes$fill)){
     label.attributes$vjust       <- NULL
-    label.attributes$max.iter    <- 1000
+    label.attributes$max.iter    <- 2000
     p                            <- p + do.call("geom_text_repel", label.attributes, quote = TRUE)
     }
     
     if(is.null(gg.input$label.aes$fill) == FALSE | is.null(label.attributes$fill) == FALSE){
       label.attributes$vjust       <- NULL
-      label.attributes$max.iter    <- 1000
+      label.attributes$max.iter    <- 2000
       p                            <- p + do.call("geom_label_repel", label.attributes, quote = TRUE)
     }
     

@@ -1,3 +1,35 @@
+##########################################################
+# to.FactoMineR
+library(FactoMineR)
+library(soc.ca)
+example(soc.ca)
+result
+
+all <- cbind(active, sup)
+colnames(all)
+sup.names <- c("Gender", "Age", "Income")
+sup.ind   <- which(colnames(all) %in% sup.names)
+fm        <- MCA(all, quali.sup = sup.ind)
+
+str(fm)
+
+to.factominer <- function(result, active, sup)
+
+x             <- list()
+
+# eig 
+eig           <- data.frame(result$adj.inertia[, c("Eigen", "Var")])
+eig$cum       <- cumsum(eig$Var)
+rownames(eig) <- paste("dim", 1:nrow(eig), sep = " ")
+colnames(eig) <- c("eigenvalue", "percentage of variance", "cumulative percentage of variance")
+x$eig         <- eig
+# call
+fm.call       <- fm$call
+fm.call$marge.col
+call          <- list()
+call$X        <- data.frame(active, sup)
+
+
 ## Diverse ubrugte funktioner
 # Balancemål for mass
 balance.mass <- function(object, act.dim=object$nd){

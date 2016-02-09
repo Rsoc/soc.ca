@@ -86,7 +86,7 @@ print.soc.mca  <- function(x, ...){
       format("	Share of passive mass:",	 		width = 40,), format(Submass, 	width = 10, justify = "right"), 
       format("|  6.", width = 10, justify = "centre" ), format(adj[6], width = 10, justify = "centre"), format(paste(stars[[6]]), width = 1), "\n",
       
-      format(" Number of passive modalities:",	 		width = 40,), format(N.pas.mod, 	width = 9, justify = "right"), 
+      format("\tNumber of passive modalities:",	 		width = 40, ), format(N.pas.mod, 	width = 10, justify = "right"), 
       format("|  7.", width = 10, justify = "centre" ), format(adj[7], width = 10, justify = "centre"), format(paste(stars[[7]]), width = 1), "\n",
       
       "\n",

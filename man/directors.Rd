@@ -73,10 +73,10 @@ variance(result)
 result      <- invert(result, c(1, 2, 3))
 
 # Export and assign label
-export.label(result)
+# export.label(result)
 
-result      <- assign.label(result,
- file = "https://raw.github.com/Rsoc/soc.ca/master/extra/director_labels.csv")
+# result      <- assign.label(result,
+#  file = "https://raw.github.com/Rsoc/soc.ca/master/extra/director_labels.csv")
 
 
 
@@ -102,9 +102,9 @@ map.ind(result)
 map.ind(result, dim = c(2, 1), label = TRUE)
 map.ind(result, dim = c(2, 1), point.size = 3, point.shape = 2)
 map.ind(result, dim = c(2, 1), map.title = "The top 100 Danish CEO's",
- point.variable = quad, point.colour = quad)
+point.color = quad)
 # Map of the individuals colored by contribution
-map.ind(result, point.colour = result$ctr.ind[, 1],
+map.ind(result, point.color = result$ctr.ind[, 1],
  point.shape = 18) + scale_color_continuous(low = "white", high = "red")
 
 
@@ -140,8 +140,8 @@ map.select(result, list.ind = forfatter)
 map.select(result, list.mod = highcor, list.sup = highdim3, list.ind = forfatter)
 
 # Add points to an existing plot
-ctrplot     <- map.ctr(result, ctr.dim = 1, colour = "red")
-map.add(result, ctrplot, data.type = "ctr", ctr.dim = 2, colour = "blue")
+ctrplot     <- map.ctr(result, ctr.dim = 1, point.color = "red")
+map.add(result, ctrplot, data.type = "ctr", ctr.dim = 2, point.color = "blue")
 
 # Using the list option in add.points
 forfatter    <- author == "Forfatter"
