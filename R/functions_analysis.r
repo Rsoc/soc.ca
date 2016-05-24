@@ -67,11 +67,11 @@
 
 soc.mca <- function(active, sup = NULL, identifier = NULL, passive = getOption("passive", default = "Missing")){
   
-  active  <- data.frame(lapply(active, factor))               # Turn active variables into factor
-  sup     <- data.frame(lapply(sup, factor))                  # Turn sup variables into factor   
-  Q       <- ncol(active)                                     # Number of active variables 
-  a.r     <- nrow(active)                                     # Number of active rows or the number of individuals
-  sup.n   <- sum(unlist(lapply(as.data.frame(sup), nlevels))) # Number of supplementary modalities
+  active  <- data.frame(lapply(active, factor), check.names = FALSE)               # Turn active variables into factor - This is invasive and should be done more elegantly
+  sup     <- data.frame(lapply(sup, factor), check.names = FALSE)                  # Turn sup variables into factor   
+  Q       <- ncol(active)                                                          # Number of active variables 
+  a.r     <- nrow(active)                                                          # Number of active rows or the number of individuals
+  sup.n   <- sum(unlist(lapply(as.data.frame(sup), nlevels)))                      # Number of supplementary modalities
   
   if ((nrow(sup) == 0) == TRUE){                                  
     sup             <- matrix(0, nrow = nrow(active), ncol = 2)
@@ -90,7 +90,7 @@ soc.mca <- function(active, sup = NULL, identifier = NULL, passive = getOption("
   set         <- 1:ncol(ind.act)
   subset      <- set[!sub]
   
-  # Finds the amount of variables without passive modalities
+  # Finds the number of variables without passive modalities
   Qm          <- Q
   for (i in seq(Q)){
     lev       <- levels(active[,i])
@@ -100,7 +100,7 @@ soc.mca <- function(active, sup = NULL, identifier = NULL, passive = getOption("
     }
   }
   
-  result       <- subset.ca.indicator(ind.act, ind.sup, subset, Q = Q , Qm = Qm)
+  result       <- soc.ca:::subset.ca.indicator(ind.act, ind.sup, subset, Q = Q , Qm = Qm)
   
   if (identical(identifier, NULL) == TRUE){
     identifier  <- 1:nrow(active)

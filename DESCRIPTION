@@ -4,8 +4,8 @@ Description: Specific and class specific multiple correspondence analysis on
     survey-like data. Soc.ca is optimized to the needs of the social scientist and
     presents easily interpretable results in near publication ready quality.
 URL: https://github.com/Rsoc/soc.ca
-Version: 0.7.2
-Maintainer: Anton Grau Larsen <alar@soc.ku.dk>
+Version: 0.7.3
+Maintainer: Anton Grau Larsen <agl.dbp@cbs.dk>
 Author: Anton Grau Larsen, with contributions from Christoph Ellersgaard and
     Stefan Andrade
 Depends:

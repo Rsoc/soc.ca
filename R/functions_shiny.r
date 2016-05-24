@@ -16,8 +16,6 @@
 
 ind.explorer     <- function(object, active, sup = NULL){
   
-  # Smid modalitetsskyen ind i den her og ryk data udtrækket ned - dog må der kun være et enkelt punkt til modalitetsskyen
-  
   # -----------
   # Creating data
   
@@ -43,7 +41,7 @@ ind.explorer     <- function(object, active, sup = NULL){
                   checkboxInput(inputId = "density", "Draw density", value = FALSE),
                   checkboxInput(inputId = "labels", "Modality labels", value = TRUE)
                ),
-        column(8, plotOutput("map.ind", click = "plot_click"))# Se hvad vi kan gøre ved størrelsen på plottet
+        column(8, plotOutput("map.ind", click = "plot_click"))
         
       ),
       fluidRow(
