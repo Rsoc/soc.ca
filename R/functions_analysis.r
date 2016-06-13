@@ -8,7 +8,7 @@
 #' Specific Multiple Correspondence Analysis
 #'
 #' \code{soc.mca} performs a specific multiple correspondence analysis on a data.frame of factors, where cases are rows and columns are variables.
-#' @param active       Defines the active modalities in a data.frame with rows of individuals and columns of factors, without NA's' 
+#' @param active       Defines the active modalities in a data.frame with rows of individuals and columns of factors, without NA's'. Active can also be a named list of data.frames. The data.frames will correspond to the analytical headings.
 #' @param sup          Defines the supplementary modalities in a data.frame with rows of individuals and columns of factors, without NA's 
 #' @param identifier   A single vector containing a single value for each row/individual in x and sup. Typically a name or an id.number.
 #' @param passive      A single character vector with the full or partial names of the passive modalities. All names that have a full or partial match will be set as passive.
@@ -65,13 +65,22 @@
 #' soc.mca(active, sup)
 #' options(passive = NULL)
 
-soc.mca <- function(active, sup = NULL, identifier = NULL, passive = getOption("passive", default = "Missing")){
+soc.mca   <-  function(active, sup=NULL, identifier=NULL, passive=getOption("passive", default="Missing"), indicator.matrix = NULL, balance.headings = FALSE) {
   
-  active  <- data.frame(lapply(active, factor), check.names = FALSE)               # Turn active variables into factor - This is invasive and should be done more elegantly
-  sup     <- data.frame(lapply(sup, factor), check.names = FALSE)                  # Turn sup variables into factor   
-  Q       <- ncol(active)                                                          # Number of active variables 
-  a.r     <- nrow(active)                                                          # Number of active rows or the number of individuals
-  sup.n   <- sum(unlist(lapply(as.data.frame(sup), nlevels)))                      # Number of supplementary modalities
+  # Merge headings ---
+  headings           <- NULL
+  if(is.list(active) & is.data.frame(active) == FALSE){
+    headings         <- rep(names(active), sapply(active, length))
+    names(active)    <- NULL
+    active           <- do.call("cbind", active)
+    a                <- aggregate(sapply(active, function(x) length(table(x))), by = list(headings), sum)
+    headings         <- rep(a[,1], a[,2])
+  }
+  
+  active  <- data.frame(lapply(active, factor), check.names = F)               # Turn active variables into factor
+  sup     <- data.frame(lapply(sup, factor), check.names = F)                  # Turn sup variables into factor   
+  a.r     <- nrow(active)                                     # Number of active rows or the number of individuals
+  sup.n   <- sum(unlist(lapply(as.data.frame(sup), nlevels))) # Number of supplementary modalities
   
   if ((nrow(sup) == 0) == TRUE){                                  
     sup             <- matrix(0, nrow = nrow(active), ncol = 2)
@@ -81,26 +90,34 @@ soc.mca <- function(active, sup = NULL, identifier = NULL, passive = getOption("
   }else{
     ind.sup         <- indicator(sup)  
   }
-    
+  
   # Creating the indicatormatrix for active and supplementary variables
+  if(identical(indicator.matrix, NULL) == FALSE) ind.act <- indicator.matrix
   ind.act     <- indicator(active)
   
-  # Finding the subset
-  sub         <- grepl(paste(passive, collapse = "|"), colnames(ind.act))
-  set         <- 1:ncol(ind.act)
-  subset      <- set[!sub]
   
-  # Finds the number of variables without passive modalities
+  # Finds the total amount of variables and variables without passive modalities
+  varlist       <- unique(gsub(": .*", "" , colnames(ind.act)))     
+  varlist.long  <- gsub(": .*", "" , colnames(ind.act))
+  
+  Q           <- length(varlist)
   Qm          <- Q
   for (i in seq(Q)){
-    lev       <- levels(active[,i])
+    lev       <- colnames(ind.act[, which(varlist.long == varlist[i])])
     pasQ      <- grepl(paste(passive, collapse = "|"), lev)
     if (any(pasQ == TRUE) == TRUE){
       Qm      <- Qm - 1
     }
   }
   
-  result       <- soc.ca:::subset.ca.indicator(ind.act, ind.sup, subset, Q = Q , Qm = Qm)
+  
+  # Finding the subset
+  passive.set    <- grepl(paste(passive, collapse = "|"), colnames(ind.act))
+  set            <- 1:ncol(ind.act)
+  subset         <- set[!passive.set]
+  
+  
+  result       <- subset.ca.indicator(ind.act, ind.sup, subset, Q = Q , Qm = Qm)
   
   if (identical(identifier, NULL) == TRUE){
     identifier  <- 1:nrow(active)
@@ -110,30 +127,29 @@ soc.mca <- function(active, sup = NULL, identifier = NULL, passive = getOption("
   result$names.mod        <- colnames(ind.act)[subset]
   result$names.ind        <- as.character(identifier)
   result$names.sup        <- colnames(ind.sup)
-  result$names.passive    <- colnames(ind.act)[sub]
+  result$names.passive    <- colnames(ind.act)[passive.set]
+  
+  # Headings
+  result$headings         <- headings[subset]
   
   # The active indicator matrix
   result$indicator.matrix <- ind.act[,subset]
   
   # List of descriptive values
   # The position and length of the active variables
-  varnames      <- colnames(active)
-  ml            <- vector()
-  for (i in 1:ncol(active)){
-    ml          <- c(ml, rep(varnames[i], nlevels(active[, i])))
-  }
-  ml            <- ml[!sub]
-  mm            <- as.matrix(cbind(ml, 1:length(ml)))
-  md            <- matrix(, nrow = ncol(active), ncol = 3)
-  rownames(md)  <- varnames
+  x <- colnames(ind.act[,subset])
+  varlist <- gsub(": .*", "" , x)
+  mm <- as.matrix(cbind(varlist, 1:length(varlist)))
+  md <- matrix(, nrow=length(unique(unlist(varlist))), ncol=3)
+  rownames(md) <- unique(unlist(varlist))
   colnames(md)  <- c("Start", "End", "Modalities")
   md            <- as.data.frame(md)
   
-  for (i in 1:ncol(active)){
-    mr          <- as.numeric(mm[, 2][mm[, 1] == varnames[i]])
-    md[i, 1]    <- min(mr)
-    md[i, 2]    <- max(mr)
-    md[i, 3]    <- length(mr)
+  for (i in 1:length(unique(unlist(varlist)))){
+    mr <- as.numeric(mm[,2][mm[,1]==unique(unlist(varlist))[i]])
+    md[i,1] <- min(mr)
+    md[i,2] <- max(mr)
+    md[i,3] <- length(mr)
   }
   md[, 1]       <- as.numeric(md[, 1])
   md[, 2]       <- as.numeric(md[, 2])
@@ -147,13 +163,13 @@ soc.mca <- function(active, sup = NULL, identifier = NULL, passive = getOption("
   
   # 
   if (identical(sup, NULL) == FALSE){
-  
-  varnames       <- colnames(sup)
-  ml             <- vector()
-  for (i in 1:ncol(sup)){
-    ml           <- c(ml, rep(varnames[i], nlevels(sup[, i])))
-  }
-  result$variable.sup <- ml
+    
+    varnames       <- colnames(sup)
+    ml             <- vector()
+    for (i in 1:ncol(sup)){
+      ml           <- c(ml, rep(varnames[i], nlevels(sup[, i])))
+    }
+    result$variable.sup <- ml
   }
   result$subset.var   <- Qm
   
@@ -170,7 +186,6 @@ soc.mca <- function(active, sup = NULL, identifier = NULL, passive = getOption("
   class(result)   <- "soc.mca"
   return(result)    
 }
-
 
 # ' Correspondence analysis on a indicator matrix
 # ' 

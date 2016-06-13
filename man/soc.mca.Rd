@@ -5,10 +5,11 @@
 \title{Specific Multiple Correspondence Analysis}
 \usage{
 soc.mca(active, sup = NULL, identifier = NULL,
-  passive = getOption("passive", default = "Missing"))
+  passive = getOption("passive", default = "Missing"),
+  indicator.matrix = NULL, balance.headings = FALSE)
 }
 \arguments{
-\item{active}{Defines the active modalities in a data.frame with rows of individuals and columns of factors, without NA's'}
+\item{active}{Defines the active modalities in a data.frame with rows of individuals and columns of factors, without NA's'. Active can also be a named list of data.frames. The data.frames will correspond to the analytical headings.}
 
 \item{sup}{Defines the supplementary modalities in a data.frame with rows of individuals and columns of factors, without NA's}
 

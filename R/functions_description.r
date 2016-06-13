@@ -166,7 +166,7 @@ balance   <- function(object, act.dim = object$nd){
 #' contribution(result, 1:2, mode = "variable")
 #' @export
 
-contribution <- function(object, dim = 1, all = FALSE, indices = FALSE, mode = "sort"){
+contribution <- function(object, dim = 1, all = FALSE, indices = FALSE, mode = "sort", matrix.output = FALSE){
   
   if (indices == TRUE & mode == "mod"){
     ctr     <- object$ctr.mod[,dim]
@@ -197,9 +197,11 @@ contribution <- function(object, dim = 1, all = FALSE, indices = FALSE, mode = "
     colnames(out) <- c("   Ctr.", "   Cor." , "   Coord")
     out           <- out[order(-out[, 1]), ]
     maxwidth      <- max(nchar(names)) + sum(nchar(colnames(out)))
+    
     cat("\n", format(header, width = maxwidth, justify = "centre"), "\n", "\n")
     print(out)
   }
+  
   # Individuals  
   if (identical(mode, "ind")){
     individuals(object, dim, indices = indices, all = FALSE)
@@ -214,6 +216,26 @@ contribution <- function(object, dim = 1, all = FALSE, indices = FALSE, mode = "
     tab.variable(object, dim)
   }
 }
+
+#' Contribution for headings
+#'
+#' Contribution.headings sums the contribution of the active categories according to the heading of their variables.
+#'
+#' @param object a \link{soc.ca} object
+#' @param dim the included dimensions
+#'
+#' @return a matrix with contribution values for each heading per dimension
+#' @export
+#'
+#' @examples
+contribution.headings <- function(object, dim = 1:3){
+  ctr                 <- object$ctr.mod[, dim]
+  colnames(ctr)       <- paste("Dim.", dim)
+  out                 <- aggregate(ctr, by = list(Heading = object$headings), FUN = sum)
+  out[,-1]            <- round(out[-1], 2)
+  out
+}
+
 
 # ' The most contributing individuals
 # ' 
