@@ -73,7 +73,6 @@ soc.mca   <-  function(active, sup = NULL, identifier = NULL, passive = getOptio
   if (identical(active.is.list, FALSE) & identical(indicator.matrix, TRUE)) {
     a.r <- nrow(active)
     ind.act <- data.frame(active, check.names = F)
-    sup.n <- sum(unlist(lapply(as.data.frame(sup), nlevels)))
     if (identical(sup, NULL) == TRUE) {
       sup <- matrix(0, nrow = nrow(active), ncol = 2)
       sup[, 1:2] <- cbind(rep(0, nrow(active)), rep(0, nrow(active)))
@@ -82,6 +81,7 @@ soc.mca   <-  function(active, sup = NULL, identifier = NULL, passive = getOptio
       ind.sup <- sup
     }
     if ((nrow(sup) == 0) == FALSE) {
+      sup.n <- sum(unlist(lapply(as.data.frame(sup), nlevels)))
       ind.sup <- indicator(sup)
     }
   }
@@ -90,7 +90,6 @@ soc.mca   <-  function(active, sup = NULL, identifier = NULL, passive = getOptio
     active <- data.frame(lapply(active, factor), check.names = F)
     a.r <- nrow(active)
     ind.act <- indicator(active)
-    sup.n <- sum(unlist(lapply(as.data.frame(sup), nlevels)))
     if (identical(sup, NULL) == TRUE) {
       sup <- matrix(0, nrow = nrow(active), ncol = 2)
       sup[, 1:2] <- cbind(rep(0, nrow(active)), rep(0, nrow(active)))
@@ -99,6 +98,7 @@ soc.mca   <-  function(active, sup = NULL, identifier = NULL, passive = getOptio
       ind.sup <- sup
     }
     if ((nrow(sup) == 0) == FALSE) {
+      sup.n <- sum(unlist(lapply(as.data.frame(sup), nlevels)))
       ind.sup <- indicator(sup)
     }
   }
@@ -126,12 +126,9 @@ soc.mca   <-  function(active, sup = NULL, identifier = NULL, passive = getOptio
     a <- aggregate(sapply(active, function(x) length(table(x))), 
                    by = list(headings), sum)
     headings <- rep(a[, 1], a[, 2])
-    
     active <- data.frame(lapply(active, factor), check.names = F)
-    sup <- data.frame(lapply(sup, factor), check.names = F)
     a.r <- nrow(active)
     ind.act <- indicator(active)
-    sup.n <- sum(unlist(lapply(as.data.frame(sup), nlevels)))
     if (identical(sup, NULL) == TRUE) {
       sup <- matrix(0, nrow = nrow(active), ncol = 2)
       sup[, 1:2] <- cbind(rep(0, nrow(active)), rep(0, nrow(active)))
@@ -140,6 +137,8 @@ soc.mca   <-  function(active, sup = NULL, identifier = NULL, passive = getOptio
       ind.sup <- sup
     }
     else {
+      sup <- data.frame(lapply(sup, factor), check.names = F)
+      sup.n <- sum(unlist(lapply(as.data.frame(sup), nlevels)))
       ind.sup <- indicator(sup)
     }
   }

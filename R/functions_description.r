@@ -656,25 +656,32 @@ headings      <- function(object, dim = 1:5) {
   head.var    <- cbind(object$headings, object$variable)
   head.var    <- head.var[!duplicated(head.var[,2]),]
   
-  head.ctr.total <- rep(1, (max(dim)+2))
+  head.ctr.total <- rep(1, (max(dim)+3))
   
+  tot    <- aggregate(rowSums(object$ctr.mod.raw), by = list(object$headings), sum)
+  tot$x  <- round(tot$x / sum(tot$x)* 100,1)
   
   for (i in seq(length(lev.head))){
     var.under.head     <- head.var[which(head.var[,1] == lev.head[i]),2]
     head.ctr           <- object$ctr.mod[which(variable %in% var.under.head),dim]
     head.ctr.total2    <- colSums(head.ctr)
-    head.ctr.total2    <- c(length(var.under.head), nrow(head.ctr), round(head.ctr.total2*100,1))
+    head.ctr.total2    <- c(length(var.under.head), nrow(head.ctr), tot$x[i], round(head.ctr.total2*100,1))
     head.ctr.total     <- rbind(head.ctr.total, head.ctr.total2)
     
   }
   head.ctr.total <- head.ctr.total[-1,]
   rownames(head.ctr.total) <- lev.head
-  colnames(head.ctr.total) <- c("Q", "K'", paste("Ctr. to dim: ", dim, sep = "")) 
+  colnames(head.ctr.total) <- c("Q", "K'", "Ctr. to all",  paste("Ctr. to dim: ", dim, sep = "")) 
   head.ctr.total
 }
 
 
 #' Breakdown of variance by group
+#' 
+#' Defining a partition of the cloud of individuals into groups, one can calculate the midpoints of the various groups. 
+#' The total variance of the cloud of individuals can then be broken down to between–within variances, i.e. variance between the groups partitioning the cloud, and variance within the groups
+#' The ratio of the between-variance to the total variance is denoted by η2 (eta-square), and accounts for the percentage of variance 'explained' by the group-variable.
+#' (see Le Roux & Rouanet 2010, p. 20ff, 69, 114)
 #' 
 #' @param object is a soc.ca class object
 #' @param dim the dimensions in the order they are to be plotted. The first 
@@ -683,6 +690,7 @@ headings      <- function(object, dim = 1:5) {
 #' @param variable a factor in the same length and order as the active variables
 #'
 #' @return a matrix
+#' @references Le Roux, Brigitte, and Henry Rouanet. 2010. Multiple Correspondence Analysis. Thousand Oaks, Calif.: Sage Publications.
 #' @export
 #' @examples
 #' example(soc.ca)
