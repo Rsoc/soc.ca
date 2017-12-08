@@ -660,6 +660,11 @@ headings      <- function(object, dim = 1:5) {
 
 #' Breakdown of variance by group
 #' 
+#' Defining a partition of the cloud of individuals into groups, one can calculate the midpoints of the various groups. 
+#' The total variance of the cloud of individuals can then be broken down to between–within variances, i.e. variance between the groups partitioning the cloud, and variance within the groups
+#' The ratio of the between-variance to the total variance is denoted by η2 (eta-square), and accounts for the percentage of variance 'explained' by the group-variable.
+#' (see Le Roux & Rouanet 2010, p. 20ff, 69, 114)
+#' 
 #' @param object is a soc.ca class object
 #' @param dim the dimensions in the order they are to be plotted. The first 
 #'   number defines the horizontal axis and the second number defines the 
@@ -667,6 +672,7 @@ headings      <- function(object, dim = 1:5) {
 #' @param variable a factor in the same length and order as the active variables
 #'
 #' @return a matrix
+#' @references Le Roux, Brigitte, and Henry Rouanet. 2010. Multiple Correspondence Analysis. Thousand Oaks, Calif.: Sage Publications.
 #' @export
 #' @examples
 #' example(soc.ca)
