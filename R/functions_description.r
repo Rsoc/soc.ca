@@ -658,8 +658,8 @@ headings      <- function(object, dim = 1:5) {
 }
 
 
-#' Title
-#'
+#' Breakdown of variance by group
+#' 
 #' @param object is a soc.ca class object
 #' @param dim the dimensions in the order they are to be plotted. The first 
 #'   number defines the horizontal axis and the second number defines the 
@@ -668,42 +668,43 @@ headings      <- function(object, dim = 1:5) {
 #'
 #' @return a matrix
 #' @export
-#'
 #' @examples
 #' example(soc.ca)
 #' breakdown.variance(result, dim = 1:3, variable = sup$Gender)
 breakdown.variance          <- function(object, dim = 1:3, variable) {
-if (anyNA(variable)) stop(substitute(variable), " contains NA - convert to missing")
+
+  if (anyNA(variable)) stop(substitute(variable), " contains NA - convert to missing")
   
-  s      <- levels(variable)
-  coords <- matrix(NA, nrow = length(s), ncol=length(dim))
-  var    <- matrix(NA, nrow = length(s), ncol=length(dim))
+  s          <- levels(variable)
+  coords     <- matrix(NA, nrow = length(s), ncol = length(dim))
+  var        <- matrix(NA, nrow = length(s), ncol = length(dim))
+  weights    <- matrix(NA, nrow = length(s), ncol = 2)
   
-  weights <- matrix(NA, nrow = length(s), ncol = 2)
   for (i in 1:length(s)) {
     weights[i,1] <- nrow(object$coord.ind[variable == s[i], dim]) 
     weights[i,2] <- nrow(object$coord.ind[variable == s[i], dim]) / length(variable)
   }
   
   for (i in 1:length(s)) {
-    coords[i,1:(length(dim))] <- colSums(object$coord.ind[variable == s[i], dim] / sum(variable == s[i]))
+    coords[i, 1:(length(dim))] <- colSums(object$coord.ind[variable == s[i], dim] / sum(variable == s[i]))
     
   }
   rownames(coords) <- s
   
-  var <- matrix(NA, nrow = length(s), ncol =length(dim))
+  var        <- matrix(NA, nrow = length(s), ncol = length(dim))
+  
   for (j in 1:length(dim)) {
     for (i in 1:length(s)) {
-      var[i,j] <- sum((object$coord.ind[variable == s[i],j] - coords[i,j])^2)/sum(variable==s[i])
+      var[i,j] <- sum((object$coord.ind[variable == s[i],j] - coords[i,j])^2)/sum(variable == s[i])
     }}
   
-  within <- colSums(weights[,2]*var)
-  bet <- colSums(coords[,dim]^2 * weights[,2])
-  total <- within + bet
-  n2    <- bet / total
-  variance <- rbind(var, within, bet, total, n2)
+  within      <- colSums(weights[,2]*var)
+  bet         <- colSums(coords[,dim]^2 * weights[,2])
+  total       <- within + bet
+  n2          <- bet / total
+  variance    <- rbind(var, within, bet, total, n2)
   weights[,2] <- round(100*weights[,2], 1)
-  meanpoints <- rbind(cbind(weights, round(coords,3)), matrix(NA, ncol=ncol(weights) + ncol(coords), nrow= 4))
+  meanpoints  <- rbind(cbind(weights, round(coords,3)), matrix(NA, ncol = ncol(weights) + ncol(coords), nrow= 4))
   
   out <- cbind(meanpoints, round(variance,4))
   

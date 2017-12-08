@@ -2,7 +2,7 @@
 % Please edit documentation in R/functions_description.r
 \name{breakdown.variance}
 \alias{breakdown.variance}
-\title{Title}
+\title{Breakdown of variance by group}
 \usage{
 breakdown.variance(object, dim = 1:3, variable)
 }
@@ -19,7 +19,7 @@ vertical axis.}
 a matrix
 }
 \description{
-Title
+Breakdown of variance by group
 }
 \examples{
 example(soc.ca)
