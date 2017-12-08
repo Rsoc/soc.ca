@@ -631,6 +631,22 @@ csa.measures      <- function(csa.object, correlations = FALSE, cosines = TRUE, 
 }
 
 
+#' Calculate contributions per heading
+#'
+#' @param object a soc.ca object with headings
+#' @param dim a numeric vector with the dimensions
+#'
+#' @return a matrix
+#' @export
+#'
+#' @examples
+#' data(taste)
+#' active.headings <- list()
+#' active.headings$Consumption <- taste[, c("TV", "Film", "Art", "Eat")
+#' active.headings$Background  <- taste[, c("Gender", "Age", "Income")]
+#' result.headings <- soc.mca(active.headings, active.is.list = TRUE)
+
+
 headings      <- function(object, dim = 1:5) {
   
   headings    <- object$headings
