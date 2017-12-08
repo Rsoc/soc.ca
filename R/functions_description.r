@@ -630,7 +630,7 @@ csa.measures      <- function(csa.object, correlations = FALSE, cosines = TRUE, 
   }
 }
 
-
+object <- dd
 headings      <- function(object, dim = 1:5) {
   
   headings    <- object$headings
@@ -640,20 +640,22 @@ headings      <- function(object, dim = 1:5) {
   head.var    <- cbind(object$headings, object$variable)
   head.var    <- head.var[!duplicated(head.var[,2]),]
   
-  head.ctr.total <- rep(1, (max(dim)+2))
+  head.ctr.total <- rep(1, (max(dim)+3))
   
+  tot    <- aggregate(rowSums(object$ctr.mod.raw), by = list(object$headings), sum)
+  tot$x  <- round(tot$x / sum(tot$x)* 100,1)
   
   for (i in seq(length(lev.head))){
     var.under.head     <- head.var[which(head.var[,1] == lev.head[i]),2]
     head.ctr           <- object$ctr.mod[which(variable %in% var.under.head),dim]
     head.ctr.total2    <- colSums(head.ctr)
-    head.ctr.total2    <- c(length(var.under.head), nrow(head.ctr), round(head.ctr.total2*100,1))
+    head.ctr.total2    <- c(length(var.under.head), nrow(head.ctr), tot$x[i], round(head.ctr.total2*100,1))
     head.ctr.total     <- rbind(head.ctr.total, head.ctr.total2)
     
   }
   head.ctr.total <- head.ctr.total[-1,]
   rownames(head.ctr.total) <- lev.head
-  colnames(head.ctr.total) <- c("Q", "K'", paste("Ctr. to dim: ", dim, sep = "")) 
+  colnames(head.ctr.total) <- c("Q", "K'", "Ctr. to all",  paste("Ctr. to dim: ", dim, sep = "")) 
   head.ctr.total
 }
 
