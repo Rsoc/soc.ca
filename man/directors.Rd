@@ -170,11 +170,6 @@ el.forfatter  <- map.ellipse(result, map.forfatter, author)
 el.forfatter
 }
 }
-\author{
-Christoph Ellersgaard
-
-Anton Grau Larsen
-}
 \references{
 Ellersgaard, Christoph, Anton Grau Larsen, og Martin D. Munk. 
  2012. "A Very Economic Elite: The Case of the Danish Top CEOs". Sociology.
@@ -190,5 +185,9 @@ Larsen, Anton Grau, og Christoph Houman Ellersgaard. 2012. "Status
  og integration paa magtens felt for danske topdirektoerer". Praktiske 
  Grunde. Nordisk tidsskrift for kultur- og samfundsvidenskab 2012(2-3).
 }
-\keyword{data}
+\author{
+Christoph Ellersgaard
 
+Anton Grau Larsen
+}
+\keyword{data}

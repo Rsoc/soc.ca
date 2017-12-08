@@ -23,4 +23,3 @@ Find the average coordinates for each category in a variable on two dimensions.
 example(soc.ca)
 average.coord(result, sup$Income)
 }
-

@@ -37,4 +37,3 @@ map <- map.ind(result, point.color = as.numeric(sup$Age))
 map <- map + scale_color_continuous(high = "red", low = "yellow")
 map.path(result, sup$Age, map)
 }
-

@@ -28,4 +28,3 @@ b         <- res.pas$coord.ind
 all.equal(as.vector(a), as.vector(b))
 map.ind(res.sup)
 }
-

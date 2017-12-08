@@ -97,4 +97,3 @@ map.add(result, original.map, plot.type = "ctr", ctr.dim = 2)
 map.add(result, map.ind(result), plot.type = "select",list.ind = 1:50,
  point.color = "red", label = FALSE, point.size = result$ctr.ind[1:50, 1]*2000)
 }
-

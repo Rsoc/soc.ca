@@ -51,4 +51,3 @@ contribution(result, 1:2, mode = "variable")
 \seealso{
 \link{map.ctr}
 }
-

@@ -39,4 +39,3 @@ result.label  <- add.to.label(result, value = "linebreak")
 result.label$names.mod
 map.ctr(result.label)
 }
-

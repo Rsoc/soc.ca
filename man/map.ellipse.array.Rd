@@ -38,4 +38,3 @@ example(soc.ca)
 map.ellipse.array(result, active[, 1])
 }
 }
-

@@ -514,39 +514,66 @@ average.coord <- function(object, x, dim = c(1, 2)){
 #' csa.measures(res.csa)
 #' csa.measures(res.csa, correlations = FALSE, cosine.angles = FALSE, dim = 1:10, format = FALSE)
 
-csa.measures <- function(csa.object, correlations = TRUE, cosines = TRUE, cosine.angles = TRUE,
-                         dim = 1:5, format = TRUE, ...){
-  
+csa.measures      <- function(csa.object, correlations = FALSE, cosines = TRUE, cosine.angles = TRUE,
+                               dim1 = 1:5, dim2= 1:5, format = TRUE, ...){
   csca.coord      <- csa.object$coord.ind
   object          <- csa.object$original.result
   class.indicator <- csa.object$original.class.indicator
   ca.coord        <- object$coord.ind[class.indicator, ]
-  
-  csca.coord      <- csca.coord[, dim]
-  ca.coord        <- ca.coord[, dim]
+  csca.coord      <- csca.coord[, dim1]
+  ca.coord        <- ca.coord[, dim2]
   
   ##################################
   # Correlations
   cor.mat             <- cor(csca.coord, ca.coord, ...)
-  rownames(cor.mat)   <- paste("CSA:", dim)
-  colnames(cor.mat)   <- paste("MCA:", dim)
+  rownames(cor.mat)   <- paste("CSA:", dim1)
+  colnames(cor.mat)   <- paste("MCA:", dim2)
   
   ####################################
   # Cosines similarity
   cosine.similarity      <- function(x, y) x %*% y / sqrt(x %*% x * y %*% y)
-  cosine.mat             <- matrix(ncol = ncol(ca.coord), nrow = ncol(ca.coord))
-  rownames(cosine.mat)   <- paste("CSA:", dim)
-  colnames(cosine.mat)   <- paste("MCA:", dim)
-    
-    for (i in 1:ncol(ca.coord)){
-      cosine.mat[i, ]       <- apply(ca.coord, 2, cosine.similarity, csca.coord[, i])
-    }
-
+  cosine.mat             <- matrix(ncol = ncol(ca.coord), nrow = ncol(csca.coord))
+  rownames(cosine.mat)   <- paste("CSA:", dim1)
+  colnames(cosine.mat)   <- paste("MCA:", dim2)
+  
+  for (i in 1:ncol(csca.coord)){
+    cosine.mat[i,]       <- apply(ca.coord, 2, cosine.similarity, csca.coord[, i])
+  }
+  
+  cosine.mat <- cbind(cosine.mat, 
+                      sqrt(cosine.mat[,1]^2 + cosine.mat[,2]^2), 
+                      sqrt(cosine.mat[,1]^2 + cosine.mat[,3]^2),
+                      sqrt(cosine.mat[,1]^2 + cosine.mat[,4]^2),
+                      sqrt(cosine.mat[,1]^2 + cosine.mat[,5]^2),
+                      sqrt(cosine.mat[,2]^2 + cosine.mat[,3]^2),
+                      sqrt(cosine.mat[,2]^2 + cosine.mat[,4]^2),
+                      sqrt(cosine.mat[,2]^2 + cosine.mat[,5]^2),
+                      sqrt(cosine.mat[,3]^2 + cosine.mat[,4]^2),
+                      sqrt(cosine.mat[,3]^2 + cosine.mat[,5]^2),
+                      sqrt(cosine.mat[,4]^2 + cosine.mat[,5]^2),
+                      sqrt(cosine.mat[,1]^2 + cosine.mat[,2]^2 + cosine.mat[,3]^2),
+                      sqrt(cosine.mat[,2]^2 + cosine.mat[,3]^2 + cosine.mat[,4]^2),
+                      sqrt(cosine.mat[,3]^2 + cosine.mat[,4]^2 + cosine.mat[,5]^2))
+  
+  colnames(cosine.mat)[length(dim2)+1]  <- "MCA: 1&2"
+  colnames(cosine.mat)[length(dim2)+2]  <- "MCA: 1&3"
+  colnames(cosine.mat)[length(dim2)+3]  <- "MCA: 1&4"
+  colnames(cosine.mat)[length(dim2)+4]  <- "MCA: 1&5"
+  colnames(cosine.mat)[length(dim2)+5]  <- "MCA: 2&3"
+  colnames(cosine.mat)[length(dim2)+6]  <- "MCA: 2&4"
+  colnames(cosine.mat)[length(dim2)+7]  <- "MCA: 2&5"
+  colnames(cosine.mat)[length(dim2)+8] <- "MCA: 3&4"
+  colnames(cosine.mat)[length(dim2)+9] <- "MCA: 3&5"
+  colnames(cosine.mat)[length(dim2)+10] <- "MCA: 4&5"
+  colnames(cosine.mat)[length(dim2)+11] <- "MCA: 1&2&3"
+  colnames(cosine.mat)[length(dim2)+12] <- "MCA: 2&3&4"
+  colnames(cosine.mat)[length(dim2)+13] <- "MCA: 3&4&5"
+  #View(cosine.mat)
   #####################################
   # Angles
-  cosine.to.angle       <- function(x) acos(x)/pi * 180 
+  cosine.to.angle       <- function(x) acos(abs(x))/pi * 180 
   angles                <- cosine.to.angle(cosine.mat)
-  
+  #View(angles)
   ####################################
   # Out.list
   out.list              <- list() 
@@ -563,32 +590,32 @@ csa.measures <- function(csa.object, correlations = TRUE, cosines = TRUE, cosine
     cat("\n", format("Measures for Class Specific Multiple Correspondence Analysis:",
                      width = 90, justify = "centre"), "\n", "\n")
     
-  #############
-  # Cosines
-  if (cosines == TRUE){
-   
-    cat("\n", format("Cosine similarity:",   width = 10, justify = "right"), "\n", "\n")
-    cosine.fat           <- round(cosine.mat, 2) 
-    rownames(cosine.fat) <- format(rownames(cosine.fat), width = 10, justify = "centre")
-    colnames(cosine.fat) <- format(colnames(cosine.fat), width = 8, justify = "right")
-    cosine.fat           <- format(cosine.fat, width = 8, justify = "left")
-    print(noquote(cosine.fat))
-    cat("\n", "\n")
+    #############
+    # Cosines
+    if (cosines == TRUE){
+      
+      cat("\n", format("Cosine similarity:",   width = 10, justify = "right"), "\n", "\n")
+      cosine.fat           <- cosine.mat
+      rownames(cosine.fat) <- format(rownames(cosine.fat), width = 10, justify = "centre")
+      colnames(cosine.fat) <- format(colnames(cosine.fat), width = 8, justify = "right")
+      cosine.fat           <- format(cosine.fat, width = 8, justify = "left")
+      print(noquote(cosine.fat))
+      cat("\n", "\n")
     }
     
-  #############
-  # Angles
-  if (cosine.angles == TRUE){
-    cat("\n", format("Cosine angles:",   width = 10, justify = "right"), "\n", "\n")
-    
-    angles.fat           <- round(angles, 1) 
-    rownames(angles.fat) <- format(rownames(angles.fat), width = 10, justify = "centre")
-    colnames(angles.fat) <- format(colnames(angles.fat), width = 8, justify = "right")
-    angles.fat           <- format(angles.fat, width = 8, justify = "left")
-    print(noquote(angles.fat))
-    cat("\n", "\n") 
+    #############
+    # Angles
+    if (cosine.angles == TRUE){
+      cat("\n", format("Cosine angles:",   width = 10, justify = "right"), "\n", "\n")
+      
+      angles.fat           <- round(angles, 1) 
+      rownames(angles.fat) <- format(rownames(angles.fat), width = 10, justify = "centre")
+      colnames(angles.fat) <- format(colnames(angles.fat), width = 8, justify = "right")
+      angles.fat           <- format(angles.fat, width = 8, justify = "left")
+      print(noquote(angles.fat))
+      cat("\n", "\n") 
     }
-
+    
     ##############
     # Correlations
     if(correlations == TRUE){
@@ -602,3 +629,87 @@ csa.measures <- function(csa.object, correlations = TRUE, cosines = TRUE, cosine
     }
   }
 }
+
+
+headings      <- function(object, dim = 1:5) {
+  
+  headings    <- object$headings
+  lev.head    <- unique(headings)
+  variable    <- object$variable
+  lev.var     <- unique(variable)
+  head.var    <- cbind(object$headings, object$variable)
+  head.var    <- head.var[!duplicated(head.var[,2]),]
+  
+  head.ctr.total <- rep(1, (max(dim)+2))
+  
+  
+  for (i in seq(length(lev.head))){
+    var.under.head     <- head.var[which(head.var[,1] == lev.head[i]),2]
+    head.ctr           <- object$ctr.mod[which(variable %in% var.under.head),dim]
+    head.ctr.total2    <- colSums(head.ctr)
+    head.ctr.total2    <- c(length(var.under.head), nrow(head.ctr), round(head.ctr.total2*100,1))
+    head.ctr.total     <- rbind(head.ctr.total, head.ctr.total2)
+    
+  }
+  head.ctr.total <- head.ctr.total[-1,]
+  rownames(head.ctr.total) <- lev.head
+  colnames(head.ctr.total) <- c("Q", "K'", paste("Ctr. to dim: ", dim, sep = "")) 
+  head.ctr.total
+}
+
+
+#' Title
+#'
+#' @param object is a soc.ca class object
+#' @param dim the dimensions in the order they are to be plotted. The first 
+#'   number defines the horizontal axis and the second number defines the 
+#'   vertical axis.
+#' @param variable a factor in the same length and order as the active variables
+#'
+#' @return a matrix
+#' @export
+#'
+#' @examples
+#' example(soc.ca)
+#' breakdown.variance(result, dim = 1:3, variable = sup$Gender)
+breakdown.variance          <- function(object, dim = 1:3, variable) {
+if (anyNA(variable)) stop(substitute(variable), " contains NA - convert to missing")
+  
+  s      <- levels(variable)
+  coords <- matrix(NA, nrow = length(s), ncol=length(dim))
+  var    <- matrix(NA, nrow = length(s), ncol=length(dim))
+  
+  weights <- matrix(NA, nrow = length(s), ncol = 2)
+  for (i in 1:length(s)) {
+    weights[i,1] <- nrow(object$coord.ind[variable == s[i], dim]) 
+    weights[i,2] <- nrow(object$coord.ind[variable == s[i], dim]) / length(variable)
+  }
+  
+  for (i in 1:length(s)) {
+    coords[i,1:(length(dim))] <- colSums(object$coord.ind[variable == s[i], dim] / sum(variable == s[i]))
+    
+  }
+  rownames(coords) <- s
+  
+  var <- matrix(NA, nrow = length(s), ncol =length(dim))
+  for (j in 1:length(dim)) {
+    for (i in 1:length(s)) {
+      var[i,j] <- sum((object$coord.ind[variable == s[i],j] - coords[i,j])^2)/sum(variable==s[i])
+    }}
+  
+  within <- colSums(weights[,2]*var)
+  bet <- colSums(coords[,dim]^2 * weights[,2])
+  total <- within + bet
+  n2    <- bet / total
+  variance <- rbind(var, within, bet, total, n2)
+  weights[,2] <- round(100*weights[,2], 1)
+  meanpoints <- rbind(cbind(weights, round(coords,3)), matrix(NA, ncol=ncol(weights) + ncol(coords), nrow= 4))
+  
+  out <- cbind(meanpoints, round(variance,4))
+  
+  rownames(out) <- c(s, "Within", "Between", "Total", "Correlation ratio")
+  colnames(out) <- c("freq", "rel.freq", paste("Meanpoint: Axis ", dim), paste("Variance: Axis ", dim))
+  out
+  
+}
+

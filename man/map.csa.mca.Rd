@@ -29,4 +29,3 @@ map.csa.mca(csa.res, mca.dim = 2, csa.dim = 1)
 \seealso{
 \link{soc.csa}, \link{map.csa.all}, link{map.csa.mca.array}
 }
-

@@ -82,4 +82,3 @@ quad   <- create.quadrant(result)
 map.ind(result, map.title = "Individuals in the space given shape and color by their quadrant",
  point.shape = quad, point.color = quad)
 }
-

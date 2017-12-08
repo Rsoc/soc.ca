@@ -38,4 +38,3 @@ print(result)
 \seealso{
 \link{soc.mca}, \link{contribution}
 }
-

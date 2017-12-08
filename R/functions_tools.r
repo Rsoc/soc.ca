@@ -142,7 +142,42 @@ export <- function(object, file = "export.csv", dim = 1:5) {
 
 invert <- function(x, dim = 1) {
   x$coord.mod[,dim] <- x$coord.mod[,dim] * -1
+  x$coord.all[, dim] <- x$coord.all[, dim] * -1
   x$coord.ind[,dim] <- x$coord.ind[,dim] * -1
   x$coord.sup[,dim] <- x$coord.sup[,dim] * -1
   return(x)
 }
+
+
+to.MCA <- function(object, active, dim) {
+  
+  rownames(active)         <- object$names.ind
+  rownames(object$coord.ind) <- object$names.ind
+  
+  var                      <- list(coord = object$coord.mod[,dim], 
+                                   cos2  = object$cor.mod[,dim], 
+                                   contrib = object$ctr.mod[,dim])
+  ind <- list(coord = object$coord.ind[,dim], 
+              cos2 = object$cor.ind[,dim], 
+              contrib = object$ctr.ind[,dim])
+  call <- list(marge.col = object$mass.mod, 
+               marge.row = 1/object$n.ind,
+               row.w = rep(1, object$n.ind),
+               X = active,
+               ind.sup = NULL)
+  eig <- matrix(0, nrow = length(dim), ncol = 3)
+  rownames(eig) <- paste("dim ", dim, sep="")
+  colnames(eig) <- c("eigenvalue", "percentage of variance", "cumulative percentage of variance")
+  eig[,1] <- object$eigen[dim]
+  eig[,2] <- eig[,1]/sum(object$eigen) *100
+  eig[,3] <- cumsum(eig[,2])
+  res <- list(eig=eig, var=var, ind=ind, call=call)                                          
+  class(res) <- c("MCA", "list")
+  return(res)
+}
+
+barycenter <- function(object, mods = NULL, dim = 1){
+  new.coord <- sum(object$mass.mod[mods] * object$coord.mod[mods, dim]) / sum(object$mass.mod[mods])
+  new.coord
+}
+

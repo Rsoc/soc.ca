@@ -42,4 +42,3 @@ map.ellipse(result, map, active[,2])
 \seealso{
 \link{map.ind}, \link{map.ctr}
 }
-

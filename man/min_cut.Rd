@@ -27,4 +27,3 @@ b <- c(rep(0, 50), 1:500)
 table(min_cut(b, min.size = 20))
 
 }
-

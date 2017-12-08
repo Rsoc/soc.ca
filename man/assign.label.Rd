@@ -35,4 +35,3 @@ To use this function first export the labels from your soc.mca
 \seealso{
 \link{export.label}, \link{add.to.label}
 }
-

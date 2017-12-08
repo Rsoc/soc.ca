@@ -50,6 +50,12 @@ class.age    <- which(taste$Age == '55-64')
 res.csa      <- soc.csa(result, class.age)
 res.csa
 }
+\references{
+Le Roux, B., og H. Rouanet. 2010. Multiple correspondence analysis. Thousand Oaks: Sage.
+}
+\seealso{
+\link{add.to.label}, \link{contribution}
+}
 \author{
 Anton Grau Larsen, University of Copenhagen
 
@@ -57,10 +63,3 @@ Stefan Bastholm Andrade, University of Copenhagen
 
 Christoph Ellersgaard, University of Copenhagen
 }
-\references{
-Le Roux, B., og H. Rouanet. 2010. Multiple correspondence analysis. Thousand Oaks: Sage.
-}
-\seealso{
-\link{add.to.label}, \link{contribution}
-}
-

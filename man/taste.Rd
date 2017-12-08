@@ -79,13 +79,12 @@ map.csa.mca(result.csca)
 map.csa.mca.array(result.csca)
 }
 }
-\author{
-Brigitte Le Roux
-}
 \references{
 Le Roux, Brigitte, Henry Rouanet, Mike Savage, og Alan Warde. 2008. "Class and Cultural Division in the UK". Sociology 42(6):1049-1071.
 
 Le Roux, B., og H. Rouanet. 2010. Multiple correspondence analysis. Thousand Oaks: Sage.
 }
+\author{
+Brigitte Le Roux
+}
 \keyword{data}
-

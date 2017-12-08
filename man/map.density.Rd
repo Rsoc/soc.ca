@@ -39,4 +39,3 @@ map.density(result, map.ind(result, legend = TRUE, point.alpha = 0.2),
  linetype = duplicated(active))
 map.density(result, map.ctr(result))
 }
-

@@ -36,4 +36,3 @@ map.csa.all(result, active[, 1])
 map.csa.all(result, active[, 1], FUN = map.ctr, ctr.dim = 1)
 }
 }
-

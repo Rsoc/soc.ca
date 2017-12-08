@@ -43,4 +43,3 @@ Le Roux, Brigitte, and Henry Rouanet. 2004. Geometric Data
   Analysis from Correspondence Analysis to Structured Data Analysis. 
   Dordrecht: Kluwer Academic Publishers.
 }
-

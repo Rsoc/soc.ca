@@ -29,4 +29,3 @@ inverted.result$coord.ind[1, 1:2]
 \seealso{
 \link{soc.mca}, \link{add.to.label}
 }
-

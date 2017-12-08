@@ -80,4 +80,3 @@ example(soc.ca)
 map.ctr(result)
 map.ctr(result, ctr.dim = c(1, 2))
 }
-

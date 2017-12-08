@@ -6,7 +6,7 @@
 \usage{
 soc.mca(active, sup = NULL, identifier = NULL,
   passive = getOption("passive", default = "Missing"),
-  indicator.matrix = NULL, balance.headings = FALSE)
+  indicator.matrix = FALSE, active.is.list = FALSE, Moschidis = FALSE)
 }
 \arguments{
 \item{active}{Defines the active modalities in a data.frame with rows of individuals and columns of factors, without NA's'. Active can also be a named list of data.frames. The data.frames will correspond to the analytical headings.}
@@ -67,6 +67,12 @@ options(passive = c("Film: CostumeDrama", "TV: Tv-Sport"))
 soc.mca(active, sup)
 options(passive = NULL)
 }
+\references{
+Le Roux, B., og H. Rouanet. 2010. Multiple correspondence analysis. Thousand Oaks: Sage.
+}
+\seealso{
+\link{soc.csa}, \link{contribution}
+}
 \author{
 Anton Grau Larsen, University of Copenhagen
 
@@ -74,10 +80,3 @@ Stefan Bastholm Andrade, University of Copenhagen
 
 Christoph Ellersgaard, University of Copenhagen
 }
-\references{
-Le Roux, B., og H. Rouanet. 2010. Multiple correspondence analysis. Thousand Oaks: Sage.
-}
-\seealso{
-\link{soc.csa}, \link{contribution}
-}
-

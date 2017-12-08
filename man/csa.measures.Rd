@@ -4,8 +4,8 @@
 \alias{csa.measures}
 \title{CSA measures}
 \usage{
-csa.measures(csa.object, correlations = TRUE, cosines = TRUE,
-  cosine.angles = TRUE, dim = 1:5, format = TRUE, ...)
+csa.measures(csa.object, correlations = FALSE, cosines = TRUE,
+  cosine.angles = TRUE, dim1 = 1:5, dim2 = 1:5, format = TRUE, ...)
 }
 \arguments{
 \item{csa.object}{is a "soc.csa" class object created by the \link{soc.csa} function}
@@ -16,11 +16,11 @@ csa.measures(csa.object, correlations = TRUE, cosines = TRUE,
 
 \item{cosine.angles}{if TRUE angles are calculated in the basis of the cosine values}
 
-\item{dim}{is the dimensions included}
-
 \item{format}{if TRUE results are formatted, rounded and printed for screen reading, if FALSE the raw numbers are returned}
 
 \item{...}{furhter arguments are send to the \link{cor} function}
+
+\item{dim}{is the dimensions included}
 }
 \value{
 A list of measures in either formatted or raw form.
@@ -33,4 +33,3 @@ example(soc.csa)
 csa.measures(res.csa)
 csa.measures(res.csa, correlations = FALSE, cosine.angles = FALSE, dim = 1:10, format = FALSE)
 }
-

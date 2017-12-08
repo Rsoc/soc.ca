@@ -17,4 +17,3 @@ a matrix with contribution values for each heading per dimension
 \description{
 Contribution.headings sums the contribution of the active categories according to the heading of their variables.
 }
-

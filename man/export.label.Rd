@@ -32,4 +32,3 @@ function you should do this after exporting and assigning labels with the
 \link{assign.label} function. Otherwise the matching of the labels is likely
 to fail.
 }
-

@@ -22,4 +22,3 @@ geom_text}
 Add a new layer of points on top of an existing plot with output from the 
 min_cut function
 }
-

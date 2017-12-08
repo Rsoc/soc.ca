@@ -1078,12 +1078,32 @@ add.count <- function(x, p, label = TRUE, ...){
 #' map.path(result, sup$Age, map)
 
 map.path  <- function(object, x, map = map.ind(object, dim), dim = c(1, 2),
-                      label = TRUE, min.size = length(x)/10, ...){
+                          label = TRUE, min.size = length(x)/10, ...){
   
   x.c     <- x
   if (is.numeric(x)) x.c     <- min_cut(x, min.size = min.size) 
   
-  x.av    <- average.coord(object = object, x = x.c, dim = dim)  
+  x.av    <- average.coord(object = object, x = x.c, dim = dim) 
+  x.av["X"] <- x.av["X"] * sqrt(object$eigen[dim[1]])
+  x.av["Y"] <- x.av["Y"] * sqrt(object$eigen[dim[2]])
   map.p   <- add.count(x.av, map, label, ...) 
   map.p
+}
+
+
+
+map.top.ind <- function(result, ctr.dim = 1, dim = c(1,2), top = 15){
+  sc            <- list()
+  sc$fill       <- scale_fill_continuous(low = "white", high = "darkblue")
+  sc$alpha      <- scale_alpha_manual(values = c(0.5, 1))
+  
+  
+  ctr           <- result$ctr.ind[, ctr.dim]
+  above.average <- ctr >= mean(ctr)
+  important     <- rank(ctr) > length(ctr) - top
+  r             <- result
+  r$names.ind[-which(important)] <- NA
+  #r             <- add.to.label(r, value = "linebreak")
+  m             <- map.ind(r, point.alpha = above.average, label = TRUE, point.shape = 21, point.fill = ctr, label.repel = TRUE, dim = dim, label.size = 3)
+  m + sc + ggtitle(paste("Map of the", top, "most contributing individuals for dim.", ctr.dim))
 }

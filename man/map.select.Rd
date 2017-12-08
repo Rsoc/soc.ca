@@ -99,4 +99,3 @@ map.select(result, map.title = "Map of all individuals sharing a particular valu
 map.select(result, map.title = "Map of both select individuals and modalities",
  list.ind = select, list.mod = 1:10)
 }
-

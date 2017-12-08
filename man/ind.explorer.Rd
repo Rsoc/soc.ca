@@ -26,4 +26,3 @@ example(soc.mca)
 ind.explorer(result, active, sup)
 }
 }
-

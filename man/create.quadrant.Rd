@@ -34,4 +34,3 @@ table(create.quadrant(result, dim = c(1, 3), cut.radius = 0.5))
 \seealso{
 \link{soc.mca}
 }
-

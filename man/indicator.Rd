@@ -27,4 +27,3 @@ indicator(data.frame(a,b))
 \seealso{
 \link{soc.mca}
 }
-

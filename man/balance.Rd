@@ -28,4 +28,3 @@ balance(result, act.dim = 3)
 \seealso{
 \link{soc.mca}, \link{contribution}
 }
-

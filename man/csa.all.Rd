@@ -39,4 +39,3 @@ csa.all(result, taste$Age)$measures
 \seealso{
 \link{soc.csa}, \link{cor}, \link{csa.measures}
 }
-

@@ -22,4 +22,3 @@ Export objects from the soc.ca package to csv files.
 \seealso{
 \link{soc.mca}, \link{contribution}
 }
-

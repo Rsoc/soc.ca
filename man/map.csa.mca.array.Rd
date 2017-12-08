@@ -23,4 +23,3 @@ example(soc.csa)
 csa.res <- soc.csa(result, class.age)
 map.csa.mca.array(csa.res, ndim = 3)
 }
-

@@ -29,4 +29,3 @@ example(soc.ca)
 map.array(list(map.ind(result), map.mod(result)), ncol = 2)
 }
 }
-
