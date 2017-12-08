@@ -19,9 +19,15 @@ vertical axis.}
 a matrix
 }
 \description{
-Breakdown of variance by group
+Defining a partition of the cloud of individuals into groups, one can calculate the midpoints of the various groups. 
+The total variance of the cloud of individuals can then be broken down to between–within variances, i.e. variance between the groups partitioning the cloud, and variance within the groups
+The ratio of the between-variance to the total variance is denoted by η2 (eta-square), and accounts for the percentage of variance 'explained' by the group-variable.
+(see Le Roux & Rouanet 2010, p. 20ff, 69, 114)
 }
 \examples{
 example(soc.ca)
 breakdown.variance(result, dim = 1:3, variable = sup$Gender)
+}
+\references{
+Le Roux, Brigitte, and Henry Rouanet. 2010. Multiple Correspondence Analysis. Thousand Oaks, Calif.: Sage Publications.
 }

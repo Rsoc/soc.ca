@@ -4,7 +4,7 @@
 \alias{headings}
 \title{Calculate contributions per heading}
 \usage{
-headings(object, dim = 1:5)
+headings(object, dim = 1:3)
 }
 \arguments{
 \item{object}{a soc.ca object with headings}
@@ -20,7 +20,8 @@ Calculate contributions per heading
 \examples{
 data(taste)
 active.headings <- list()
-active.headings$Consumption <- taste[, c("TV", "Film", "Art", "Eat")
+active.headings$Consumption <- taste[, c("TV", "Film", "Art", "Eat")]
 active.headings$Background  <- taste[, c("Gender", "Age", "Income")]
 result.headings <- soc.mca(active.headings, active.is.list = TRUE)
+headings(result.headings)
 }

@@ -642,33 +642,33 @@ csa.measures      <- function(csa.object, correlations = FALSE, cosines = TRUE, 
 #' @examples
 #' data(taste)
 #' active.headings <- list()
-#' active.headings$Consumption <- taste[, c("TV", "Film", "Art", "Eat")
+#' active.headings$Consumption <- taste[, c("TV", "Film", "Art", "Eat")]
 #' active.headings$Background  <- taste[, c("Gender", "Age", "Income")]
 #' result.headings <- soc.mca(active.headings, active.is.list = TRUE)
+#' headings(result.headings)
 
-
-headings      <- function(object, dim = 1:5) {
+headings      <- function(object, dim = 1:3) {
   
   headings    <- object$headings
   lev.head    <- unique(headings)
   variable    <- object$variable
-  lev.var     <- unique(variable)
+#  lev.var     <- unique(variable)
   head.var    <- cbind(object$headings, object$variable)
   head.var    <- head.var[!duplicated(head.var[,2]),]
   
-  head.ctr.total <- rep(1, (max(dim)+3))
+  head.ctr.total <- rep(1, (max(dim) + 3))
   
   tot    <- aggregate(rowSums(object$ctr.mod.raw), by = list(object$headings), sum)
-  tot$x  <- round(tot$x / sum(tot$x)* 100,1)
+  tot$x  <- round(tot$x / sum(tot$x) * 100,1)
   
-  for (i in seq(length(lev.head))){
+  for (i in seq(length(lev.head))) {
     var.under.head     <- head.var[which(head.var[,1] == lev.head[i]),2]
     head.ctr           <- object$ctr.mod[which(variable %in% var.under.head),dim]
     head.ctr.total2    <- colSums(head.ctr)
     head.ctr.total2    <- c(length(var.under.head), nrow(head.ctr), tot$x[i], round(head.ctr.total2*100,1))
     head.ctr.total     <- rbind(head.ctr.total, head.ctr.total2)
-    
   }
+  
   head.ctr.total <- head.ctr.total[-1,]
   rownames(head.ctr.total) <- lev.head
   colnames(head.ctr.total) <- c("Q", "K'", "Ctr. to all",  paste("Ctr. to dim: ", dim, sep = "")) 
@@ -684,9 +684,7 @@ headings      <- function(object, dim = 1:5) {
 #' (see Le Roux & Rouanet 2010, p. 20ff, 69, 114)
 #' 
 #' @param object is a soc.ca class object
-#' @param dim the dimensions in the order they are to be plotted. The first 
-#'   number defines the horizontal axis and the second number defines the 
-#'   vertical axis.
+#' @param dim the dimensions
 #' @param variable a factor in the same length and order as the active variables
 #'
 #' @return a matrix
