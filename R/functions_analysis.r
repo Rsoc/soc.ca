@@ -279,9 +279,9 @@ soc.mca   <-  function(active, sup = NULL, identifier = NULL, passive = getOptio
 # ' This function is part of the soc.mca function but allows for manipulation of the indicator matrix before analysis.
 # ' Most users will not need this function.
 # ' 
-# ' @param indicator.act   An indicator matrix of all the active modalities (including those that are to be set as passive)
-# ' @param indicator.sup   An indicator matrix of the supplementary modalities
-# ' @param subset  A vector containing column indices of passive modalities
+# ' @param ind.act   An indicator matrix of all the active modalities (including those that are to be set as passive)
+# ' @param ind.sup   An indicator matrix of the supplementary modalities
+# ' @param subset    A vector containing column indices of passive modalities
 # ' @param Q       The number of variables
 # ' @param Qm      The number of variables without passive modalities
 # ' #@export
