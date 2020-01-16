@@ -110,10 +110,9 @@ soc.mca <- function(active, sup = NULL, identifier = NULL, passive = getOption("
     headings <- rep(names(active), sapply(active, length))
     names(active) <- NULL
     active <- do.call("cbind", active)
-    a <- aggregate(sapply(active, function(x) length(table(x))), 
-                   by = list(headings), sum)
-    headings <- rep(a[, 1], a[, 2])
     active <- data.frame(lapply(active, factor), check.names = F)
+    nl     <- sapply(active, nlevels)
+    headings <- rep(headings, nl)
     a.r <- nrow(active)
     ind.act <- indicator(active)
   }
@@ -259,7 +258,7 @@ soc.mca <- function(active, sup = NULL, identifier = NULL, passive = getOption("
   # Mass matrix
   #######################################################
   tmp                    <- data.frame(result$variable.all, result$mass.mod.all)
-  mass.all <- matrix( , nrow = length(unique(varlist)), ncol = 4)
+  mass.all               <- matrix( , nrow = length(unique(varlist)), ncol = 4)
   for (i in 1:length(unique(varlist))) {
     mass.all[i,4] <- as.numeric(sum(tmp[which(result$variable.all == unique(result$variable.all)[i]),2]))
   }
