@@ -4,12 +4,26 @@
 \alias{map.ctr}
 \title{Map the most contributing modalities}
 \usage{
-map.ctr(object, dim = c(1, 2), ctr.dim = 1, point.shape = "variable",
-  point.alpha = 0.8, point.fill = "whitesmoke",
-  point.color = "black", point.size = "freq", label = TRUE,
-  label.repel = TRUE, label.alpha = 0.8, label.color = "black",
-  label.size = 4, label.fill = NULL, map.title = "ctr",
-  labelx = "default", labely = "default", legend = NULL)
+map.ctr(
+  object,
+  dim = c(1, 2),
+  ctr.dim = 1,
+  point.shape = "variable",
+  point.alpha = 0.8,
+  point.fill = "whitesmoke",
+  point.color = "black",
+  point.size = "freq",
+  label = TRUE,
+  label.repel = TRUE,
+  label.alpha = 0.8,
+  label.color = "black",
+  label.size = 4,
+  label.fill = NULL,
+  map.title = "ctr",
+  labelx = "default",
+  labely = "default",
+  legend = NULL
+)
 }
 \arguments{
 \item{object}{a soc.ca class object as created by \link{soc.mca} and 

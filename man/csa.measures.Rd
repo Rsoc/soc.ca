@@ -4,8 +4,16 @@
 \alias{csa.measures}
 \title{CSA measures}
 \usage{
-csa.measures(csa.object, correlations = FALSE, cosines = TRUE,
-  cosine.angles = TRUE, dim1 = 1:5, dim2 = 1:5, format = TRUE, ...)
+csa.measures(
+  csa.object,
+  correlations = FALSE,
+  cosines = TRUE,
+  cosine.angles = TRUE,
+  dim1 = 1:5,
+  dim2 = 1:5,
+  format = TRUE,
+  ...
+)
 }
 \arguments{
 \item{csa.object}{is a "soc.csa" class object created by the \link{soc.csa} function}

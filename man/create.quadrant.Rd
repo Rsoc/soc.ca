@@ -4,8 +4,13 @@
 \alias{create.quadrant}
 \title{Create categories according to the quadrant position of each individual}
 \usage{
-create.quadrant(object, dim = c(1, 2), cut.min = -0.125,
-  cut.max = 0.125, cut.radius = 0.25)
+create.quadrant(
+  object,
+  dim = c(1, 2),
+  cut.min = -0.125,
+  cut.max = 0.125,
+  cut.radius = 0.25
+)
 }
 \arguments{
 \item{object}{a soc.ca class object}

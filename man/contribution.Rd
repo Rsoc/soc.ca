@@ -4,8 +4,14 @@
 \alias{contribution}
 \title{Summaries of contribution values}
 \usage{
-contribution(object, dim = 1, all = FALSE, indices = FALSE,
-  mode = "sort", matrix.output = FALSE)
+contribution(
+  object,
+  dim = 1,
+  all = FALSE,
+  indices = FALSE,
+  mode = "sort",
+  matrix.output = FALSE
+)
 }
 \arguments{
 \item{object}{a \link{soc.ca} object}

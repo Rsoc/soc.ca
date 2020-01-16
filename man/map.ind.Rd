@@ -4,12 +4,25 @@
 \alias{map.ind}
 \title{Map the individuals of a soc.ca analysis}
 \usage{
-map.ind(object, dim = c(1, 2), point.shape = 21, point.alpha = 0.8,
-  point.fill = "whitesmoke", point.color = "black", point.size = 3,
-  label = FALSE, label.repel = FALSE, label.alpha = 0.8,
-  label.color = "black", label.size = 4, label.fill = NULL,
-  map.title = "ind", labelx = "default", labely = "default",
-  legend = NULL)
+map.ind(
+  object,
+  dim = c(1, 2),
+  point.shape = 21,
+  point.alpha = 0.8,
+  point.fill = "whitesmoke",
+  point.color = "black",
+  point.size = 3,
+  label = FALSE,
+  label.repel = FALSE,
+  label.alpha = 0.8,
+  label.color = "black",
+  label.size = 4,
+  label.fill = NULL,
+  map.title = "ind",
+  labelx = "default",
+  labely = "default",
+  legend = NULL
+)
 }
 \arguments{
 \item{object}{a soc.ca class object as created by \link{soc.mca} and 

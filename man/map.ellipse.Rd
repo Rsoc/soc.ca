@@ -4,9 +4,16 @@
 \alias{map.ellipse}
 \title{Concentration ellipses}
 \usage{
-map.ellipse(object, ca.plot = map.ind(object), variable,
-  ellipse.label = TRUE, ellipse.color = "default", label.size = 4,
-  draw.levels = 1:nlevels(variable), ellipse.line = "solid")
+map.ellipse(
+  object,
+  ca.plot = map.ind(object),
+  variable,
+  ellipse.label = TRUE,
+  ellipse.color = "default",
+  label.size = 4,
+  draw.levels = 1:nlevels(variable),
+  ellipse.line = "solid"
+)
 }
 \arguments{
 \item{object}{is a \link{soc.ca} class object.}

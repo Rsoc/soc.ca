@@ -4,9 +4,14 @@
 \alias{soc.mca}
 \title{Specific Multiple Correspondence Analysis}
 \usage{
-soc.mca(active, sup = NULL, identifier = NULL,
+soc.mca(
+  active,
+  sup = NULL,
+  identifier = NULL,
   passive = getOption("passive", default = "Missing"),
-  balance.headings = FALSE, Moschidis = FALSE)
+  balance.headings = FALSE,
+  Moschidis = FALSE
+)
 }
 \arguments{
 \item{active}{Defines the active modalities in a data.frame with rows of individuals and columns of factors, without NA's'. Active can also be a named list of data.frames. The data.frames will correspond to the analytical headings.}

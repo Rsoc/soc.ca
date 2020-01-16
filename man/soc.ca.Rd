@@ -3,7 +3,6 @@
 \docType{package}
 \name{soc.ca}
 \alias{soc.ca}
-\alias{soc.ca-package}
 \title{Soc.ca a package for specific correspondence analysis}
 \description{
 This package is optimized to the needs of scientists within the social 

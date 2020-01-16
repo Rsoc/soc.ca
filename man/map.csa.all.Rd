@@ -4,9 +4,17 @@
 \alias{map.csa.all}
 \title{Array of several CSA maps}
 \usage{
-map.csa.all(object, variable, dim = c(1, 2), ncol = 2, FUN = map.ind,
-  fixed.coord = TRUE, main.title = "", titles = levels(variable),
-  ...)
+map.csa.all(
+  object,
+  variable,
+  dim = c(1, 2),
+  ncol = 2,
+  FUN = map.ind,
+  fixed.coord = TRUE,
+  main.title = "",
+  titles = levels(variable),
+  ...
+)
 }
 \arguments{
 \item{object}{a \link{soc.ca} result object}
