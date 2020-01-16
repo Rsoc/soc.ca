@@ -166,7 +166,7 @@ soc.mca <- function(active, sup = NULL, identifier = NULL, passive = getOption("
     if (all(sapply(sup, is.numeric))) {          # if indidactor sup is used as is
       ind.sup <- sup
     }else{                                       # else an indicator is created
-      ind.sup <- indicator_jacob(sup)  
+      ind.sup <- indicator(sup)  
     } }
   
   
