@@ -332,3 +332,43 @@ NULL
 #' result_trans$inertia_full
 #' result_trans$ctr.mod[, 4]
 NULL
+
+
+
+#' French Political Space example
+#' 
+#' The example dataset used by Brigitte Le Roux & Henry Rouanet (2004):
+#' @name political_space97
+#' @docType data
+#' @author Brigitte Le Roux
+#' @references Perrineau, Pascal, Jean Chiche, Brigitte Le Roux, and Henry Rouanet. “L’espace politique des électeurs français à la fin des années 1990 : nouveaux et anciens clivages, hétérogénéité des électorats.” Revue Francaise de Science Politique, no. 3 (June 2000): 463–88.
+#' @references Le Roux, Brigitte, and Henry Rouanet. Multiple Correspondence Analysis. Thousand Oaks, Calif.: Sage Publications, 2010.
+#' @keywords data
+#' @examples
+#' # French Political Space example
+#' data(political_space97)
+#' #Recoding
+#' political_space97$Democracy <- ifelse(political_space97$Democracy %in% 1:2, "1_2", political_space97$Democracy)
+#' political_space97$Politicians <- ifelse(political_space97$Politicians %in% 1:2, "1_2", political_space97$Politicians)
+#' 
+#' #Assigning questions to themes
+#' ethno   <- data.frame(Immigrants = political_space97$Immigrants, "North-Africans" = political_space97$NorthAfricans, 
+#'                       Races = political_space97$Races, "At home" = political_space97$AtHome, check.names = F)
+#' autho   <- data.frame("Death Penalty" = political_space97$DeathPenalty, School = political_space97$School, check.names = F)
+#' social  <- data.frame("Strike Effectiveness" = political_space97$StrikeEffectivness, "Strike 95" = political_space97$Strike95,
+#'                       "Unions" = political_space97$Unions, "Public services" = political_space97$PublicServices, check.names = F)
+#' 
+#' economy <- data.frame(Liberalism = political_space97$Liberalism, Profit = political_space97$Profit, Privatization = political_space97$Privatization,
+#'                       Globalization = political_space97$Globalization, check.names = F)
+#' politics <- data.frame(Democracy = political_space97$Democracy, Politicians = political_space97$Politicians, check.names = F)
+#' supranat <- data.frame(Euro = political_space97$Euro, "EU Power" = political_space97$EUpower, 
+#'                        "End EU" = political_space97$EndEU, "EU protection" = political_space97$EUprotection, check.names = F)
+#' 
+#' #Creating and naming list of headings
+#' active <- list(ethno, autho, social, economy, politics, supranat)
+#' names(active) <- c("Ethnocentrism", "Authoritarianism", "Social", "Economy", "Politics", "Supranationality")
+#' sup    <- data.frame(political_space97$Vote)
+#' 
+#' result <- soc.mca(active, sup = sup, passive = ": 5")
+#' heading.table(result)
+NULL
