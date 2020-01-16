@@ -44,8 +44,8 @@ print.soc.mca  <- function(x, ...){
   Nmodal       <- x$n.mod
   Nsup         <- sum(x$freq.sup != 0)
   Nid          <- x$n.ind
-  Share.of.var <- round((x$modal[, 3] - 1)/ (length(x$names.passive) + Nmodal - nrow(x$modal)), 2) * 100
-  Vnames       <- paste(rownames(x$modal), " [", x$modal[, 3], " - ", format(Share.of.var), "%]", sep = "")
+  Share.of.var <- round((x$modal[, "Nb. active modalities"] - 1) / (length(x$names.passive) + Nmodal - nrow(x$modal)), 2) * 100
+  Vnames       <- paste(rownames(x$modal), " [", x$modal[, "Nb. active modalities"], " - ", format(Share.of.var), "%]", sep = "")
   Vnames       <- Vnames[order(Share.of.var, decreasing = TRUE)]
   Submass 	   <- 1 - round(sum(x$mass.mod), digits = 2) 
   act.dim 	   <- nrow(x$adj.inertia)
@@ -94,8 +94,12 @@ print.soc.mca  <- function(x, ...){
       "\n",
       "\n",
       sep = "")
+  
+  Vnames <- Vnames[order(Share.of.var, decreasing = TRUE)]
+  
+  if(length(Vnames) > 20) Vnames <- c(head(Vnames, 20), "[...]")
+  
   cat(format(Vnames, width = 25, justify = "right"), fill = 100)
-   
 }
 
 #' Contribution balance
