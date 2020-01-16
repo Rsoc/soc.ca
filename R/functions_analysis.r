@@ -318,6 +318,7 @@ subset.ca.indicator <- function(ind.act, ind.sup, active.set, passive.set, Q, Qm
   
   
   Z.act     <- ind.act
+  Z.sup     <- ind.sup
   colZ      <- colSums(Z.act)
   
   # If moschidis is TRUE, the method from 
