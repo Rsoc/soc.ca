@@ -4,8 +4,8 @@
 \alias{add.to.label}
 \title{Add values to label}
 \usage{
-add.to.label(object, value = "freq", prefix = "default", suffix = ")",
-  dim = 1)
+add.to.label(object, value = "freq", prefix = "default",
+  suffix = ")", dim = 1)
 }
 \arguments{
 \item{object}{is a soc.ca object}

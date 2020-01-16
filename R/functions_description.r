@@ -512,10 +512,11 @@ average.coord <- function(object, x, dim = c(1, 2)){
 #' @examples
 #' example(soc.csa)
 #' csa.measures(res.csa)
-#' csa.measures(res.csa, correlations = FALSE, cosine.angles = FALSE, dim = 1:10, format = FALSE)
+#' csa.measures(res.csa, correlations = FALSE, cosine.angles = FALSE, dim1 = 1:5, format = FALSE)
 
 csa.measures      <- function(csa.object, correlations = FALSE, cosines = TRUE, cosine.angles = TRUE,
                                dim1 = 1:5, dim2= 1:5, format = TRUE, ...){
+  
   csca.coord      <- csa.object$coord.ind
   object          <- csa.object$original.result
   class.indicator <- csa.object$original.class.indicator
@@ -562,8 +563,8 @@ csa.measures      <- function(csa.object, correlations = FALSE, cosines = TRUE, 
   colnames(cosine.mat)[length(dim2)+5]  <- "MCA: 2&3"
   colnames(cosine.mat)[length(dim2)+6]  <- "MCA: 2&4"
   colnames(cosine.mat)[length(dim2)+7]  <- "MCA: 2&5"
-  colnames(cosine.mat)[length(dim2)+8] <- "MCA: 3&4"
-  colnames(cosine.mat)[length(dim2)+9] <- "MCA: 3&5"
+  colnames(cosine.mat)[length(dim2)+8]  <- "MCA: 3&4"
+  colnames(cosine.mat)[length(dim2)+9]  <- "MCA: 3&5"
   colnames(cosine.mat)[length(dim2)+10] <- "MCA: 4&5"
   colnames(cosine.mat)[length(dim2)+11] <- "MCA: 1&2&3"
   colnames(cosine.mat)[length(dim2)+12] <- "MCA: 2&3&4"
@@ -572,7 +573,7 @@ csa.measures      <- function(csa.object, correlations = FALSE, cosines = TRUE, 
   #####################################
   # Angles
   cosine.to.angle       <- function(x) acos(abs(x))/pi * 180 
-  angles                <- cosine.to.angle(cosine.mat)
+  angles                <- suppressWarnings(cosine.to.angle(cosine.mat))
   #View(angles)
   ####################################
   # Out.list

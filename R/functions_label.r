@@ -34,8 +34,8 @@ add.to.label <- function(object, value = "freq", prefix = "default", suffix = ")
   # Prefix
   if (identical(prefix, "default") & identical(value, "freq")) prefix   <- " (n:"
   if (identical(prefix, "default") & identical(value, "mass")) prefix   <- " (mass:"
-  if (identical(prefix, "default") & identical(value, "ctr")) prefix    <- " (ctr:"
-  if (identical(prefix, "default") & identical(value, "cor")) prefix    <- " (cor:"
+  if (identical(prefix, "default") & identical(value, "ctr"))  prefix   <- " (ctr:"
+  if (identical(prefix, "default") & identical(value, "cor"))  prefix   <- " (cor:"
   if (identical(prefix, "default") & length(value) > 1 )       prefix   <- " ("
   
   # Values
@@ -73,7 +73,7 @@ add.to.label <- function(object, value = "freq", prefix = "default", suffix = ")
     
   }
   
-  colnames(object$indicator.matrix) <- object$names.mod
+  colnames(object$indicator.matrix.active) <- object$names.mod
   
   return(object)
 }

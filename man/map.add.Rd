@@ -4,9 +4,10 @@
 \alias{map.add}
 \title{Add points to an existing map created by one of the soc.ca mapping functions.}
 \usage{
-map.add(object, ca.map, plot.type = NULL, ctr.dim = 1, list.mod = NULL,
-  list.sup = NULL, list.ind = NULL, point.shape = "variable",
-  point.alpha = 0.8, point.fill = "whitesmoke", point.color = "black",
+map.add(object, ca.map, plot.type = NULL, ctr.dim = 1,
+  list.mod = NULL, list.sup = NULL, list.ind = NULL,
+  point.shape = "variable", point.alpha = 0.8,
+  point.fill = "whitesmoke", point.color = "black",
   point.size = "freq", label = TRUE, label.repel = TRUE,
   label.alpha = 0.8, label.color = "black", label.size = 4,
   label.fill = NULL, labelx = "default", labely = "default",
