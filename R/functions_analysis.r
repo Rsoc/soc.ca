@@ -38,9 +38,10 @@
 #' @name soc.mca
 #' @export
 #' @references Le Roux, B., og H. Rouanet. 2010. Multiple correspondence analysis. Thousand Oaks: Sage.
-#' @author Anton Grau Larsen, University of Copenhagen
-#' @author Stefan Bastholm Andrade, University of Copenhagen
-#' @author Christoph Ellersgaard, University of Copenhagen
+#' @author Anton Grau Larsen
+#' @author Jacob Lunding
+#' @author Stefan Bastholm Andrade
+#' @author Christoph Ellersgaard
 #' @seealso \link{soc.csa}, \link{contribution}
 #' @examples
 #' # Loads the "taste" dataset included in this package
@@ -216,14 +217,13 @@ soc.mca   <-  function(active, sup = NULL, identifier = NULL, passive = getOptio
     variable <- c(variable, rep(rownames(md)[i], md[i, "Nb. active modalities"]))
   }
   result$variable <- variable
+  
   if (identical(sup, NULL) == FALSE) {
-    varnames <- colnames(sup)
-    ml <- vector()
-    for (i in 1:ncol(sup)) {
-      ml <- c(ml, rep(varnames[i], nlevels(sup[, i])))
-    }
-    result$variable.sup <- ml
+    varnames             <- colnames(sup)
+    times                <- unlist(lapply(sup, nlevels))
+    result$variable.sup  <- rep(varnames, times)
   }
+  
   result$subset.var <- Qm
   
   
