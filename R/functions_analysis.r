@@ -264,7 +264,7 @@ soc.mca <- function(active, sup = NULL, identifier = NULL, passive = getOption("
     mass.all[i,4] <- as.numeric(sum(tmp[which(result$variable.all == unique(result$variable.all)[i]),2]))
   }
   
-  tmp2                   <- dataidentifier.frame(result$variable, result$mass.mod)
+  tmp2                   <- data.frame(result$variable, result$mass.mod)
   mass.act <- vector()
   for (i in 1:length(unique(varlist))) {
     mass.act[i] <- as.numeric(sum(tmp2[which(result$variable == unique(result$variable)[i]),2]))
