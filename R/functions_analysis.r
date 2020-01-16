@@ -327,7 +327,7 @@ subset.ca.indicator <- function(ind.act, ind.sup, active.set, passive.set, Q, Qm
   if (identical(Moschidis, TRUE)) {
     Y <- vector()
     x <- colnames(Z.act)
-    varlist <- gsub(': [A-zæøå1-9&/ ]*', '' , x)
+    varlist <- gsub(': .*', '' , x)
     for (i in seq(Q)) {
       x <- rep(table(varlist)[i], table(varlist)[i])
       Y <- c(Y, x)
