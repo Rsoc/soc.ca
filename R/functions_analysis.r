@@ -166,7 +166,7 @@ soc.mca <- function(active, sup = NULL, identifier = NULL, passive = getOption("
     if (all(sapply(sup, is.numeric))) {          # if indidactor sup is used as is
       ind.sup <- sup
     }else{                                       # else an indicator is created
-      ind.sup <- indicator_jacob(sup)  
+      ind.sup <- indicator(sup)  
     } }
   
   
@@ -264,7 +264,7 @@ soc.mca <- function(active, sup = NULL, identifier = NULL, passive = getOption("
     mass.all[i,4] <- as.numeric(sum(tmp[which(result$variable.all == unique(result$variable.all)[i]),2]))
   }
   
-  tmp2                   <- dataidentifier.frame(result$variable, result$mass.mod)
+  tmp2                   <- data.frame(result$variable, result$mass.mod)
   mass.act <- vector()
   for (i in 1:length(unique(varlist))) {
     mass.act[i] <- as.numeric(sum(tmp2[which(result$variable == unique(result$variable)[i]),2]))
@@ -318,6 +318,7 @@ subset.ca.indicator <- function(ind.act, ind.sup, active.set, passive.set, Q, Qm
   
   
   Z.act     <- ind.act
+  Z.sup     <- ind.sup
   colZ      <- colSums(Z.act)
   
   # If moschidis is TRUE, the method from 
