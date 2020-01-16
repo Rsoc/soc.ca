@@ -676,7 +676,7 @@ headings      <- function(object, dim = 1:3) {
   
   head.ctr.total <- head.ctr.total[-1,]
   rownames(head.ctr.total) <- lev.head
-  colnames(head.ctr.total) <- c("Q", "K'", "Ctr. to all",  paste("Ctr. to dim: ", dim, sep = "")) 
+  colnames(head.ctr.total) <- c("Variables", "Active Modalities", "Ctr. total",  paste("Ctr. dim: ", dim, sep = "")) 
   head.ctr.total
 }
 
