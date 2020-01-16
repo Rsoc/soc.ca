@@ -581,8 +581,8 @@ subset.ca.indicator <- function(ind.act, ind.sup, active.set, passive.set, Q, Qm
 #' indicator(data.frame(a,b))
 #' @export
 
-
 indicator  <- function(x, id = NULL, ps = ": "){
+
 obj         <- x
 I           <- nrow(obj)                                      # Number of individuals
 levels.n    <- unlist(lapply(obj, nlevels))
