@@ -20,8 +20,8 @@ Calculate contributions per heading
 \examples{
 data(taste)
 active.headings <- list()
-active.headings$Consumption <- taste[, c("TV", "Film", "Art", "Eat")]
-active.headings$Background  <- taste[, c("Gender", "Age", "Income")]
-result.headings <- soc.mca(active.headings, active.is.list = TRUE)
+active.headings$Consumption <- na.omit(taste)[, c("TV", "Film", "Art", "Eat")]
+active.headings$Background  <- na.omit(taste)[, c("Gender", "Age", "Income")]
+result.headings <- soc.mca(active.headings)
 headings(result.headings)
 }

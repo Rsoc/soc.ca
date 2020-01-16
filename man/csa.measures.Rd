@@ -31,5 +31,5 @@ Several measures for the evaluation of the relations between the dimensions of t
 \examples{
 example(soc.csa)
 csa.measures(res.csa)
-csa.measures(res.csa, correlations = FALSE, cosine.angles = FALSE, dim = 1:10, format = FALSE)
+csa.measures(res.csa, correlations = FALSE, cosine.angles = FALSE, dim1 = 1:5, format = FALSE)
 }

@@ -18,7 +18,7 @@ Imports:
     utils,
     shiny,
     reshape2,
-    FactoMineR
+    FactoMineR,
     ggrepel
 License: GPL-3
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1

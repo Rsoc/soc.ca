@@ -4,8 +4,9 @@
 \alias{map.ellipse.array}
 \title{Ellipse array}
 \usage{
-map.ellipse.array(object, variable, dim = c(1, 2), draw.ellipses = TRUE,
-  ncol = 2, titles = levels(variable), main.title = "", ...)
+map.ellipse.array(object, variable, dim = c(1, 2),
+  draw.ellipses = TRUE, ncol = 2, titles = levels(variable),
+  main.title = "", ...)
 }
 \arguments{
 \item{object}{a soc.ca class object}

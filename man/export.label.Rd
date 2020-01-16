@@ -4,7 +4,8 @@
 \alias{export.label}
 \title{Exports the labels of a soc.ca object into a csv file.}
 \usage{
-export.label(object, file = FALSE, encoding = "UTF-8", overwrite = FALSE)
+export.label(object, file = FALSE, encoding = "UTF-8",
+  overwrite = FALSE)
 }
 \arguments{
 \item{object}{is a soc.ca object}

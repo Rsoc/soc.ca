@@ -36,7 +36,6 @@
 #'  \item{modal}{A matrix with the number of modalities per variable and their location}
 #'  \item{variable}{A vector with the name of the variable of the active modalities}
 #' @name soc.mca
-#' @export
 #' @references Le Roux, B., og H. Rouanet. 2010. Multiple correspondence analysis. Thousand Oaks: Sage.
 #' @author Anton Grau Larsen
 #' @author Jacob Lunding
@@ -65,6 +64,7 @@
 #' options(passive = c("Film: CostumeDrama", "TV: Tv-Sport"))
 #' soc.mca(active, sup)
 #' options(passive = NULL)
+#' @export
 
 soc.mca <- function(active, sup = NULL, identifier = NULL, passive = getOption("passive", default = "Missing"), 
                     balance.headings = FALSE, Moschidis = FALSE) {
@@ -225,8 +225,8 @@ soc.mca <- function(active, sup = NULL, identifier = NULL, passive = getOption("
   
   ###########################################################################
   # Calculating 'The Rosenlund treshold' for each modality 
-  # see p 92 in: Rosenlund, Lennart. Exploring the City with Bourdieu: Applying Pierre Bourdieu’s Theories and Methods to Study the Community. Saarbrücken: VDM Verlag Dr. Müller, 2009.
   ###########################################################################
+
   result$Rosenlund.tresh          <- rep(1/result$Q/result$modal$`Nb. active modalities`, times = result$modal$`Nb. active modalities`)
   result$Rosenlund.tresh.all      <- rep(1/result$Q/result$modal$`Total nb. modalities`, times = result$modal$`Total nb. modalities`)
   
@@ -320,14 +320,17 @@ subset.ca.indicator <- function(ind.act, ind.sup, active.set, passive.set, Q, Qm
   Z.sup     <- ind.sup
   colZ      <- colSums(Z.act)
   
-  # If moschidis is TRUE, the method from 
-  # Moschidis, Odysseas E. “A Different Approach to Multiple Correspondence Analysis (MCA) than That of Specific MCA.” Mathématiques et Sciences Humaines / Mathematics and Social Sciences 47, no. 186 (October 15, 2009): 77–88. https://doi.org/10.4000/msh.11091.
-  # is used, i.e. the indicator matrix is transformed in order to obtain equally balanced variables...
+  # If moschidis is TRUE, the method from Moschidis, Odysseas E.
   
   if (identical(Moschidis, TRUE)) {
     Y <- vector()
     x <- colnames(Z.act)
+<<<<<<< HEAD
     varlist <- gsub(': .*', '' , x)
+=======
+    varlist <- gsub(pattern = ": .*", "" , x) 
+    
+>>>>>>> 2956e326243cbed2bb0378a9cb16ec901e6a6fe6
     for (i in seq(Q)) {
       x <- rep(table(varlist)[i], table(varlist)[i])
       Y <- c(Y, x)
@@ -928,7 +931,7 @@ csa.all <- function(object, variable, dim = 1:5, ...){
   
   names(result.list) <- lev.variable
   
-  measure.list <- lapply(result.list, csa.measures, format = FALSE, dim = dim, ...)
+  measure.list <- lapply(result.list, csa.measures, format = FALSE, dim1 = dim, ...)
   
   list(results = result.list, measures = measure.list)
 }
@@ -965,7 +968,7 @@ supplementary.individuals <- function(object, sup.indicator, replace = FALSE){
   sup.ind.dim     <- function(object, sup.indicator, dim){
     Q             <- length(table(object$variable))
     yk            <- t(object$coord.mod[, dim] * t(sup.indicator))
-    pk            <- (colSums(object$indicator.matrix)/object$n.ind) / Q
+    pk            <- (colSums(object$indicator.matrix.active)/object$n.ind) / Q
     sas           <- pk * object$coord.mod[, dim]
     Q.ind         <- yk / Q
     out           <- 1/sqrt(object$eigen[dim]) * (rowSums(Q.ind) - sum(sas))
@@ -1034,6 +1037,7 @@ supplementary.individuals <- function(object, sup.indicator, replace = FALSE){
 #' @return
 #'
 #' @examples
+#' \dontrun{
 #'   # Valid scenarios ----
 #' 
 #' # X is a valid data.frame
@@ -1083,8 +1087,9 @@ supplementary.individuals <- function(object, sup.indicator, replace = FALSE){
 #' # X contains both indicators and matrixes
 #' x <- list(nif = taste[, 2:3], hurma = indicator(taste[, 5:6]))
 #' what.is.x(x)
+#' }
 
-# 
+
 what.is.x  <- function(x){
   # Is it a list of data.frames?
   is.d    <- is.data.frame(x)
