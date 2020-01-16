@@ -96,7 +96,7 @@ soc.mca <- function(active, sup = NULL, identifier = NULL, passive = getOption("
   # If active is a list and input data is an identicator.matrix, headings are created and active used as it is
   ############################################################################
   
-  if (data.type == "list.indicator") {
+  if (data.type == "list.indicators") {
     headings <- rep(names(active), sapply(active, ncol))
     names(active) <- NULL
     ind.act <- do.call("cbind", active)
