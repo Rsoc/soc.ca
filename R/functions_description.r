@@ -694,6 +694,7 @@ headings      <- function(object, dim = 1:3) {
 #' @examples
 #' example(soc.ca)
 #' breakdown.variance(result, dim = 1:3, variable = sup$Gender)
+
 breakdown.variance          <- function(object, dim = 1:3, variable) {
 
   if (anyNA(variable)) stop(substitute(variable), " contains NA - convert to missing")

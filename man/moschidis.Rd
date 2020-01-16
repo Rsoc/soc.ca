@@ -10,16 +10,16 @@ The example dataset used by Odysseas E. Moschidis (2009):
 \examples{
 # The moschidis example
 data(moschidis)
-active    <- moschidis[,c("E1","E2", "E3")]
-id        <- moschidis[,c("ID")]
-result    <- soc.mca(active, identifier = id, Moschidis = F)
+active    <- moschidis[, c("E1","E2", "E3")]
+id        <- moschidis[, c("ID")]
+result    <- soc.mca(active, identifier = id, Moschidis = FALSE)
 
 result$inertia_full
-result$ctr.mod[,4]
+result$ctr.mod[, 4]
 
-result_trans    <- soc.mca(active, identifier = id, Moschidis = T)
+result_trans    <- soc.mca(active, identifier = id, Moschidis = TRUE)
 result_trans$inertia_full
-result_trans$ctr.mod[,4]
+result_trans$ctr.mod[, 4]
 }
 \references{
 Moschidis, Odysseas E. “A Different Approach to Multiple Correspondence Analysis (MCA) than That of Specific MCA.” Mathématiques et Sciences Humaines / Mathematics and Social Sciences 47, no. 186 (October 15, 2009): 77–88. https://doi.org/10.4000/msh.11091.
