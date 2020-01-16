@@ -643,9 +643,9 @@ csa.measures      <- function(csa.object, correlations = FALSE, cosines = TRUE, 
 #' @examples
 #' data(taste)
 #' active.headings <- list()
-#' active.headings$Consumption <- taste[, c("TV", "Film", "Art", "Eat")]
-#' active.headings$Background  <- taste[, c("Gender", "Age", "Income")]
-#' result.headings <- soc.mca(active.headings, active.is.list = TRUE)
+#' active.headings$Consumption <- na.omit(taste)[, c("TV", "Film", "Art", "Eat")]
+#' active.headings$Background  <- na.omit(taste)[, c("Gender", "Age", "Income")]
+#' result.headings <- soc.mca(active.headings)
 #' headings(result.headings)
 
 headings      <- function(object, dim = 1:3) {

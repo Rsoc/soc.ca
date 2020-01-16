@@ -149,7 +149,17 @@ invert <- function(x, dim = 1) {
 }
 
 
-to.MCA <- function(object, active, dim) {
+#' Convert to MCA class from FactoMineR
+#'
+#' @param object is a soc.ca object
+#' @param active the active variables
+#' @param dim a numeric vector
+#'
+#' @return
+#'
+#' @examples
+
+to.MCA <- function(object, active, dim = 1:5) {
   
   rownames(active)         <- object$names.ind
   rownames(object$coord.ind) <- object$names.ind

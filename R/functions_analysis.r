@@ -964,7 +964,7 @@ supplementary.individuals <- function(object, sup.indicator, replace = FALSE){
   sup.ind.dim     <- function(object, sup.indicator, dim){
     Q             <- length(table(object$variable))
     yk            <- t(object$coord.mod[, dim] * t(sup.indicator))
-    pk            <- (colSums(object$indicator.matrix)/object$n.ind) / Q
+    pk            <- (colSums(object$indicator.matrix.active)/object$n.ind) / Q
     sas           <- pk * object$coord.mod[, dim]
     Q.ind         <- yk / Q
     out           <- 1/sqrt(object$eigen[dim]) * (rowSums(Q.ind) - sum(sas))
@@ -1033,6 +1033,7 @@ supplementary.individuals <- function(object, sup.indicator, replace = FALSE){
 #' @return
 #'
 #' @examples
+#' \dontrun{
 #'   # Valid scenarios ----
 #' 
 #' # X is a valid data.frame
@@ -1082,8 +1083,9 @@ supplementary.individuals <- function(object, sup.indicator, replace = FALSE){
 #' # X contains both indicators and matrixes
 #' x <- list(nif = taste[, 2:3], hurma = indicator(taste[, 5:6]))
 #' what.is.x(x)
+#' }
 
-# 
+
 what.is.x  <- function(x){
   # Is it a list of data.frames?
   is.d    <- is.data.frame(x)

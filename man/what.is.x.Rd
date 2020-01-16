@@ -16,6 +16,7 @@ what.is.x(x)
 Check if data is valid for soc.mca
 }
 \examples{
+\dontrun{
   # Valid scenarios ----
 
 # X is a valid data.frame
@@ -65,4 +66,5 @@ what.is.x(x)
 # X contains both indicators and matrixes
 x <- list(nif = taste[, 2:3], hurma = indicator(taste[, 5:6]))
 what.is.x(x)
+}
 }
