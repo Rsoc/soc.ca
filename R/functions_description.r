@@ -653,6 +653,7 @@ csa.measures      <- function(csa.object, correlations = FALSE, cosines = TRUE, 
 #' headings(result.headings)
 
 headings      <- function(object, dim = 1:3) {
+  try(if(identical(object$headings, NULL) == TRUE) stop("You have defined no headings"))
   
   headings    <- object$headings
   lev.head    <- unique(headings)
