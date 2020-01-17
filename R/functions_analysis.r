@@ -38,6 +38,8 @@
 #'  \item{variable}{A character vector with the name of the variable of the active modalities}
 #'  \item{Rosenlund.tresh}{A numeric vector with the contribution values adjusted with the Rosenlund threshold, see:  see p 92 in: Rosenlund, Lennart. Exploring the City with Bourdieu: Applying Pierre Bourdieu’s Theories and Methods to Study the Community. Saarbrücken: VDM Verlag Dr. Müller, 2009.}
 #'  \item{t.test.sup}{A matrix with a the student t-test of the coordinates of the supplementary variables}
+#'  \item{Share.of.var}{A matrix the share of variance for each variable}
+#'  
 #' @name soc.mca
 #' @references Le Roux, B., og H. Rouanet. 2010. Multiple correspondence analysis. Thousand Oaks: Sage.
 #' @author Anton Grau Larsen
@@ -604,6 +606,19 @@ rownames(Z) <- id
 }    
 return(Z)
 
+}
+
+indicator <- function(x, id = NULL, ps = ": "){
+  
+  
+  
+  
+  if (identical(id, NULL) == TRUE){
+    rownames(Z) <- as.character(seq(I))
+  }else{
+    rownames(Z) <- id
+  }    
+  
 }
 
 

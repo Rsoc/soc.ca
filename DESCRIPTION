@@ -20,6 +20,8 @@ Imports:
     FactoMineR,
     ggrepel,
     tidyverse,
-    htmlTable
+    htmlTable,
+    stringr,
+    RColorBrewer
 License: GPL-3
 RoxygenNote: 7.0.2

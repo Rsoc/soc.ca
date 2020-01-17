@@ -1,5 +1,4 @@
-pem <- function(x) {
-  require("FactoMineR")
+pem <- function(x){
   tota <- colSums(x)
   totb <- rowSums(x)
   total <- sum(x)
@@ -38,32 +37,32 @@ pem <- function(x) {
   
   rm(tota, totb, total, theo, ecart, max, emax, cor, z, m, maxc, i, j)
   PEM <- list(peml=round(pem,1), pemg=round(100*pemg2,1))
-  return(PEM)
+  PEM
 }
 
 
-pem.table <- function(object) {
-  require(reshape2)
-  require(stringr)
-  require(htmlTable)
+pem.table <- function(object, output = c("html", 
+                                         "matrix")) {
+  output <- match.arg(output)
   
-  B   <- t(as.matrix(object$indicator.matrix.all))%*%as.matrix(object$indicator.matrix.all)
-  nam <- gsub(":.*", "", rownames(B))
-  cc  <- combn(unique(nam), 2)
-  x   <- list()
+  B    <- t(as.matrix(object$indicator.matrix.all)) %*% as.matrix(object$indicator.matrix.all)
+  nam  <- object$variable
+  cc   <- combn(unique(nam), 2)
+  x    <- list()
+
   for (i in 1:ncol(cc)) {
-    x[[i]] <- pem(B[which(nam == cc[1,i]), which(nam == cc[2,i])])
+    x[[i]] <- pem(B[which(nam == cc[1,i]), which(nam == cc[2,i])])$pemg
   }
+
+  x.pemg     <- lapply(x, function(x) as.data.frame(as.table(x))) %>% do.call(rbind, .)
+  pm         <- pivot_wider(x.pemg, names_from = Var2, values_from = Freq)
+  rn         <- pm$Var1
+  pm         <- pm %>% select(-Var1) %>% as.matrix()
+  rownames(pm)         <- rn
+  #pm                       <- reshape2::dcast(data = x.pemg,formula = Var1~Var2)
   
-  PEM  <- lapply(x, melt)
-  PEM  <- do.call(rbind, PEM)
+  if(output == "matrix") return(pm)
   
-  pm                       <- dcast(data = PEM[PEM$L1 == "pemg",],formula = Var1~Var2)
-  rownames(pm)             <- pm$Var1
-  pm$Var1                  <- NA
-  colnames(pm)[1]          <- rownames(pm)[1]
-  pm                       <- rbind(pm, rep(NA, ncol(pm)))
-  rownames(pm)[ncol(pm)]   <- colnames(pm)[ncol(pm)]
   css.pm                   <- matrix("padding-right: 10px;",  nrow = nrow(pm), ncol = ncol(pm))
   css.pm[pm < 50 & pm >10] <- "padding-right: 10px; font-weight: 900;background-color: rgb(191, 242, 150);"
   css.pm[pm >= 50]         <- "padding-right: 10px; font-weight: 900;background-color: rgb(94, 165, 38);"
@@ -87,40 +86,58 @@ pem.table <- function(object) {
   if(identical(object$headings, NULL)==TRUE)  htmlTable(pm, css.cell = css.pm, tfoot = "<10% probably no ties, 10% < > 50% interesting ties, >50% probably due to redundancy in indicator (Cibois 2013: 41)")  
   }
 
-pem.plot <- function(object, treshold = "mean", plane = c(1,2), dim = 1, cut.pem = 25) {
-  require(reshape2)
-  require(stringr)
-  require(htmlTable)
-  
-  B <-   t(as.matrix(object$indicator.matrix.all))%*%as.matrix(object$indicator.matrix.all)
-  nam <- gsub(":.*", "", rownames(B))
-  cc <- combn(unique(nam), 2)
-  x <- list()
+pem.local.scores <- function(object, plane = 1:2){
+  B    <- t(as.matrix(object$indicator.matrix.all)) %*% as.matrix(object$indicator.matrix.all)
+  nam  <- object$variable.all
+  cc   <- combn(unique(nam), 2)
+  x    <- list()
   for (i in 1:ncol(cc)) {
-    x[[i]] <- pem(B[which(nam == cc[1,i]), which(nam == cc[2,i])])
+    x[[i]] <- pem(B[which(nam == cc[1,i]), which(nam == cc[2,i])])$peml
   }
   
-  PEM  <- lapply(x, melt)
-  PEM  <- do.call(rbind, PEM)
-  if(treshold == "rosenlund") s    <-  object$names.mod[object$ctr.mod[,dim[1]] >= object$Rosenlund.tresh]
-  if(treshold == "mean")      s    <-  object$names.mod[object$ctr.mod[,dim[1]] >= mean(object$ctr.mod[,dim[1]])]
-  if(is.numeric(treshold))    s    <-  object$names.mod[object$ctr.mod[,dim[1]] >= treshold]
-  PEM1 <- PEM[PEM$Var1 %in% s & PEM$Var2 %in% s, ]
-  PEM1 <- PEM1[PEM1$value > cut.pem,]
-  data <- object$coord.mod[,plane]
-  rownames(data) <- object$names.mod
-  PEM1$xstart <- data[as.character(PEM1$Var1),1]
-  PEM1$xend   <- data[as.character(PEM1$Var2),1]
-  PEM1$ystart <- data[as.character(PEM1$Var1),2]
-  PEM1$yend   <- data[as.character(PEM1$Var2),2]
+  PEM     <- lapply(x, function(x) as.data.frame(as.table(x))) %>% do.call(rbind, .) %>% rename(value = Freq)
+  PEM     <- PEM %>% mutate(Var1 = as.character(Var1), Var2 = as.character(Var2))
+  
+  # Join the coordinates
+  coord   <- tibble(name = object$names.mod.all, X = object$coord.all[, plane[1]], Y = object$coord.all[, plane[2]])
+  
+  o       <- left_join(PEM, coord, by = c("Var1" = "name")) %>% left_join(., coord, by = c("Var2" = "name"), suffix = c(".Var1", ".Var2"))
+  o$same.side.X <- (o$X.Var1 >= 0) == (o$X.Var2 >= 0)
+  o$same.side.Y <- (o$Y.Var1 >= 0) == (o$Y.Var2 >= 0)
+  
+  o
+}
+
+
+
+
+
+pem.plot <- function(object, threshold = "mean", plane = c(1,2), dim = 1, cut.pem = 25) {
+
+  PEM    <- pem.local.scores(object, plane = plane)  
+  
+  if(threshold == "rosenlund") s    <-  which(rowSums(object$ctr.mod[, plane] >= object$Rosenlund.tresh) > 0)
+  if(threshold == "mean")      s    <-  which(rowSums(object$ctr.mod[, plane] >= 1/object$n.mod) > 0)
+  if(is.numeric(threshold))    s    <-  which(rowSums(object$ctr.mod[, plane] >= threshold) > 0)
+  
+  s    <- object$names.mod[s]
+  
+  PEM1 <- PEM %>% filter(Var1 %in% s & Var2 %in% s) %>% filter(abs(value) >= cut.pem)
+  
+  PEM1 <- PEM1 %>% filter(value > 0 | (same.side.X + same.side.Y) > 0 & value < 0)
+  
   
   ### TO BE CONTINUED........
-  p     <- map.select(object, list.mod = which(object$names.mod %in% s), dim =plane, map.title = "", point.shape = 21, label.repel = T)
-  p     <- p + geom_segment(data = PEM1, aes(x = xstart, xend = xend, y = ystart, yend = yend, alpha = value), color = "red", size = 0.5) + scale_alpha_continuous(range = c(0.001, 1), name= "PEM") + guides(size = FALSE) + theme(legend.position = "right")
+  p     <- map.select(object, list.mod = which(object$names.mod %in% s), dim = plane, map.title = "", point.shape = 21, label.repel = T)
+  p     <- p + geom_segment(data = PEM1, aes(x = X.Var1, xend = X.Var2, y = Y.Var1, yend = Y.Var2, color = value), size = 0.5)
+  p     <- p + scale_alpha_continuous(range = c(0.001, 1), name= "PEM") + guides(size = FALSE) + theme(legend.position = "right")
   p     <- p + labs(title = "Degree of association between modalities", subtitle = "Percentage of maximum deviation from independence")
-p 
+p + scale_color_gradientn(colours = rev(brewer.pal(9, name = "RdYlBu")), limits = c(-100, 100))
   }
 
-pem.plot(result, plane = c(1,3), dim = 3)
+pem.table(result)
+pem.table(result, output = "matrix")
+
+pem.plot(result, plane = c(1,2), dim = 1)
 
 
