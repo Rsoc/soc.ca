@@ -316,7 +316,7 @@ soc.mca <- function(active, sup = NULL, identifier = NULL, passive = getOption("
 # ' #@export
 # ' @return a list of various results. See \link{soc.mca} documentation
 
-subset.ca.indicator <- function(ind.act, ind.sup, active.set, passive.set, Q, Qm, Moschidis){
+subset.ca.indicator <- function(ind.act, ind.sup, active.set, passive.set, Q, Qm, Moschidis, balance.headings = FALSE){
   
   
   Z.act     <- ind.act
