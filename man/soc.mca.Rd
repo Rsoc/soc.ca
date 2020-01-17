@@ -38,6 +38,7 @@
  \item{modal}{A matrix with the number of modalities per variable and their location}
  \item{variable}{A character vector with the name of the variable of the active modalities}
  \item{Rosenlund.tresh}{A numeric vector with the contribution values adjusted with the Rosenlund threshold, see:  see p 92 in: Rosenlund, Lennart. Exploring the City with Bourdieu: Applying Pierre Bourdieu’s Theories and Methods to Study the Community. Saarbrücken: VDM Verlag Dr. Müller, 2009.}
+ \item{t.test.sup}{A matrix with a the student t-test of the coordinates of the supplementary variables}
 }
 \description{
 \code{soc.mca} performs a specific multiple correspondence analysis on a data.frame of factors, where cases are rows and columns are variables.

@@ -179,7 +179,7 @@ soc.mca <- function(active, sup = NULL, identifier = NULL, passive = getOption("
   #      The actual analysis, a CA of the indicator matrix       #
   ################################################################
   
-  result <- subset.ca.indicator(ind.act, ind.sup, active.set, passive.set, Q = Q, Qm = Qm, Moschidis = Moschidis)
+  result <- subset.ca.indicator(ind.act, ind.sup, active.set, passive.set, Q = Q, Qm = Qm, Moschidis = Moschidis, balance.headings = balance.headings)
   
   result$variable.all <- varlist.long
   
