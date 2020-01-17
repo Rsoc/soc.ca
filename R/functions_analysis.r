@@ -71,8 +71,7 @@
 #' options(passive = NULL)
 #' @export
 
-soc.mca <- function(active, sup = NULL, identifier = NULL, passive = getOption("passive", default = "Missing"), 
-                    balance.headings = FALSE, Moschidis = FALSE) {
+soc.mca <- function(active, sup = NULL, identifier = NULL, passive = getOption("passive", default = "Missing"), Moschidis = FALSE) {
 
   # Preparing data 
   data.type <- what.is.x(active)
@@ -338,7 +337,7 @@ subset.ca.indicator <- function(ind.act, ind.sup, active.set, passive.set, Q, Qm
     }
     Z.act <- Z.act%*%diag(1/(Y-1))
     colnames(Z.act) <- cnZ.act
-    }
+  }
   
   I         <- dim(Z.act)[1]  # Number of individuals
   J         <- dim(Z.act)[2]  # Number of modalities >> Subset
@@ -1140,4 +1139,15 @@ what.is.x  <- function(x){
   o
 }
 
+balance.headings <- function(indicator, headings, Q) {
+  heads         <- unique(headings)
+  n_head        <- length(heads)
+  mass_by_head  <-  Q / n_head
+  Q_prH         <- sapply(heads, function(x) max(rowSums(indicator[, headings == x])))
+  weight        <- Q_prH / mass_by_head 
+  sum(Z.act)
+  for(i in 1:length(heads)) {
+    indicator[ ,headings == heads[i]] <- indicator[ ,headings == heads[i]] / weight[i]
+  }
+}
 
