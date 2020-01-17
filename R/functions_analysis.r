@@ -550,8 +550,8 @@ subset.ca.indicator <- function(ind.act, ind.sup, active.set, passive.set, Q, Qm
                     ctr.mod   = ctr.mod,
                     svd.d     = dec.full$d,
                     svd.u     = dec.full$u,
-                    svd.v     = dec.full$v
-                    
+                    svd.v     = dec.full$v,
+                    indicator.matrix.trans   = Z.act
   )
   
   # Cleanup
