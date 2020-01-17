@@ -336,7 +336,19 @@ subset.ca.indicator <- function(ind.act, ind.sup, active.set, passive.set, Q, Qm
     }
     Z.act <- Z.act%*%diag(1/(Y-1))
     colnames(Z.act) <- cnZ.act
-    }
+  }
+  
+  if (identical(balance.headings, TRUE)) {
+  heads         <- unique(headings)
+  n_head        <- length(heads)
+  mass_by_head  <-  Q / n_head
+  Q_prH         <- sapply(heads, function(x) max(rowSums(Z.act[, headings == x])))
+  weight        <- Q_prH / mass_by_head 
+  sum(Z.act)
+  for(i in 1:length(heads)) {
+    Z.act[ ,headings == heads[i]] <- Z.act[ ,headings == heads[i]] / weight[i]
+  }
+  }
   
   I         <- dim(Z.act)[1]  # Number of individuals
   J         <- dim(Z.act)[2]  # Number of modalities >> Subset
