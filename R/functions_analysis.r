@@ -324,15 +324,16 @@ subset.ca.indicator <- function(ind.act, ind.sup, active.set, passive.set, Q, Qm
   
   if (identical(Moschidis, TRUE)){
     Y <- vector()
-    x <- colnames(Z.act)
-    varlist <- gsub(pattern = ": .*", "" , x) 
+    cnZ.act <- colnames(Z.act)
+    varlist <- gsub(pattern = ": .*", "" , cnZ.act) 
     
     for (i in seq(Q)) {
       x <- rep(table(varlist)[i], table(varlist)[i])
       Y <- c(Y, x)
     }
     Z.act <- Z.act%*%diag(1/(Y-1))
-  }
+    colnames(Z.act) <- cnZ.act
+    }
   
   I         <- dim(Z.act)[1]  # Number of individuals
   J         <- dim(Z.act)[2]  # Number of modalities >> Subset
