@@ -47,10 +47,10 @@ pem.table <- function(object) {
   require(stringr)
   require(htmlTable)
   
-  B <-   t(as.matrix(object$indicator.matrix.all))%*%as.matrix(object$indicator.matrix.all)
+  B   <- t(as.matrix(object$indicator.matrix.all))%*%as.matrix(object$indicator.matrix.all)
   nam <- gsub(":.*", "", rownames(B))
-  cc <- combn(unique(nam), 2)
-  x <- list()
+  cc  <- combn(unique(nam), 2)
+  x   <- list()
   for (i in 1:ncol(cc)) {
     x[[i]] <- pem(B[which(nam == cc[1,i]), which(nam == cc[2,i])])
   }
@@ -58,16 +58,16 @@ pem.table <- function(object) {
   PEM  <- lapply(x, melt)
   PEM  <- do.call(rbind, PEM)
   
-  pm <- dcast(data = PEM[PEM$L1 == "pemg",],formula = Var1~Var2)
-  rownames(pm) <- pm$Var1
-  pm$Var1      <- NA
-  colnames(pm)[1] <-  rownames(pm)[1]
-  pm           <- rbind(pm, rep(NA, ncol(pm)))
-  rownames(pm)[ncol(pm)] <-  colnames(pm)[ncol(pm)]
-  css.pm <- matrix("padding-right: 10px;",  nrow = nrow(pm), ncol = ncol(pm))
+  pm                       <- dcast(data = PEM[PEM$L1 == "pemg",],formula = Var1~Var2)
+  rownames(pm)             <- pm$Var1
+  pm$Var1                  <- NA
+  colnames(pm)[1]          <- rownames(pm)[1]
+  pm                       <- rbind(pm, rep(NA, ncol(pm)))
+  rownames(pm)[ncol(pm)]   <- colnames(pm)[ncol(pm)]
+  css.pm                   <- matrix("padding-right: 10px;",  nrow = nrow(pm), ncol = ncol(pm))
   css.pm[pm < 50 & pm >10] <- "padding-right: 10px; font-weight: 900;background-color: rgb(191, 242, 150);"
-  css.pm[pm >= 50] <- "padding-right: 10px; font-weight: 900;background-color: rgb(94, 165, 38);"
-  css.pm[pm <10] <- "padding-right: 10px; font-weight: 900;background-color: rgb(193, 193, 193);"
+  css.pm[pm >= 50]         <- "padding-right: 10px; font-weight: 900;background-color: rgb(94, 165, 38);"
+  css.pm[pm <10]           <- "padding-right: 10px; font-weight: 900;background-color: rgb(193, 193, 193);"
   
   if(identical(object$headings, NULL)==TRUE) {
   QprH <- vector()
