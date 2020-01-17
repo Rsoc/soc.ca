@@ -14,9 +14,12 @@ active    <- moschidis[, c("E1","E2", "E3")]
 id        <- moschidis[, c("ID")]
 result    <- soc.mca(active, identifier = id, Moschidis = FALSE)
 
+Compare output to Moschidis (2009, p. 85)
 result$inertia_full
+In the analysis of the 'real' data the modality 'E1: 1' with a low mass (fr/Q) has a very high contribution to the fourth axis
 result$ctr.mod[, 4]
 
+Using the transformed model suggested by Moschidis (2009) that takes into account the number of modalities per question in order to balance the contribution of the modalities 
 result_trans    <- soc.mca(active, identifier = id, Moschidis = TRUE)
 result_trans$inertia_full
 result_trans$ctr.mod[, 4]

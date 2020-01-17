@@ -150,6 +150,7 @@ balance   <- function(object, act.dim = object$nd){
 #' @param mode indicates which form of output. Possible values: \code{"sort"},
 #'   \code{"mod"}, \code{"ind"}, \code{"variable"}. If the mode is
 #'   \code{"variable"}, \code{dim} can be a sequence of dimensions: \code{1:5}
+#' @param if TRUE; returns output as a matrix instead of as printed output.
 #' @return Each mode prints different results:
 #' @return   \item{"mod"}{Ranks all modalities according to their contribution}
 #'   \item{"sort"}{Ranks all modalities according to their contribution and then sorts them according to their coordinates}
@@ -232,6 +233,8 @@ contribution <- function(object, dim = 1, all = FALSE, indices = FALSE, mode = "
 #' @export
 #'
 #' @examples
+#' 
+#' 
 contribution.headings <- function(object, dim = 1:3){
   ctr                 <- object$ctr.mod[, dim]
   colnames(ctr)       <- paste("Dim.", dim)
@@ -508,7 +511,8 @@ average.coord <- function(object, x, dim = c(1, 2)){
 #' @param correlations if TRUE correlations calculated by the \link{cor} function is returned
 #' @param cosines if TRUE cosine similarities are returned
 #' @param cosine.angles if TRUE angles are calculated in the basis of the cosine values
-#' @param dim is the dimensions included
+#' @param dim.csa the dimensions included from the csa
+#' @param dim.mca the dimensions included from the original mca
 #' @param format if TRUE results are formatted, rounded and printed for screen reading, if FALSE the raw numbers are returned
 #' @param ... furhter arguments are send to the \link{cor} function
 #' @return A list of measures in either formatted or raw form.
@@ -516,30 +520,30 @@ average.coord <- function(object, x, dim = c(1, 2)){
 #' @examples
 #' example(soc.csa)
 #' csa.measures(res.csa)
-#' csa.measures(res.csa, correlations = FALSE, cosine.angles = FALSE, dim1 = 1:5, format = FALSE)
+#' csa.measures(res.csa, correlations = FALSE, cosine.angles = FALSE, dim.mca = 1:5, format = FALSE)
 
 csa.measures      <- function(csa.object, correlations = FALSE, cosines = TRUE, cosine.angles = TRUE,
-                               dim1 = 1:5, dim2= 1:5, format = TRUE, ...){
+                               dim.mca = 1:5, dim.csa= 1:5, format = TRUE, ...){
   
   csca.coord      <- csa.object$coord.ind
   object          <- csa.object$original.result
   class.indicator <- csa.object$original.class.indicator
   ca.coord        <- object$coord.ind[class.indicator, ]
-  csca.coord      <- csca.coord[, dim1]
-  ca.coord        <- ca.coord[, dim2]
+  csca.coord      <- csca.coord[, dim.mca]
+  ca.coord        <- ca.coord[, dim.csa]
   
   ##################################
   # Correlations
   cor.mat             <- cor(csca.coord, ca.coord, ...)
-  rownames(cor.mat)   <- paste("CSA:", dim1)
-  colnames(cor.mat)   <- paste("MCA:", dim2)
+  rownames(cor.mat)   <- paste("CSA:", dim.mca)
+  colnames(cor.mat)   <- paste("MCA:", dim.csa)
   
   ####################################
   # Cosines similarity
   cosine.similarity      <- function(x, y) x %*% y / sqrt(x %*% x * y %*% y)
   cosine.mat             <- matrix(ncol = ncol(ca.coord), nrow = ncol(csca.coord))
-  rownames(cosine.mat)   <- paste("CSA:", dim1)
-  colnames(cosine.mat)   <- paste("MCA:", dim2)
+  rownames(cosine.mat)   <- paste("CSA:", dim.mca)
+  colnames(cosine.mat)   <- paste("MCA:", dim.csa)
   
   for (i in 1:ncol(csca.coord)){
     cosine.mat[i,]       <- apply(ca.coord, 2, cosine.similarity, csca.coord[, i])
@@ -560,19 +564,19 @@ csa.measures      <- function(csa.object, correlations = FALSE, cosines = TRUE, 
                       sqrt(cosine.mat[,2]^2 + cosine.mat[,3]^2 + cosine.mat[,4]^2),
                       sqrt(cosine.mat[,3]^2 + cosine.mat[,4]^2 + cosine.mat[,5]^2))
   
-  colnames(cosine.mat)[length(dim2)+1]  <- "MCA: 1&2"
-  colnames(cosine.mat)[length(dim2)+2]  <- "MCA: 1&3"
-  colnames(cosine.mat)[length(dim2)+3]  <- "MCA: 1&4"
-  colnames(cosine.mat)[length(dim2)+4]  <- "MCA: 1&5"
-  colnames(cosine.mat)[length(dim2)+5]  <- "MCA: 2&3"
-  colnames(cosine.mat)[length(dim2)+6]  <- "MCA: 2&4"
-  colnames(cosine.mat)[length(dim2)+7]  <- "MCA: 2&5"
-  colnames(cosine.mat)[length(dim2)+8]  <- "MCA: 3&4"
-  colnames(cosine.mat)[length(dim2)+9]  <- "MCA: 3&5"
-  colnames(cosine.mat)[length(dim2)+10] <- "MCA: 4&5"
-  colnames(cosine.mat)[length(dim2)+11] <- "MCA: 1&2&3"
-  colnames(cosine.mat)[length(dim2)+12] <- "MCA: 2&3&4"
-  colnames(cosine.mat)[length(dim2)+13] <- "MCA: 3&4&5"
+  colnames(cosine.mat)[length(dim.csa)+1]  <- "MCA: 1&2"
+  colnames(cosine.mat)[length(dim.csa)+2]  <- "MCA: 1&3"
+  colnames(cosine.mat)[length(dim.csa)+3]  <- "MCA: 1&4"
+  colnames(cosine.mat)[length(dim.csa)+4]  <- "MCA: 1&5"
+  colnames(cosine.mat)[length(dim.csa)+5]  <- "MCA: 2&3"
+  colnames(cosine.mat)[length(dim.csa)+6]  <- "MCA: 2&4"
+  colnames(cosine.mat)[length(dim.csa)+7]  <- "MCA: 2&5"
+  colnames(cosine.mat)[length(dim.csa)+8]  <- "MCA: 3&4"
+  colnames(cosine.mat)[length(dim.csa)+9]  <- "MCA: 3&5"
+  colnames(cosine.mat)[length(dim.csa)+10] <- "MCA: 4&5"
+  colnames(cosine.mat)[length(dim.csa)+11] <- "MCA: 1&2&3"
+  colnames(cosine.mat)[length(dim.csa)+12] <- "MCA: 2&3&4"
+  colnames(cosine.mat)[length(dim.csa)+13] <- "MCA: 3&4&5"
   #View(cosine.mat)
   #####################################
   # Angles

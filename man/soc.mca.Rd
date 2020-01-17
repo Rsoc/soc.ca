@@ -3,16 +3,6 @@
 \name{soc.mca}
 \alias{soc.mca}
 \title{Specific Multiple Correspondence Analysis}
-\usage{
-soc.mca(
-  active,
-  sup = NULL,
-  identifier = NULL,
-  passive = getOption("passive", default = "Missing"),
-  balance.headings = FALSE,
-  Moschidis = FALSE
-)
-}
 \arguments{
 \item{active}{Defines the active modalities in a data.frame with rows of individuals and columns of factors, without NA's'. Active can also be a named list of data.frames. The data.frames will correspond to the analytical headings.}
 
@@ -21,6 +11,8 @@ soc.mca(
 \item{identifier}{A single vector containing a single value for each row/individual in x and sup. Typically a name or an id.number.}
 
 \item{passive}{A single character vector with the full or partial names of the passive modalities. All names that have a full or partial match will be set as passive.}
+
+\item{Moschidis}{If TRUE adjusts contribution values for rare modalities. see \link{moschidis}.}
 }
 \value{
 \item{nd}{Number of active dimensions}
@@ -44,7 +36,8 @@ soc.mca(
  \item{names.sup}{The names of the supplementary modalities}
  \item{names.passive}{The names of the passive modalities}
  \item{modal}{A matrix with the number of modalities per variable and their location}
- \item{variable}{A vector with the name of the variable of the active modalities}
+ \item{variable}{A character vector with the name of the variable of the active modalities}
+ \item{Rosenlund.tresh}{A numeric vector with the contribution values adjusted with the Rosenlund threshold, see:  see p 92 in: Rosenlund, Lennart. Exploring the City with Bourdieu: Applying Pierre Bourdieu’s Theories and Methods to Study the Community. Saarbrücken: VDM Verlag Dr. Müller, 2009.}
 }
 \description{
 \code{soc.mca} performs a specific multiple correspondence analysis on a data.frame of factors, where cases are rows and columns are variables.

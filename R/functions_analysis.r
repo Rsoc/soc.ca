@@ -12,6 +12,7 @@
 #' @param sup          Defines the supplementary modalities in a data.frame with rows of individuals and columns of factors, without NA's 
 #' @param identifier   A single vector containing a single value for each row/individual in x and sup. Typically a name or an id.number.
 #' @param passive      A single character vector with the full or partial names of the passive modalities. All names that have a full or partial match will be set as passive.
+#' @param Moschidis    If TRUE adjusts contribution values for rare modalities. see \link{moschidis}.
 #' 
 #' @return \item{nd}{Number of active dimensions}
 #'  \item{n.ind}{The number of active individuals}
@@ -34,7 +35,9 @@
 #'  \item{names.sup}{The names of the supplementary modalities}
 #'  \item{names.passive}{The names of the passive modalities}
 #'  \item{modal}{A matrix with the number of modalities per variable and their location}
-#'  \item{variable}{A vector with the name of the variable of the active modalities}
+#'  \item{variable}{A character vector with the name of the variable of the active modalities}
+#'  \item{Rosenlund.tresh}{A numeric vector with the contribution values adjusted with the Rosenlund threshold, see:  see p 92 in: Rosenlund, Lennart. Exploring the City with Bourdieu: Applying Pierre Bourdieu’s Theories and Methods to Study the Community. Saarbrücken: VDM Verlag Dr. Müller, 2009.}
+#'  \item{t.test.sup}{A matrix with a the student t-test of the coordinates of the supplementary variables}
 #' @name soc.mca
 #' @references Le Roux, B., og H. Rouanet. 2010. Multiple correspondence analysis. Thousand Oaks: Sage.
 #' @author Anton Grau Larsen
@@ -408,7 +411,7 @@ subset.ca.indicator <- function(ind.act, ind.sup, active.set, passive.set, Q, Qm
     # t.test for supplementary points
     
     t       <- matrix(NA, nrow = nrow(pc.sup), ncol = ncol(pc.sup))
-    t.plane <- matrix(NA, nrow = nrow(pc.sup), ncol = 3)
+    
     
     for (j in 1:ncol(pc.sup)) {
       for (i in 1:nrow(pc.sup)) {
@@ -416,9 +419,7 @@ subset.ca.indicator <- function(ind.act, ind.sup, active.set, passive.set, Q, Qm
         t[i,j] <- round(sqrt(cs.star[i]*((I-1)/(I-cs.star[i])))*pc.sup[i,j],5) # produces warning for freq.sup = 0
       }
     }
-    t.plane[,1] <- round(pchisq(((pc.sup[,1]^2 + pc.sup[,2]^2)*(cs.star*((I-1)/(I-cs.star)))), df= 2, lower.tail=FALSE),5)
-    t.plane[,2] <- round(pchisq(((pc.sup[,1]^2 + pc.sup[,3]^2)*(cs.star*((I-1)/(I-cs.star)))), df= 2, lower.tail=FALSE),5)
-    t.plane[,3] <- round(pchisq(((pc.sup[,2]^2 + pc.sup[,3]^2)*(cs.star*((I-1)/(I-cs.star)))), df= 2, lower.tail=FALSE),5) 
+    
   }else{
     pc.sup  <- NULL
     t.plane <- NULL
@@ -546,7 +547,6 @@ subset.ca.indicator <- function(ind.act, ind.sup, active.set, passive.set, Q, Qm
                     coord.all = pc.all, 
                     coord.sup = pc.sup,
                     t.test.sup = t,
-                    t.test.sup.planes = t.plane,
                     ctr.mod   = ctr.mod,
                     svd.d     = dec.full$d,
                     svd.u     = dec.full$u,
@@ -928,7 +928,7 @@ csa.all <- function(object, variable, dim = 1:5, ...){
   
   names(result.list) <- lev.variable
   
-  measure.list <- lapply(result.list, csa.measures, format = FALSE, dim1 = dim, ...)
+  measure.list <- lapply(result.list, csa.measures, format = FALSE, dim.csa = dim, ...)
   
   list(results = result.list, measures = measure.list)
 }

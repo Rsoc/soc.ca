@@ -11,3 +11,4 @@
 * soc.mca no longer accepts NA
 * csa.measures now includes new measures
 * soc.mca function has been simplified substantially
+* removed dependency for reshape2

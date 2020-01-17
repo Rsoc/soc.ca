@@ -37,7 +37,7 @@ headings(result)
 map.active(result, point.color = result$headings, point.shape = result$headings, label.color = result$headings)
 }
 \references{
-Perrineau, Pascal, Jean Chiche, Brigitte Le Roux, and Henry Rouanet. “L’espace politique des électeurs français à la fin des années 1990 : nouveaux et anciens clivages, hétérogénéité des électorats.” Revue Francaise de Science Politique, no. 3 (June 2000): 463–88.
+Perrineau, Pascal, Jean Chiche, Brigitte Le Roux, and Henry Rouanet. “L’espace politique des électeurs français à la fin des années 1990: nouveaux et anciens clivages, hétérogénéité des électorats.” Revue Francaise de Science Politique, no. 3 (June 2000): 463–88.
 
 Le Roux, Brigitte, and Henry Rouanet. Multiple Correspondence Analysis. Thousand Oaks, Calif.: Sage Publications, 2010.
 }

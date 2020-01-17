@@ -3,9 +3,6 @@
 \name{soc.csa}
 \alias{soc.csa}
 \title{Class Specific Multiple Correspondence Analysis}
-\usage{
-soc.csa(object, class.indicator, sup = NULL)
-}
 \arguments{
 \item{object}{is a soc.ca class object created with \link{soc.mca}}
 

@@ -17,8 +17,9 @@ Imports:
     stats,
     utils,
     shiny,
-    reshape2,
     FactoMineR,
-    ggrepel
+    ggrepel,
+    tidyverse,
+    htmlTable
 License: GPL-3
 RoxygenNote: 7.0.2

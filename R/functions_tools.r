@@ -156,9 +156,6 @@ invert <- function(x, dim = 1) {
 #' @param dim a numeric vector
 #'
 #' @return
-#'
-#' @examples
-
 to.MCA <- function(object, active, dim = 1:5) {
   
   rownames(active)         <- object$names.ind

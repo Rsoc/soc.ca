@@ -322,12 +322,12 @@ NULL
 #' id        <- moschidis[, c("ID")]
 #' result    <- soc.mca(active, identifier = id, Moschidis = FALSE)
 #' 
-# Compare output to Moschidis (2009, p. 85)
+#' Compare output to Moschidis (2009, p. 85)
 #' result$inertia_full
-# In the analysis of the 'real' data the modality 'E1: 1' with a low mass (fr/Q) has a very high contribution to the fourth axis
+#' In the analysis of the 'real' data the modality 'E1: 1' with a low mass (fr/Q) has a very high contribution to the fourth axis
 #' result$ctr.mod[, 4]
 #' 
-# Using the transformed model suggested by Moschidis (2009) that takes into account the number of modalities per question in order to balance the contribution of the modalities 
+#' Using the transformed model suggested by Moschidis (2009) that takes into account the number of modalities per question in order to balance the contribution of the modalities 
 #' result_trans    <- soc.mca(active, identifier = id, Moschidis = TRUE)
 #' result_trans$inertia_full
 #' result_trans$ctr.mod[, 4]
@@ -341,7 +341,7 @@ NULL
 #' @name political_space97
 #' @docType data
 #' @author Brigitte Le Roux
-#' @references Perrineau, Pascal, Jean Chiche, Brigitte Le Roux, and Henry Rouanet. “L’espace politique des électeurs français à la fin des années 1990 : nouveaux et anciens clivages, hétérogénéité des électorats.” Revue Francaise de Science Politique, no. 3 (June 2000): 463–88.
+#' @references Perrineau, Pascal, Jean Chiche, Brigitte Le Roux, and Henry Rouanet. “L’espace politique des électeurs français à la fin des années 1990: nouveaux et anciens clivages, hétérogénéité des électorats.” Revue Francaise de Science Politique, no. 3 (June 2000): 463–88.
 #' @references Le Roux, Brigitte, and Henry Rouanet. Multiple Correspondence Analysis. Thousand Oaks, Calif.: Sage Publications, 2010.
 #' @keywords data
 #' @examples

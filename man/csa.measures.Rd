@@ -9,8 +9,8 @@ csa.measures(
   correlations = FALSE,
   cosines = TRUE,
   cosine.angles = TRUE,
-  dim1 = 1:5,
-  dim2 = 1:5,
+  dim.mca = 1:5,
+  dim.csa = 1:5,
   format = TRUE,
   ...
 )
@@ -24,11 +24,13 @@ csa.measures(
 
 \item{cosine.angles}{if TRUE angles are calculated in the basis of the cosine values}
 
+\item{dim.mca}{the dimensions included from the original mca}
+
+\item{dim.csa}{the dimensions included from the csa}
+
 \item{format}{if TRUE results are formatted, rounded and printed for screen reading, if FALSE the raw numbers are returned}
 
 \item{...}{furhter arguments are send to the \link{cor} function}
-
-\item{dim}{is the dimensions included}
 }
 \value{
 A list of measures in either formatted or raw form.
@@ -39,5 +41,5 @@ Several measures for the evaluation of the relations between the dimensions of t
 \examples{
 example(soc.csa)
 csa.measures(res.csa)
-csa.measures(res.csa, correlations = FALSE, cosine.angles = FALSE, dim1 = 1:5, format = FALSE)
+csa.measures(res.csa, correlations = FALSE, cosine.angles = FALSE, dim.mca = 1:5, format = FALSE)
 }
