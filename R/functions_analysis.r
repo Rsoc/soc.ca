@@ -607,20 +607,6 @@ return(Z)
 
 }
 
-indicator <- function(x, id = NULL, ps = ": "){
-  
-  
-  
-  
-  if (identical(id, NULL) == TRUE){
-    rownames(Z) <- as.character(seq(I))
-  }else{
-    rownames(Z) <- id
-  }    
-  
-}
-
-
 #' Class Specific Multiple Correspondence Analysis
 #'
 #' \code{soc.csa} performs a class specific multiple correspondence analysis on a data.frame of factors, where cases are rows and columns are variables. Most descriptive and analytical functions that work for \link{soc.mca}, also work for \code{soc.csa}
