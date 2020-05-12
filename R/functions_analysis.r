@@ -111,23 +111,23 @@ soc.mca <- function(active, sup = NULL, identifier = NULL, passive = getOption("
   ############################################################################
   
   if (data.type == "list.data.frame") {
-    headings <- rep(names(active), sapply(active, length))
+    headings  <- rep(names(active), sapply(active, length))
     names(active) <- NULL
-    active <- do.call("cbind", active)
-    active <- data.frame(lapply(active, factor), check.names = F)
-    nl     <- sapply(active, nlevels)
-    headings <- rep(headings, nl)
-    a.r <- nrow(active)
-    ind.act <- indicator(active)
+    active    <- do.call("cbind", active)
+    active    <- data.frame(lapply(active, factor), check.names = F)
+    nl        <- sapply(active, nlevels)
+    headings  <- rep(headings, nl)
+    a.r       <- nrow(active)
+    ind.act   <- indicator(active)
   }
   
   #########################################
   # Creating lists of variable names...
   #########################################
   
-  varlist <- unique(gsub(": .*", "", colnames(ind.act)))                  # Unique varnames
+  varlist      <- unique(gsub(": .*", "", colnames(ind.act)))             # Unique varnames
   varlist.long <- gsub(": .*", "", colnames(ind.act))                     # Vector of varnames matching the list of modalities
-  Q <- median(rowSums(ind.act))                                           # Number of Questions [we use the median in order to allow for questions that do not sum to one]
+  Q            <- median(rowSums(ind.act))                                # Number of Questions [we use the median in order to allow for questions that do not sum to one]
   
   passive.set <- grepl(paste(passive, collapse = "|"), colnames(ind.act)) # Defining the set of passive modalities, default is no passive
   set <- 1:ncol(ind.act)                                                  # set is all
@@ -234,6 +234,9 @@ soc.mca <- function(active, sup = NULL, identifier = NULL, passive = getOption("
   result$Rosenlund.tresh          <- rep(1/result$Q/result$modal$`Nb. active modalities`, times = result$modal$`Nb. active modalities`)
   result$Rosenlund.tresh.all      <- rep(1/result$Q/result$modal$`Total nb. modalities`, times = result$modal$`Total nb. modalities`)
   
+  #############################################
+  # The variable vectors
+  #############################################
   
   variable <- vector()
   for (i in 1:nrow(md)) {
@@ -245,7 +248,7 @@ soc.mca <- function(active, sup = NULL, identifier = NULL, passive = getOption("
     varnames <- colnames(sup)
     ml <- vector()
     for (i in 1:ncol(sup)) {
-      ml <- c(ml, rep(varnames[i], nlevels(sup[, i])))
+      ml <- c(ml, rep(varnames[i], nlevels(sup[[i]])))
     }
     result$variable.sup <- ml
   }
