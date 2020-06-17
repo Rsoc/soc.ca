@@ -13,6 +13,8 @@
 \item{passive}{A single character vector with the full or partial names of the passive modalities. All names that have a full or partial match will be set as passive.}
 
 \item{Moschidis}{If TRUE adjusts contribution values for rare modalities. see \link{moschidis}.}
+
+\item{detailed.results}{If FALSE the result object is trimmed to reduce its memory footprint.}
 }
 \value{
 \item{nd}{Number of active dimensions}

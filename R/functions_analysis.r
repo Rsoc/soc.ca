@@ -1,10 +1,5 @@
 # Functions analysis
 
-# ' @docType package
-# ' ...
-# ' @import ggplot2 ellipse grid scales
-
-
 #' Specific Multiple Correspondence Analysis
 #'
 #' \code{soc.mca} performs a specific multiple correspondence analysis on a data.frame of factors, where cases are rows and columns are variables.
@@ -13,6 +8,7 @@
 #' @param identifier   A single vector containing a single value for each row/individual in x and sup. Typically a name or an id.number.
 #' @param passive      A single character vector with the full or partial names of the passive modalities. All names that have a full or partial match will be set as passive.
 #' @param Moschidis    If TRUE adjusts contribution values for rare modalities. see \link{moschidis}.
+#' @param detailed.results If FALSE the result object is trimmed to reduce its memory footprint.
 #' 
 #' @return \item{nd}{Number of active dimensions}
 #'  \item{n.ind}{The number of active individuals}
@@ -71,7 +67,8 @@
 #' options(passive = NULL)
 #' @export
 
-soc.mca <- function(active, sup = NULL, identifier = NULL, passive = getOption("passive", default = "Missing"), Moschidis = FALSE) {
+soc.mca <- function(active, sup = NULL, identifier = NULL, passive = getOption("passive", default = "Missing"), Moschidis = FALSE,
+                    detailed.results = FALSE) {
 
   # Preparing data 
   data.type <- what.is.x(active)
@@ -301,7 +298,21 @@ soc.mca <- function(active, sup = NULL, identifier = NULL, passive = getOption("
     result <- invert(result, dim.ind)
     return(result)
   }
-  #result <- median.standard(result)
+  
+  result <- median.standard(result)
+  
+  # Cleaning
+  
+  if(identical(detailed.results, FALSE)){
+  result$svd.u                  <- NULL
+  result$cor.mod.all.raw        <- NULL
+  result$ctr.mod.all.raw        <- NULL
+  #result$ctr.mod.raw            <- NULL
+  result$eigen.raw              <- NULL
+  result$indicator.matrix.all   <- NULL
+  result$indicator.matrix.trans <- NULL
+  }
+  
   class(result) <- "soc.mca"
   return(result)
 }
@@ -643,7 +654,7 @@ return(Z)
 #'  \item{original.class.indicator}{The class indicator}
 #'  \item{original.result}{The original soc.ca object used for the CSA}
 #' @name soc.csa
-#' @export
+#' @export soc.csa
 #' @author Anton Grau Larsen, University of Copenhagen
 #' @author Stefan Bastholm Andrade, University of Copenhagen
 #' @author Christoph Ellersgaard, University of Copenhagen
@@ -845,29 +856,27 @@ soc.csa   <- function(object, class.indicator, sup = NULL){
   
 } 
 
-####################################################
-#### Create Quadrant
-
 #' Create categories according to the quadrant position of each individual
 #' 
 #' Creates a vector from two dimensions from a soc.ca object. Labels are the 
 #' cardinal directions with the first designated dimension running East - West.
 #' The center category is a circle defined by \code{cut.radius}.
-#' 
-#' 
+#'
 #' @param object a soc.ca class object
-#' @param dim  the dimensions
-#' @param cut.min  Minimum cut value
-#' @param cut.max  Maximum cut value
-#' @param cut.radius  Radius of the center category
+#' @param dim the dimensions
+#' @param cut.min Minimum cut value
+#' @param cut.max Maximum cut value
+#' @param cut.radius Radius of the center category
+#'
 #' @return Returns a character vector with category memberships
 #' @seealso \link{soc.mca}
+#' @export create.quadrant
+#' 
 #' @examples 
 #' example(soc.ca)
 #' create.quadrant(result, dim = c(2, 1))
 #' table(create.quadrant(result, dim = c(1, 3), cut.radius = 0.5))
-#' @export
-
+#' 
 create.quadrant <- function(object, dim = c(1,2), cut.min = -0.125, cut.max = 0.125, cut.radius = 0.25){
   
   coord                      <- object$coord.ind
