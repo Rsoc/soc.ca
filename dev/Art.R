@@ -82,4 +82,5 @@ cadj <- cadj %>% filter(value > 3)
 
 p <- ggplot(cadj, aes(x = x, y = Ind, color = C1)) + geom_point(shape = "X") + theme_void() 
 p <- p + scale_color_gradient(high = "papayawhip", low = "darkblue", guide = "none", na.value = "white")
-p + coord_polar()
+p + coord_polar() + theme(plot.background = element_rect(color = "black", fill = "black"))
+

@@ -334,6 +334,15 @@ NULL
 NULL
 
 
+#' The Field of the Danish Power Elite
+#' 
+#' This dataset was used to construct a field of the Danish Power Elite from 2013
+#' @name pe13
+#' @docType data
+#' @author Jacob Lunding, Anton Grau Larsen and Christoph Ellersgaard
+#' @keywords data
+#' @examples
+NULL
 
 #' French Political Space example
 #' 
@@ -364,7 +373,7 @@ NULL
 #' supranat <- data.frame(Euro = political_space97$Euro, "EU Power" = political_space97$EUpower, 
 #'                        "End EU" = political_space97$EndEU, "EU protection" = political_space97$EUprotection, check.names = FALSE)
 #' 
-#' #Creating and naming list of headings
+#' # Creating and naming list of headings
 #' active <- list(ethno, autho, social, economy, politics, supranat)
 #' names(active) <- c("Ethnocentrism", "Authoritarianism", "Social", "Economy", "Politics", "Supranationality")
 #' sup    <- data.frame(political_space97$Vote)

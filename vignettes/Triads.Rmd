@@ -1,11 +1,26 @@
-# Triads functions -----
+---
+title: "Triads"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Triads}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
 
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
 
+```{r setup}
+library(soc.ca)
+library(RColorBrewer)
+library(tidyverse)
+```
 
-
-
-
-# Triad taste example ----
+```{r}
 data(taste)
 
 d                    <- taste[which(taste$Isup == 'Active'), ]
@@ -19,7 +34,6 @@ a2                   <- d2 %>% select(TV, Film, Art, Eat)
 
 d3                    <- taste
 a3                   <- d3 %>% select(TV, Film, Art, Eat)
-
 
 
 
@@ -53,12 +67,19 @@ l.triads$D           <- d %>% transmute(id = as.character(ID),
                                         "Film: Documentary" = Film == "Documentary")
 
 
+l.mca$Men.csa  <- soc.csa(l.mca$Original, which(d$Gender == "Men"))
+l.mca$Women.csa <- soc.csa(l.mca$Original, which(d$Gender != "Men"))
 
 l.mca.triads         <- mca.triads(l.mca, l.triads, dim = c(1, 2), fix.mca = 1)
 
+mca <- l.mca$Men$coord.ind[, 1:2]
+csa <- l.mca$Men.csa$coord.ind[, 1:2]
+tibble(mca, csa) %>% cor %>% round(3)
+
+soc.ca:::mca.triad.array(l.mca.triads)
 
 
-library(RColorBrewer)
-mca.triad.array(l.mca.triads)
+```
+
 
 
