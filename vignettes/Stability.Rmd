@@ -1,0 +1,54 @@
+---
+title: "Stability"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Stability}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(soc.ca)
+library(tidyverse)
+```
+
+
+```{r}
+a <- tibble(A = c(rep("T", 5), rep("F", 5)),
+       B = c(rep("T", 5), rep("F", 5)),
+       C = c(rep("T", 8), rep("F", 2)),
+       D = c(rep("T", 2), rep("F", 8)),
+       E = c("A", "A", "B", "B", "C", "C", "D", "D", "E", "E")
+       )
+
+a <- map_df(a, ~.x[sample(length(.x))])
+
+r <- soc.mca(a)
+r
+
+map.ind(r)
+map.active(r)
+contribution(r)
+```
+
+
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+

@@ -177,7 +177,7 @@ soc.mca <- function(active, sup = NULL, identifier = NULL, passive = getOption("
   #      The actual analysis, a CA of the indicator matrix       #
   ################################################################
   
-  result <- subset.ca.indicator(ind.act, ind.sup, active.set, passive.set, Q = Q, Qm = Qm, Moschidis = Moschidis)
+  result <- subset.ca.indicator(ind.act, ind.sup, active.set, passive.set, Q = Q, Qm = Qm, Moschidis = Moschidis, detailed.results = detailed.results)
   
   result$variable.all <- varlist.long
   
@@ -331,7 +331,7 @@ soc.mca <- function(active, sup = NULL, identifier = NULL, passive = getOption("
 # ' #@export
 # ' @return a list of various results. See \link{soc.mca} documentation
 
-subset.ca.indicator <- function(ind.act, ind.sup, active.set, passive.set, Q, Qm, Moschidis){
+subset.ca.indicator <- function(ind.act, ind.sup, active.set, passive.set, Q, Qm, Moschidis, detailed.results = FALSE){
   
   
   Z.act     <- ind.act
@@ -381,7 +381,6 @@ subset.ca.indicator <- function(ind.act, ind.sup, active.set, passive.set, Q, Qm
   ##################################
   
   # Decomposition and eigenvectors
-  dec.full  <- svd(S, nu = nrow(S), nv = ncol(S))                 # Singular decomposition keeping all vectors
   dec       <- svd(S)                                             # Singular decomposition
   eigen     <- dec$d^2                                            # Eigenvalues from singularvalues
   
@@ -389,20 +388,21 @@ subset.ca.indicator <- function(ind.act, ind.sup, active.set, passive.set, Q, Qm
   pc.mod    <- diag.cm %*% dec$v %*% diag(dec$d)   # Principal coordinates for modalities
   
   # Principal coordinates for individuals
-  diag.rm   <- diag(1/ sqrt(rm))  
+  #diag.rm   <- diag(1/ sqrt(rm))  
+  diag.rm   <- Matrix::Diagonal(x = 1/ sqrt(rm))
   pc.ind    <- diag.rm %*% dec$u %*% diag(dec$d)   # Principal coordinates for individuals # This is a slow process, but it scales ok # Anders Holm adjustment  
   
   # Inertias for rows and column profiles
-  inr.ind   <- diag(rm) %*% pc.ind^2     # Inertia for row (Individuals) (mass x principal coordinates) # This is a slow process and it scales badly - diag(rm) is a individual X individual matrix. It is also sparse - so it might be possible to do it quicker.
+  inr.ind   <- Matrix::Diagonal(x =rm) %*% pc.ind^2     # Inertia for row (Individuals) (mass x principal coordinates) # This is a slow process and it scales badly - diag(rm) is a individual X individual matrix. It is also sparse - so it might be possible to do it quicker.
   inr.mod   <- diag(cm) %*% pc.mod^2     # Inertia for columns (Modalities)
   
   # Relative contributions, 'point inertia on axis' / total inertia of axis
-  ctr.ind   <- t(t(inr.ind) / dec$d^2)   # Contribution for the individuals (inertia / eigenvalue)
+  ctr.ind   <- Matrix::t(Matrix::t(inr.ind) / dec$d^2)   # Contribution for the individuals (inertia / eigenvalue)
   ctr.mod   <- t(t(inr.mod) / dec$d^2)   # Contribution for the modalities
   ctr.mod.raw   <- inr.mod               # Contribution for the modalities
   
   # Squared cosines or correlations
-  cor.ind   <- inr.ind/rowSums(inr.ind)  # Squared cosines for individuals
+  cor.ind   <- inr.ind/Matrix::rowSums(inr.ind)  # Squared cosines for individuals
   cor.mod   <- inr.mod/rowSums(inr.mod)  # Squared cosines for modalities
   cor.mod.raw   <- inr.mod               # Squared cosines for modalities
   
@@ -563,11 +563,17 @@ subset.ca.indicator <- function(ind.act, ind.sup, active.set, passive.set, Q, Qm
                     coord.sup = pc.sup,
                     t.test.sup = t,
                     ctr.mod   = ctr.mod,
-                    svd.d     = dec.full$d,
-                    svd.u     = dec.full$u,
-                    svd.v     = dec.full$v,
                     indicator.matrix.trans   = Z.act
   )
+  
+  if(identical(detailed.results, TRUE)){
+    dec.full  <- svd(S, nu = nrow(S), nv = ncol(S))   # Singular decomposition keeping all vectors
+    full      <- data.frame(svd.d     = dec.full$d,
+                            svd.u     = dec.full$u,
+                            svd.v     = dec.full$v)
+    ca.output <- cbind(ca.output, full)
+  }
+  
   
   # Cleanup
   names(ca.output$mass.mod)         <- NULL
@@ -577,15 +583,15 @@ subset.ca.indicator <- function(ind.act, ind.sup, active.set, passive.set, Q, Qm
   
   return(ca.output)
 }
-################################### Indicator matrix
+
 
 #' Indicator matrix
 #' 
-#' Creates an indicator matrix from a data.frame with questions as columns and individuals as rows.
+#' Creates an indicator matrix from a data.frame with the categories of the questions as columns and individuals as rows.
 #' 
 #' @param x   a data.frame of factors
 #' @param id  a vector defining the labels for the individuals. If id = NULL row number is used.
-#' @param ps  the seperator used in the creation of the names of the columns (modalities).
+#' @param ps  the seperator used in the creation of the names of the columns.
 #'
 #' @return Returns a indicator matrix
 #' @seealso \link{soc.mca}
@@ -593,7 +599,7 @@ subset.ca.indicator <- function(ind.act, ind.sup, active.set, passive.set, Q, Qm
 #' a  <- rep(c("A","B"), 5)
 #' b  <- rep(c("C", "D"), 5)
 #' indicator(data.frame(a,b))
-#' @export
+#' @export indicator
 
 indicator  <- function(x, id = NULL, ps = ": "){
 
@@ -1111,7 +1117,7 @@ what.is.x  <- function(x){
   if(is.ld | is.lm){
     not.all.data.frames <- any(!unlist(lapply(x, is.data.frame)))
     not.all.matrix      <- any(!unlist(lapply(x, is.matrix)))
-    if(all(not.all.data.frames, not.all.matrix)) stop("x is a list, but not all elements are not the same valid type (aka. data.frame or indicator matrix).")
+    if(all(not.all.data.frames, not.all.matrix)) stop("x is a list, but not all elements are the same valid type (aka. data.frame or indicator matrix).")
     l.nam    <- names(x)
     if(unique(length(l.nam)) != length(x)) stop("x is a list, but each element (heading) does not have a unique name.")
   }

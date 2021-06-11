@@ -59,6 +59,43 @@ min_cut <- function(x, min.size = length(x)/10){
   factor(x.group, labels = levs, ordered = TRUE)
 }
 
+#' Cut ordinal variables
+#' 
+#' If we are in a hurry and need to cut a lot of likert-scale or similar type of variables into MCA-friendly ordered factors this function comes in handy.
+#' cowboy_cut will try its best to create approx 3-5 categories, where the top and the bottom are smaller than the middle. Missing or other unwanted categories are recoded but still influence the categorization. So that when cowboy_cut tries to part the top of a variable with a threshold around 10% of cases it is 10% including the missing or NA cases.
+#' Make sure that levels are in the right order before cutting. 
+#' @param x a factor
+#' @param top.share approximate share in top category
+#' @param bottom.share approximate share in bottom category
+#' @param missing a character vector with all the missing or unwanted categories.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+cowboy_cut <- function(x, top.share = 0.10, bottom.share = 0.10,  missing = "Missing"){
+  x[x %in% missing] <- NA
+  x <- droplevels(x)
+  x <- as.ordered(x)
+  x <- as.numeric(x)
+  
+  x.top <- x
+  x.bottom <- x
+  x.top[is.na(x)] <- -Inf
+  x.bottom[is.na(x)] <- Inf
+  
+  top <- quantile(x.top, probs = seq(0, 1, by = top.share), na.rm = TRUE, type = 3) %>% tail(2) %>% head(1)
+  bottom <- quantile(x.bottom, probs = seq(0, 1, by = bottom.share), na.rm = TRUE, type = 3) %>% head(2) %>% tail(1)
+  mid  <- x[x != 0 & x < top] %>% quantile(probs = seq(0, 1, by = 0.33), type = 3, na.rm = TRUE)
+  mid  <- mid[-1]
+  mid  <- mid[-3]
+  breaks <- c(-Inf, bottom, mid, top, Inf)
+  o <- x %>% as.numeric() %>% cut(breaks = unique(breaks), include.lowest = TRUE)
+  levels(o) <- paste0(1:nlevels(o), "/", nlevels(o)) 
+  o %>% fct_explicit_na(na_level = "Missing")
+}
+
+
 #' Export results from soc.ca
 #'
 #' Export objects from the soc.ca package to csv files.
@@ -188,3 +225,36 @@ barycenter <- function(object, mods = NULL, dim = 1){
   new.coord
 }
 
+#' MCA Eigenvalue check
+#'
+#' Two variables that have perfectly or almost perfectly overlapping sets of categories will skew an mca analysis. This function tries to find the variables that do that so that we may remove them from the analysis or set some of the categories as passive.
+#' An MCA is run on all pairs of variables in the active dataset and we take first and strongest eigenvalue for each pair.
+#' Values range from 0.5 to 1, where 1 signifies a perfect or near perfect overlap between sets of categories while 0.5 is the opposite - a near orthogonal relationship between the two variables.
+#' While a eigenvalue of 1 is a strong candidate for intervention, probably exclusion of one of the variables, it is less clear what the lower bound is. But values around 0.8 are also strong candidates for further inspection.  
+
+#' @param active a data.frame of factors
+#' @param passive a character vector with the full or partial names of categories to be set as passive. Each element in passive is passed to a grep function.
+#'
+#' @return a tibble
+#' @export
+#'
+#' @examples
+#' example(soc.ca)
+#' mca.eigen.check(active)
+mca.eigen.check <- function(active, passive = "Missing"){
+  
+  get.eigen <- function(x, y, passive = "Missing"){
+    d <- data.frame(x, y)
+    r <- soc.mca(d, passive = passive)
+    
+    o <- c("First eigen" = r$eigen[1], "Passive categories" = length(r$names.passive))
+    o
+  }
+  
+  comb <- active %>% colnames() %>% combn(., 2, simplify = T) %>% t() %>% as_tibble()
+  colnames(comb) <- c("x", "y")
+  
+  values           <- map2_df(.x = comb$x, .y = comb$y,  ~get.eigen(x = active[[.x]], y = active[[.y]], passive = passive))
+  o                <- bind_cols(comb, values)
+  o
+}

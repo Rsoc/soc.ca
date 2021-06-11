@@ -23,7 +23,8 @@ Imports:
     htmlTable,
     stringr,
     RColorBrewer,
-    reshape2
+    reshape2,
+    Matrix
 License: GPL-3
 RoxygenNote: 7.1.1
 Suggests: 
