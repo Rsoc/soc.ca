@@ -247,7 +247,13 @@ mca.eigen.check <- function(active, passive = "Missing"){
     d <- data.frame(x, y)
     r <- soc.mca(d, passive = passive)
     
-    o <- c("First eigen" = r$eigen[1], "Passive categories" = length(r$names.passive))
+    burt <- t(r$indicator.matrix.active) %*% r$indicator.matrix.active
+    
+    burt.s <- burt / diag(burt)
+    diag(burt.s) <- 0
+    max(burt.s)
+    
+    o <- c("First eigen" = r$eigen[1], "Passive categories" = length(r$names.passive), "Max overlap (%)" = max(burt.s))
     o
   }
   
