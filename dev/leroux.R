@@ -104,3 +104,54 @@ G
 vb <- ((coord-G)^2) * weights
 rowSums(vb)/nrow(target)
 
+
+# 2.5 Principal Axes of a Cloud ----
+
+
+# Figure 2.8 Projected clouds on six lines with their variances
+variance.of.angle <- function(a, x, y){
+v1 <- x
+v2 <- y
+c  <- covariance
+cos.a <- cos(a * (pi/180))
+sin.a <- sin(a * (pi/180))
+(v1 * cos.a^2) + (2 * c * sin.a * cos.a) + (v2 * sin.a^2)
+}
+
+angles <- c(L1 = -90, L2 = -60, L3 = -30, L4 = 0, L5 = 30, L6 = 60, L1 = 90)
+var.angles  <- map_dbl(angles, variance.of.angle, x = var.x1, y = var.x2)
+var.angles
+
+# Figure 2.9 Variance of projected clouds as a function of angle
+angles <- -90:90
+var.angles  <- map_dbl(angles, variance.of.angle, x = var.x1, y = var.x2)
+var.angles
+plot(var.angles, x = -90:90, xlab = "Degree", main = "Variance of projected cloud", ylab = "Variance")
+
+# Figure 2.10 First principal axis
+
+label <- paste("M", "^", 1:10, "", sep = "")
+xintercept <- 6 * tan(63.44 * (pi/180))
+
+p <- ggplot(target, aes(x = x1, y = x2, label = label)) + geom_point()
+p <- p + geom_hline(yintercept = 0, size = 0.3) + geom_vline(xintercept = 0, size = 0.3)
+p <- p + annotate(y = 0, x = 6, geom = "point", shape = 1)
+p <- p + geom_text(parse = TRUE, nudge_y = -0.5, nudge_x = 0.5)
+p <- p + geom_abline(intercept = -xintercept, slope = tan(63.44 * (pi/180)))
+p <- p + theme_void() + xlab("") + ylab("") 
+p
+
+# First principal axis
+variance.of.angle(a = 63.44, x = var.x1, y = var.x2)
+
+# Rotation of the cloud # Not in the book
+target.p1 <- rotate_coord(x1, x2, angle = 63.44, type = "degrees", center = c(6,0))
+colnames(target.p1) <- c("x1", "x2")
+
+p <- ggplot(target.p1 %>% as_tibble, aes(x = x1, y = x2, label = label)) + geom_point()
+p <- p + geom_hline(yintercept = 0, size = 0.3) + geom_vline(xintercept = 0, size = 0.3)
+p <- p + geom_text(parse = TRUE, nudge_y = -0.5, nudge_x = 0.5)
+p <- p + theme_void() + xlab("") + ylab("") 
+p
+
+

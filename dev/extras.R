@@ -22,8 +22,11 @@ debug(soc.ca:::subset.ca.indicator)
 
 example(soc.mca)
 
+soc.ca::mca.eigen.check(active, passive = passive)
 
 
+check <- soc.ca::mca.eigen.check(active, passive = passive)
+View(check)
 
 profvis(soc.mca(active, sup))
 
