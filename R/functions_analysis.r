@@ -467,21 +467,24 @@ subset.ca.indicator <- function(ind.act, ind.sup, active.set, passive.set, Q, Qm
     tmp.ctr.raw <- rbind(tmp.ctr.raw, passive.modalities)
     tmp.cor.raw <- rbind(tmp.cor.raw, passive.modalities)
     
-    pc.all            <- matrix(0, nrow = dim(Z.act)[2], ncol = length(eigen))
-    ctr.mod.all       <- matrix(0, nrow = dim(Z.act)[2], ncol = length(eigen))
-    cor.mod.all       <- matrix(0, nrow = dim(Z.act)[2], ncol = length(eigen))
-    ctr.mod.all.raw   <- matrix(0, nrow = dim(Z.act)[2], ncol = length(eigen))
-    cor.mod.all.raw   <- matrix(0, nrow = dim(Z.act)[2], ncol = length(eigen))
-    
-    # scaling midpoint coordinates along axes
-    for (j in 1:length(eigen)) {
-      for (i in 1:length(colnames(Z.act))){
-        pc.all[i,j]            <- sum(pc.ind[Z.act[,i] > 0,j]) / cs.star.all[i] / sqrt(eigen[j])
-        ctr.mod.all[i,j]       <- tmp.ctr[rownames(tmp.ctr) == colnames(Z.act)[i], j]
-        cor.mod.all[i,j]       <- tmp.cor[rownames(tmp.cor) == colnames(Z.act)[i], j]
-        ctr.mod.all.raw[i,j]   <- tmp.ctr.raw[rownames(tmp.ctr.raw) == colnames(Z.act)[i], j]
-        cor.mod.all.raw[i,j]   <- tmp.cor.raw[rownames(tmp.cor.raw) == colnames(Z.act)[i], j]
-      }}
+    if(identical(detailed.results, TRUE)){
+      # These are for detailed results
+      pc.all            <- matrix(0, nrow = dim(Z.act)[2], ncol = length(eigen))
+      ctr.mod.all       <- matrix(0, nrow = dim(Z.act)[2], ncol = length(eigen))
+      cor.mod.all       <- matrix(0, nrow = dim(Z.act)[2], ncol = length(eigen))
+      ctr.mod.all.raw   <- matrix(0, nrow = dim(Z.act)[2], ncol = length(eigen))
+      cor.mod.all.raw   <- matrix(0, nrow = dim(Z.act)[2], ncol = length(eigen))
+      
+      # scaling midpoint coordinates along axes
+      for (j in 1:length(eigen)) {
+        for (i in 1:length(colnames(Z.act))){
+          pc.all[i,j]            <- sum(pc.ind[Z.act[,i] > 0,j]) / cs.star.all[i] / sqrt(eigen[j])
+          ctr.mod.all[i,j]       <- tmp.ctr[rownames(tmp.ctr) == colnames(Z.act)[i], j]
+          cor.mod.all[i,j]       <- tmp.cor[rownames(tmp.cor) == colnames(Z.act)[i], j]
+          ctr.mod.all.raw[i,j]   <- tmp.ctr.raw[rownames(tmp.ctr.raw) == colnames(Z.act)[i], j]
+          cor.mod.all.raw[i,j]   <- tmp.cor.raw[rownames(tmp.cor.raw) == colnames(Z.act)[i], j]
+        }}
+    }
     
   }
   
@@ -546,20 +549,13 @@ subset.ca.indicator <- function(ind.act, ind.sup, active.set, passive.set, Q, Qm
                     freq.mod  = freq.mod,
                     freq.mod.all = freq.mod.all,
                     freq.sup  = freq.sup,
-                    ctr.mod.raw   = ctr.mod.raw,
-                    ctr.mod.all = ctr.mod.all,
-                    ctr.mod.all.raw = ctr.mod.all.raw,
-                    ctr.ind   = as.matrix(ctr.ind),
+                    ctr.ind   = ctr.ind,
                     cor.mod   = cor.mod,
-                    cor.mod.raw   = cor.mod.raw,
-                    cor.mod.all = cor.mod.all,
-                    cor.mod.all.raw = cor.mod.all.raw,
-                    cor.ind   = as.matrix(cor.ind),
+                    cor.ind   = cor.ind,
                     mass.mod  = cm,
                     mass.mod.all = mass.mod.all,
                     coord.mod = pc.mod,
-                    coord.ind = as.matrix(pc.ind),
-                    coord.all = pc.all, 
+                    coord.ind = pc.ind,
                     coord.sup = pc.sup,
                     t.test.sup = t,
                     ctr.mod   = ctr.mod,
@@ -571,7 +567,16 @@ subset.ca.indicator <- function(ind.act, ind.sup, active.set, passive.set, Q, Qm
     full      <- data.frame(svd.d     = dec.full$d,
                             svd.u     = dec.full$u,
                             svd.v     = dec.full$v)
-    ca.output <- cbind(ca.output, full)
+    
+    ca.output$ctr.mod.raw     = ctr.mod.raw
+    ca.output$ctr.mod.all     = ctr.mod.all
+    ca.output$ctr.mod.all.raw = ctr.mod.all.raw 
+    
+    ca.output$cor.mod.raw               = cor.mod.raw
+    ca.output$cor.mod.all               = cor.mod.all
+    ca.output$cor.mod.all.raw           = cor.mod.all.raw
+    ca.output$coord.all                 = pc.all
+    ca.output$full <- full
   }
   
   
@@ -583,6 +588,7 @@ subset.ca.indicator <- function(ind.act, ind.sup, active.set, passive.set, Q, Qm
   
   return(ca.output)
 }
+
 
 
 #' Indicator matrix

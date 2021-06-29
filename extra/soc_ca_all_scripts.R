@@ -382,8 +382,7 @@ NULL
 #' headings(result)
 #' map.active(result, point.color = result$headings, point.shape = result$headings, label.color = result$headings)
 NULL
-files <- list.files(path = "R/", full.names = T)
-lapply(files, readLines)
+
 # Functions analysis
 
 #' Specific Multiple Correspondence Analysis
@@ -853,6 +852,8 @@ subset.ca.indicator <- function(ind.act, ind.sup, active.set, passive.set, Q, Qm
     tmp.ctr.raw <- rbind(tmp.ctr.raw, passive.modalities)
     tmp.cor.raw <- rbind(tmp.cor.raw, passive.modalities)
     
+    if(identical(detailed.results, TRUE)){
+    # These are for detailed results
     pc.all            <- matrix(0, nrow = dim(Z.act)[2], ncol = length(eigen))
     ctr.mod.all       <- matrix(0, nrow = dim(Z.act)[2], ncol = length(eigen))
     cor.mod.all       <- matrix(0, nrow = dim(Z.act)[2], ncol = length(eigen))
@@ -868,6 +869,7 @@ subset.ca.indicator <- function(ind.act, ind.sup, active.set, passive.set, Q, Qm
         ctr.mod.all.raw[i,j]   <- tmp.ctr.raw[rownames(tmp.ctr.raw) == colnames(Z.act)[i], j]
         cor.mod.all.raw[i,j]   <- tmp.cor.raw[rownames(tmp.cor.raw) == colnames(Z.act)[i], j]
       }}
+    }
     
   }
   
@@ -932,20 +934,13 @@ subset.ca.indicator <- function(ind.act, ind.sup, active.set, passive.set, Q, Qm
                     freq.mod  = freq.mod,
                     freq.mod.all = freq.mod.all,
                     freq.sup  = freq.sup,
-                    ctr.mod.raw   = ctr.mod.raw,
-                    ctr.mod.all = ctr.mod.all,
-                    ctr.mod.all.raw = ctr.mod.all.raw,
                     ctr.ind   = ctr.ind,
                     cor.mod   = cor.mod,
-                    cor.mod.raw   = cor.mod.raw,
-                    cor.mod.all = cor.mod.all,
-                    cor.mod.all.raw = cor.mod.all.raw,
                     cor.ind   = cor.ind,
                     mass.mod  = cm,
                     mass.mod.all = mass.mod.all,
                     coord.mod = pc.mod,
                     coord.ind = pc.ind,
-                    coord.all = pc.all, 
                     coord.sup = pc.sup,
                     t.test.sup = t,
                     ctr.mod   = ctr.mod,
@@ -957,7 +952,16 @@ subset.ca.indicator <- function(ind.act, ind.sup, active.set, passive.set, Q, Qm
     full      <- data.frame(svd.d     = dec.full$d,
                             svd.u     = dec.full$u,
                             svd.v     = dec.full$v)
-    ca.output <- cbind(ca.output, full)
+    
+    ca.output$ctr.mod.raw     = ctr.mod.raw
+    ca.output$ctr.mod.all     = ctr.mod.all
+    ca.output$ctr.mod.all.raw = ctr.mod.all.raw 
+    
+    ca.output$cor.mod.raw               = cor.mod.raw
+    ca.output$cor.mod.all               = cor.mod.all
+    ca.output$cor.mod.all.raw           = cor.mod.all.raw
+    ca.output$coord.all                 = pc.all
+    ca.output$full <- full
   }
   
   
