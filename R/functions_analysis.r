@@ -549,13 +549,14 @@ subset.ca.indicator <- function(ind.act, ind.sup, active.set, passive.set, Q, Qm
                     freq.mod  = freq.mod,
                     freq.mod.all = freq.mod.all,
                     freq.sup  = freq.sup,
-                    ctr.ind   = ctr.ind,
+                    ctr.ind   = as.matrix(ctr.ind),
+                    ctr.mod.raw     = ctr.mod.raw,
                     cor.mod   = cor.mod,
-                    cor.ind   = cor.ind,
+                    cor.ind   = as.matrix(cor.ind),
                     mass.mod  = cm,
                     mass.mod.all = mass.mod.all,
                     coord.mod = pc.mod,
-                    coord.ind = pc.ind,
+                    coord.ind = as.matrix(pc.ind),
                     coord.sup = pc.sup,
                     t.test.sup = t,
                     ctr.mod   = ctr.mod,
@@ -568,7 +569,7 @@ subset.ca.indicator <- function(ind.act, ind.sup, active.set, passive.set, Q, Qm
                             svd.u     = dec.full$u,
                             svd.v     = dec.full$v)
     
-    ca.output$ctr.mod.raw     = ctr.mod.raw
+    
     ca.output$ctr.mod.all     = ctr.mod.all
     ca.output$ctr.mod.all.raw = ctr.mod.all.raw 
     
