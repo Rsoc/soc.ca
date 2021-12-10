@@ -4,21 +4,30 @@
 \alias{map.ca.base}
 \title{Create the base of a soc.ca map}
 \usage{
-map.ca.base(up = NULL, down = NULL, right = NULL, left = NULL, ...)
+map.ca.base(
+  up = NULL,
+  down = NULL,
+  right = NULL,
+  left = NULL,
+  base_size = 15,
+  ...
+)
 }
 \arguments{
-\item{up}{}
+\item{up}{the name of + pole on the vertical axis - "North"}
 
-\item{down}{}
+\item{down}{the name of the - pole on the vertical axis - "South"}
 
-\item{right}{}
+\item{right}{the name of the + pole on horizontal axis - "East"}
 
-\item{left}{}
+\item{left}{the name of the - pole on the horizontal axis - "West"}
 
-\item{...}{}
+\item{base_size}{controls the text size of themed labels}
+
+\item{...}{further arguments are passed onto ggplot()}
 }
 \value{
-
+a ggplot2 object
 }
 \description{
 Create the base of a soc.ca map

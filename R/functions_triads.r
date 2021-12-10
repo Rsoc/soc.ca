@@ -1,4 +1,4 @@
-triangle.coordinates <- function(results, tri, dim = 1:2){
+triangle.coordinates <- function(result, tri, dim = 1:2){
   ind                  <- result$indicator.matrix.active != 0
   ind                  <- ind[, tri]
   tri.members          <- ind %>% rowSums() == length(tri)
@@ -12,7 +12,7 @@ triangle.coordinates <- function(results, tri, dim = 1:2){
   coords$is.tri        <- !is.na(coords$id)
   coords$is.center     <- coords$label == "Center"
   coords$type          <- c("tri", "tri", "tri", "center", "combined")
-  coords$"Distance between center and combined" <- coords %>% filter(type != "tri") %>% select(X, Y) %>% dist()
+  coords$"Distance between center and combined" <- coords %>% filter(.data$type != "tri") %>% select(.data$X, .data$Y) %>% dist()
   coords
 }
 
@@ -26,7 +26,7 @@ mca.triad.array <- function(l.mca.triads){
   coords$name <- coords$name %>% as_factor() %>% fct_reorder(as.numeric(coords$triangle))
   coords$mca  <- coords$mca %>% as_factor() %>% fct_relevel(names(l.mca.triads$l.sup.coord))
   
-  p <- map.ca.base(data = coords, mapping = aes(x = X, y = Y, shape = name, group = triangle, color = triangle))
+  p <- map.ca.base(data = coords, mapping = aes(x = .data$X, y = .data$Y, shape = .data$name, group = .data$triangle, color = .data$triangle))
   p <- p + geom_polygon(fill = NA, size = 0.3)
   p <- p + geom_point(size = 5, shape = 21, fill = "white", color = "white") + geom_point(size = 3, fill = "black")
   p <- p + facet_wrap(~mca) + theme_bw() + theme(strip.background = element_rect(fill = "white"),
@@ -36,21 +36,19 @@ mca.triad.array <- function(l.mca.triads){
   p + coord_fixed()
 }
 
-#' Title
+#' Compare MCA's with triads
 #'
 #' @param l.mca a list of soc.mca objects
-#' @param l.triads 
-#' @param dim 
-#' @param fix.mca 
+#' @param l.triads a list of triads
+#' @param dim the dimensions of the plane
+#' @param fix.mca the indice of the mca that is used as a fixpoint for the axis across mca's
 #'
-#' @return
+#' @return a triad object
 #' @export
-#'
-#' @examples
 
 mca.triads <- function(l.mca, l.triads, dim = c(1,2), fix.mca = 1){
   
-  tri.names <- map(l.triads, .f = function(x) x %>% select(-starts_with("id")) %>% colnames()) %>% stack() %>% rename(name = values, triangle = ind)
+  tri.names <- map(l.triads, .f = function(x) x %>% select(-starts_with("id")) %>% colnames()) %>% stack() %>% rename(name = .data$values, triangle = .data$ind)
   
   # List of joined supplementary variables
   create_l.sup <- function(mca, l.triads){
@@ -62,8 +60,8 @@ mca.triads <- function(l.mca, l.triads, dim = c(1,2), fix.mca = 1){
   
   # Sup coordinates
   get.sup   <- function(mca, sup, dim){
-    sup.coord <- sup %>% select(-id) %>% map(~average.coord(mca, .x, dim = dim)) %>% bind_rows(.id = "name") %>% dplyr::filter(label)
-    sup.coord <- sup.coord %>% left_join(., tri.names, by = "name") %>% select(-group, -label)
+    sup.coord <- sup %>% select(-id) %>% map(~average.coord(mca, .x, dim = dim)) %>% bind_rows(.id = "name") %>% dplyr::filter(.data$label)
+    sup.coord <- sup.coord %>% left_join(., tri.names, by = "name") %>% select(-.data$group, -.data$label)
     sup.coord
   }
   
@@ -71,13 +69,13 @@ mca.triads <- function(l.mca, l.triads, dim = c(1,2), fix.mca = 1){
   
   # Aligning coordinates
   coords     <- bind_rows(l.sup.coord, .id = "mca")
-  max.coords <- coords %>% select(name, X, Y) %>% gather(key = "key", value = "value", -name) %>% group_by(name) %>%
-    summarise(median = median(sqrt(value^2)))
+  max.coords <- coords %>% select(.data$name, .data$X, .data$Y) %>% gather(key = "key", value = "value", -.data$name) %>% group_by(.data$name) %>%
+    summarise(median = median(sqrt(.data$value^2)))
   
   coords        <- coords[coords$name == max.coords$name[which.max(max.coords$median)],]
   cat("\n", "Category used for fixing: ", coords$name[1], "\n")
   
-  coords        <- coords %>% select(X, Y)
+  coords        <- coords %>% select(.data$X, .data$Y)
   direction     <- coords > 0
   fix.direction <- coords[fix.mca,] > 0
   

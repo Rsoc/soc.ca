@@ -1,5 +1,3 @@
-#### Functions for describtion and printing
-
 #' Print soc.ca objects
 #' 
 #' Prints commonly used measures used in the analysis of multiple correspondence
@@ -150,7 +148,7 @@ balance   <- function(object, act.dim = object$nd){
 #' @param mode indicates which form of output. Possible values: \code{"sort"},
 #'   \code{"mod"}, \code{"ind"}, \code{"variable"}. If the mode is
 #'   \code{"variable"}, \code{dim} can be a sequence of dimensions: \code{1:5}
-#' @param if TRUE; returns output as a matrix instead of as printed output.
+#' @param matrix.output if TRUE; returns output as a matrix instead of as printed output.
 #' @return Each mode prints different results:
 #' @return   \item{"mod"}{Ranks all modalities according to their contribution}
 #'   \item{"sort"}{Ranks all modalities according to their contribution and then sorts them according to their coordinates}
@@ -221,28 +219,6 @@ contribution <- function(object, dim = 1, all = FALSE, indices = FALSE, mode = "
     tab.variable(object, dim)
   }
 }
-
-#' Contribution for headings
-#'
-#' Contribution.headings sums the contribution of the active categories according to the heading of their variables.
-#'
-#' @param object a \link{soc.ca} object
-#' @param dim the included dimensions
-#'
-#' @return a matrix with contribution values for each heading per dimension
-#' @export
-#'
-#' @examples
-#' 
-#' 
-contribution.headings <- function(object, dim = 1:3){
-  ctr                 <- object$ctr.mod[, dim]
-  colnames(ctr)       <- paste("Dim.", dim)
-  out                 <- aggregate(ctr, by = list(Heading = object$headings), FUN = sum)
-  out[,-1]            <- round(out[-1], 2)
-  out
-}
-
 
 # ' The most contributing individuals
 # ' 
@@ -503,6 +479,29 @@ average.coord <- function(object, x, dim = c(1, 2)){
   point.coord
 }
 
+#' Supplementary coordinates for a data.frame of factors
+#'
+#' Calculate the average coordinates in the category cloud of a soc.mca analysis.
+#' 
+#' @param object a soc.mca result object
+#' @param sup a data.frame of factors
+#' @param dim a numeric vector with the two dimensions calculated
+#'
+#' @return a data.frame with coordinates and labels
+#' @export
+#'
+#' @examples
+#' example(soc.mca)
+#' supplementary.categories(result, sup)
+supplementary.categories <- function(object, sup, dim = 1:2){
+  sup <- sup %>% tibble()
+  # Add tests
+  out   <- map(sup, ~average.coord(object, .x, dim)) %>% bind_rows(.id = "Variable")
+  out   <- out %>% select(Variable, label = label, X, Y, Frequency = Freq) %>% tibble() %>% mutate(Modality = paste0(Variable, ": ", label))
+  out
+}
+
+
 #' CSA measures
 #' 
 #' Several measures for the evaluation of the relations between the dimensions of the CSA and the dimensions the of original MCA
@@ -690,7 +689,7 @@ headings      <- function(object, dim = 1:3) {
 #' 
 #' Defining a partition of the cloud of individuals into groups, one can calculate the midpoints of the various groups. 
 #' The total variance of the cloud of individuals can then be broken down to between–within variances, i.e. variance between the groups partitioning the cloud, and variance within the groups
-#' The ratio of the between-variance to the total variance is denoted by η2 (eta-square), and accounts for the percentage of variance 'explained' by the group-variable.
+#' The ratio of the between-variance to the total variance is denoted by n2 (eta-square), and accounts for the percentage of variance 'explained' by the group-variable.
 #' (see Le Roux & Rouanet 2010, p. 20ff, 69, 114)
 #' 
 #' @param object is a soc.ca class object

@@ -5,11 +5,14 @@
 \alias{taste}
 \title{Taste dataset}
 \value{
-The variables included in the dataset:
-\item{Preferred TV program}{(8 categories): news, comedy, police, nature, sport, films, drama, soap operas}
-\item{Preferred Film}{(8 categories): action, comedy, costume drama, documentary, horror, musical, romance, SciFi}
-\item{Preferred type of Art}{(7 categories): performance, landscape, renaissance, still life, portrait, modern, impressionsism}
-\item{Preferred place to Eat out}{(6 categories): fish & chips, pub, Indian restuarant, Italian restaurant, French restaurant, steak house}
+The variables included in the dataset: \item{Preferred TV program}{(8
+categories): news, comedy, police, nature, sport, films, drama, soap operas}
+\item{Preferred Film}{(8 categories): action, comedy, costume drama,
+documentary, horror, musical, romance, SciFi} \item{Preferred type of Art}{(7
+categories): performance, landscape, renaissance, still life, portrait,
+modern, impressionsism} \item{Preferred place to Eat out}{(6 categories):
+fish & chips, pub, Indian restuarant, Italian restaurant, French restaurant,
+steak house}
 }
 \description{
 The taste example dataset used by Le Roux & Rouanet(2010):
@@ -37,7 +40,7 @@ map.active(result.mca, point.fill = result.mca$variable)
 map.active(result.mca,
  map.title="Map of active modalities with size of contribution to 1. dimension",
  point.size=result.mca$ctr.mod[, 1])
-map.active(result.mca, 
+map.active(result.mca,
  map.title="Map of active modalities with size of contribution to 2. dimension",
  point.size=result.mca$ctr.mod[, 2])
 
@@ -50,7 +53,7 @@ map.ind(result.mca, map.title="Map of all unique individuals", point.color=dupli
 map.ind(result.mca, map.title="Map with individuals colored by the TV variable",
  point.color=active$TV)
 
-# Ellipse 
+# Ellipse
 map             <- map.ind(result.mca)
 map.ellipse(result.mca, map, as.factor(data_taste$Age == '55-64'))
 
@@ -80,9 +83,11 @@ map.csa.mca.array(result.csca)
 }
 }
 \references{
-Le Roux, Brigitte, Henry Rouanet, Mike Savage, og Alan Warde. 2008. "Class and Cultural Division in the UK". Sociology 42(6):1049-1071.
+Le Roux, Brigitte, Henry Rouanet, Mike Savage, og Alan Warde.
+  2008. "Class and Cultural Division in the UK". Sociology 42(6):1049-1071.
 
-Le Roux, B., og H. Rouanet. 2010. Multiple correspondence analysis. Thousand Oaks: Sage.
+Le Roux, B., og H. Rouanet. 2010. Multiple correspondence
+  analysis. Thousand Oaks: Sage.
 }
 \author{
 Brigitte Le Roux

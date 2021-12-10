@@ -2,18 +2,22 @@
 % Please edit documentation in R/functions_build_plot.r
 \name{extract_sup}
 \alias{extract_sup}
-\title{Extract supplementary categories}
+\title{Extract supplementary categories from an soc.mca}
 \usage{
 extract_sup(result, dim = 1:2)
 }
 \arguments{
-\item{result}{}
+\item{result}{a soc.mca object}
 
-\item{dim}{}
+\item{dim}{the dimensions}
 }
 \value{
-
+a data.frame with coordinates and frequences
 }
 \description{
-Extract supplementary categories
+Extract supplementary categories from an soc.mca
+}
+\examples{
+example(soc.mca)
+extract_sup(result)
 }

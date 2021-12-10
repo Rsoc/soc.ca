@@ -2019,7 +2019,7 @@ balance   <- function(object, act.dim = object$nd){
 #' @param mode indicates which form of output. Possible values: \code{"sort"},
 #'   \code{"mod"}, \code{"ind"}, \code{"variable"}. If the mode is
 #'   \code{"variable"}, \code{dim} can be a sequence of dimensions: \code{1:5}
-#' @param if TRUE; returns output as a matrix instead of as printed output.
+#' @param matrix.output if TRUE; returns output as a matrix instead of as printed output.
 #' @return Each mode prints different results:
 #' @return   \item{"mod"}{Ranks all modalities according to their contribution}
 #'   \item{"sort"}{Ranks all modalities according to their contribution and then sorts them according to their coordinates}
@@ -2559,7 +2559,7 @@ headings      <- function(object, dim = 1:3) {
 #' 
 #' Defining a partition of the cloud of individuals into groups, one can calculate the midpoints of the various groups. 
 #' The total variance of the cloud of individuals can then be broken down to between–within variances, i.e. variance between the groups partitioning the cloud, and variance within the groups
-#' The ratio of the between-variance to the total variance is denoted by η2 (eta-square), and accounts for the percentage of variance 'explained' by the group-variable.
+#' The ratio of the between-variance to the total variance is denoted by n2 (eta-square), and accounts for the percentage of variance 'explained' by the group-variable.
 #' (see Le Roux & Rouanet 2010, p. 20ff, 69, 114)
 #' 
 #' @param object is a soc.ca class object

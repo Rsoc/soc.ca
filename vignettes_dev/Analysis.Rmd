@@ -1,0 +1,114 @@
+---
+title: "Analysis"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Analysis}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(soc.ca)
+library(GDAtools)
+library(tidyverse)
+```
+
+
+# Weighting 
+
+```{r}
+example(soc.mca)
+
+ind   <- indicator(active)
+w     <- rep(1, nrow(ind))
+w[active$Film == "Horror"] <- 50000
+
+res    <- soc.mca(ind)
+res
+res.w  <- soc.mca(ind, weight = w)
+res.w
+
+contribution(res)
+contribution(res.w)
+contribution(res)
+contribution(res.w)
+
+map.ind(res)
+map.ind(res.w)
+
+average.coord(res, active$Film == "Horror") %>% select(X, Y) %>% round(2)
+average.coord(res.w, active$Film == "Horror") %>% select(X, Y) %>% round(2)
+
+ind   <- indicator(active)
+w     <- rep(1, nrow(ind))
+w[sup$Gender == "Women"] <- 0.5
+rowSums(ind.w) %>% table()
+
+res    <- soc.mca(ind)
+res
+res.w  <- soc.mca(ind.w, weight = w)
+res.w
+
+contribution(res)
+contribution(res.w)
+map.ind(res)
+map.ind(res.w)
+
+average.coord(res, sup$Gender == "Women") %>% select(X, Y) %>% round(2)
+average.coord(res.w, sup$Gender == "Women") %>% select(X, Y) %>% round(2)
+
+
+ind   <- indicator(active)
+w     <- rep(1, nrow(ind))
+w[sample(seq_along(w), size = length(w)/2)] <- 0.5
+rowSums(ind.w) %>% table()
+
+res    <- soc.mca(ind)
+res
+res.w  <- soc.mca(ind, weight = w)
+res.w
+
+contribution(res)
+contribution(res.w)
+map.ind(res)
+map.ind(res.w)
+
+average.coord(res, sup$Gender == "Women") %>% select(X, Y) %>% round(2)
+average.coord(res.w, sup$Gender == "Women") %>% select(X, Y) %>% round(2)
+
+
+# Test op imod GDAtools
+res.gda <- GDAtools::speMCA(active)
+res     <- soc.mca(active)
+gda.eig <- res.gda$eig$eigen %>% round(7) %>% head(5)
+res.eig <- res$eigen %>% round(7) %>% head(5)
+all.equal(gda.eig, res.eig)
+gda.coord <- res.gda$var$coord[, 1] %>% round(5)
+res.coord <- res$coord.mod[,1] %>% round(5)
+all.equal(gda.coord^2, res.coord^2)
+
+w[sample(seq_along(w), size = length(w)/2)] <- 0.5
+res.gda <- GDAtools::speMCA(active, row.w = w)
+res     <- soc.mca(active, weight = w)
+gda.eig <- res.gda$eig$eigen %>% round(7) %>% head(5)
+res.eig <- res$eigen %>% round(7) %>% head(5)
+all.equal(gda.eig, res.eig)
+
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+

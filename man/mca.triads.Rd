@@ -2,22 +2,22 @@
 % Please edit documentation in R/functions_triads.r
 \name{mca.triads}
 \alias{mca.triads}
-\title{Title}
+\title{Compare MCA's with triads}
 \usage{
 mca.triads(l.mca, l.triads, dim = c(1, 2), fix.mca = 1)
 }
 \arguments{
 \item{l.mca}{a list of soc.mca objects}
 
-\item{l.triads}{}
+\item{l.triads}{a list of triads}
 
-\item{dim}{}
+\item{dim}{the dimensions of the plane}
 
-\item{fix.mca}{}
+\item{fix.mca}{the indice of the mca that is used as a fixpoint for the axis across mca's}
 }
 \value{
-
+a triad object
 }
 \description{
-Title
+Compare MCA's with triads
 }

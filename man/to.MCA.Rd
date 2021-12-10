@@ -14,7 +14,7 @@ to.MCA(object, active, dim = 1:5)
 \item{dim}{a numeric vector}
 }
 \value{
-
+an FactoMineR class object
 }
 \description{
 Convert to MCA class from FactoMineR

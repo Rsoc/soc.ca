@@ -3,7 +3,7 @@ data(taste)
 
 colnames(taste)
 data(directors)
-?directors
+
 attach(directors)
 
 Career     <- data.frame(careerprofile_maclean_cat, years_between_edu_dir_cat,

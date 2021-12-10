@@ -21,6 +21,6 @@ Values range from 0.5 to 1, where 1 signifies a perfect or near perfect overlap 
 While a eigenvalue of 1 is a strong candidate for intervention, probably exclusion of one of the variables, it is less clear what the lower bound is. But values around 0.8 are also strong candidates for further inspection.
 }
 \examples{
-example(soc.ca)
+example(soc.mca)
 mca.eigen.check(active)
 }

@@ -2,18 +2,22 @@
 % Please edit documentation in R/functions_build_plot.r
 \name{extract_mod}
 \alias{extract_mod}
-\title{Extract categories}
+\title{Extract coordinates for the categories from an soc.mca}
 \usage{
 extract_mod(result, dim = 1:2)
 }
 \arguments{
-\item{result}{}
+\item{result}{a soc.mca object}
 
-\item{dim}{}
+\item{dim}{the dimension}
 }
 \value{
-
+a data.frame with coordinates and frequences
 }
 \description{
-Extract categories
+Extract coordinates for the categories from an soc.mca
+}
+\examples{
+example(soc.mca)
+extract_mod(result)
 }

@@ -7,13 +7,17 @@
 extract_ind(result, dim = 1:2)
 }
 \arguments{
-\item{result}{}
+\item{result}{a soc.ca object}
 
-\item{dim}{}
+\item{dim}{the dimensions}
 }
 \value{
-
+a data.frame with coordinates and frequences
 }
 \description{
 Extract individuals
+}
+\examples{
+example(soc.mca)
+extract_ind(result)
 }

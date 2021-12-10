@@ -11,35 +11,56 @@ The example dataset used by Brigitte Le Roux & Henry Rouanet (2004):
 # French Political Space example
 data(political_space97)
 #Recoding
-political_space97$Democracy <- ifelse(political_space97$Democracy \%in\% 1:2, "1_2", political_space97$Democracy)
-political_space97$Politicians <- ifelse(political_space97$Politicians \%in\% 1:2, "1_2", political_space97$Politicians)
+political_space97$Democracy <- ifelse(political_space97$Democracy \%in\% 1:2, "1_2",
+                                      political_space97$Democracy)
+political_space97$Politicians <- ifelse(political_space97$Politicians \%in\% 1:2, "1_2",
+                                        political_space97$Politicians)
 
 #Assigning questions to themes
-ethno   <- data.frame(Immigrants = political_space97$Immigrants, "North-Africans" = political_space97$NorthAfricans, 
-                      Races = political_space97$Races, "At home" = political_space97$AtHome, check.names = FALSE)
-autho   <- data.frame("Death Penalty" = political_space97$DeathPenalty, School = political_space97$School, check.names = FALSE)
-social  <- data.frame("Strike Effectiveness" = political_space97$StrikeEffectivness, "Strike 95" = political_space97$Strike95,
-                      "Unions" = political_space97$Unions, "Public services" = political_space97$PublicServices, check.names = FALSE)
+ethno   <- data.frame(Immigrants = political_space97$Immigrants,
+                      "North-Africans" = political_space97$NorthAfricans,
+                      Races = political_space97$Races,
+                       "At home" = political_space97$AtHome, check.names = FALSE)
 
-economy <- data.frame(Liberalism = political_space97$Liberalism, Profit = political_space97$Profit, Privatization = political_space97$Privatization,
+autho   <- data.frame("Death Penalty" = political_space97$DeathPenalty,
+                       School = political_space97$School, check.names = FALSE)
+
+social  <- data.frame("Strike Effectiveness" = political_space97$StrikeEffectivness,
+                       "Strike 95" = political_space97$Strike95,
+                      "Unions" = political_space97$Unions,
+                      "Public services" = political_space97$PublicServices, check.names = FALSE)
+
+economy <- data.frame(Liberalism = political_space97$Liberalism,
+                      Profit = political_space97$Profit,
+                      Privatization = political_space97$Privatization,
                       Globalization = political_space97$Globalization, check.names = FALSE)
-politics <- data.frame(Democracy = political_space97$Democracy, Politicians = political_space97$Politicians, check.names = FALSE)
-supranat <- data.frame(Euro = political_space97$Euro, "EU Power" = political_space97$EUpower, 
-                       "End EU" = political_space97$EndEU, "EU protection" = political_space97$EUprotection, check.names = FALSE)
+
+politics <- data.frame(Democracy = political_space97$Democracy,
+                        Politicians = political_space97$Politicians, check.names = FALSE)
+
+supranat <- data.frame(Euro = political_space97$Euro, "EU Power" = political_space97$EUpower,
+                       "End EU" = political_space97$EndEU,
+                       "EU protection" = political_space97$EUprotection, check.names = FALSE)
 
 # Creating and naming list of headings
 active <- list(ethno, autho, social, economy, politics, supranat)
-names(active) <- c("Ethnocentrism", "Authoritarianism", "Social", "Economy", "Politics", "Supranationality")
+names(active) <- c("Ethnocentrism", "Authoritarianism",
+                    "Social", "Economy", "Politics", "Supranationality")
 sup    <- data.frame(political_space97$Vote)
 
 result <- soc.mca(active, sup = sup, passive = ": 5")
 headings(result)
-map.active(result, point.color = result$headings, point.shape = result$headings, label.color = result$headings)
+map.active(result, point.color = result$headings,
+           point.shape = result$headings, label.color = result$headings)
 }
 \references{
-Perrineau, Pascal, Jean Chiche, Brigitte Le Roux, and Henry Rouanet. “L’espace politique des électeurs français à la fin des années 1990: nouveaux et anciens clivages, hétérogénéité des électorats.” Revue Francaise de Science Politique, no. 3 (June 2000): 463–88.
+Perrineau, Pascal, Jean Chiche, Brigitte Le Roux, and Henry
+  Rouanet. “L’espace politique des électeurs français à la fin des années
+  1990: nouveaux et anciens clivages, hétérogénéité des électorats.” Revue
+  Francaise de Science Politique, no. 3 (June 2000): 463–88.
 
-Le Roux, Brigitte, and Henry Rouanet. Multiple Correspondence Analysis. Thousand Oaks, Calif.: Sage Publications, 2010.
+Le Roux, Brigitte, and Henry Rouanet. Multiple Correspondence
+  Analysis. Thousand Oaks, Calif.: Sage Publications, 2010.
 }
 \author{
 Brigitte Le Roux

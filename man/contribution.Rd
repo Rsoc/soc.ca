@@ -28,7 +28,7 @@ modalities or individuals}
 \code{"mod"}, \code{"ind"}, \code{"variable"}. If the mode is
 \code{"variable"}, \code{dim} can be a sequence of dimensions: \code{1:5}}
 
-\item{if}{TRUE; returns output as a matrix instead of as printed output.}
+\item{matrix.output}{if TRUE; returns output as a matrix instead of as printed output.}
 }
 \value{
 Each mode prints different results:

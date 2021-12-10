@@ -144,6 +144,7 @@ p
 # First principal axis
 variance.of.angle(a = 63.44, x = var.x1, y = var.x2)
 
+
 # Rotation of the cloud # Not in the book
 target.p1 <- rotate_coord(x1, x2, angle = 63.44, type = "degrees", center = c(6,0))
 colnames(target.p1) <- c("x1", "x2")

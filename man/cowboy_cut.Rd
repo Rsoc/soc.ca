@@ -16,7 +16,7 @@ cowboy_cut(x, top.share = 0.1, bottom.share = 0.1, missing = "Missing")
 \item{missing}{a character vector with all the missing or unwanted categories.}
 }
 \value{
-
+a recoded factor
 }
 \description{
 If we are in a hurry and need to cut a lot of likert-scale or similar type of variables into MCA-friendly ordered factors this function comes in handy.

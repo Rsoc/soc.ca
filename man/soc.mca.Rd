@@ -2,7 +2,20 @@
 % Please edit documentation in R/functions_analysis.r
 \name{soc.mca}
 \alias{soc.mca}
-\title{Specific Multiple Correspondence Analysis}
+\title{soc.mca
+
+\code{soc.mca} performs a specific multiple correspondence analysis on a data.frame of factors, where cases are rows and columns are variables.}
+\usage{
+soc.mca(
+  active,
+  sup = NULL,
+  identifier = NULL,
+  passive = getOption("passive", default = "Missing"),
+  weight = NULL,
+  Moschidis = FALSE,
+  detailed.results = FALSE
+)
+}
 \arguments{
 \item{active}{Defines the active modalities in a data.frame with rows of individuals and columns of factors, without NA's'. Active can also be a named list of data.frames. The data.frames will correspond to the analytical headings.}
 
@@ -11,6 +24,8 @@
 \item{identifier}{A single vector containing a single value for each row/individual in x and sup. Typically a name or an id.number.}
 
 \item{passive}{A single character vector with the full or partial names of the passive modalities. All names that have a full or partial match will be set as passive.}
+
+\item{weight}{a numeric vector with the weights for the individual rows. The weight is normalized afterwardsds.}
 
 \item{Moschidis}{If TRUE adjusts contribution values for rare modalities. see \link{moschidis}.}
 
@@ -34,6 +49,7 @@
  \item{coord.ind}{A matrix with the principal coordinates of each individual per dimension.}
  \item{coord.sup}{A matrix with the principal coordinates of each supplementary modality per dimension.}
  \item{names.mod}{The names of the active modalities}
+ \item{labels.mod}{The shorter labels of the active modalities}
  \item{names.ind}{The names of the individuals}
  \item{names.sup}{The names of the supplementary modalities}
  \item{names.passive}{The names of the passive modalities}
@@ -44,7 +60,7 @@
  \item{Share.of.var}{A matrix the share of variance for each variable}
 }
 \description{
-\code{soc.mca} performs a specific multiple correspondence analysis on a data.frame of factors, where cases are rows and columns are variables.
+Specific Multiple Correspondence Analysis
 }
 \examples{
 # Loads the "taste" dataset included in this package

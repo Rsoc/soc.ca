@@ -1,12 +1,13 @@
-#' Extract categories
+#' Extract coordinates for the categories from an soc.mca
 #'
-#' @param result 
-#' @param dim 
+#' @param result a soc.mca object
+#' @param dim the dimension
 #'
-#' @return
+#' @return a data.frame with coordinates and frequences
 #' @export
-#'
-#' @examples
+#' @examples 
+#' example(soc.mca)
+#' extract_mod(result)
 
 extract_mod         <- function(result, dim = 1:2){
   coord.mod           <- result$coord.mod[, dim]
@@ -14,7 +15,7 @@ extract_mod         <- function(result, dim = 1:2){
   coord.mod           <- coord.mod[,]
   colnames(coord.mod) <- c("X", "Y")
   
-  md            <- coord.mod %>% data.frame() %>% rownames_to_column(var = "Modality")
+  md            <- coord.mod %>% data.frame() %>% tibble::rownames_to_column(var = "Modality")
   ctr           <- result$ctr.mod[, dim]
   md$ctr.x      <- ctr[, 1]
   md$ctr.y      <- ctr[, 2]
@@ -22,18 +23,22 @@ extract_mod         <- function(result, dim = 1:2){
   md$ctr.set    <- (apply(ctr, 2, function(x) x >= mean(x)) %>% rowSums()) > 0
   md$Frequency  <- result$freq.mod
   md$Variable   <- result$variable
+  md$label      <- result$labels.mod
+  md            <- md %>% tibble()
   md
 }
 
-#' Extract supplementary categories
+#' Extract supplementary categories from an soc.mca
 #'
-#' @param result 
-#' @param dim 
+#' @param result a soc.mca object
+#' @param dim the dimensions
 #'
-#' @return
+#' @return a data.frame with coordinates and frequences
 #' @export
-#'
 #' @examples
+#' example(soc.mca)
+#' extract_sup(result)
+ 
 extract_sup         <- function(result, dim = 1:2){
   coord.sup           <- result$coord.sup[, dim]
   rownames(coord.sup) <- result$names.sup
@@ -43,18 +48,21 @@ extract_sup         <- function(result, dim = 1:2){
   md                  <- coord.sup %>% data.frame() %>% rownames_to_column(var = "Modality")
   md$Frequency        <- result$freq.sup
   md$Variable         <- result$variable.sup
+  md                  <- md %>% tibble()
   md
 }
 
 #' Extract individuals
 #'
-#' @param result 
-#' @param dim 
+#' @param result a soc.ca object 
+#' @param dim the dimensions
 #'
-#' @return
+#' @return a data.frame with coordinates and frequences
 #' @export
-#'
-#' @examples
+#' @examples 
+#' example(soc.mca)
+#' extract_ind(result)
+
 extract_ind         <- function(result, dim = 1:2){
   coord.ind           <- result$coord.ind[, dim]
   rownames(coord.ind) <- result$names.ind
@@ -67,24 +75,24 @@ extract_ind         <- function(result, dim = 1:2){
   md$ctr.y     <- ctr[, 2]
   md$ctr       <- rowSums(ctr) / 2
   md$ctr.set   <- (apply(ctr, 2, function(x) x >= mean(x)) %>% rowSums()) > 0
+  md           <- md %>% tibble()
   md
 }
 
 
 #' Create the base of a soc.ca map
 #'
-#' @param up 
-#' @param down 
-#' @param right 
-#' @param left 
-#' @param ... 
+#' @param up the name of + pole on the vertical axis - "North"
+#' @param down the name of the - pole on the vertical axis - "South"
+#' @param right the name of the + pole on horizontal axis - "East"
+#' @param left the name of the - pole on the horizontal axis - "West"
+#' @param base_size controls the text size of themed labels
+#' @param ... further arguments are passed onto ggplot()
 #'
-#' @return
+#' @return a ggplot2 object
 #' @export
-#'
-#' @examples
 
-map.ca.base <- function(up = NULL, down = NULL, right = NULL, left = NULL, ...){
+map.ca.base <- function(up = NULL, down = NULL, right = NULL, left = NULL, base_size = 15, ...){
   
   breaks.major <- seq(-100, 100, by = 0.25)
   labels       <- breaks.major
@@ -115,7 +123,7 @@ map.ca.base <- function(up = NULL, down = NULL, right = NULL, left = NULL, ...){
     ret
   }
   
-  p      <- p + theme_ca_base()
+  p      <- p + theme_ca_base(base_size = base_size)
   
   
   p      <- p + scale_size_continuous(range = c(0.1, 2))

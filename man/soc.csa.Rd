@@ -3,6 +3,9 @@
 \name{soc.csa}
 \alias{soc.csa}
 \title{Class Specific Multiple Correspondence Analysis}
+\usage{
+soc.csa(object, class.indicator, sup = NULL)
+}
 \arguments{
 \item{object}{is a soc.ca class object created with \link{soc.mca}}
 
@@ -29,6 +32,7 @@
  \item{coord.sup}{A matrix with the principal coordinates of each supplementary modality per dimension. Notice that the position of the supplementary modalities in class specific analysis is the mean point of the individuals, which is not directly comparable with the cloud of the active modalities.}
  \item{indicator.matrix}{A indicator matrix. See \link{indicator}}
  \item{names.mod}{The names of the active modalities}
+ \item{labels.mod}{The shorter labels of the active modalities}
  \item{names.ind}{The names of the individuals}
  \item{names.sup}{The names of the supplementary modalities}
  \item{names.passive}{The names of the passive modalities}

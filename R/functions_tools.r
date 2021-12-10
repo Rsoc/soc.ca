@@ -69,10 +69,9 @@ min_cut <- function(x, min.size = length(x)/10){
 #' @param bottom.share approximate share in bottom category
 #' @param missing a character vector with all the missing or unwanted categories.
 #'
-#' @return
+#' @return a recoded factor
 #' @export
-#'
-#' @examples
+
 cowboy_cut <- function(x, top.share = 0.10, bottom.share = 0.10,  missing = "Missing"){
   x[x %in% missing] <- NA
   x <- droplevels(x)
@@ -192,7 +191,7 @@ invert <- function(x, dim = 1) {
 #' @param active the active variables
 #' @param dim a numeric vector
 #'
-#' @return
+#' @return an FactoMineR class object
 to.MCA <- function(object, active, dim = 1:5) {
   
   rownames(active)         <- object$names.ind
@@ -239,8 +238,9 @@ barycenter <- function(object, mods = NULL, dim = 1){
 #' @export
 #'
 #' @examples
-#' example(soc.ca)
+#' example(soc.mca)
 #' mca.eigen.check(active)
+
 mca.eigen.check <- function(active, passive = "Missing"){
   
   get.eigen <- function(x, y, passive = "Missing"){
@@ -260,7 +260,7 @@ mca.eigen.check <- function(active, passive = "Missing"){
   comb <- active %>% colnames() %>% combn(., 2, simplify = T) %>% t() %>% as_tibble()
   colnames(comb) <- c("x", "y")
   
-  values           <- map2_df(.x = comb$x, .y = comb$y,  ~get.eigen(x = active[[.x]], y = active[[.y]], passive = passive))
+  values           <- purrr::map2_df(.x = comb$x, .y = comb$y,  ~get.eigen(x = active[[.x]], y = active[[.y]], passive = passive))
   o                <- bind_cols(comb, values)
   o
 }

@@ -1,6 +1,5 @@
-# Functions analysis
-
 #' Specific Multiple Correspondence Analysis
+#' @title soc.mca
 #'
 #' \code{soc.mca} performs a specific multiple correspondence analysis on a data.frame of factors, where cases are rows and columns are variables.
 #' @param active       Defines the active modalities in a data.frame with rows of individuals and columns of factors, without NA's'. Active can also be a named list of data.frames. The data.frames will correspond to the analytical headings.
@@ -9,6 +8,7 @@
 #' @param passive      A single character vector with the full or partial names of the passive modalities. All names that have a full or partial match will be set as passive.
 #' @param Moschidis    If TRUE adjusts contribution values for rare modalities. see \link{moschidis}.
 #' @param detailed.results If FALSE the result object is trimmed to reduce its memory footprint.
+#' @param weight a numeric vector with the weights for the individual rows. The weight is normalized afterwardsds.
 #' 
 #' @return \item{nd}{Number of active dimensions}
 #'  \item{n.ind}{The number of active individuals}
@@ -27,6 +27,7 @@
 #'  \item{coord.ind}{A matrix with the principal coordinates of each individual per dimension.}
 #'  \item{coord.sup}{A matrix with the principal coordinates of each supplementary modality per dimension.}
 #'  \item{names.mod}{The names of the active modalities}
+#'  \item{labels.mod}{The shorter labels of the active modalities}
 #'  \item{names.ind}{The names of the individuals}
 #'  \item{names.sup}{The names of the supplementary modalities}
 #'  \item{names.passive}{The names of the passive modalities}
@@ -67,7 +68,7 @@
 #' options(passive = NULL)
 #' @export
 
-soc.mca <- function(active, sup = NULL, identifier = NULL, passive = getOption("passive", default = "Missing"), Moschidis = FALSE,
+soc.mca <- function(active, sup = NULL, identifier = NULL, passive = getOption("passive", default = "Missing"), weight = NULL, Moschidis = FALSE,
                     detailed.results = FALSE) {
 
   # Preparing data 
@@ -126,15 +127,16 @@ soc.mca <- function(active, sup = NULL, identifier = NULL, passive = getOption("
   varlist.long <- gsub(": .*", "", colnames(ind.act))                     # Vector of varnames matching the list of modalities
   Q            <- median(rowSums(ind.act))                                # Number of Questions [we use the median in order to allow for questions that do not sum to one]
   
-  passive.set <- grepl(paste(passive, collapse = "|"), colnames(ind.act)) # Defining the set of passive modalities, default is no passive
+  passive.set  <- grepl(paste(passive, collapse = "|"), colnames(ind.act)) # Defining the set of passive modalities, default is no passive
   set <- 1:ncol(ind.act)                                                  # set is all
   active.set <- set[!passive.set]                                         # active.set is active modalities
   
   ind.reduced <- ind.act[ ,active.set]                                    # Reducing the indicator matrix to the active set of modalities
   varlist.long.red <- gsub(": .*", "", colnames(ind.reduced))             # The reduced vector of var names, matching the reduced modality name vector
   
-  tmpx <- vector()
   
+# This part here can be written more transparent.  
+  tmpx <- vector()
   #for each variable, 
   for (i in 1:length(unique(varlist))) {
     t1 <- ind.act[,varlist.long == unique(varlist)[i]]
@@ -142,9 +144,12 @@ soc.mca <- function(active, sup = NULL, identifier = NULL, passive = getOption("
     if (is.null(dim(t1)[2])) {
       tmpx[i] <- max(ind.act[,varlist.long == unique(varlist)[i]] - ind.reduced[,varlist.long.red == unique(varlist)[i]])  
     }else{
-      tmpx[i] <- max(rowSums(ind.act[,varlist.long == unique(varlist)[i]]) - rowSums(ind.reduced[,varlist.long.red == unique(varlist)[i]]))
+      tmpx[i] <- max(rowSums(ind.act[,varlist.long == unique(varlist)[i]]) - rowSums(ind.reduced[,varlist.long.red == unique(varlist)[i], drop = FALSE]))
     }
   }
+  
+  
+  
   Qm <- Q - sum(tmpx)                                                     # Calculating the number of questions with passive modalities
   
   
@@ -177,7 +182,7 @@ soc.mca <- function(active, sup = NULL, identifier = NULL, passive = getOption("
   #      The actual analysis, a CA of the indicator matrix       #
   ################################################################
   
-  result <- subset.ca.indicator(ind.act, ind.sup, active.set, passive.set, Q = Q, Qm = Qm, Moschidis = Moschidis, detailed.results = detailed.results)
+  result <- subset.ca.indicator(ind.act, ind.sup, active.set, passive.set, Q = Q, Qm = Qm, Moschidis = Moschidis, detailed.results = detailed.results, weight = weight)
   
   result$variable.all <- varlist.long
   
@@ -188,6 +193,7 @@ soc.mca <- function(active, sup = NULL, identifier = NULL, passive = getOption("
   
   result$names.mod.all            <- colnames(ind.act)
   result$names.mod                <- colnames(ind.act)[active.set]
+  result$labels.mod               <- names(colnames(ind.act))[active.set]
   result$names.ind                <- as.character(identifier)
   result$names.sup                <- colnames(ind.sup)
   result$names.passive            <- colnames(ind.act)[passive.set]
@@ -331,126 +337,118 @@ soc.mca <- function(active, sup = NULL, identifier = NULL, passive = getOption("
 # ' #@export
 # ' @return a list of various results. See \link{soc.mca} documentation
 
-subset.ca.indicator <- function(ind.act, ind.sup, active.set, passive.set, Q, Qm, Moschidis, detailed.results = FALSE){
+subset.ca.indicator <- function (ind.act, ind.sup, active.set, passive.set, Q, Qm, 
+                                 Moschidis, detailed.results = FALSE, weight = NULL) {
   
   
-  Z.act     <- ind.act
-  Z.sup     <- ind.sup
-  colZ      <- colSums(Z.act)
+  if(is.null(weight)) weight <- rep(1, nrow(ind.act))
   
-  # If moschidis is TRUE, the method from Moschidis, Odysseas E.
+  Z.act <- ind.act
+  Z.sup <- ind.sup
+  row.w <- weight/sum(weight) * nrow(Z.act) # a vector of row weights 
   
-  if (identical(Moschidis, TRUE)){
+  #colZ <- colSums(Z.act)
+  if (identical(Moschidis, TRUE)) {
     Y <- vector()
     cnZ.act <- colnames(Z.act)
-    varlist <- gsub(pattern = ": .*", "" , cnZ.act) 
-    
+    varlist <- gsub(pattern = ": .*", "", cnZ.act)
     for (i in seq(Q)) {
       x <- rep(table(varlist)[i], table(varlist)[i])
       Y <- c(Y, x)
     }
-    Z.act <- Z.act%*%diag(1/(Y-1))
+    Z.act <- Z.act %*% diag(1/(Y - 1))
     colnames(Z.act) <- cnZ.act
   }
   
-  I         <- dim(Z.act)[1]  # Number of individuals
-  J         <- dim(Z.act)[2]  # Number of modalities >> Subset
-  Q         <- Q              # Number of variables
-  
-  # Inertias
-  P            <- Z.act / sum(Z.act)      # The full correspondence matrix 
-  cm.all       <- colSums(P)              # Column (modality) mass
-  mass.mod.all <- cm.all                  # keeping the full column mass vector for later use
-  rm           <- rowSums(P)              # Row (individual) mass
-  
-  diag.cm.all   <- diag(1/ sqrt(cm.all))       # A J x J diagonal matrix of 1/sqrt(column masses)
-  
-  eP        <- rm %*% t(cm.all)            # Expected distances
-  S         <- (P - eP) / sqrt(eP)         # Euclidian distances, a matrix of standardized residuals
-  
-  ## Subsetting 
-  K         <- length(active.set)
-  S         <- S[, active.set]
-  cm        <- cm.all[active.set]
-  cm.all[passive.set]                     <- 0
-  diag.cm   <- diag.cm.all[active.set, active.set]
-  diag.cm.all[passive.set, passive.set]   <- 0
-  
-  ##################################
-  ## Singular value decomposition ##
-  ##################################
-  
-  # Decomposition and eigenvectors
-  dec       <- svd(S)                                             # Singular decomposition
-  eigen     <- dec$d^2                                            # Eigenvalues from singularvalues
-  
-  # Principal coordinates
-  pc.mod    <- diag.cm %*% dec$v %*% diag(dec$d)   # Principal coordinates for modalities
-  
-  # Principal coordinates for individuals
-  #diag.rm   <- diag(1/ sqrt(rm))  
-  diag.rm   <- Matrix::Diagonal(x = 1/ sqrt(rm))
-  pc.ind    <- diag.rm %*% dec$u %*% diag(dec$d)   # Principal coordinates for individuals # This is a slow process, but it scales ok # Anders Holm adjustment  
-  
-  # Inertias for rows and column profiles
-  inr.ind   <- Matrix::Diagonal(x =rm) %*% pc.ind^2     # Inertia for row (Individuals) (mass x principal coordinates) # This is a slow process and it scales badly - diag(rm) is a individual X individual matrix. It is also sparse - so it might be possible to do it quicker.
-  inr.mod   <- diag(cm) %*% pc.mod^2     # Inertia for columns (Modalities)
-  
-  # Relative contributions, 'point inertia on axis' / total inertia of axis
-  ctr.ind   <- Matrix::t(Matrix::t(inr.ind) / dec$d^2)   # Contribution for the individuals (inertia / eigenvalue)
-  ctr.mod   <- t(t(inr.mod) / dec$d^2)   # Contribution for the modalities
-  ctr.mod.raw   <- inr.mod               # Contribution for the modalities
-  
-  # Squared cosines or correlations
-  cor.ind   <- inr.ind/Matrix::rowSums(inr.ind)  # Squared cosines for individuals
-  cor.mod   <- inr.mod/rowSums(inr.mod)  # Squared cosines for modalities
-  cor.mod.raw   <- inr.mod               # Squared cosines for modalities
   
   
-  ############################################
-  #         Supplementary points             #
-  ############################################
+  I <- dim(Z.act)[1]
+  J <- dim(Z.act)[2]
+  # P <- Z.act/sum(Z.act)
+  Z.act_w <- row.w * Z.act
+  n_k  <- colSums(Z.act_w)
+  n_kp <- n_k[active.set]                                  # subsetting modality frequencies to remove passive modalities     
+  NK   <- diag(n_k) 
+  NKp  <- NK[active.set, active.set]                        # subsetting modality frequencies to remove passive modalities 
   
-  # Supplementary principal coordinates
-  if (sum(ind.sup) >0 ) {
-    Z.sup     <- Z.sup[,which(colSums(Z.sup) > 0)]
-    Z.star    <- Z.sup
-    I.star    <- dim(Z.sup)[1]
-    cs.star   <- apply(Z.sup, 2, sum)
-    
-    base      <- Z.star / matrix(rep(cs.star, I.star), nrow = I.star, byrow = TRUE)
-    f.s1      <- dec$u * sqrt(eigen) / sqrt(rm)   
-    a.s1      <- f.s1 / sqrt(eigen)               
-    pc.sup    <- t(base) %*% a.s1
-    
-    # t.test for supplementary points
-    
-    t       <- matrix(NA, nrow = nrow(pc.sup), ncol = ncol(pc.sup))
-    
-    
+  n  <- nrow(Z.act)
+  Z0 <- sweep(Z.act, 2, n_k/n)                             # subtracts the relative frequency of the modality (nk/n) from the k-column dirac meassures (1/0)
+  Z0 <- as.matrix(Z0)
+  Z0t <- Z0[, active.set]                                  # subsetting to remove passive modalities  = Z̃0
+  
+  H0t <- sqrt(row.w) * (1/sqrt(Q)) * Z0t %*% diag(1/sqrt(n_kp)) ## I don't understand what the squared row.w term is doing.
+  dec <- svd(H0t)
+  
+  # cm.all <- colSums(P)
+  cm.all <- n_k/n
+  cm.all[passive.set] <- 0
+  mass.mod.all <- cm.all
+  rm <- row.w/n
+  #diag.cm.all <- diag(1/sqrt(cm.all))
+  #eP <- rm %*% t(cm.all)
+  #S <- (P - eP)/sqrt(eP)
+  K <- length(active.set)
+  #S <- S[, active.set]
+  #cm <- cm.all[active.set]
+  fk <- n_kp/n
+  cm <- n_kp/n / Q
+  #cm.all[passive.set] <- 0
+  #diag.cm <- diag.cm.all[active.set, active.set]
+  #diag.cm.all[passive.set, passive.set] <- 0
+  #dec <- svd(S)
+  
+  eigen <- dec$d^2
+  
+  pc.mod <- sqrt(n * Q) * diag(1/sqrt(n_kp)) %*% dec$v %*% diag(dec$d)
+  #pc.mod <- diag.cm %*% dec$v %*% diag(dec$d)
+  #diag.rm <- Matrix::Diagonal(x = 1/sqrt(rm))
+  pc.ind  <- (1/sqrt(row.w)) * sqrt(n) * dec$u %*% diag(dec$d)
+  #pc.ind <- diag.rm %*% dec$u %*% diag(dec$d)
+  inr.ind <- row.w/n * pc.ind^2
+  #inr.ind <- Matrix::Diagonal(x = row.w/n) %*% pc.ind^2
+  
+  inr.mod  <- (fk/Q) * pc.mod^2
+  #inr.mod  <- diag(cm) %*% pc.mod^2
+  
+  ctr.ind <- Matrix::t(Matrix::t(inr.ind)/dec$d^2)
+  ctr.mod <- t(t(inr.mod)/dec$d^2)
+  ctr.mod.raw <- inr.mod
+  cor.ind <- inr.ind/Matrix::rowSums(inr.ind)
+  cor.mod <- inr.mod/rowSums(inr.mod)
+  cor.mod.raw <- inr.mod
+  
+  
+  if (sum(ind.sup) > 0) {
+    Z.sup <- Z.sup[, which(colSums(Z.sup) > 0)]
+    Z.star <- Z.sup
+    I.star <- dim(Z.sup)[1]
+    cs.star <- apply(Z.sup, 2, sum)
+    base <- Z.star/matrix(rep(cs.star, I.star), nrow = I.star, 
+                          byrow = TRUE)
+    f.s1 <- dec$u * sqrt(eigen)/sqrt(rm)
+    a.s1 <- f.s1/sqrt(eigen)
+    pc.sup <- t(base) %*% a.s1
+    t <- matrix(NA, nrow = nrow(pc.sup), ncol = ncol(pc.sup))
     for (j in 1:ncol(pc.sup)) {
       for (i in 1:nrow(pc.sup)) {
-        #t[i,j] <- round(pnorm(-abs(sqrt(cs.star[i]*((I-1)/(I-cs.star[i])))*pc.sup[i,j])),5) # produces warning for freq.sup = 0
-        t[i,j] <- round(sqrt(cs.star[i]*((I-1)/(I-cs.star[i])))*pc.sup[i,j],5) # produces warning for freq.sup = 0
+        t[i, j] <- round(sqrt(cs.star[i] * ((I - 1)/(I - 
+                                                       cs.star[i]))) * pc.sup[i, j], 5)
       }
     }
-    
-  }else{
-    pc.sup  <- NULL
+  }
+  else {
+    pc.sup <- NULL
     t.plane <- NULL
-    t       <- NULL
+    t <- NULL
   }
   
-  # principle coordinates for active and passive modalities, in case we want to plot the passive modalities
-  pc.all            <- pc.mod
-  ctr.mod.all       <- ctr.mod
-  cor.mod.all       <- cor.mod
-  ctr.mod.all.raw   <- ctr.mod.raw
-  cor.mod.all.raw   <- cor.mod.raw
-  
-  # Calculating midpoint coordinates of passive modalities
+  pc.all <- pc.mod
+  ctr.mod.all <- ctr.mod
+  cor.mod.all <- cor.mod
+  ctr.mod.all.raw <- ctr.mod.raw
+  cor.mod.all.raw <- cor.mod.raw
   if (length(active.set) < ncol(Z.act)) {
-    cs.star.all       <- colZ
+    cs.star.all <- n_k
     tmp.ctr <- ctr.mod
     tmp.cor <- cor.mod
     tmp.ctr.raw <- ctr.mod.raw
@@ -460,136 +458,90 @@ subset.ca.indicator <- function(ind.act, ind.sup, active.set, passive.set, Q, Qm
     rownames(tmp.ctr.raw) <- colnames(Z.act)[active.set]
     rownames(tmp.cor.raw) <- colnames(Z.act)[active.set]
     passive.mod <- setdiff(names(cs.star.all), rownames(tmp.ctr))
-    passive.modalities <- matrix(0, nrow = length(passive.mod), ncol = length(eigen))
+    passive.modalities <- matrix(0, nrow = length(passive.mod), 
+                                 ncol = length(eigen))
     rownames(passive.modalities) <- passive.mod
     tmp.ctr <- rbind(tmp.ctr, passive.modalities)
     tmp.cor <- rbind(tmp.cor, passive.modalities)
     tmp.ctr.raw <- rbind(tmp.ctr.raw, passive.modalities)
     tmp.cor.raw <- rbind(tmp.cor.raw, passive.modalities)
-    
-    if(identical(detailed.results, TRUE)){
-      # These are for detailed results
-      pc.all            <- matrix(0, nrow = dim(Z.act)[2], ncol = length(eigen))
-      ctr.mod.all       <- matrix(0, nrow = dim(Z.act)[2], ncol = length(eigen))
-      cor.mod.all       <- matrix(0, nrow = dim(Z.act)[2], ncol = length(eigen))
-      ctr.mod.all.raw   <- matrix(0, nrow = dim(Z.act)[2], ncol = length(eigen))
-      cor.mod.all.raw   <- matrix(0, nrow = dim(Z.act)[2], ncol = length(eigen))
-      
-      # scaling midpoint coordinates along axes
+    if (identical(detailed.results, TRUE)) {
+      pc.all <- matrix(0, nrow = dim(Z.act)[2], ncol = length(eigen))
+      ctr.mod.all <- matrix(0, nrow = dim(Z.act)[2], ncol = length(eigen))
+      cor.mod.all <- matrix(0, nrow = dim(Z.act)[2], ncol = length(eigen))
+      ctr.mod.all.raw <- matrix(0, nrow = dim(Z.act)[2], 
+                                ncol = length(eigen))
+      cor.mod.all.raw <- matrix(0, nrow = dim(Z.act)[2], 
+                                ncol = length(eigen))
       for (j in 1:length(eigen)) {
-        for (i in 1:length(colnames(Z.act))){
-          pc.all[i,j]            <- sum(pc.ind[Z.act[,i] > 0,j]) / cs.star.all[i] / sqrt(eigen[j])
-          ctr.mod.all[i,j]       <- tmp.ctr[rownames(tmp.ctr) == colnames(Z.act)[i], j]
-          cor.mod.all[i,j]       <- tmp.cor[rownames(tmp.cor) == colnames(Z.act)[i], j]
-          ctr.mod.all.raw[i,j]   <- tmp.ctr.raw[rownames(tmp.ctr.raw) == colnames(Z.act)[i], j]
-          cor.mod.all.raw[i,j]   <- tmp.cor.raw[rownames(tmp.cor.raw) == colnames(Z.act)[i], j]
-        }}
+        for (i in 1:length(colnames(Z.act))) {
+          pc.all[i, j] <- sum(pc.ind[Z.act[, i] > 0, 
+                                     j])/cs.star.all[i]/sqrt(eigen[j])
+          ctr.mod.all[i, j] <- tmp.ctr[rownames(tmp.ctr) == 
+                                         colnames(Z.act)[i], j]
+          cor.mod.all[i, j] <- tmp.cor[rownames(tmp.cor) == 
+                                         colnames(Z.act)[i], j]
+          ctr.mod.all.raw[i, j] <- tmp.ctr.raw[rownames(tmp.ctr.raw) == 
+                                                 colnames(Z.act)[i], j]
+          cor.mod.all.raw[i, j] <- tmp.cor.raw[rownames(tmp.cor.raw) == 
+                                                 colnames(Z.act)[i], j]
+        }
+      }
     }
-    
-  }
-  
-  #################################
-  #     Preparing output          #
-  #################################
-  
-  # First reduction of dimensionality - 'La dimension du suppport': 
-  R1.dim        <- K-Qm
-  R1.eigen.val  <- eigen[1:R1.dim]
-  
-  # Second reduction of dimensionality - dimensions above average
-  Mean.r.eigen  <- ((K/Q) - sum(cm)) / R1.dim
-  R2.eigen.val  <- eigen[eigen >= Mean.r.eigen]
-  R2.dim        <- length(R2.eigen.val)
-  
-  # Explained variance
-  unadj.var       <- 100*(eigen[1:R1.dim])/sum(eigen[1:R1.dim]) # Unadjusted rates of variance
-  adj.var.mod     <-(Q/(Q-1))^2 * (eigen[1:R2.dim]-Mean.r.eigen)^2
-  sum.adj.var     <- sum(adj.var.mod)
-  adj.var         <- round(((adj.var.mod/sum.adj.var)*100), digits = 1) # The adjusted rates of variance
-  cumpercent      <- cumsum(adj.var)
-  adj.inertia     <- cbind(1:R2.dim, round(eigen[1:R2.dim], 3), round(unadj.var[1:R2.dim], 1), adj.var ,cumpercent)
-  colnames(adj.inertia) <- c("Dim", "Eigen", "Var" ,"Adj.Var", "Cum%")
-  
-  
-  ### Inerti, total and expressed in rates of 1) Sum of adj.var greater than avr eigenval (Benzecri) and of 2) acerage off-diagonal inertia of the Burt-table (Greenacre)
-  # unadj.var     <- 100*(eigen[1:R1.dim])/sum(eigen[1:R1.dim]) # Unadjusted rates of variance
-  
-  # nz <- nrow(ind.act[,subset])/sum(ind.act[,subset])
-  # adj.var.Zarrag <- (sum(ind.act[,subset])/(nrow(ind.act[,subset])*(Q-1)))^2 * (eigen[eigen > nz]- nz)^2
-  # sum.adj.var.Zarrag <- sum(adj.var.Zarrag[adj.var.Zarrag>0])
-  # adj.var.rate.Zarrag <- round(((adj.var.Zarrag/sum.adj.var.Zarrag)*100), digits=1)
-  # cumpercent.Zarrag <- cumsum(adj.var.rate.Zarrag)
-  # stop <- length(adj.var.rate.Zarrag)
-  # adj.inertia2   <- cbind(1:stop, round(eigen[1:stop], 3), round(unadj.var[1:stop], 1), adj.var.rate.Zarrag, cumpercent.Zarrag) # De Rouanet adjustede inertier - skal nok rykkes ned.
-  adj.inertia2   <- cbind(1:R1.dim, round(eigen[1:R1.dim], 3), round(unadj.var, 1),  round(cumsum(unadj.var),1)) # De Rouanet adjustede inertier - skal nok rykkes ned.
-  colnames(adj.inertia2) <- c("Dim", "Eigen", "Unadj.Var%", "Cum%")
-  
-  freq.mod.all  <- colZ
-  freq.mod      <- colZ[active.set]
-  if (sum(ind.sup) >0 ) {
-    freq.sup      <- colSums(Z.sup)
-  }else{
-    freq.sup      <- NULL
   }
   
   
-  # Output
-  ca.output <- list(nd        = R2.dim,
-                    n.ind     = nrow(Z.act),
-                    n.mod     = length(active.set),
-                    eigen     = eigen[1:R2.dim],
-                    eigen.raw = eigen,
-                    Qm        = Qm,
-                    Q         = Q,
-                    total.inertia = sum(eigen[1:R2.dim]),
-                    total.inertia.raw = sum(eigen),
-                    adj.inertia = adj.inertia,
-                    #   adj.inertia.alt.green = adj.inertia1,
-                    inertia_full = adj.inertia2,
-                    freq.mod  = freq.mod,
-                    freq.mod.all = freq.mod.all,
-                    freq.sup  = freq.sup,
-                    ctr.ind   = as.matrix(ctr.ind),
-                    ctr.mod.raw     = ctr.mod.raw,
-                    cor.mod   = cor.mod,
-                    cor.ind   = as.matrix(cor.ind),
-                    mass.mod  = cm,
-                    mass.mod.all = mass.mod.all,
-                    coord.mod = pc.mod,
-                    coord.ind = as.matrix(pc.ind),
-                    coord.sup = pc.sup,
-                    t.test.sup = t,
-                    ctr.mod   = ctr.mod,
-                    indicator.matrix.trans   = Z.act
-  )
-  
-  if(identical(detailed.results, TRUE)){
-    dec.full  <- svd(S, nu = nrow(S), nv = ncol(S))   # Singular decomposition keeping all vectors
-    full      <- data.frame(svd.d     = dec.full$d,
-                            svd.u     = dec.full$u,
-                            svd.v     = dec.full$v)
-    
-    
-    ca.output$ctr.mod.all     = ctr.mod.all
-    ca.output$ctr.mod.all.raw = ctr.mod.all.raw 
-    
-    ca.output$cor.mod.raw               = cor.mod.raw
-    ca.output$cor.mod.all               = cor.mod.all
-    ca.output$cor.mod.all.raw           = cor.mod.all.raw
-    ca.output$coord.all                 = pc.all
-    ca.output$full <- full
+  R1.dim <- K - Qm
+  R1.eigen.val <- eigen[1:R1.dim]
+  Mean.r.eigen <- ((K/Q) - sum(cm))/R1.dim
+  R2.eigen.val <- eigen[eigen >= Mean.r.eigen]
+  R2.dim <- length(R2.eigen.val)
+  unadj.var <- 100 * (eigen[1:R1.dim])/sum(eigen[1:R1.dim])
+  adj.var.mod <- (Q/(Q - 1))^2 * (eigen[1:R2.dim] - Mean.r.eigen)^2
+  sum.adj.var <- sum(adj.var.mod)
+  adj.var <- round(((adj.var.mod/sum.adj.var) * 100), digits = 1)
+  cumpercent <- cumsum(adj.var)
+  adj.inertia <- cbind(1:R2.dim, round(eigen[1:R2.dim], 3), 
+                       round(unadj.var[1:R2.dim], 1), adj.var, cumpercent)
+  colnames(adj.inertia) <- c("Dim", "Eigen", "Var", "Adj.Var", 
+                             "Cum%")
+  adj.inertia2 <- cbind(1:R1.dim, round(eigen[1:R1.dim], 3), 
+                        round(unadj.var, 1), round(cumsum(unadj.var), 1))
+  colnames(adj.inertia2) <- c("Dim", "Eigen", "Unadj.Var%", 
+                              "Cum%")
+  freq.mod.all <- n_k
+  freq.mod <- n_kp
+  if (sum(ind.sup) > 0) {
+    freq.sup <- colSums(Z.sup)
   }
-  
-  
-  # Cleanup
-  names(ca.output$mass.mod)         <- NULL
-  dimnames(ca.output$coord.sup)     <- NULL
-  names(ca.output$freq.mod)         <- NULL
-  names(ca.output$freq.sup)         <- NULL
-  
+  else {
+    freq.sup <- NULL
+  }
+  ca.output <- list(nd = R2.dim, n.ind = nrow(Z.act), n.mod = length(active.set), 
+                    eigen = eigen[1:R2.dim], eigen.raw = eigen, Qm = Qm, 
+                    Q = Q, total.inertia = sum(eigen[1:R2.dim]), total.inertia.raw = sum(eigen), 
+                    adj.inertia = adj.inertia, inertia_full = adj.inertia2, 
+                    freq.mod = freq.mod, freq.mod.all = freq.mod.all, freq.sup = freq.sup, 
+                    ctr.ind = as.matrix(ctr.ind), ctr.mod.raw = ctr.mod.raw, 
+                    cor.mod = cor.mod, cor.ind = as.matrix(cor.ind), mass.mod = cm, 
+                    mass.mod.all = mass.mod.all, coord.mod = pc.mod, coord.ind = as.matrix(pc.ind), 
+                    coord.sup = pc.sup, t.test.sup = t, ctr.mod = ctr.mod, 
+                    indicator.matrix.trans = Z.act_w)
+  if (identical(detailed.results, TRUE)) {
+    ca.output$ctr.mod.all = ctr.mod.all
+    ca.output$ctr.mod.all.raw = ctr.mod.all.raw
+    ca.output$cor.mod.raw = cor.mod.raw
+    ca.output$cor.mod.all = cor.mod.all
+    ca.output$cor.mod.all.raw = cor.mod.all.raw
+    ca.output$coord.all = pc.all
+    ca.output$full <- svd(H0t, nu = nrow(H0t), nv = ncol(H0t))
+  }
+  names(ca.output$mass.mod) <- NULL
+  dimnames(ca.output$coord.sup) <- NULL
+  names(ca.output$freq.mod) <- NULL
+  names(ca.output$freq.sup) <- NULL
   return(ca.output)
 }
-
 
 
 #' Indicator matrix
@@ -624,6 +576,7 @@ fn          <- rep(names(obj), unlist(lapply(obj, nlevels)))
 ln          <- unlist(lapply(obj, levels))
 col.names   <- paste(fn, ln, sep = ps)
 colnames(Z) <- col.names
+names(colnames(Z)) <- ln
 
 if (identical(id, NULL) == TRUE){
 rownames(Z) <- as.character(seq(I))
@@ -658,6 +611,7 @@ return(Z)
 #'  \item{coord.sup}{A matrix with the principal coordinates of each supplementary modality per dimension. Notice that the position of the supplementary modalities in class specific analysis is the mean point of the individuals, which is not directly comparable with the cloud of the active modalities.}
 #'  \item{indicator.matrix}{A indicator matrix. See \link{indicator}}
 #'  \item{names.mod}{The names of the active modalities}
+#'  \item{labels.mod}{The shorter labels of the active modalities}
 #'  \item{names.ind}{The names of the individuals}
 #'  \item{names.sup}{The names of the supplementary modalities}
 #'  \item{names.passive}{The names of the passive modalities}
@@ -832,6 +786,7 @@ soc.csa   <- function(object, class.indicator, sup = NULL){
     coord.ind   = csa.i.coord,
     coord.sup   = sup.coord,
     names.mod   = names.mod,
+    labels.mod  = object$labels.mod,
     names.ind   = names.ind,
     names.sup   = names.sup,
     names.passive = names.passive,
@@ -1053,10 +1008,12 @@ supplementary.individuals <- function(object, sup.indicator, replace = FALSE){
 # map.ind(res.sup, point.fill = res.sup$supplementary.individuals, label = T)
 
 #' Check if data is valid for soc.mca
+#' 
+#' Performs tests on what has been passed on to soc.mca by the user.
 #'
-#' @param x 
+#' @param x the active variables sent to soc.mca
 #'
-#' @return
+#' @return a character vector with an evaluation of whether x is data.frame, a list of data.frames, an indicator or a list of indicators.
 #'
 #' @examples
 #' \dontrun{
@@ -1111,7 +1068,6 @@ supplementary.individuals <- function(object, sup.indicator, replace = FALSE){
 #' what.is.x(x)
 #' }
 
-
 what.is.x  <- function(x){
   # Is it a list of data.frames?
   is.d    <- is.data.frame(x)
@@ -1156,7 +1112,6 @@ balance.headings <- function(indicator, headings, Q) {
   mass_by_head  <-  Q / n_head
   Q_prH         <- sapply(heads, function(x) max(rowSums(indicator[, headings == x])))
   weight        <- Q_prH / mass_by_head 
-  sum(Z.act)
   for(i in 1:length(heads)) {
     indicator[ ,headings == heads[i]] <- indicator[ ,headings == heads[i]] / weight[i]
   }

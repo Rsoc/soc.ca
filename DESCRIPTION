@@ -9,7 +9,7 @@ Maintainer: Anton Grau Larsen <agraul@ruc.dk>
 Author: Anton Grau Larsen and Jacob Lunding with contributions from Christoph Ellersgaard and
     Stefan Andrade
 Depends:
-    R (>= 2.15.0),
+    R (>= 3.5.0),
     ggplot2
 Imports:
     gridExtra,
@@ -19,15 +19,22 @@ Imports:
     shiny,
     FactoMineR,
     ggrepel,
-    tidyverse,
+    magrittr,
     htmlTable,
     stringr,
     RColorBrewer,
     reshape2,
-    Matrix
+    Matrix,
+    flextable,
+    purrr,
+    tibble,
+    dplyr,
+    forcats,
+    rlang,
+    tidyr
 License: GPL-3
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Suggests: 
     knitr,
     rmarkdown
-VignetteBuilder: knitr
+Encoding: UTF-8
