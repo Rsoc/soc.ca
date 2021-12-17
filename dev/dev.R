@@ -77,7 +77,7 @@ add.ellipse <- function(object, var = NULL, draw = unique(var), dim = c(1, 2), e
 map.ca.base() + add.categories(result)                               # Alle aktive kategorier
 map.ca.base() + add.categories(result, repel = TRUE)                 # Med repel
 map.ca.base() + add.categories(result, check_overlap = TRUE)         # Med check overlap
-map.ca.base() + add.categories(result, "ctr")                        # De der bidrager over gennemsnit til planet
+map.ca.base() + add.categories(result, "ctr", size = 2)              # De der bidrager over gennemsnit til planet og nu ganske små
 map.ca.base() + add.categories(result, "sup")                        # De prædefinerede supplementære
 map.ca.base() + add.categories(result, cats = supplementary.categories(result, active[, 1:2])) # Selvstændigt definerede supplementære
 map.ca.base() + add.categories(result, "sup", color = "red") + add.categories(result, "all", color = "black")  
@@ -86,7 +86,6 @@ map.ca.base() + add.categories(result, mapping = aes(color = Variable, label = l
 map.ca.base() + add.categories(result, "sup", points = TRUE)
 
 map.ca.base() + add.ind(result, mapping = aes(color = active$Film))
-add.ind(result)
 
 map.ca.base() + add.ind(result, mapping = aes(color = active$TV))
 var <- active$TV == "Tv-Comedy" 
@@ -97,3 +96,29 @@ example(headings)
 cats <- extract_mod(result.headings)
 
 map.ca.base() + add.categories(cats = cats, mapping = aes(group = headings, color = Variable, label = label)) + facet_wrap(~headings)
+
+x <- 1:10
+
+
+
+select_proper_scale <- function(x){
+  
+# Is it numerical?
+is.numeric(x)
+# Discrete or really numeric?
+
+# Divergent?  
+
+  
+# Is it a categorical?
+
+  
+# Sequencial?
+  
+# Binary?
+if (n_distinct(x)  == 2) s <- scale_color_manual(values = getOption("soc.ca.colors.binary"))
+
+  
+s
+}
+

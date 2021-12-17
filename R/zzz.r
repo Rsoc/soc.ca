@@ -13,6 +13,7 @@ options(soc.ca.colors = c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3", "#FF7F00",
 options(soc.ca.gradient = c(low = "papayawhip", high = "darkblue"))
 options(soc.ca.shape    = c(21, 22, 23, 24, 25, 6, 0, 1, 2, 3, 4, 5, 7, 8, 9, 10,
                             12, 15, 16, 17, 18, 42, 45, 61, 48, 50:120))
+options(soc.ca.colors.binary = c("black", "#d53e4f"))
 }
 
 ################################################################################
