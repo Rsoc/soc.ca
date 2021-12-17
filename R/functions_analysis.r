@@ -517,7 +517,7 @@ subset.ca.indicator <- function (ind.act, ind.sup, active.set, passive.set, Q, Q
   else {
     freq.sup <- NULL
   }
-  ca.output <- list(nd = R2.dim, n.ind = nrow(Z.act), n.mod = length(active.set), 
+  ca.output <- list(nd = R2.dim, n.ind = nrow(Z.act), n.mod = length(active.set), weight = weight, 
                     eigen = eigen[1:R2.dim], eigen.raw = eigen, Qm = Qm, 
                     Q = Q, total.inertia = sum(eigen[1:R2.dim]), total.inertia.raw = sum(eigen), 
                     adj.inertia = adj.inertia, inertia_full = adj.inertia2, 

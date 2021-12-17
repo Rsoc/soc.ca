@@ -502,6 +502,42 @@ supplementary.categories <- function(object, sup, dim = 1:2){
 }
 
 
+supplementary_variable <- function(res, var) {
+  eigen    <- res$eigen
+  weight   <- res$weight
+  variable <- factor(var)
+  n  <- sum(weight)
+  
+  FK <- colSums(weight * (indicator(as.data.frame(variable))))/n
+  ind <- res$coord.ind
+  coord <- aggregate(weight * ind, list(variable), sum)[, -1]/n/FK
+  vrc   <- aggregate(weight * ind * ind, list(variable), sum)[, -1]/n/FK - coord * coord
+  
+  for (i in 1:ncol(coord)) coord[, i] <- coord[, i]/ sqrt(eigen[i])
+  cos2 <- coord * coord/((1/FK) - 1)
+  freq = n * FK
+  
+  names(freq) <- levels(variable)
+  rownames(coord) <- levels(variable)
+  rownames(cos2) <- levels(variable)
+  wi <- apply(vrc, 2, weighted.mean, w = freq)
+  be <- eigen - wi[1:length(eigen)]
+  eta2 <- be/eigen[1:length(be)]
+  vrc <- rbind(vrc[1:length(be)], wi, be, eigen[1:length(be)], eta2)
+  vrc <- round(vrc, 6)
+  rownames(vrc) <- c(levels(variable), "within", "between", "total", 
+                     "eta2")
+  coord <- round(coord, 6)
+  typic <- sqrt(cos2) * sqrt(length(variable) - 1)
+  typic <- (((abs(coord) + coord)/coord) - 1) * typic
+  pval <- 2 * (1 - pnorm(abs(as.matrix(typic))))
+  list(freq = round(freq, 1), coord = coord, cos2 = round(cos2, 
+                                                          6), var = round(vrc, 6), typic = round(typic, 6), pval = round(pval, 
+                                                                                                                         6))
+}
+
+
+
 #' CSA measures
 #' 
 #' Several measures for the evaluation of the relations between the dimensions of the CSA and the dimensions the of original MCA

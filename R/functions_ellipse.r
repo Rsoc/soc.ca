@@ -132,3 +132,101 @@ ellipse.origo <- function(el.axis){
 el.origo      <- c((x1 + x2) / 2, (y1 + y2) / 2)
 el.origo
 }
+
+
+#' Title
+#'
+#' @param object 
+#' @param var 
+#' @param dim 
+#' @param kappa 
+#' @param npoints 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+
+ellipses <- function(object, var, dim = c(1, 2), 
+                     kappa = 2, npoints = 1000) {
+  var <- factor(var)
+  m   <- supplementary_variable(object, var)$coord[, dim]
+  m[, 1] <- m[, 1] * object$eigen[dim[1]] %>% sqrt()
+  m[, 2] <- m[, 2] * object$eigen[dim[2]] %>% sqrt()
+  v <- supplementary_variable(object, var)$var[1:length(levels(var)), dim]
+  
+  varb <- var
+  wt <- object$weight
+  
+  c <- vector(length = length(levels(var)))
+  i <- 1
+  for (i in 1:length(c)) {
+    temp1 <- matrix(object$coord.ind[varb == levels(varb)[i], 
+                                  dim], ncol = 2)
+    temp1[, 1] <- temp1[, 1] - m[i, 1]
+    temp1[, 2] <- temp1[, 2] - m[i, 2]
+    temp2 <- wt[varb == levels(varb)[i]] * temp1[, 1] * 
+      temp1[, 2]
+    c[i] <- sum(temp2)/sum(wt[varb == levels(varb)[i]])
+  }
+  g1 <- 0.5 * (v[, 1] + v[, 2]) + 0.5 * sqrt((v[, 1] - v[, 
+                                                         2])^2 + 4 * c^2)
+  g2 <- 0.5 * (v[, 1] + v[, 2]) - 0.5 * sqrt((v[, 1] - v[, 
+                                                         2])^2 + 4 * c^2)
+  sa1 <- kappa * sqrt(g1)
+  sa2 <- kappa * sqrt(g2)
+  alph <- atan((g1 - v[, 1])/c)
+  theta <- seq(0, 2 * pi, length = npoints)
+  
+  modalities <- list()
+  for (i in 1:length(levels(varb))) {
+    x0 <- m[i, 1]
+    y0 <- m[i, 2]
+    alpha <- alph[i]
+    a <- sa1[i]
+    b <- sa2[i]
+    x <- x0 + a * cos(theta) * cos(alpha) - b * sin(theta) * 
+      sin(alpha)
+    y <- y0 + a * cos(theta) * sin(alpha) + b * sin(theta) * 
+      cos(alpha)
+    z1 <- x0 + c(a, b, a, b) * cos(alpha + c(0, pi/2, 
+                                             pi, 3 * pi/2))
+    z2 <- y0 + c(a, b, a, b) * sin(alpha + c(0, pi/2, 
+                                             pi, 3 * pi/2))
+    z <- cbind(z1, z2)
+    
+    origo <- data.frame(x = x0, y = y0)  
+    pc1 <- data.frame(z[c(1, 3), ])
+    colnames(pc1) <- c("x", "y")
+    pc2 <- data.frame(z[c(2, 4), ])   
+    colnames(pc2) <- c("x", "y")
+    a <- sqrt((pc1$x[1]- pc1$x[2])^2 + (pc1$y[2]- pc1$y[2])^2)/2
+    b <- sqrt((pc2$x[1]- pc2$x[2])^2 + (pc2$y[1]- pc2$y[2])^2)/2
+    
+    slope <- (pc1$y[2] - pc1$y[1]) / (pc1$x[2] - pc1$x[1])
+    angle <- atan(slope) * 180/pi
+    if( a > b) {
+      c <- 1-(b^2 / a^2)
+    }else{
+      c <- 1-(a^2 / b^2)
+    }
+    
+    out <- list()
+    out$principal_dim_1 <- pc1
+    out$principal_dim_2 <- pc2
+    out$origo           <- origo
+    out$ellipse        <- tibble(x, y)
+    out$`eccentricity coefficient` <- c
+    out$`orientation in plane` <- angle
+    modalities[[i]] <- out
+    
+  }
+  names(modalities) <- levels(varb)
+
+  modalities <- modalities %>% map(~.x %>% enframe() %>% pivot_wider(names_from = name, values_from = value)) %>% bind_rows(.id = "Category")
+  modalities$`eccentricity coefficient` <- modalities$`eccentricity coefficient` %>% as.numeric()
+  modalities$`orientation in plane` <- modalities$`orientation in plane` %>% as.numeric()
+  modalities
+}
+
+

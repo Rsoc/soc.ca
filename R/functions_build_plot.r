@@ -24,6 +24,7 @@ extract_mod         <- function(result, dim = 1:2){
   md$Frequency  <- result$freq.mod
   md$Variable   <- result$variable
   md$label      <- result$labels.mod
+  if(!is.null(result$headings)) md$headings = result$headings
   md            <- md %>% tibble()
   md
 }
@@ -128,5 +129,6 @@ map.ca.base <- function(up = NULL, down = NULL, right = NULL, left = NULL, base_
   
   p      <- p + scale_size_continuous(range = c(0.1, 2))
   p      <- p + theme(legend.position = "bottom")
+  p      <- p + coord_fixed()
   p
 }
