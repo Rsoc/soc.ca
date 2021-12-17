@@ -134,7 +134,7 @@ el.origo
 }
 
 
-#' Title
+#' Calculate concentraion ellipses
 #'
 #' @param object 
 #' @param var 
@@ -143,7 +143,7 @@ el.origo
 #' @param npoints 
 #'
 #' @return
-#' @export
+#' @export ellipses
 #'
 #' @examples
 
