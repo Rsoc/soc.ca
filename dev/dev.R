@@ -1,4 +1,5 @@
 library(soc.ca)
+library(tidyverse)
 example(soc.mca)
 
 add.ind    <- function(object, dim = c(1, 2), ind = extract_ind(object, dim), mapping = aes(), ...){
@@ -82,17 +83,17 @@ map.ca.base() + add.categories(result, cats = supplementary.categories(result, a
 map.ca.base() + add.categories(result, "sup", color = "red") + add.categories(result, "all", color = "black")  
 
 map.ca.base() + add.categories(result, mapping = aes(color = Variable, label = label))
-map.ca.base() + add.categories(object, "sup", points = TRUE)
+map.ca.base() + add.categories(result, "sup", points = TRUE)
 
-map.ca.base() + add.ind(object, mapping = aes(color = active$Film))
-add.ind(object)
+map.ca.base() + add.ind(result, mapping = aes(color = active$Film))
+add.ind(result)
 
-map.ca.base() + add.ind(object, mapping = aes(color = active$TV))
+map.ca.base() + add.ind(result, mapping = aes(color = active$TV))
 var <- active$TV == "Tv-Comedy" 
-map.ca.base() + add.ind(object, mapping = aes(color = var)) + add.ellipse(object, var = var, draw = "TRUE") 
+map.ca.base() + add.ind(result, mapping = aes(color = var)) + add.ellipse(result, var = var, draw = "TRUE") 
 
 example(headings)
 
-cats <- extract_mod(result)
+cats <- extract_mod(result.headings)
 
 map.ca.base() + add.categories(cats = cats, mapping = aes(group = headings, color = Variable, label = label)) + facet_wrap(~headings)
