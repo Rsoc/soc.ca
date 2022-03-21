@@ -14,6 +14,8 @@ options(soc.ca.gradient = c(low = "papayawhip", high = "darkblue"))
 options(soc.ca.shape    = c(21, 22, 23, 24, 25, 6, 0, 1, 2, 3, 4, 5, 7, 8, 9, 10,
                             12, 15, 16, 17, 18, 42, 45, 61, 48, 50:120))
 options(soc.ca.colors.binary = c("black", "#d53e4f"))
+options(soc.ca.red = "#d53e4f")
+update_geom_defaults("density2d",   list(color = "#d53e4f"))
 }
 
 ################################################################################
