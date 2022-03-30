@@ -105,14 +105,15 @@ all.equal(gda.eig, res.eig)
 average.coord <- function(object, x, dim = c(1, 2)) 
 {
     coord <- object$coord.ind[, dim] 
-    coord <- tibble(label = x, X = coord[, 1], Y = coord[, 2], w = object$weight)
+    coord <- tibble(label = x, X = coord[, 1], Y = coord[, 2], w = object$weight) %>% na.omit()
     point.coord <- coord %>% group_by(label) %>% summarise(X = weighted.mean(X, w = w), Y = weighted.mean(Y, w = w), Freq = sum(w))
     point.coord <- point.coord %>% mutate(X = X/sqrt(object$eigen[dim[1]]), Y = Y/sqrt(object$eigen[dim[2]]))
     point.coord <- point.coord %>% mutate(group = label) %>% relocate(group, .after = Y)
     point.coord
 }
 
-average.coord(result, sup$Age)
+sup$Age[1:10] <- NA
+average.coord(res.w, sup$Age)
 soc.ca::average.coord(result, sup$Age)
 ```
 

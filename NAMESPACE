@@ -2,6 +2,10 @@
 
 S3method(print,soc.mca)
 export("%>%")
+export(add.categories)
+export(add.density)
+export(add.ellipse)
+export(add.ind)
 export(add.to.label)
 export(assign.label)
 export(average.coord)
