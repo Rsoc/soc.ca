@@ -192,7 +192,7 @@ add_modify_aes <- function(mapping, ...) {
 add.categories  <- function(object, preset = c("active", "ctr", "sup", "all"), dim = c(1, 2),
                             cats = extract_mod(object, dim),
                             mapping = aes(label = Modality), repel = FALSE, check_overlap = FALSE,
-                            points = FALSE,
+                            points = FALSE, draw.labels = TRUE,
                             ...){
   
   if(identical(preset, "ctr")) cats <- cats %>% filter(ctr.set)
@@ -209,7 +209,9 @@ add.categories  <- function(object, preset = c("active", "ctr", "sup", "all"), d
     o$points    <- geom_point(data = cats, mapping = mapping_points, ...)
   }
   
+  if(identical(draw.labels, TRUE)){
   o$text    <- geom_text(data = cats, mapping = mapping, check_overlap = check_overlap, ...)
+  }
   
   if(identical(repel, TRUE)){
     o$text    <- ggrepel::geom_text_repel(data = cats, mapping = mapping, ...)

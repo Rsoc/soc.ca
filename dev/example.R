@@ -23,7 +23,3 @@ options(passive = c("MISSING", "Missing", "Irrelevant", "residence_value_cat2: U
 
 object <- soc.mca(active)
 object$headings
-
-
-
-

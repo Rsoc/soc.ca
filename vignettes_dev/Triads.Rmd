@@ -79,6 +79,7 @@ tibble(mca, csa) %>% cor %>% round(3)
 soc.ca:::mca.triad.array(l.mca.triads)
 
 
+
 ```
 
 

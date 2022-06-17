@@ -15,6 +15,8 @@ add.hex.summary <- function(object, var, dim = c(1, 2), ind = extract_ind(object
   o
 }
 
+var <- sup$Gender == "Women"
+map.ca.base() + add.hex.summary(result, var, bins = 10)
 
 
 map.ca.base() + add.categories(result)                               # Alle aktive kategorier
