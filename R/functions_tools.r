@@ -231,7 +231,7 @@ barycenter <- function(object, mods = NULL, dim = 1){
 #' Values range from 0.5 to 1, where 1 signifies a perfect or near perfect overlap between sets of categories while 0.5 is the opposite - a near orthogonal relationship between the two variables.
 #' While a eigenvalue of 1 is a strong candidate for intervention, probably exclusion of one of the variables, it is less clear what the lower bound is. But values around 0.8 are also strong candidates for further inspection.  
 
-#' @param active a data.frame of factors
+#' @param x a data.frame of factors or a result object from soc.mca
 #' @param passive a character vector with the full or partial names of categories to be set as passive. Each element in passive is passed to a grep function.
 #'
 #' @return a tibble
@@ -240,8 +240,17 @@ barycenter <- function(object, mods = NULL, dim = 1){
 #' @examples
 #' example(soc.mca)
 #' mca.eigen.check(active)
+#' mca.eigen.check(result)
 
-mca.eigen.check <- function(active, passive = "Missing"){
+mca.eigen.check <- function(x, passive = "Missing"){
+  x.is  <- what.is.x(x)
+  
+  if(x.is == "soc.mca")  return(mca.eigen.check.soc.mca(x))
+  if(x.is == "data.frame") mca.eigen.check.active(x, passive = passive)
+  
+}
+
+mca.eigen.check.active <- function(active, passive = "Missing"){
   
   get.eigen <- function(x, y, passive = "Missing"){
     d <- data.frame(x, y)
@@ -257,10 +266,176 @@ mca.eigen.check <- function(active, passive = "Missing"){
     o
   }
   
-  comb <- active %>% colnames() %>% combn(., 2, simplify = T) %>% t() %>% as_tibble()
+  comb           <- active %>% colnames() %>% combn(., 2, simplify = T) %>% t() %>% as_tibble(.name_repair = 'minimal')
   colnames(comb) <- c("x", "y")
   
   values           <- purrr::map2_df(.x = comb$x, .y = comb$y,  ~get.eigen(x = active[[.x]], y = active[[.y]], passive = passive))
-  o                <- bind_cols(comb, values)
+  o                <- bind_cols(comb, values) |> arrange(-`First eigen`)
   o
 }
+
+mca.eigen.check.soc.mca <- function(r){
+  
+  ind              <- cbind(r$indicator.matrix.active, r$indicator.matrix.passive)
+  ind              <- ind[, r$names.mod.all]
+  var              <- r$variable.all
+  
+  get.eigen <- function(x, y, passive = "Missing"){
+    d <- cbind(x, y) %>% as.matrix()
+    r <- soc.mca(d)
+    
+    burt <- t(r$indicator.matrix.active) %*% as.matrix(r$indicator.matrix.active)
+    
+    burt.s <- burt / diag(burt)
+    diag(burt.s) <- 0
+    max(burt.s)
+    
+    o <- c("First eigen" = r$eigen[1], "Passive categories" = length(r$names.passive), "Max overlap (%)" = max(burt.s))
+    o
+  }
+  
+  comb <- r$variable %>% unique() %>% combn(., 2, simplify = T) %>% t() %>% as_tibble(.name_repair = 'minimal')
+  colnames(comb) <- c("x", "y")
+  
+  values           <- purrr::map2_df(.x = comb$x, .y = comb$y,  ~get.eigen(x = ind[, var == .x], y = ind[, var == .y], passive = r$names.passive))
+  o                <- bind_cols(comb, values) |> arrange(-`First eigen`)
+  o
+}
+
+#' Pivot the indicator matrix from an MCA to long format
+#' 
+#' Sometimes we want the indicator matrix from an mca in long format and this function delivers just that. The results contain both active and passive categories.
+#'
+#' @param r an result object of class soc.mca
+#'
+#' @return a tibble in long format
+#' @export
+#'
+#' @examples
+#' example(soc.mca)
+#' result |> indicator.to.long() 
+
+indicator.to.long <- function(r){
+  ind           <- r$indicator.matrix.active
+  rownames(ind) <- r$names.ind
+  
+  if(ncol(r$indicator.matrix.passive) > 0){
+    
+    pas           <- r$indicator.matrix.passive
+    rownames(pas) <- r$names.ind
+    ind           <- cbind(ind, pas)  
+  }
+  
+  m    <- as.data.frame.table(ind) %>% filter(Freq != 0) %>% as_tibble() |> select(case = Var1, category = Var2, value = "Freq")
+  cats <- tibble(category = r$names.mod.all, variable = r$variable.all, label = names(r$names.mod.all), passive = category %in% r$names.passive)
+  o    <- left_join(m, cats, by = "category")
+  o
+}
+
+#' Create a randomized mca on the basis of an existing mca
+#'
+#' We sample from each of the active variables independently removing the
+#' original correlations but retaining the frequencies of the categories. This
+#' function is useful to see the extent to which the mca solution reflects the
+#' correlations between variables or the frequency distribution between the
+#' active categories. Passive categories are inherited from the original analysis.
+#'
+#'
+#' @param r a result object from soc.mca
+#' @param replace
+#'
+#' @return a soc.mca object
+#' @export
+#'
+#' @examples
+#' example(soc.mca)
+#' randomize.mca(result)
+
+randomize.mca <- function(r, replace = FALSE){
+  
+  im <- r |> indicator.to.long()
+  iw <- pivot_wider(im, id_cols = case, names_from = variable, values_from = label)
+  ir <- map_df(iw, ~.x[sample(length(.x), replace = replace)] )
+  passive <- im$category[im$passive] %>% unique()
+  if(length(passive) == 0) passive <- NA
+  soc.mca(ir |> select(-case), passive = passive)
+}
+
+#' Remove unnecessary variables from an MCA
+#' 
+#' This function tests and removes variables that have no or too few relations with other variables. In other words variables that only contribute with random noise to the analysis. Removing these variables will tend to increase the strength of the first dimensions and give a wider dispersion of the cloud of cases on the first dimensions. Removing these variables can also give a simpler analysis that is easier to interpret and communicate. The core of the pruning procedure uses the \link(mca.eigen.check) to construct a weighted network of relations between variables. Tie strength is measured by the first eigenvalue of an MCA between the two variables. Ties between variables with a weak relationship  are removed and variables with few connections to other variables are discarded. With the default values a analysis without irrelevant variables is unchanged. Note that passive categories are inherited from the original analysis and are not included in the \link{mca.eigen.check}. This procedure does not help with variables that are too strongly related.
+#'
+#' @param r a result object from \link{soc.mca}
+#' @param eigen.cut.off the cut.off for the first eigen value from \link{mca.eigen.check}
+#' @param network.pruning If TRUE variables are pruned on the basis their degree
+#' @param average.pruning If TRUE variables with a sum of ties below average are discarded. This 
+#' @param min.degree the minimum number of ties a variable has to have to remain in the analysis
+#'
+#' @return A list containing:
+#'  \item{var}{a tibble with the weighted degree of the variables} 
+#'  \item{mca.eigen.check}{The results from \link{mca.eigen.check}}
+#'  \item{g}{a network graph - see \link{igraph}}
+#'  \item{remaining.var}{a character vector with the names of the remaining variables}
+#'  \item{removed}{a character vector with the names of the removed variables}
+#'  \item{pruned.r}{A pruned version of the original soc.mca object}                
+#' @export
+#' @references Inspired by: Durand, Jean-Luc, and Brigitte Le Roux. 2018. “Linkage Index of Variables and its Relationship with Variance of Eigenvalues in PCA and MCA.” Statistica Applicata 29(2):123–35. doi: 10.26398/ijas.0029-006.
+#' @examples
+#' example(soc.mca)      
+#' pr <- prune.mca(result)  
+#' pr$removed               # This example has no irrelevant variables so nothing is removed
+
+prune.mca <- function(r, eigen.cut.off = 0.55, network.pruning = TRUE, average.pruning = FALSE, min.degree = 1){
+  require(igraph) 
+  
+  mec <- mca.eigen.check(r, passive = r$names.passive)
+  g   <- graph_from_data_frame(mec, directed = FALSE)
+  gso  <- graph.strength(g, weights = E(g)$"First eigen")
+  
+  gi <- delete.edges(g, edges = which(E(g)$"First eigen" < eigen.cut.off))
+  
+  if(identical(average.pruning, TRUE)){
+    kill.their.edges <- which(gso < mean(gso))
+    gi[, kill.their.edges] <- 0
+    gi[kill.their.edges, ] <- 0
+  }
+  
+  if(identical(network.pruning, TRUE)){
+    kill.their.edges <- which(degree(gi) < min.degree)
+    gi[, kill.their.edges] <- 0
+    gi[kill.their.edges, ] <- 0
+  }
+  
+  gs  <- graph.strength(gi, weights = E(gi)$"First eigen")
+  set <- names(gs)[gs >= min.degree] 
+  
+  if(length(set) == 0) {
+    
+    cat("\n", "No variables survived the pruning procedure")
+    return(NULL)
+  }
+  
+  un.set <- names(gs)[gs < min.degree] 
+  
+  # Redo the mca
+  im <- indicator.to.long(r)
+  iw <- pivot_wider(im, id_cols = case, names_from = variable, 
+                    values_from = label)
+  passive <- im$category[im$passive] %>% unique()
+  if (length(passive) == 0) passive <- NA
+  
+  iw.set <- iw[, set]
+  ri    <- soc.mca(iw.set, passive = passive)
+  
+  
+  o      <- list()
+  o$var  <- tibble(variable = V(g)$name, "graph.strength.original" = gso, "graph.strength.pruned" = gs, "below.average" = gso < mean(gso))
+  o$mca.eigen.check <- mec
+  o$g    <- gi
+  o$remaining.var <- set
+  o$removed <- un.set
+  o$pruned.r <- ri
+  
+  o
+}
+

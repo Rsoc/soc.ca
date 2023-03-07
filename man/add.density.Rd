@@ -21,10 +21,7 @@ add.density(
 
 \item{mapping}{a call to \link(aes) from the ggplot2 package. Here you can map aesthetics to variables such as color, fill, alpha, size and linetype.}
 
-\item{...}{further arguments is passed onto \link(geom_density_2d)}
-}
-\value{
-
+\item{...}{further arguments are passed onto \link(geom_density_2d)}
 }
 \description{
 Add a layer with density curves to an mca map.

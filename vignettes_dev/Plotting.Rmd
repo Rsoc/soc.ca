@@ -10,13 +10,204 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  fig.height = 6,
+  fig.width = 6
+  
 )
 ```
 
-```{r setup}
+# Plotting
+
+Here we will looking at the two types of plots that we usually make - the quick diagnostic plots that we use when we evaluate our analysis and the carefully annotated and curated plots where we communicate our results to others. We will use the simple taste example and we will only scratch the surface of what is possible with the powerful combination of the soc.ca package and ggplot2.
+
+See `?soc.mca` or `?taste` to see how the analysis was constructed. 
+
+```{r setup, message=FALSE}
 library(soc.ca)
+example(soc.mca)
 ```
 
-# Plotting
-Here we will cover the basics of plotting.
+## Analytical and diagnostic plots
+
+For the diagnostic plots we use the map.\* functions from the soc.ca package. They are quick and have sensible defaults - and with a bit of work they can also produce publication ready plots. But the map.\* functions are limited and to really customize and annotate we need another set of functions described later.
+
+### The cloud of individuals
+
+One of the first things we want to do is to inspect the shape and evenness of the cloud of cases or individuals on a plane. Initially we are interested in the first two dimensions and that is easily done like this. The danger is always overplotting and in this case we have `r result$n.ind` cases so we need to adjust the size argument for the points. To better see whether some points are directly on top of each other we also adjust the alpha.
+
+```{r}
+p <- map.ind(result, point.size = 1, point.alpha = 0.5)
+p
+```
+
+We want a balanced and evenly distributed cloud for several reasons, but the most intuitive is that for most of our analysis we will look at mean points of categories. If our cloud of cases is unevenly distributed the mean points become rather difficult to interpret.  
+
+Here are some of the things that we can look for when we inspect the cloud.
+
+* __The shape of the cloud__: Is it round and evenly distributed across the plane. 
+In this case it is ok, but we have some empty quadrants in the north-east and south-east. So the shape is somewhat triangular.
+* __Lines in the cloud__: If some categories are near perfectly correlated or there are too few categories we can see lines inside the cloud. If the lines are very clearly separated with empty space between them - this is a cause to redefine the active variables and possible discard the analysis.  
+We can only see a few line like parts in this cloud - to remedy it we could see if we could include more variables. 
+* __Lumps__: Lumps are a set of cases that are perfectly overlapping. This is for cases with the exact same profile. So all their values on the active variables are the same. The fewer categories and the more cases the more likely this is to happen. Lumps make it a bit more difficult to read the clouds and if we have a lot of them we might need to use `map.density` instead.  
+Here the cloud is somewhat lumpy. We can see that some profiles (the dark ones) are perfectly overlapping.
+* __Hard boundaries__:  If the cloud has sharp boundaries this can be a result of logically impossible positions or cutoff criteria that defined the population. If the cloud is unbalanced and strongly triangular we will also see hard boundaries.  
+In this case we have a hard boundary in the north-east quadrant. It is a good idea to find out why that is. But it does not invalidate our analysis.  
+* __Extreme cases__: We are looking for cases that are breaking away from the rest of the cloud - a rule of thumb would be coordinates above 2, but it it depends more on the amount of space between the extreme points and the rest of the cloud. Often the problem is in two categories that necessarily overlap or missing categories. The solution can be to set some categories as passive.  
+In this case we don't really have extreme cases.
+* __Small cloud__: If the cloud of cases is dispersed between 0.5 and -0.5 then the dimensions are not very telling of the position of the cases. This will probably give us both active and supplementary categories that are close to each other and therefore difficult to interpret. Sometimes this can be handled by removing variables with low contributions to the dimensions that you are interested in.
+
+### The other planes
+```{r}
+p12 <- p  + ggtitle("Dim 1 and 3")
+p13 <- map.ind(result, point.size = 1, point.alpha = 0.5, dim = c(1,3)) + ggtitle("Dim 1 and 3")
+p23 <- map.ind(result, point.size = 1, point.alpha = 0.5, dim = c(2,3)) + ggtitle("Dim 2 and 3")
+
+p12 + p13 + p23 + patchwork::plot_layout(ncol = 2)
+```
+
+```{r}
+men <- sup$Gender == "Men"
+p <- map.ind(result, point.fill = men, point.size = 2, point.alpha = men)
+p
+```
+
+### Density plot
+If we have a lot of cases and they are overlapping we can draw a density map. This shows where the cases are. We add the density lines to an already existing plot or we use the defaults in `map.density`.
+```{r}
+p12 + add.density(result)
+```
+
+### The cloud of categories
+
+
+```{r}
+map.active(result, label = FALSE, point.fill = result$variable, point.color = result$variable)
+```
+
+
+
+### The most contributing categories
+```{r}
+map.ctr(result, ctr.dim = 1)
+map.ctr(result, ctr.dim = 2)
+map.ctr(result, ctr.dim = 1:2)
+```
+
+
+
+### Supplementary variables
+```{r}
+map.sup(result, label.color = result$variable.sup)
+```
+
+### Follow a variable along a path
+```{r}
+map.path()
+```
+
+
+## Annotated plots
+
+```{r}
+p.b <- map.ca.base(up = "North", down = "South", right = "East", left = "West")
+
+p <- p.b + add.categories(result, check_overlap = TRUE)
+labels <- c("North-West", "North-East", "South-East", "South-West")
+p + add.quadrant.labels()
+p + add.quadrant.labels(labels, distance = 0.5, fill = "black", color = "white", label.r = unit(0, "inch"), label.padding = unit(0.2, "cm"))
+
+```
+
+```{r}
+p.b <- map.ca.base(up = "North", down = "South", right = "East", left = "West")
+p <- p.b + add.ind(result)
+p + ggpp::geom_quadrant_lines(colour = "red") + ggpp::stat_quadrant_counts(colour = "red", data = p$layers[[3]]$data, mapping = p$layers[[3]]$mapping) 
+```
+
+# PEM edges
+```{r}
+r <- result
+
+# Should export coordinates - 
+# Should take an arbitrary indicator.matrix
+
+
+
+
+# join.cat.coordinates <- function(cat.rel, coords){
+#   cat.rel           <- cat.rel %>% rename(A = x, B = y)
+#   g                 <- graph_from_data_frame(cat.rel, directed = FALSE)
+#   graph.names       <- V(g)$name
+#   gid               <- tibble(category = V(g)$name)
+#   layout            <- left_join(gid, coords, by = "category") %>% select(X,Y) %>% as.matrix()
+#   
+#   el                <- data.frame(get.edgelist(g, names = FALSE))
+#   el.names          <- data.frame(get.edgelist(g, names = TRUE))
+#   
+#   colnames(el)       <- c("ego", "alter")
+#   colnames(el.names) <- c("A", "B")
+#   
+#   out               <- tibble(X = layout[el$ego, 1],
+#                               Y = layout[el$ego, 2],
+#                               Xend  = layout[el$alter, 1],
+#                               Yend  = layout[el$alter, 2]
+#   )
+#   
+#   out <- bind_cols(el.names, out)
+#   left_join(cat.rel, out, by = c("A", "B"))
+# }
+
+
+
+cat.rel <- get.category.relations(r = r)
+cat.rel
+table(cat.rel$valid.correlation)
+
+add.category.relations <- function(r, cat.rel = get.category.relations(r, dim = dim) |> filter(valid.correlation), dim = c(1, 2),  mapping = aes(alpha = pem), ...){
+  
+  mapping <- soc.ca:::add_modify_aes(mapping, aes(x = X, xend = Xend, y = Y, yend = Yend))
+    o <- list()
+    o$points <- geom_segment(data = cat.rel, mapping = mapping, ...)
+    o
+  
+}
+
+map.ca.base() + add.category.relations(r, color = "red") + add.categories(r)
+map.ca.base() + add.category.relations(r, color = "red", mapping = aes(alpha = chisq.p.value)) + add.categories(r)
+
+
+
+
+```
+
+
+```{r}
+
+add.pem.triads <- function(triads, triad.edges, mapping = aes(shape = category, color = triad), mapping_triads = aes(color = triad, alpha = pem),  
+                           point.size = 3, pem.cut = 0.5, 
+                           ...){
+  
+  tec    <- triad.edges %>% group_by(year, triad) %>% summarise(edges = sum(pem > 0), .groups = "drop_last") %>% ungroup()
+  triads <- left_join(triads, tec, by = c("year", "triad"))
+  
+  triad.edges$pem[triad.edges$pem < 0] <- 0
+  triad.edges$pem[triad.edges$pem > pem.cut] <- pem.cut
+  
+  mapping        <- add_modify_aes(mapping, aes(x = X, y = Y))
+  mapping_triads <- add_modify_aes(mapping_triads, aes(x = X, xend = Xend, y = Y, yend = Yend))
+  
+  o <- list()
+  
+  o$segment       <- geom_segment(data = triad.edges, mapping = mapping_triads, size = 0.3, ...)
+  
+  o$background <- geom_point(data = triads, mapping = mapping, size = point.size + 2, shape = 21, alpha = 0.8, fill = "white", color = "white")
+  o$ring       <- geom_point(data = triads %>% filter(edges >= 3), mapping = mapping, size = point.size + 2, shape = 21, alpha = 0.8, fill = "white")
+  o$points     <- geom_point(data = triads, mapping = mapping, size = point.size, ...)
+  o$shape      <- scale_shape_manual(values = LETTERS) 
+  o$alpha      <- scale_alpha(range = c(0,1), limits = c(0, pem.cut), guide = "none")
+  o
+}
+
+```
+

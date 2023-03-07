@@ -4,10 +4,10 @@
 \alias{mca.eigen.check}
 \title{MCA Eigenvalue check}
 \usage{
-mca.eigen.check(active, passive = "Missing")
+mca.eigen.check(x, passive = "Missing")
 }
 \arguments{
-\item{active}{a data.frame of factors}
+\item{x}{a data.frame of factors or a result object from soc.mca}
 
 \item{passive}{a character vector with the full or partial names of categories to be set as passive. Each element in passive is passed to a grep function.}
 }
@@ -23,4 +23,5 @@ While a eigenvalue of 1 is a strong candidate for intervention, probably exclusi
 \examples{
 example(soc.mca)
 mca.eigen.check(active)
+mca.eigen.check(result)
 }

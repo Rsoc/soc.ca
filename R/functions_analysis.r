@@ -90,7 +90,8 @@ soc.mca <- function(active, sup = NULL, identifier = NULL, passive = getOption("
   
   if (data.type == "indicator") {
     a.r <- nrow(active)
-    ind.act <- data.frame(active, check.names = F)
+    #ind.act <- data.frame(active, check.names = F)  #!§ This must be wrong! # Let this comment stay a bit and then remove this line.
+    ind.act <- active                              
     headings = NULL                      # As default, no headings are defined
     }
   
@@ -123,7 +124,7 @@ soc.mca <- function(active, sup = NULL, identifier = NULL, passive = getOption("
   # Creating lists of variable names...
   #########################################
   
-  varlist      <- unique(gsub(": .*", "", colnames(ind.act)))             # Unique varnames
+  varlist      <- unique(gsub(": .*", "", colnames(ind.act)))             # Unique varnames §! This seems weird - but we do it out of necessity - should be remade at some point.
   varlist.long <- gsub(": .*", "", colnames(ind.act))                     # Vector of varnames matching the list of modalities
   Q            <- median(rowSums(ind.act))                                # Number of Questions [we use the median in order to allow for questions that do not sum to one]
   
@@ -199,7 +200,7 @@ soc.mca <- function(active, sup = NULL, identifier = NULL, passive = getOption("
   result$names.passive            <- colnames(ind.act)[passive.set]
   result$headings.all             <- headings
   result$headings                 <- headings[active.set]
-  result$indicator.matrix.passive <- ind.act[, passive.set]
+  result$indicator.matrix.passive <- ind.act[, passive.set, drop = FALSE]
   result$indicator.matrix.active  <- ind.act[, active.set]
   result$indicator.matrix.all     <- ind.act
   
@@ -561,30 +562,29 @@ subset.ca.indicator <- function (ind.act, ind.sup, active.set, passive.set, Q, Q
 #' @export indicator
 
 indicator  <- function(x, id = NULL, ps = ": "){
-
-obj         <- x
-I           <- nrow(obj)                                      # Number of individuals
-levels.n    <- unlist(lapply(obj, nlevels))
-n           <- cumsum(levels.n)                               # Number of modalities for each question
-m           <- max(n)                                         # Total number of modalities
-Q           <- ncol(obj)                                      # Number of questions
-Z           <- matrix(0, nrow = I, ncol = m)                  # Predefinition of the indicatormatrix
-newdat      <- lapply(obj, as.numeric)
-offset      <- (c(0, n[-length(n)]))
-for (i in seq(Q)) Z[seq(I) + (I * (offset[i] + newdat[[i]] - 1))] <- 1 # Indicator matrix
-fn          <- rep(names(obj), unlist(lapply(obj, nlevels)))  
-ln          <- unlist(lapply(obj, levels))
-col.names   <- paste(fn, ln, sep = ps)
-colnames(Z) <- col.names
-names(colnames(Z)) <- ln
-
-if (identical(id, NULL) == TRUE){
-rownames(Z) <- as.character(seq(I))
-}else{
-rownames(Z) <- id
-}    
-return(Z)
-
+  
+  obj         <- x
+  I           <- nrow(obj)                                      # Number of individuals
+  levels.n    <- unlist(lapply(obj, nlevels))
+  n           <- cumsum(levels.n)                               # Number of modalities for each question
+  m           <- max(n)                                         # Total number of modalities
+  Q           <- ncol(obj)                                      # Number of questions
+  Z           <- matrix(0, nrow = I, ncol = m)                  # Predefinition of the indicatormatrix
+  newdat      <- lapply(obj, as.numeric)
+  offset      <- (c(0, n[-length(n)]))
+  for (i in seq(Q)) Z[seq(I) + (I * (offset[i] + newdat[[i]] - 1))] <- 1 # Indicator matrix
+  fn          <- rep(names(obj), unlist(lapply(obj, nlevels)))  
+  ln          <- unlist(lapply(obj, levels))
+  col.names   <- paste(fn, ln, sep = ps)
+  colnames(Z) <- col.names
+  names(colnames(Z)) <- ln
+  
+  if (identical(id, NULL) == TRUE){
+    rownames(Z) <- as.character(seq(I))
+  }else{
+    rownames(Z) <- id
+  }    
+  Z
 }
 
 #' Class Specific Multiple Correspondence Analysis
@@ -1074,7 +1074,9 @@ what.is.x  <- function(x){
   is.l    <- is.list(x)
   is.m    <- is.matrix(x)
   is.lm   <- all(unlist(lapply(x, is.matrix)))
-  is.ld   <- is.d == FALSE & is.l == TRUE & is.lm == FALSE
+  is.mca  <- inherits(x, "soc.mca")
+  is.ld   <- is.d == FALSE & is.l == TRUE & is.lm == FALSE & is.mca == FALSE
+  is.all.numeric <- all(unlist(lapply(x, is.numeric)))
   
   # Scenario: List
   if(is.ld | is.lm){
@@ -1098,11 +1100,13 @@ what.is.x  <- function(x){
   if(is.d)  o <- "data.frame"
   # It is surely an indicator matrix
   if(is.m)  o <- "indicator"  
+  if(is.d & is.all.numeric)  o <- "indicator"  
   # It is surely a list of data.frames
   if(is.ld) o <- "list.data.frame"
   # It is surely a list of indicators
   if(is.lm) o <- "list.indicators"
-  
+  # It is an mca
+  if(is.mca) o <- "soc.mca"
   o
 }
 
@@ -1117,3 +1121,44 @@ balance.headings <- function(indicator, headings, Q) {
   }
 }
 
+
+pem_fast<- function(x, y, weights = rep(1, length(x)), digits = 1, sort = FALSE){
+  # This function is a stripped down and faster version of GDAtools::pem()
+  
+  idnona <- !is.na(x) & !is.na(y)
+  X <- x[idnona]
+  Y <- y[idnona]
+  W <- weights[idnona]
+  cont <- xtabs(data = data.frame(X, Y), ~X+Y)
+  
+  tota <- colSums(cont)
+  totb <- rowSums(cont)
+  total <- sum(cont)
+  theo <- matrix(nrow = nrow(cont), ncol = ncol(cont))
+  for (i in 1:nrow(cont)) {
+    for (j in 1:ncol(cont)) theo[i, j] <- tota[j] * totb[i]/total
+  }
+  ecart <- cont - theo
+  max <- matrix(nrow = nrow(cont), ncol = ncol(cont))
+  emax <- matrix(nrow = nrow(cont), ncol = ncol(cont))
+  pem <- matrix(nrow = nrow(cont), ncol = ncol(cont))
+  for (i in 1:nrow(cont)) {
+    for (j in 1:ncol(cont)) {
+      if (ecart[i, j] >= 0) 
+        max[i, j] <- min(tota[j], totb[i])
+      if (ecart[i, j] < 0 & tota[j] <= (total - totb[i])) 
+        max[i, j] <- 0
+      if (ecart[i, j] < 0 & tota[j] > (total - totb[i])) 
+        max[i, j] <- tota[j] + totb[i] - total
+      emax[i, j] <- max[i, j] - theo[i, j]
+      pem[i, j] <- ifelse(ecart[i, j] >= 0, ecart[i, j]/emax[i, 
+                                                             j] * 100, 0 - ecart[i, j]/emax[i, j] * 100)
+    }
+  }
+  dimnames(pem) <- dimnames(cont)
+  
+  pem <- as.table(pem)
+  rownames(pem) <- gsub("data.", "", rownames(pem))
+  colnames(pem) <- gsub("data.", "", colnames(pem))
+  round(as.table(pem), digits)
+}

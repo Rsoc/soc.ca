@@ -88,6 +88,80 @@ mca.triads <- function(l.mca, l.triads, dim = c(1,2), fix.mca = 1){
   # Recalculate sup coordinates
   l.sup.coord   <- map2(l.mca, l.sup, get.sup, dim = dim)
   
-  list(l.mca = l.mca, l.sup.coord= l.sup.coord)
+  list(l.mca = l.mca, l.sup.coord= l.sup.coord, l.ind = l.sup)
+}
+
+#' Get and calculate the relationships and oppositions between each pair of categories
+#' 
+#' Use this function to calculate PEM \link(GDAtools::pem) values, chisq, distance and coordinates for each pair of categories in either an indicator matrix or the categories from an soc.mca result object. These relationship are usefull for both diagnostics, analysis, interpretation and plotting. 
+#' For plotting combine with \link(add.category.relations) to build your plot. 
+#' 
+#'
+#' @param r an soc.mca result object
+#' @param ind an indicator matrix, see \link(indicator)
+#' @param dim a numeric vector with the dimensions for the coordinates. This is only sent to \link(extract_mod).
+#' @param variable a character vector with the variable where each category in ind came from. If ind was created directly with \link(indicator) you can use names(colnames(ind)).
+#' @param coords a data.frame with coordinates - similar to those produced by \link(extract_mod)
+#' @param rel a matrix with pairs of categories
+#'
+#' @return a tibble
+#' @export
+#'
+#' @examples
+#' example(soc.mca)
+#' get.category.relations(result)
+
+get.category.relations <- function(r, ind = r$indicator.matrix.active, dim = c(1, 2), 
+                                   variable = r$variable,
+                                   coords = extract_mod(r, dim),
+                                   rel = t(combn(colnames(ind),2))
+){
+  
+  
+  coords$category  <-   coords$Modality
+  
+  el         <- rel 
+  v          <- tibble(category = colnames(ind), variable)
+  el         <- tibble(x = el[,1], y = el[,2])
+  
+  
+  el <- left_join(el, v, by = c("x" = "category")) %>% rename(variable.x = variable) %>% left_join(v, by = c("y" = "category")) %>% rename(variable.y = variable)
+  
+  el         <- el %>% filter(variable.x != variable.y)
+  
+  f.pem <- function(x, y){
+    o <- soc.ca:::pem_fast(ind[, x], ind[, y])
+    o[2,2]
+  }
+  
+  f.chisq <- function(x, y){
+    o <- chisq.test(ind[, x], ind[, y])
+    o
+  }
+  
+  o          <- tibble(A = el$x, B = el$y)
+  c.A        <- coords %>% select(A = category, X, Y)
+  c.B        <- coords %>% select(B = category, Xend = X, Yend = Y)
+  o          <- left_join(o, c.A, by = "A") |> left_join(c.B, by = "B")
+  
+  cross <- function(x, y, xend, yend){
+    px <- prod(x, xend)
+    py <- prod(y, yend)
+    cross <- px < 0 | py < 0
+    cross
+  }
+  
+  calc.dist <- function(x, y, xend, yend){
+    #cat("x", x, "y", y, "xend", xend, "yend", yend)
+    d <- cbind(x = c(x,xend), y = c(y, yend)) |> dist()
+    as.numeric(d)
+  }
+  
+  o <- o %>% rowwise %>% mutate(pem = f.pem(A, B)) |> mutate(chisq = list(f.chisq(A, B)))
+  o <- o %>% rowwise %>% mutate("N both" = chisq$observed[2, 2], expected = chisq$expected[2, 2], chisq.p.value = chisq$p.value)
+  o <- o %>% rowwise %>% mutate(opposed = cross(X, Y, Xend, Yend)) |> mutate(distance =  calc.dist(X, Y, Xend, Yend))
+  o <- o |> mutate(valid.opposition = expected > 5 &  chisq.p.value < 0.05 & distance > 0.75 &  pem < -25,
+                   valid.correlation = expected > 5 &  chisq.p.value < 0.05 & pem > 10)
+  o
 }
 

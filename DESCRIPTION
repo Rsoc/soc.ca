@@ -16,24 +16,26 @@ Imports:
     ellipse,
     stats,
     utils,
-    shiny,
     FactoMineR,
-    ggrepel,
-    magrittr,
-    htmlTable,
     stringr,
-    RColorBrewer,
-    reshape2,
     Matrix,
+    htmlTable,
     flextable,
+    ggpp,
+    ggrepel,
+    shiny,
     purrr,
+    RColorBrewer,
     tibble,
     dplyr,
     forcats,
     rlang,
+    magrittr,
+    reshape2,
+    GDAtools,
     tidyr
 License: GPL-3
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.3
 Suggests: 
     knitr,
     rmarkdown

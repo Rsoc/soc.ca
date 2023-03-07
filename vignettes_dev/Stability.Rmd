@@ -28,7 +28,7 @@ a <- tibble(A = c(rep("T", 5), rep("F", 5)),
        E = c("A", "A", "B", "B", "C", "C", "D", "D", "E", "E")
        )
 
-a <- map_df(a, ~.x[sample(length(.x))])
+a <- map_df(a, ~.x[sample(length(.x), replace = TRUE, size = 400)])
 
 r <- soc.mca(a)
 r
@@ -36,6 +36,9 @@ r
 map.ind(r)
 map.active(r)
 contribution(r)
+
+mca.eigen.check(a)
+
 ```
 
 

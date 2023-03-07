@@ -17,9 +17,6 @@ ellipses(object, var, dim = c(1, 2), kappa = 2, npoints = 1000)
 
 \item{npoints}{}
 }
-\value{
-
-}
 \description{
 Calculate concentraion ellipses
 }

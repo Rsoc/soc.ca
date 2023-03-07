@@ -3,6 +3,12 @@ library(tidyverse)
 example(soc.mca)
 
 
+# New indicator function 
+
+x <- active
+i <- indicator(active)
+i
+
 
 add.hex.summary <- function(object, var, dim = c(1, 2), ind = extract_ind(object, dim), summary_fun = mean, ... ){
   
@@ -66,6 +72,18 @@ p + add.categories(result)
 
 
 
+ind    <- indicator(active)
+r      <- soc.mca(active)
+r.ind  <- soc.mca(ind)
+r.ind2 <- soc.mca(r.ind$indicator.matrix.active %>% as.matrix())
+r.ind3 <- soc.mca(r.ind$indicator.matrix.active)
+r
+r.ind
+r.ind2
+r.ind3
+
+ind
+r$variable.all
 
 
 # select_proper_scale <- function(x){

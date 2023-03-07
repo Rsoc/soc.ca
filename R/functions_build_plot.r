@@ -273,7 +273,7 @@ add.ellipse <- function(object, var = NULL, draw = unique(var), dim = c(1, 2), e
 #' @param dim a numeric vector with the dimensions for the plane
 #' @param ind a data.frame with coordinates of cases as produced by \link(extract_ind). This controls the points that are used for the density curves.
 #' @param mapping a call to \link(aes) from the ggplot2 package. Here you can map aesthetics to variables such as color, fill, alpha, size and linetype.
-#' @param ... further arguments is passed onto \link(geom_density_2d)
+#' @param ... further arguments are passed onto \link(geom_density_2d)
 #'
 #' @return
 #' @export
@@ -285,4 +285,51 @@ add.density <-  function(object, dim = c(1, 2), ind = extract_ind(object, dim), 
   o <- list()
   o$density    <- geom_density_2d(data = ind, mapping = mapping, ...)
   o
+}
+
+
+#' Annotate labels to the quadrants of an MCA or any ggplot2 based quadrant plot.
+#' 
+#' This function is a convience function that uses \link(ggpp::annotate) to easily create labels for the quadrants.
+#'
+#' @param quadrant.labels 
+#' @param distance if equal to "npc" labels are positioned dynamically at the edges of the plot. see \link(ggpp::annotate). If a numeric vector it is interpreted as the distance to 0 on both X and Y.
+#' @param geom controls the annotation geom; usually you would use "text" or "label".
+#' @param color either a single value or 4 values that control the color of the labels
+#' @param ... further arguments are passed onto \link(ggpp::annotate)
+#'
+#' @return a ggplot2 layer that can be added to an existing ggplot object.
+#' @export
+#'
+#' @examples
+#' example(soc.mca)
+#' map.ind(result, point.size = 1) + add.quadrant.labels()
+#' labels <- c("Dominant:\nCultural fraction", "Dominant:\nEconomic fraction", "Dominated:\nEconomic fraction", "Dominated:\nCultural fraction")
+#' map.ca.base() + add.quadrant.labels(labels, geom = "text")
+#' map.ca.base() + add.ind(result, color = "grey80") + add.quadrant.labels(labels, geom = "text", distance = 1) 
+#' map.ca.base() + add.categories(result, color = "grey50", check_overlap = TRUE) + add.quadrant.labels(labels, geom = "label", distance = 0.5, fill = c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3"), alpha = 0.3) 
+
+# It could have origo labels.
+add.quadrant.labels <- function(quadrant.labels = c("A", "B", "C", "D"), distance = "npc", geom = "label", color = "black", ...){
+  
+  if(is.numeric(distance)){
+    ql <- tibble(quadrant.labels, X = distance, Y = distance) %>% mutate(X = X * c(-1, 1, 1, -1), Y = Y * c(1, 1, -1, -1))
+    a <- ggpp::annotate(geom = geom, x = ql$X, y = ql$Y, label = ql$quadrant.labels, color = color, ...)
+  }
+  
+  if(identical(distance, "npc")){
+    geom <- paste0(geom, "_npc")
+    a <- ggpp::annotate(geom = geom, npcx = c("left", "right", "right", "left"), npcy = c("top", "top", "bottom", "bottom"), label = quadrant.labels, color = color, ...)
+  }
+  a
+}
+
+
+add.category.relations <- function(r, cat.rel = get.category.relations(r, dim = dim) |> filter(valid.correlation), dim = c(1, 2),  mapping = aes(alpha = pem), ...){
+  
+  mapping <- soc.ca:::add_modify_aes(mapping, aes(x = X, xend = Xend, y = Y, yend = Yend))
+  o <- list()
+  o$points <- geom_segment(data = cat.rel, mapping = mapping, ...)
+  o
+  
 }

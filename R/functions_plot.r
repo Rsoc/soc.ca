@@ -1107,3 +1107,5 @@ map.top.ind <- function(result, ctr.dim = 1, dim = c(1,2), top = 15){
   m             <- map.ind(r, point.alpha = above.average, label = TRUE, point.shape = 21, point.fill = ctr, label.repel = TRUE, dim = dim, label.size = 3)
   m + sc + ggtitle(paste("Map of the", top, "most contributing individuals for dim.", ctr.dim))
 }
+
+
