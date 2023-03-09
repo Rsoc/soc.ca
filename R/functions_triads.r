@@ -93,15 +93,15 @@ mca.triads <- function(l.mca, l.triads, dim = c(1,2), fix.mca = 1){
 
 #' Get and calculate the relationships and oppositions between each pair of categories
 #' 
-#' Use this function to calculate PEM \link(GDAtools::pem) values, chisq, distance and coordinates for each pair of categories in either an indicator matrix or the categories from an soc.mca result object. These relationship are usefull for both diagnostics, analysis, interpretation and plotting. 
-#' For plotting combine with \link(add.category.relations) to build your plot. 
+#' Use this function to calculate PEM \link{GDAtools::pem} values, chisq, distance and coordinates for each pair of categories in either an indicator matrix or the categories from an soc.mca result object. These relationship are usefull for both diagnostics, analysis, interpretation and plotting. 
+#' For plotting combine with \link{soc.ca:::add.category.relations} to build your plot. 
 #' 
 #'
 #' @param r an soc.mca result object
-#' @param ind an indicator matrix, see \link(indicator)
-#' @param dim a numeric vector with the dimensions for the coordinates. This is only sent to \link(extract_mod).
-#' @param variable a character vector with the variable where each category in ind came from. If ind was created directly with \link(indicator) you can use names(colnames(ind)).
-#' @param coords a data.frame with coordinates - similar to those produced by \link(extract_mod)
+#' @param ind an indicator matrix, see \link{indicator}
+#' @param dim a numeric vector with the dimensions for the coordinates. This is only sent to \link{extract_mod}.
+#' @param variable a character vector with the variable where each category in ind came from. If ind was created directly with \link{indicator} you can use names(colnames(ind)).
+#' @param coords a data.frame with coordinates - similar to those produced by \link{extract_mod}
 #' @param rel a matrix with pairs of categories
 #'
 #' @return a tibble
