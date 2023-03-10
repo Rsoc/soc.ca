@@ -17,11 +17,11 @@ add.density(
 
 \item{dim}{a numeric vector with the dimensions for the plane}
 
-\item{ind}{a data.frame with coordinates of cases as produced by \link(extract_ind). This controls the points that are used for the density curves.}
+\item{ind}{a data.frame with coordinates of cases as produced by \link{extract_ind}. This controls the points that are used for the density curves.}
 
-\item{mapping}{a call to \link(aes) from the ggplot2 package. Here you can map aesthetics to variables such as color, fill, alpha, size and linetype.}
+\item{mapping}{a call to \link[ggplot2]{aes} from the ggplot2 package. Here you can map aesthetics to variables such as color, fill, alpha, size and linetype.}
 
-\item{...}{further arguments are passed onto \link(geom_density_2d)}
+\item{...}{further arguments are passed onto \link[ggplot2]{geom_density_2d}}
 }
 \description{
 Add a layer with density curves to an mca map.

@@ -24,16 +24,16 @@ add.ellipse(
 
 \item{dim}{a numeric vector with the dimensions for the plane}
 
-\item{el}{a data.frame produced by the \link(ellipses) function.}
+\item{el}{a data.frame produced by the \link{ellipses} function.}
 
-\item{mapping}{a call to \link(aes) from the ggplot2 package. Here you can map aesthetics to variables such as color, fill, alpha, size and linetype.}
+\item{mapping}{a call to \link[ggplot2]{aes} from the ggplot2 package. Here you can map aesthetics to variables such as color, fill, alpha, size and linetype.}
 
 \item{draw.axis}{if TRUE the axis within the concentration ellipse is drawn.}
 
-\item{...}{further arguments is passed onto \link(geom_path) and \link(geom_line)}
+\item{...}{further arguments is passed onto \link[ggplot2]{geom_path} and \link[ggplot2]{geom_line}}
 }
 \value{
-a ggplot2 object that can be added to an existing plot like those produced by \link(map.ca.base)
+a ggplot2 object that can be added to an existing plot like those produced by \link{map.ca.base}
 }
 \description{
 Add a layer with concentration ellipses to an mca map.

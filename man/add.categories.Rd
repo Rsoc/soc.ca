@@ -17,9 +17,9 @@ change is made to "cats".}
 
 \item{dim}{a numeric vector with the dimensions for the plane}
 
-\item{cats}{a data.frame with coordinates of categories as produced by \link(extract_mod) or \link(extract_sup). This controls the plotted points.}
+\item{cats}{a data.frame with coordinates of categories as produced by \link{extract_mod} or \link{extract_sup}. This controls the plotted points.}
 
-\item{mapping}{a call to \link(aes) from the ggplot2 package. Here you can map aesthetics to variables such as color, alpha, size and family.}
+\item{mapping}{a call to \link{aes} from the ggplot2 package. Here you can map aesthetics to variables such as color, alpha, size and family.}
 
 \item{repel}{if TRUE label position is adjusted to lower overlap}
 
@@ -27,10 +27,10 @@ change is made to "cats".}
 
 \item{points}{if TRUE points are plotted}
 
-\item{...}{further arguments are passed onto \link(geom_text) or \link(geom_text_repel)}
+\item{...}{further arguments are passed onto \link{geom_text} or \link{geom_text_repel}}
 }
 \value{
-a ggplot2 object that can be added to an existing plot like those produced by \link(map.ca.base)
+a ggplot2 object that can be added to an existing plot like those produced by \link{map.ca.base}
 }
 \description{
 Add a layer of categories (modalities) to an mca map

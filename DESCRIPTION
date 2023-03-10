@@ -33,7 +33,8 @@ Imports:
     magrittr,
     reshape2,
     GDAtools,
-    tidyr
+    tidyr,
+    igraph
 License: GPL-3
 RoxygenNote: 7.2.3
 Suggests: 

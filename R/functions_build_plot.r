@@ -138,11 +138,11 @@ map.ca.base <- function(up = NULL, down = NULL, right = NULL, left = NULL, base_
 #'
 #' @param object a soc.mca result object
 #' @param dim a numeric vector with the plotted dimensions
-#' @param ind a data.frame with coordinates of cases as produced by \link(extract_ind). This controls the plotted points.
-#' @param mapping a call to \link(aes) from the ggplot2 package. Here you can map aesthetics to variables such as color, fill, alpha, size and shape.
+#' @param ind a data.frame with coordinates of cases as produced by \link{extract_ind}. This controls the plotted points.
+#' @param mapping a call to \link{aes} from the ggplot2 package. Here you can map aesthetics to variables such as color, fill, alpha, size and shape.
 #' @param ... further arguments are passed on to geom_point()
 #'
-#' @return a ggplot2 object that can be added to an existing plot like those produced by \link(map.ca.base)
+#' @return a ggplot2 object that can be added to an existing plot like those produced by \link{map.ca.base}
 #' @export add.ind
 #'
 #' @examples
@@ -171,14 +171,14 @@ add_modify_aes <- function(mapping, ...) {
 #' @param preset a character string selecting among presets. If "active" - no
 #'   change is made to "cats".
 #' @param dim a numeric vector with the dimensions for the plane
-#' @param cats a data.frame with coordinates of categories as produced by \link(extract_mod) or \link(extract_sup). This controls the plotted points.
-#' @param mapping a call to \link(aes) from the ggplot2 package. Here you can map aesthetics to variables such as color, alpha, size and family.
+#' @param cats a data.frame with coordinates of categories as produced by \link{extract_mod} or \link{extract_sup}. This controls the plotted points.
+#' @param mapping a call to \link{aes} from the ggplot2 package. Here you can map aesthetics to variables such as color, alpha, size and family.
 #' @param repel if TRUE label position is adjusted to lower overlap
 #' @param check_overlap if TRUE overlapping categories are removed
 #' @param points if TRUE points are plotted
-#' @param ... further arguments are passed onto \link(geom_text) or \link(geom_text_repel)
+#' @param ... further arguments are passed onto \link{geom_text} or \link{geom_text_repel}
 #'
-#' @return a ggplot2 object that can be added to an existing plot like those produced by \link(map.ca.base)
+#' @return a ggplot2 object that can be added to an existing plot like those produced by \link{map.ca.base}
 #' @usage The presets adds, replaces or filters from the categories in cats.
 #'   "ctr" returns all categories contributing above average to the plane
 #'   defined in dim. "sup" returns the supplementary categories from object.
@@ -225,12 +225,12 @@ add.categories  <- function(object, preset = c("active", "ctr", "sup", "all"), d
 #' @param var a factor 
 #' @param draw a character vector with the levels to draw ellipses for
 #' @param dim a numeric vector with the dimensions for the plane
-#' @param el a data.frame produced by the \link(ellipses) function.
-#' @param mapping a call to \link(aes) from the ggplot2 package. Here you can map aesthetics to variables such as color, fill, alpha, size and linetype.
+#' @param el a data.frame produced by the \link{ellipses} function.
+#' @param mapping a call to \link[ggplot2]{aes} from the ggplot2 package. Here you can map aesthetics to variables such as color, fill, alpha, size and linetype.
 #' @param draw.axis if TRUE the axis within the concentration ellipse is drawn.
-#' @param ... further arguments is passed onto \link(geom_path) and \link(geom_line)
+#' @param ... further arguments is passed onto \link[ggplot2]{geom_path} and \link[ggplot2]{geom_line}
 #'
-#' @return a ggplot2 object that can be added to an existing plot like those produced by \link(map.ca.base)
+#' @return a ggplot2 object that can be added to an existing plot like those produced by \link{map.ca.base}
 #' @export add.ellipse
 #'
 #' @examples
@@ -271,9 +271,9 @@ add.ellipse <- function(object, var = NULL, draw = unique(var), dim = c(1, 2), e
 #'
 #' @param object a soc.mca result object
 #' @param dim a numeric vector with the dimensions for the plane
-#' @param ind a data.frame with coordinates of cases as produced by \link(extract_ind). This controls the points that are used for the density curves.
-#' @param mapping a call to \link(aes) from the ggplot2 package. Here you can map aesthetics to variables such as color, fill, alpha, size and linetype.
-#' @param ... further arguments are passed onto \link(geom_density_2d)
+#' @param ind a data.frame with coordinates of cases as produced by \link{extract_ind}. This controls the points that are used for the density curves.
+#' @param mapping a call to \link[ggplot2]{aes} from the ggplot2 package. Here you can map aesthetics to variables such as color, fill, alpha, size and linetype.
+#' @param ... further arguments are passed onto \link[ggplot2]{geom_density_2d}
 #'
 #' @return
 #' @export
@@ -290,13 +290,13 @@ add.density <-  function(object, dim = c(1, 2), ind = extract_ind(object, dim), 
 
 #' Annotate labels to the quadrants of an MCA or any ggplot2 based quadrant plot.
 #' 
-#' This function is a convience function that uses \link(ggpp::annotate) to easily create labels for the quadrants.
+#' This function is a convience function that uses \link[ggpp]{annotate} to easily create labels for the quadrants.
 #'
 #' @param quadrant.labels 
-#' @param distance if equal to "npc" labels are positioned dynamically at the edges of the plot. see \link(ggpp::annotate). If a numeric vector it is interpreted as the distance to 0 on both X and Y.
+#' @param distance if equal to "npc" labels are positioned dynamically at the edges of the plot. see \link[ggpp]{annotate}. If a numeric vector it is interpreted as the distance to 0 on both X and Y.
 #' @param geom controls the annotation geom; usually you would use "text" or "label".
 #' @param color either a single value or 4 values that control the color of the labels
-#' @param ... further arguments are passed onto \link(ggpp::annotate)
+#' @param ... further arguments are passed onto \link[ggpp]{annotate}
 #'
 #' @return a ggplot2 layer that can be added to an existing ggplot object.
 #' @export
@@ -327,7 +327,7 @@ add.quadrant.labels <- function(quadrant.labels = c("A", "B", "C", "D"), distanc
 
 add.category.relations <- function(r, cat.rel = get.category.relations(r, dim = dim) |> filter(valid.correlation), dim = c(1, 2),  mapping = aes(alpha = pem), ...){
   
-  mapping <- soc.ca:::add_modify_aes(mapping, aes(x = X, xend = Xend, y = Y, yend = Yend))
+  mapping <- add_modify_aes(mapping, aes(x = X, xend = Xend, y = Y, yend = Yend))
   o <- list()
   o$points <- geom_segment(data = cat.rel, mapping = mapping, ...)
   o

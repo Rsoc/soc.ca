@@ -93,8 +93,8 @@ mca.triads <- function(l.mca, l.triads, dim = c(1,2), fix.mca = 1){
 
 #' Get and calculate the relationships and oppositions between each pair of categories
 #' 
-#' Use this function to calculate PEM \link{GDAtools::pem} values, chisq, distance and coordinates for each pair of categories in either an indicator matrix or the categories from an soc.mca result object. These relationship are usefull for both diagnostics, analysis, interpretation and plotting. 
-#' For plotting combine with \link{soc.ca:::add.category.relations} to build your plot. 
+#' Use this function to calculate PEM \link[GDAtools]{pem} values, chisq, distance and coordinates for each pair of categories in either an indicator matrix or the categories from an soc.mca result object. These relationship are usefull for both diagnostics, analysis, interpretation and plotting. 
+#' For plotting combine with \link{add.category.relations} to build your plot. 
 #' 
 #'
 #' @param r an soc.mca result object
@@ -130,7 +130,7 @@ get.category.relations <- function(r, ind = r$indicator.matrix.active, dim = c(1
   el         <- el %>% filter(variable.x != variable.y)
   
   f.pem <- function(x, y){
-    o <- soc.ca:::pem_fast(ind[, x], ind[, y])
+    o <- pem_fast(ind[, x], ind[, y])
     o[2,2]
   }
   

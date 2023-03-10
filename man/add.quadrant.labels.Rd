@@ -15,19 +15,19 @@ add.quadrant.labels(
 \arguments{
 \item{quadrant.labels}{}
 
-\item{distance}{if equal to "npc" labels are positioned dynamically at the edges of the plot. see \link(ggpp::annotate). If a numeric vector it is interpreted as the distance to 0 on both X and Y.}
+\item{distance}{if equal to "npc" labels are positioned dynamically at the edges of the plot. see \link[ggpp]{annotate}. If a numeric vector it is interpreted as the distance to 0 on both X and Y.}
 
 \item{geom}{controls the annotation geom; usually you would use "text" or "label".}
 
 \item{color}{either a single value or 4 values that control the color of the labels}
 
-\item{...}{further arguments are passed onto \link(ggpp::annotate)}
+\item{...}{further arguments are passed onto \link[ggpp]{annotate}}
 }
 \value{
 a ggplot2 layer that can be added to an existing ggplot object.
 }
 \description{
-This function is a convience function that uses \link(ggpp::annotate) to easily create labels for the quadrants.
+This function is a convience function that uses \link[ggpp]{annotate} to easily create labels for the quadrants.
 }
 \examples{
 example(soc.mca)

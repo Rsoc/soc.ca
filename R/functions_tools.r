@@ -363,7 +363,7 @@ randomize.mca <- function(r, replace = FALSE){
 
 #' Remove unnecessary variables from an MCA
 #' 
-#' This function tests and removes variables that have no or too few relations with other variables. In other words variables that only contribute with random noise to the analysis. Removing these variables will tend to increase the strength of the first dimensions and give a wider dispersion of the cloud of cases on the first dimensions. Removing these variables can also give a simpler analysis that is easier to interpret and communicate. The core of the pruning procedure uses the \link(mca.eigen.check) to construct a weighted network of relations between variables. Tie strength is measured by the first eigenvalue of an MCA between the two variables. Ties between variables with a weak relationship  are removed and variables with few connections to other variables are discarded. With the default values a analysis without irrelevant variables is unchanged. Note that passive categories are inherited from the original analysis and are not included in the \link{mca.eigen.check}. This procedure does not help with variables that are too strongly related.
+#' This function tests and removes variables that have no or too few relations with other variables. In other words variables that only contribute with random noise to the analysis. Removing these variables will tend to increase the strength of the first dimensions and give a wider dispersion of the cloud of cases on the first dimensions. Removing these variables can also give a simpler analysis that is easier to interpret and communicate. The core of the pruning procedure uses the \link{mca.eigen.check} to construct a weighted network of relations between variables. Tie strength is measured by the first eigenvalue of an MCA between the two variables. Ties between variables with a weak relationship  are removed and variables with few connections to other variables are discarded. With the default values a analysis without irrelevant variables is unchanged. Note that passive categories are inherited from the original analysis and are not included in the \link{mca.eigen.check}. This procedure does not help with variables that are too strongly related.
 #'
 #' @param r a result object from \link{soc.mca}
 #' @param eigen.cut.off the cut.off for the first eigen value from \link{mca.eigen.check}
@@ -374,7 +374,7 @@ randomize.mca <- function(r, replace = FALSE){
 #' @return A list containing:
 #'  \item{var}{a tibble with the weighted degree of the variables} 
 #'  \item{mca.eigen.check}{The results from \link{mca.eigen.check}}
-#'  \item{g}{a network graph - see \link{igraph}}
+#'  \item{g}{a network graph - see \link[igraph]{igraph}}
 #'  \item{remaining.var}{a character vector with the names of the remaining variables}
 #'  \item{removed}{a character vector with the names of the removed variables}
 #'  \item{pruned.r}{A pruned version of the original soc.mca object}                
@@ -386,7 +386,7 @@ randomize.mca <- function(r, replace = FALSE){
 #' pr$removed               # This example has no irrelevant variables so nothing is removed
 
 prune.mca <- function(r, eigen.cut.off = 0.55, network.pruning = TRUE, average.pruning = FALSE, min.degree = 1){
-  require(igraph) 
+  requireNamespace("igraph", quietly = TRUE) 
   
   mec <- mca.eigen.check(r, passive = r$names.passive)
   g   <- graph_from_data_frame(mec, directed = FALSE)

@@ -30,8 +30,8 @@ get.category.relations(
 a tibble
 }
 \description{
-Use this function to calculate PEM \link(GDAtools::pem) values, chisq, distance and coordinates for each pair of categories in either an indicator matrix or the categories from an soc.mca result object. These relationship are usefull for both diagnostics, analysis, interpretation and plotting. 
-For plotting combine with \link(soc.ca:::add.category.relations) to build your plot.
+Use this function to calculate PEM \link[GDAtools]{pem} values, chisq, distance and coordinates for each pair of categories in either an indicator matrix or the categories from an soc.mca result object. These relationship are usefull for both diagnostics, analysis, interpretation and plotting. 
+For plotting combine with \link{add.category.relations} to build your plot.
 }
 \examples{
 example(soc.mca)
