@@ -20,6 +20,27 @@ library(GDAtools)
 library(tidyverse)
 ```
 
+```{r}
+library(soc.ca)
+library(GDAtools)
+
+example(soc.mca)
+
+gda.taste <- GDAtools::speMCA(active)
+gda.taste$eig$mrate
+result$adj.inertia[,"Adj.Var"]
+
+gda.taste.s <- GDAtools::speMCA(active, excl = "TV.Tv-Comedy")
+soc.ca.taste.s <- soc.mca(active, passive = "Tv-Comedy")
+soc.ca.taste.s$adj.inertia[,"Adj.Var"]
+gda.taste.s$eig$mrate
+
+soc.ca.taste.s$adj.inertia
+gda.taste.s$eig$rate
+
+```
+
+
 
 # Weighting 
 

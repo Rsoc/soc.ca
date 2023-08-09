@@ -9,7 +9,7 @@ supplementary.categories(object, sup, dim = 1:2)
 \arguments{
 \item{object}{a soc.mca result object}
 
-\item{sup}{a data.frame of factors}
+\item{sup}{a data.frame of factors or an indicator matrix}
 
 \item{dim}{a numeric vector with the two dimensions calculated}
 }

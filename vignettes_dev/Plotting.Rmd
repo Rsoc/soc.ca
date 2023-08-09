@@ -53,7 +53,7 @@ We can only see a few line like parts in this cloud - to remedy it we could see 
 Here the cloud is somewhat lumpy. We can see that some profiles (the dark ones) are perfectly overlapping.
 * __Hard boundaries__:  If the cloud has sharp boundaries this can be a result of logically impossible positions or cutoff criteria that defined the population. If the cloud is unbalanced and strongly triangular we will also see hard boundaries.  
 In this case we have a hard boundary in the north-east quadrant. It is a good idea to find out why that is. But it does not invalidate our analysis.  
-* __Extreme cases__: We are looking for cases that are breaking away from the rest of the cloud - a rule of thumb would be coordinates above 2, but it it depends more on the amount of space between the extreme points and the rest of the cloud. Often the problem is in two categories that necessarily overlap or missing categories. The solution can be to set some categories as passive.  
+* __Extreme cases__: We are looking for cases that are breaking away from the rest of the cloud - a rule of thumb would be coordinates above 2, but it depends more on the amount of space between the extreme points and the rest of the cloud. Often the problem is in two categories that necessarily overlap or missing categories. The solution can be to set some categories as passive.  
 In this case we don't really have extreme cases.
 * __Small cloud__: If the cloud of cases is dispersed between 0.5 and -0.5 then the dimensions are not very telling of the position of the cases. This will probably give us both active and supplementary categories that are close to each other and therefore difficult to interpret. Sometimes this can be handled by removing variables with low contributions to the dimensions that you are interested in.
 
@@ -161,10 +161,10 @@ r <- result
 
 
 cat.rel <- get.category.relations(r = r)
-cat.rel
+cat.rel |> dplyr::filter(valid.opposition)
 table(cat.rel$valid.correlation)
 
-add.category.relations <- function(r, cat.rel = get.category.relations(r, dim = dim) |> filter(valid.correlation), dim = c(1, 2),  mapping = aes(alpha = pem), ...){
+add.category.relations <- function(r, cat.rel = get.category.relations(r, dim = dim) |> dplyr::filter(valid.correlation), dim = c(1, 2),  mapping = aes(alpha = pem), ...){
   
   mapping <- soc.ca:::add_modify_aes(mapping, aes(x = X, xend = Xend, y = Y, yend = Yend))
     o <- list()
@@ -173,41 +173,21 @@ add.category.relations <- function(r, cat.rel = get.category.relations(r, dim = 
   
 }
 
-map.ca.base() + add.category.relations(r, color = "red") + add.categories(r)
+map.ca.base() + add.category.relations(r, cat.rel = cat.rel, color = "red") + add.categories(r)
 map.ca.base() + add.category.relations(r, color = "red", mapping = aes(alpha = chisq.p.value)) + add.categories(r)
 
 
 
-
-```
+ ```
 
 
 ```{r}
 
-add.pem.triads <- function(triads, triad.edges, mapping = aes(shape = category, color = triad), mapping_triads = aes(color = triad, alpha = pem),  
-                           point.size = 3, pem.cut = 0.5, 
-                           ...){
-  
-  tec    <- triad.edges %>% group_by(year, triad) %>% summarise(edges = sum(pem > 0), .groups = "drop_last") %>% ungroup()
-  triads <- left_join(triads, tec, by = c("year", "triad"))
-  
-  triad.edges$pem[triad.edges$pem < 0] <- 0
-  triad.edges$pem[triad.edges$pem > pem.cut] <- pem.cut
-  
-  mapping        <- add_modify_aes(mapping, aes(x = X, y = Y))
-  mapping_triads <- add_modify_aes(mapping_triads, aes(x = X, xend = Xend, y = Y, yend = Yend))
-  
-  o <- list()
-  
-  o$segment       <- geom_segment(data = triad.edges, mapping = mapping_triads, size = 0.3, ...)
-  
-  o$background <- geom_point(data = triads, mapping = mapping, size = point.size + 2, shape = 21, alpha = 0.8, fill = "white", color = "white")
-  o$ring       <- geom_point(data = triads %>% filter(edges >= 3), mapping = mapping, size = point.size + 2, shape = 21, alpha = 0.8, fill = "white")
-  o$points     <- geom_point(data = triads, mapping = mapping, size = point.size, ...)
-  o$shape      <- scale_shape_manual(values = LETTERS) 
-  o$alpha      <- scale_alpha(range = c(0,1), limits = c(0, pem.cut), guide = "none")
-  o
-}
+
+
+
+
+
 
 ```
 

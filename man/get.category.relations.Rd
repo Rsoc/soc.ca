@@ -8,8 +8,6 @@ get.category.relations(
   r,
   ind = r$indicator.matrix.active,
   dim = c(1, 2),
-  variable = r$variable,
-  coords = extract_mod(r, dim),
   rel = t(combn(colnames(ind), 2))
 )
 }
@@ -20,11 +18,11 @@ get.category.relations(
 
 \item{dim}{a numeric vector with the dimensions for the coordinates. This is only sent to \link{extract_mod}.}
 
+\item{rel}{a matrix with pairs of categories}
+
 \item{variable}{a character vector with the variable where each category in ind came from. If ind was created directly with \link{indicator} you can use names(colnames(ind)).}
 
 \item{coords}{a data.frame with coordinates - similar to those produced by \link{extract_mod}}
-
-\item{rel}{a matrix with pairs of categories}
 }
 \value{
 a tibble

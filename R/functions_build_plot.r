@@ -1,25 +1,33 @@
 #' Extract coordinates for the categories from an soc.mca
 #'
-#' @param result a soc.mca object
-#' @param dim the dimension
+#' @param result a soc.mca object or a PCA
+#' @param dim the dimensions
 #'
 #' @return a data.frame with coordinates and frequences
 #' @export
 #' @examples 
 #' example(soc.mca)
-#' extract_mod(result)
+#' extract_cats(result)
 
-extract_mod         <- function(result, dim = 1:2){
+extract_cats         <- function(result, dim = 1:3){
+  
+  if(what.is.x(result) %in% c("PCA", "gPCA")){
+    result <- from.pca.to.soc.ca(result)
+  }
+  
+  
   coord.mod           <- result$coord.mod[, dim]
   rownames(coord.mod) <- result$names.mod
   coord.mod           <- coord.mod[,]
-  colnames(coord.mod) <- c("X", "Y")
+  colnames(coord.mod) <- c("X", "Y", "Z", LETTERS)[1:length(dim)]
   
   md            <- coord.mod %>% data.frame() %>% tibble::rownames_to_column(var = "Modality")
   ctr           <- result$ctr.mod[, dim]
-  md$ctr.x      <- ctr[, 1]
-  md$ctr.y      <- ctr[, 2]
-  md$ctr        <- rowSums(ctr) / 2
+  
+  colnames(ctr) <- paste0("ctr.", colnames(coord.mod))
+  md           <- tibble(md, ctr)
+  
+  md$ctr        <- rowSums(ctr) / length(dim)
   md$ctr.set    <- (apply(ctr, 2, function(x) x >= mean(x)) %>% rowSums()) > 0
   md$Frequency  <- result$freq.mod
   md$Variable   <- result$variable
@@ -28,6 +36,12 @@ extract_mod         <- function(result, dim = 1:2){
   md            <- md %>% tibble()
   md
 }
+
+#' @rdname extract_cats
+#' @export
+
+extract_mod <- extract_cats   
+
 
 #' Extract supplementary categories from an soc.mca
 #'
@@ -40,11 +54,12 @@ extract_mod         <- function(result, dim = 1:2){
 #' example(soc.mca)
 #' extract_sup(result)
  
-extract_sup         <- function(result, dim = 1:2){
+extract_sup         <- function(result, dim = 1:3){
+
   coord.sup           <- result$coord.sup[, dim]
   rownames(coord.sup) <- result$names.sup
   coord.sup           <- coord.sup[,]
-  colnames(coord.sup) <- c("X", "Y")
+  colnames(coord.sup) <- c("X", "Y", "Z", LETTERS)[1:length(dim)]
   
   md                  <- coord.sup %>% data.frame() %>% rownames_to_column(var = "Modality")
   md$Frequency        <- result$freq.sup
@@ -55,31 +70,47 @@ extract_sup         <- function(result, dim = 1:2){
 
 #' Extract individuals
 #'
-#' @param result a soc.ca object 
+#' @param result a soc.ca object or a PCA
 #' @param dim the dimensions
 #'
 #' @return a data.frame with coordinates and frequences
 #' @export
 #' @examples 
 #' example(soc.mca)
-#' extract_ind(result)
+#' extract_cases(result)
 
-extract_ind         <- function(result, dim = 1:2){
+extract_cases         <- function(result, dim = 1:3){
+  
+  # If the result is a PCA
+  if(what.is.x(result) %in% c("PCA", "gPCA")){
+    result <- from.pca.to.soc.ca(result)
+  }
+  
+  
   coord.ind           <- result$coord.ind[, dim]
   rownames(coord.ind) <- result$names.ind
   coord.ind           <- coord.ind[,]
-  colnames(coord.ind) <- c("X", "Y")
+  colnames(coord.ind) <- c("X", "Y", "Z", LETTERS)[1:length(dim)]
   
   md           <- coord.ind %>% data.frame() %>% rownames_to_column(var = "Individual")
   ctr          <- result$ctr.ind[, dim]
-  md$ctr.x     <- ctr[, 1]
-  md$ctr.y     <- ctr[, 2]
-  md$ctr       <- rowSums(ctr) / 2
+  
+  colnames(ctr) <- paste0("ctr.", colnames(coord.ind))
+  md           <- tibble(md, ctr)
+  
+  md$ctr       <- rowSums(ctr) / length(dim)
   md$ctr.set   <- (apply(ctr, 2, function(x) x >= mean(x)) %>% rowSums()) > 0
+  
+  md$weight    <- result$weight
+  
   md           <- md %>% tibble()
   md
 }
 
+#' @rdname extract_cases
+#' @export
+
+extract_ind <- extract_cases   
 
 #' Create the base of a soc.ca map
 #'
@@ -147,9 +178,9 @@ map.ca.base <- function(up = NULL, down = NULL, right = NULL, left = NULL, base_
 #'
 #' @examples
 #' example(soc.mca)
-#' map.ca.base() + add.ind(result)
+#' map.ca.base() + add.cases(result)
 
-add.ind    <- function(object, dim = c(1, 2), ind = extract_ind(object, dim), mapping = aes(), ...){
+add.cases    <- function(object, dim = c(1, 2), ind = extract_ind(object, dim), mapping = aes(), ...){
   
   mapping    <- add_modify_aes(mapping, aes(x = X, y = Y))
   
@@ -158,6 +189,11 @@ add.ind    <- function(object, dim = c(1, 2), ind = extract_ind(object, dim), ma
   o
   
 }
+
+#' @rdname add.cases
+#' @export
+
+add.ind <- add.cases   
 
 
 
@@ -218,6 +254,8 @@ add.categories  <- function(object, preset = c("active", "ctr", "sup", "all"), d
   }
   o
 }
+
+
 
 #' Add a layer with concentration ellipses to an mca map.
 #'

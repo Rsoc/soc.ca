@@ -1,13 +1,14 @@
 library(soc.ca)
 library(tidyverse)
+library(GDAtools)
 example(soc.mca)
 
-
-# New indicator function 
-
-x <- active
-i <- indicator(active)
-i
+extract_ind
+data("political_space97")
+result <- political_space97 %>% select(-quest, -Vote) %>% GDAtools::gPCA()
+extract_cats(result)
+extract_cases(result)
+supplementary.categories(result, sup = political_space97 %>% select(Vote))
 
 
 add.hex.summary <- function(object, var, dim = c(1, 2), ind = extract_ind(object, dim), summary_fun = mean, ... ){
@@ -21,8 +22,50 @@ add.hex.summary <- function(object, var, dim = c(1, 2), ind = extract_ind(object
   o
 }
 
+
+
 var <- sup$Gender == "Women"
 map.ca.base() + add.hex.summary(result, var, bins = 10)
+map.ca.base() + add.hex.summary(result, var, summary_fun = median, bins = 10)
+
+# Color by relation to outcome
+
+r <- result
+outcome <- sup$Gender == "Women"
+
+get.category.outcome <- function(r, outcome, ind = r$indicator.matrix.active, categories = colnames(ind), dim = 1:2, outcome.functions = soc.ca:::pem_fast){
+
+cats                 <- supplementary.categories(r, ind, dim = dim)
+ond                  <- cbind(ind, ".outcome: TRUE" = outcome * 1)
+rel                  <- cbind(categories, ".outcome: TRUE")
+cat.rel              <- get.category.relations(r = r, ind = ond, dim = dim, rel = rel)
+cat.out              <- cat.rel %>% select(-B, -Xend, -Yend, -label_end, -variable_end) %>% rename(Modality = A, category = A)
+cat.out
+}
+
+cat.outcome <- get.category.outcome(r, outcome)
+
+add.categories
+
+add.category.outcome <- function(r, outcome, cats = get.category.outcome(r, outcome), mapping = aes(color = pem, label = category), repel = FALSE, check_overlap = FALSE, ...){
+  
+  mapping <- soc.ca:::add_modify_aes(mapping, aes(x = X, y = Y))
+  
+  o <- list()
+  
+  if(identical(repel, FALSE)){
+    o$text    <- geom_text(data = cats, mapping = mapping, check_overlap = check_overlap, ...)
+  }
+  
+  if(identical(repel, TRUE)){
+    o$text    <- ggrepel::geom_text_repel(data = cats, mapping = mapping, ...)
+  }
+  o
+}
+
+map.ca.base() + add.category.outcome(r, outcome) + scale_colour_steps2()
+map.ca.base() + add.category.outcome(r, outcome, mapping = aes(color = chisq.p.value, label = label)) + scale_colour_steps2()
+
 
 
 map.ca.base() + add.categories(result)                               # Alle aktive kategorier

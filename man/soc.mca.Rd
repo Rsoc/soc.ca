@@ -25,7 +25,7 @@ soc.mca(
 
 \item{passive}{A single character vector with the full or partial names of the passive modalities. All names that have a full or partial match will be set as passive.}
 
-\item{weight}{a numeric vector with the weights for the individual rows. The weight is normalized afterwardsds.}
+\item{weight}{a numeric vector with the weights for the individual rows. The weight is normalized afterwards.}
 
 \item{Moschidis}{If TRUE adjusts contribution values for rare modalities. see \link{moschidis}.}
 

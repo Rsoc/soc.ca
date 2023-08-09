@@ -484,7 +484,7 @@ average.coord <- function(object, x, dim = c(1, 2)){
 #' Calculate the average coordinates in the category cloud of a soc.mca analysis.
 #' 
 #' @param object a soc.mca result object
-#' @param sup a data.frame of factors
+#' @param sup a data.frame of factors or an indicator matrix
 #' @param dim a numeric vector with the two dimensions calculated
 #'
 #' @return a data.frame with coordinates and labels
@@ -493,7 +493,41 @@ average.coord <- function(object, x, dim = c(1, 2)){
 #' @examples
 #' example(soc.mca)
 #' supplementary.categories(result, sup)
-supplementary.categories <- function(object, sup, dim = 1:2){
+supplementary.categories <- function(object, sup, dim = 1:3){
+  
+  sup.is <- soc.ca:::what.is.x(sup)
+  object.is <- soc.ca:::what.is.x(object)
+  
+  
+  
+  
+  
+  
+  # If sup is an indicator
+  if(sup.is == "indicator"){
+    
+    coord <- object$coord.ind[, dim]
+    ind.x <- sup * coord[, 1] 
+    ind.y <- sup * coord[, 2]
+    ind.x[ind.x == 0] <- NA
+    ind.y[ind.y == 0] <- NA
+    
+    cmx   <- colMeans(ind.x, na.rm = TRUE) / sqrt(object$eigen[dim[1]])  
+    cmy   <- colMeans(ind.y, na.rm = TRUE) / sqrt(object$eigen[dim[2]])
+    
+    # Variable names
+    
+    var.names <- attr(colnames(sup), "variable")
+    if(length(var.names) != ncol(sup)) var.names <- NULL
+    if(is.null(var.names)) var.names <- colnames(sup) %>% strsplit(": ") %>% map_chr(~head(.x, 1))
+    
+    labels <- names(colnames(sup))
+    if(is.null(labels)) labels <- colnames(sup) %>% strsplit(": ") %>% map_chr(~tail(.x, 1))
+    
+    out <- tibble(Variable = var.names, label = labels, X = cmx, Y = cmy, Frequency = colSums(sup), Modality = colnames(sup))
+    return(out)
+  }
+  
   sup <- sup %>% tibble()
   # Add tests
   out   <- map(sup, ~average.coord(object, .x, dim)) %>% bind_rows(.id = "Variable")
@@ -517,13 +551,15 @@ supplementary_variable <- function(res, var) {
   cos2 <- coord * coord/((1/FK) - 1)
   freq = n * FK
   
+  s <- 1:length(eigen)
+  
   names(freq) <- levels(variable)
   rownames(coord) <- levels(variable)
   rownames(cos2) <- levels(variable)
   wi <- apply(vrc, 2, weighted.mean, w = freq)
-  be <- eigen - wi[1:length(eigen)]
-  eta2 <- be/eigen[1:length(be)]
-  vrc <- rbind(vrc[1:length(be)], wi, be, eigen[1:length(be)], eta2)
+  be <- eigen - wi[s]
+  eta2 <- be/eigen[s]
+  vrc <- rbind(vrc[s], wi[s], be, eigen[1:length(be)], eta2)
   vrc <- round(vrc, 6)
   rownames(vrc) <- c(levels(variable), "within", "between", "total", 
                      "eta2")

@@ -4,6 +4,9 @@ library(soc.ca)
 library(tidyverse)
 
 extract_ind         <- function(result, dim = 1:2){
+  
+  soc.ca:::what.is.x(result)
+  
   coord.ind           <- result$coord.ind[, dim]
   rownames(coord.ind) <- result$names.ind
   coord.ind           <- coord.ind[,]

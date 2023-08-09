@@ -46,7 +46,7 @@ l.mca                <- list("Original" = soc.mca(a0, identifier = d$ID),
 l.triads             <- list()
 
 l.triads$A           <- d %>% transmute(id = as.character(ID), 
-                               "TV: Comedy" = TV == "Tv-Comedy",
+                               "TV: Tv-Comedy" = TV == "Tv-Comedy",
                                "Eat: IndianRest" = Eat == "IndianRest",
                                "Art: StillLife" = Art == "StillLife")
 
@@ -81,6 +81,108 @@ soc.ca:::mca.triad.array(l.mca.triads)
 
 
 ```
+# New approach
+```{r}
+
+example(soc.mca)
+r <- result
+
+# First define the triads as a list.
+
+triads             <- list("A" = c("TV: Tv-Comedy", "Eat: IndianRest", "Art: StillLife"),
+                           "B" = c("Film: SciFi", "Eat: FrenchRest", "Art: RenaissanceArt"),
+                           "C" = c("Film: Romance", "TV: Tv-Soap", "Art: Portrait"),
+                           "D" = c("Eat: SteakHouse", "Art: Landscape", "Film: Documentary")
+)
+
+# Add the triads to the result object
+r                  <- soc.ca:::soc.mca.triads(r, triads)
+
+# Plot the triads
+map.ca.base() + soc.ca:::add.triads(r = r)
+
+# Plot the combination points
+map.ca.base() + soc.ca:::add.triads(r = r) + soc.ca:::add.combination.points(r)
+
+```
+
+# Fix points
+If we want to plot the relationship between a combination point and a fix.point. This is doable now with the existing functions, but it is cumbersome.
+```{r}
+
+```
+
+# Structure of oppositions
+This type of map is a pem map but for combination points. 
+```{r}
+
+```
 
 
+
+# Multiple mca's
+In this example we only use the active categories - and therefore it is a rather simple setup
+```{r}
+
+triads             <- list("A" = c("TV: Tv-Comedy", "Eat: IndianRest", "Art: StillLife"),
+                           "B" = c("Film: SciFi", "Eat: FrenchRest", "Art: RenaissanceArt"),
+                           "C" = c("Film: Romance", "TV: Tv-Soap", "Art: Portrait"),
+                           "D" = c("Eat: SteakHouse", "Art: Landscape", "Film: Documentary")
+)
+
+
+
+d                    <- taste[which(taste$Isup == 'Active'), ]
+a0                   <- d %>% select(TV, Film, Art, Eat)
+
+d1                   <- d[which(d$Gender == 'Women'), ]
+a1                   <- d1 %>% select(TV, Film, Art, Eat)
+
+d2                   <- d[which(d$Gender != 'Women'), ]
+a2                   <- d2 %>% select(TV, Film, Art, Eat)
+
+d3                   <- taste
+a3                   <- d3 %>% select(TV, Film, Art, Eat)
+
+
+l.mca               <- list()
+l.mca$Original      <- soc.mca(a0) %>% soc.mca.triads(triads = triads)
+l.mca$"No Passive"  <- soc.mca(a3) %>% soc.mca.triads(triads = triads)
+l.mca$"Women"       <- soc.mca(a1) %>% soc.mca.triads(triads = triads)
+l.mca$"Men"         <- soc.mca(a2) %>% soc.mca.triads(triads = triads)
+
+# Fixate coordinates
+l.mca <- fixate.coordinates(l.mca)
+
+# Plot individually
+map.ca.base() + add.triads(l.mca$Original) + add.combination.points(l.mca$Original)
+map.ca.base() + add.triads(l.mca$`No Passive`) + add.combination.points(l.mca$`No Passive`)
+map.ca.base() + add.triads(l.mca$Women) + add.combination.points(l.mca$Women)
+map.ca.base() + add.triads(l.mca$Men) + add.combination.points(l.mca$Men)
+
+# Plot together?
+
+# It is probably possible to just do it through add.triads and add.combination.points. ask what.is.x and then join them if it is a list of mcas.
+# But that makes it less transparent and we if we want extra variables (in the same layer ??) we need to add them individually to each mca ... which is kinda ok.
+```
+
+
+
+# Tests 
+```{r}
+triads             <- list("A" = c("Eat: IndianRest", "Art: StillLife"),
+                           "B" = c("Film: SciFi", "Eat: FrenchRest"),
+                           "C" = c("Film: Romance", "TV: Tv-Soap", "Art: Portrait", "Eat: Fish&Chips"),
+                           "D" = c("Eat: SteakHouse", "Art: Landscape", "Film: Documentary", "TV: Tv-Comedy")
+)
+
+# Add the triads to the result object
+r                  <- soc.mca.triads(r, triads)
+
+# Plot the triads
+map.ca.base() + add.triads(r = r)
+
+# Plot the combination points
+map.ca.base() + add.triads(r = r) + add.combination.points(r)
+```
 

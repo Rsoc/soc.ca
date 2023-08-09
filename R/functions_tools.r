@@ -357,7 +357,7 @@ randomize.mca <- function(r, replace = FALSE){
   iw <- pivot_wider(im, id_cols = case, names_from = variable, values_from = label)
   ir <- map_df(iw, ~.x[sample(length(.x), replace = replace)] )
   passive <- im$category[im$passive] %>% unique()
-  if(length(passive) == 0) passive <- NA
+  if(length(passive) == 0){ passive <- NA }
   soc.mca(ir |> select(-case), passive = passive)
 }
 
@@ -386,10 +386,10 @@ randomize.mca <- function(r, replace = FALSE){
 #' pr$removed               # This example has no irrelevant variables so nothing is removed
 
 prune.mca <- function(r, eigen.cut.off = 0.55, network.pruning = TRUE, average.pruning = FALSE, min.degree = 1){
-  requireNamespace("igraph", quietly = TRUE) 
+  if(requireNamespace("igraph", quietly = TRUE) == FALSE) return("You need the package igraph in order to run this function")
   
-  mec <- mca.eigen.check(r, passive = r$names.passive)
-  g   <- graph_from_data_frame(mec, directed = FALSE)
+  mec  <- mca.eigen.check(r, passive = r$names.passive)
+  g    <- graph_from_data_frame(mec, directed = FALSE)
   gso  <- graph.strength(g, weights = E(g)$"First eigen")
   
   gi <- delete.edges(g, edges = which(E(g)$"First eigen" < eigen.cut.off))
@@ -419,16 +419,15 @@ prune.mca <- function(r, eigen.cut.off = 0.55, network.pruning = TRUE, average.p
   
   # Redo the mca
   im <- indicator.to.long(r)
-  iw <- pivot_wider(im, id_cols = case, names_from = variable, 
+  iw <- tidyr::pivot_wider(im, id_cols = case, names_from = variable, 
                     values_from = label)
   passive <- im$category[im$passive] %>% unique()
-  if (length(passive) == 0) passive <- NA
+  if (length(passive) == 0) passive <- getOption("passive", default = "Missing")
   
   iw.set <- iw[, set]
   ri    <- soc.mca(iw.set, passive = passive)
   
-  
-  o      <- list()
+    o      <- list()
   o$var  <- tibble(variable = V(g)$name, "graph.strength.original" = gso, "graph.strength.pruned" = gs, "below.average" = gso < mean(gso))
   o$mca.eigen.check <- mec
   o$g    <- gi

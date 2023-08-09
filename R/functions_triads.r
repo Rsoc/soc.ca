@@ -36,6 +36,48 @@ mca.triad.array <- function(l.mca.triads){
   p + coord_fixed()
 }
 
+
+
+soc.mca.triads <- function(r,
+                           triads = list("A" = c(), "B" = c(), "C" = c(), "D" = c()),
+                           ind = r$indicator.matrix.active,
+                           dim = c(1, 2)
+){
+  
+  # Triads as a tibble
+  td       <- triads %>% stack() %>% select(category = values, triad = ind)
+  
+  # The indicator matrix
+  ind      <- ind[, colnames(ind) %in% td$category]
+  
+  # Coordinates of each point
+  cat.coords   <- supplementary.categories(r, ind, dim = dim) %>% left_join(td, by = c("Modality" = "category")) %>% mutate(category = Modality)
+  
+  # Test: Are some of the categories from the same variable. That is not allowed since then they cannot have a positive relation
+  test <- cat.coords %>% group_by(triad) %>% summarise(variables = n_distinct(Variable), n = n())
+  if(any(test$variables < test$n)) warning("One of your triads has more than 1 category from the same variable")
+  
+  # Category relations
+  rel       <- triads %>% map(~ .x %>% combn(2) %>% t() %>% data.frame() %>% select(A = X1, B = X2)) %>% bind_rows(.id = "triad")
+  cat.rel   <- get.category.relations(r, ind = ind, dim = dim, rel = rel[, -1])
+  cat.rel   <- inner_join(cat.rel, rel, by = c("A", "B"))
+  
+  # Combination points
+  combination.points <- calculate.combination.points(triads, r, dim, ind)
+  
+  r$triads             <- triads
+  r$triads.ind         <- ind
+  r$triads.dim         <- dim
+  r$triads.coords      <- cat.coords
+  r$triads.edges       <- cat.rel
+  r$combination.points <- combination.points
+  r
+}
+
+
+
+
+
 #' Compare MCA's with triads
 #'
 #' @param l.mca a list of soc.mca objects
@@ -111,17 +153,15 @@ mca.triads <- function(l.mca, l.triads, dim = c(1,2), fix.mca = 1){
 #' example(soc.mca)
 #' get.category.relations(result)
 
-get.category.relations <- function(r, ind = r$indicator.matrix.active, dim = c(1, 2), 
-                                   variable = r$variable,
-                                   coords = extract_mod(r, dim),
+get.category.relations <- function(r, ind = r$indicator.matrix.active, dim = c(1, 2),
                                    rel = t(combn(colnames(ind),2))
 ){
   
-  
-  coords$category  <-   coords$Modality
+  coords           <- supplementary.categories(r, ind, dim)
+  coords$category  <- coords$Modality
   
   el         <- rel 
-  v          <- tibble(category = colnames(ind), variable)
+  v          <- coords %>% select(category, variable = Variable)
   el         <- tibble(x = el[,1], y = el[,2])
   
   
@@ -130,18 +170,22 @@ get.category.relations <- function(r, ind = r$indicator.matrix.active, dim = c(1
   el         <- el %>% filter(variable.x != variable.y)
   
   f.pem <- function(x, y){
-    o <- pem_fast(ind[, x], ind[, y])
+    a <- ind[, x] %>% factor(levels = c("0", "1"))
+    b <- ind[, y] %>% factor(levels = c("0", "1"))
+    o <- soc.ca:::pem_fast(a, b)
     o[2,2]
   }
   
   f.chisq <- function(x, y){
-    o <- chisq.test(ind[, x], ind[, y])
+    a <- ind[, x] %>% factor(levels = c("0", "1"))
+    b <- ind[, y] %>% factor(levels = c("0", "1"))
+    o <- suppressWarnings(chisq.test(table(a, b)))
     o
   }
   
   o          <- tibble(A = el$x, B = el$y)
-  c.A        <- coords %>% select(A = category, X, Y)
-  c.B        <- coords %>% select(B = category, Xend = X, Yend = Y)
+  c.A        <- coords %>% select(A = category, X, Y, label, Variable)
+  c.B        <- coords %>% select(B = category, Xend = X, Yend = Y, label_end = label, variable_end = Variable)
   o          <- left_join(o, c.A, by = "A") |> left_join(c.B, by = "B")
   
   cross <- function(x, y, xend, yend){
@@ -163,5 +207,106 @@ get.category.relations <- function(r, ind = r$indicator.matrix.active, dim = c(1
   o <- o |> mutate(valid.opposition = expected > 5 &  chisq.p.value < 0.05 & distance > 0.75 &  pem < -25,
                    valid.correlation = expected > 5 &  chisq.p.value < 0.05 & pem > 10)
   o
+}
+
+add.combination.points <- function (r, combined.coord = r$combination.points$combined.coord, dim = c(1, 2), draw.levels = c("1", "+2"), mapping = aes(color = triad, label = category, group = triad, size = Frequency), 
+                                    points = TRUE, draw.labels = FALSE, linetype = "dashed", linesize = 0.3,
+                                    ...) 
+{
+  
+  cats <- combined.coord %>% filter(label %in% draw.levels)
+  mapping <- soc.ca:::add_modify_aes(mapping, aes(x = X, y = Y))
+  o <- list()
+  
+  mapping_lines <- soc.ca:::add_modify_aes(mapping, aes(label = NULL, size = NULL))
+  o$lines       <- geom_path(data = cats, mapping = mapping_lines, linetype = linetype,
+                             ...)
+  
+  if (identical(points, TRUE)) {
+    mapping_points <- soc.ca:::add_modify_aes(mapping, aes(label = NULL))
+    o$points <- geom_point(data = cats, mapping = mapping_points, 
+                           ...)
+  }
+  
+  if (identical(draw.labels, TRUE)) {
+    o$text <- geom_text(data = cats, mapping = mapping, check_overlap = check_overlap, 
+                        ...)
+  }
+  o
+}
+
+add.triads <- function(r, triads.coords = r$triads.coords, triad.edges = r$triads.edges, mapping = aes(shape = category, color = triad), mapping_triads = aes(color = triad, alpha = pem),
+                       point.size = 3, pem.cut = 0.5,
+                       ...){
+
+
+  tec           <- triad.edges %>% group_by(triad) %>% summarise(edges = sum(pem > 0), .groups = "drop_last") %>% ungroup()
+  triads.coords <- left_join(triads.coords, tec, by = c("triad"))
+
+  triad.edges$pem[triad.edges$pem < 0] <- 0
+  triad.edges$pem[triad.edges$pem > pem.cut] <- pem.cut
+
+  mapping        <- soc.ca:::add_modify_aes(mapping, aes(x = X, y = Y))
+  mapping_triads <- soc.ca:::add_modify_aes(mapping_triads, aes(x = X, xend = Xend, y = Y, yend = Yend))
+
+  o <- list()
+
+  o$segment       <- geom_segment(data = triad.edges, mapping = mapping_triads, size = 0.3, ...)
+
+  o$background <- geom_point(data = triads.coords, mapping = mapping, size = point.size + 2, shape = 21, alpha = 0.8, fill = "white", color = "white")
+  o$ring       <- geom_point(data = triads.coords %>% filter(edges >= 3), mapping = mapping, size = point.size + 2, shape = 21, alpha = 0.8, fill = "white")
+  o$points     <- geom_point(data = triads.coords, mapping = mapping, size = point.size, ...)
+  o$shape      <- scale_shape_manual(values = LETTERS)
+  o$alpha      <- scale_alpha(range = c(0,1), limits = c(0, pem.cut), guide = "none")
+  o
+}
+
+calculate.combination.points <- function(triads, r, dim = c(1,2), ind = r$indicator.matrix.active){
+  
+  comb.fact  <- map(triads, ~rowSums(ind[, colnames(ind) %in% .x])) |> bind_cols()
+  comb.fact[comb.fact > 2] <- 2
+  comb.fact  <- comb.fact %>% modify(~as.character(.x) %>% fct(, levels = as.character(0:2)) %>% fct_recode("+2" = "2")) 
+  
+  comb.coord <- soc.ca::supplementary.categories(r, comb.fact)
+  comb.coord <- comb.coord %>% mutate(triad = Variable, category = Modality)
+  # PEM network
+  ind.comb    <- indicator(comb.fact)
+  rel         <- t(combn(colnames(ind.comb),2))
+  comb.pem    <- get.category.relations(r, ind = ind.comb, dim = dim, rel = t(combn(colnames(ind.comb),2)))
+  
+  o                  <- list()
+  o$combined.factors <- comb.fact
+  o$combined.coord   <- comb.coord
+  o$combined.pem     <- comb.pem
+  o
+}
+
+fixate.coordinates <- function(l.mca, fix.mca = 1){
+  
+  l.coords <- map(l.mca, ~ .x$triads.coords)
+  dim      <- l.mca[[1]]$triads.dim
+  
+  # Aligning coordinates
+  coords     <- bind_rows(l.coords, .id = "mca")
+  max.coords <- coords %>% select("Modality", "X", "Y") %>% gather(key = "key", value = "value", -Modality) %>% group_by(Modality) %>%
+    summarise(median = median(sqrt(value^2)))
+  
+  coords        <- coords[coords$Modality == max.coords$Modality[which.max(max.coords$median)],]
+  cat("\n", "Category used for fixing: ", coords$Modality[1], "\n")
+  
+  coords        <- coords %>% select("X", "Y")
+  direction     <- coords > 0
+  fix.direction <- coords[fix.mca,] > 0
+  
+  flip                 <- t(direction) != as.vector(fix.direction)
+  flip                 <- lapply(data.frame(flip), which)
+  flip                 <- flip %>% map(~dim[.x])
+  
+  l.mca                <- map2(l.mca, flip, invert)
+  
+  # Recalculate triads
+  l.mca <- l.mca %>% map(~ soc.mca.triads(r = .x, ind = .x$triads.ind, triads = .x$triads, dim = .x$triads.dim))
+  
+  l.mca
 }
 

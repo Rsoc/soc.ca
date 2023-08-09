@@ -151,8 +151,16 @@ el.origo
 
 ellipses <- function(object, var, dim = c(1, 2), 
                      kappa = 2, npoints = 1000) {
+  if(is.factor(var) == FALSE){
   var <- factor(var)
-  m   <- supplementary_variable(object, var)$coord[, dim]
+  }
+  
+  if(anyNA(var)){
+  var <- fct_explicit_na(var)
+  warning("var contains NA values. Made explicit with forcats::fct_explicit_na()")
+  }
+  
+  m   <- soc.ca:::supplementary_variable(object, var)$coord[, dim]
   m[, 1] <- m[, 1] * object$eigen[dim[1]] %>% sqrt()
   m[, 2] <- m[, 2] * object$eigen[dim[2]] %>% sqrt()
   v <- supplementary_variable(object, var)$var[1:length(levels(var)), dim]

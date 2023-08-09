@@ -8,7 +8,7 @@
 #' @param passive      A single character vector with the full or partial names of the passive modalities. All names that have a full or partial match will be set as passive.
 #' @param Moschidis    If TRUE adjusts contribution values for rare modalities. see \link{moschidis}.
 #' @param detailed.results If FALSE the result object is trimmed to reduce its memory footprint.
-#' @param weight a numeric vector with the weights for the individual rows. The weight is normalized afterwardsds.
+#' @param weight a numeric vector with the weights for the individual rows. The weight is normalized afterwards.
 #' 
 #' @return \item{nd}{Number of active dimensions}
 #'  \item{n.ind}{The number of active individuals}
@@ -128,7 +128,9 @@ soc.mca <- function(active, sup = NULL, identifier = NULL, passive = getOption("
   varlist.long <- gsub(": .*", "", colnames(ind.act))                     # Vector of varnames matching the list of modalities
   Q            <- median(rowSums(ind.act))                                # Number of Questions [we use the median in order to allow for questions that do not sum to one]
   
-  passive.set  <- grepl(paste(passive, collapse = "|"), colnames(ind.act)) # Defining the set of passive modalities, default is no passive
+  # passive.set  <- grepl(paste(passive, collapse = "|"), colnames(ind.act)) # Defining the set of passive modalities, default is no passive
+  passive.set  <- purrr::map_lgl(colnames(ind.act), ~ stringr::str_detect(string = .x, pattern = stringr::coll(passive)) %>% any())
+  
   set <- 1:ncol(ind.act)                                                  # set is all
   active.set <- set[!passive.set]                                         # active.set is active modalities
   
@@ -578,6 +580,7 @@ indicator  <- function(x, id = NULL, ps = ": "){
   col.names   <- paste(fn, ln, sep = ps)
   colnames(Z) <- col.names
   names(colnames(Z)) <- ln
+  attr(colnames(Z), "variable") <- fn
   
   if (identical(id, NULL) == TRUE){
     rownames(Z) <- as.character(seq(I))
@@ -1074,12 +1077,18 @@ what.is.x  <- function(x){
   is.l    <- is.list(x)
   is.m    <- is.matrix(x)
   is.lm   <- all(unlist(lapply(x, is.matrix)))
+  
   is.mca  <- inherits(x, "soc.mca")
+  is.gpca  <- inherits(x, "gPCA")
+  is.pca  <- inherits(x, "PCA")
+  
+  is.result <- any(is.mca, is.gpca, is.pca)
+  
   is.ld   <- is.d == FALSE & is.l == TRUE & is.lm == FALSE & is.mca == FALSE
   is.all.numeric <- all(unlist(lapply(x, is.numeric)))
   
   # Scenario: List
-  if(is.ld | is.lm){
+  if( (is.ld | is.lm) & !is.result){
     not.all.data.frames <- any(!unlist(lapply(x, is.data.frame)))
     not.all.matrix      <- any(!unlist(lapply(x, is.matrix)))
     if(all(not.all.data.frames, not.all.matrix)) stop("x is a list, but not all elements are the same valid type (aka. data.frame or indicator matrix).")
@@ -1105,8 +1114,12 @@ what.is.x  <- function(x){
   if(is.ld) o <- "list.data.frame"
   # It is surely a list of indicators
   if(is.lm) o <- "list.indicators"
-  # It is an mca
+  # It is an mca  
   if(is.mca) o <- "soc.mca"
+  # It is an PCA from FactoMineR
+  if(is.pca) o <- "PCA"
+  # It is an gPCA from GDAtools
+  if(is.pca) o <- "gPCA"
   o
 }
 
