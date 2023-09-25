@@ -101,6 +101,8 @@ r                  <- soc.ca:::soc.mca.triads(r, triads)
 # Plot the triads
 map.ca.base() + soc.ca:::add.triads(r = r)
 
+
+
 # Plot the combination points
 map.ca.base() + soc.ca:::add.triads(r = r) + soc.ca:::add.combination.points(r)
 
@@ -146,13 +148,13 @@ a3                   <- d3 %>% select(TV, Film, Art, Eat)
 
 
 l.mca               <- list()
-l.mca$Original      <- soc.mca(a0) %>% soc.mca.triads(triads = triads)
-l.mca$"No Passive"  <- soc.mca(a3) %>% soc.mca.triads(triads = triads)
-l.mca$"Women"       <- soc.mca(a1) %>% soc.mca.triads(triads = triads)
-l.mca$"Men"         <- soc.mca(a2) %>% soc.mca.triads(triads = triads)
+l.mca$Original      <- soc.mca(a0) %>% soc.ca:::soc.mca.triads(triads = triads)
+l.mca$"No Passive"  <- soc.mca(a3) %>% soc.ca:::soc.mca.triads(triads = triads)
+l.mca$"Women"       <- soc.mca(a1) %>% soc.ca:::soc.mca.triads(triads = triads)
+l.mca$"Men"         <- soc.mca(a2) %>% soc.ca:::soc.mca.triads(triads = triads)
 
 # Fixate coordinates
-l.mca <- fixate.coordinates(l.mca)
+l.mca <- soc.ca:::fixate.coordinates(l.mca)
 
 # Plot individually
 map.ca.base() + add.triads(l.mca$Original) + add.combination.points(l.mca$Original)

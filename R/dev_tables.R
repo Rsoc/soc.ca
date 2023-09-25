@@ -39,8 +39,8 @@ contribution.cat.ft <- function(result, dim = 1, caption = paste("Categories con
 }
 
 contribution.cat.leroux.ft <- function(result, dim = 1, caption = paste("Categories contributing above average to dim.", dim)){
-  t   <-   extract_mod(result, c(dim, 2)) %>% as_tibble() %>% filter(ctr.x >= mean(ctr.x)) %>% arrange(-ctr.x)
-  t   <- t %>% transmute(Category = Modality, "Coord +" = round(X, 2), "Coord -" = round(X, 2), "Ctr %" = round(ctr.x * 100, 1), n = Frequency)
+  t   <-   extract_mod(result, c(dim, 2)) %>% as_tibble() %>% filter(ctr.X >= mean(ctr.X)) %>% arrange(-ctr.X)
+  t   <- t %>% transmute(Category = Modality, "Coord +" = round(X, 2), "Coord -" = round(X, 2), "Ctr %" = round(ctr.X * 100, 1), n = Frequency)
   t$`Coord +`[t$`Coord +` >= 0] <- NA
   t$`Coord -`[t$`Coord -` <= 0] <- NA
   ft <- flextable(t) %>% autofit() %>% set_caption(caption)

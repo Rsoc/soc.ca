@@ -25,7 +25,7 @@ extract_cats         <- function(result, dim = 1:3){
   ctr           <- result$ctr.mod[, dim]
   
   colnames(ctr) <- paste0("ctr.", colnames(coord.mod))
-  md           <- tibble(md, ctr)
+  md            <- bind_cols(md, ctr)
   
   md$ctr        <- rowSums(ctr) / length(dim)
   md$ctr.set    <- (apply(ctr, 2, function(x) x >= mean(x)) %>% rowSums()) > 0
@@ -33,7 +33,7 @@ extract_cats         <- function(result, dim = 1:3){
   md$Variable   <- result$variable
   md$label      <- result$labels.mod
   if(!is.null(result$headings)) md$headings = result$headings
-  md            <- md %>% tibble()
+  md            <- md %>% dplyr::tibble()
   md
 }
 

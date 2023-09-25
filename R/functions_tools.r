@@ -387,10 +387,11 @@ randomize.mca <- function(r, replace = FALSE){
 
 prune.mca <- function(r, eigen.cut.off = 0.55, network.pruning = TRUE, average.pruning = FALSE, min.degree = 1){
   if(requireNamespace("igraph", quietly = TRUE) == FALSE) return("You need the package igraph in order to run this function")
+  require("igraph", quietly = TRUE)
   
   mec  <- mca.eigen.check(r, passive = r$names.passive)
-  g    <- graph_from_data_frame(mec, directed = FALSE)
-  gso  <- graph.strength(g, weights = E(g)$"First eigen")
+  g    <- igraph::graph_from_data_frame(mec, directed = FALSE)
+  gso  <- igraph::graph.strength(g, weights = E(g)$"First eigen")
   
   gi <- delete.edges(g, edges = which(E(g)$"First eigen" < eigen.cut.off))
   

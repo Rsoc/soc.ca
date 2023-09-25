@@ -499,10 +499,6 @@ supplementary.categories <- function(object, sup, dim = 1:3){
   object.is <- soc.ca:::what.is.x(object)
   
   
-  
-  
-  
-  
   # If sup is an indicator
   if(sup.is == "indicator"){
     
