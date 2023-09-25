@@ -493,7 +493,7 @@ average.coord <- function(object, x, dim = c(1, 2)){
 #' @examples
 #' example(soc.mca)
 #' supplementary.categories(result, sup)
-supplementary.categories <- function(object, sup, dim = 1:3){
+supplementary.categories <- function(object, sup, dim = 1:2){
   
   sup.is <- soc.ca:::what.is.x(sup)
   object.is <- soc.ca:::what.is.x(object)
