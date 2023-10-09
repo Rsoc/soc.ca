@@ -533,7 +533,13 @@ supplementary.categories <- function(object, sup, dim = 1:2){
 
 
 supplementary_variable <- function(res, var) {
+  
   eigen    <- res$eigen
+  if(length(eigen) != ncol(res$coord.ind)){
+  eigen    <- res$eigen[1:ncol(res$coord.ind)]
+  warning("Your soc.ca object has been trimmed prior to this function. This may influence calculations")
+  }
+  
   weight   <- res$weight
   variable <- factor(var)
   n  <- sum(weight)
@@ -555,8 +561,10 @@ supplementary_variable <- function(res, var) {
   wi <- apply(vrc, 2, weighted.mean, w = freq)
   be <- eigen - wi[s]
   eta2 <- be/eigen[s]
+  
   vrc <- rbind(vrc[s], wi[s], be, eigen[1:length(be)], eta2)
   vrc <- round(vrc, 6)
+  
   rownames(vrc) <- c(levels(variable), "within", "between", "total", 
                      "eta2")
   coord <- round(coord, 6)
@@ -735,8 +743,10 @@ headings      <- function(object, dim = 1:3) {
   
   head.ctr.total <- rep(1, (max(dim) + 3))
   
-  tot    <- aggregate(rowSums(object$ctr.mod.raw), by = list(object$headings), sum)
+  tot     <- tibble(ctr = rowSums(object$ctr.mod.raw), heading = object$headings %>% fct() %>% fct_relevel(lev.head)) %>% group_by(heading) %>% summarise(x = sum(ctr))
   tot$x  <- round(tot$x / sum(tot$x) * 100,1)
+  # tot    <- aggregate(rowSums(object$ctr.mod.raw), by = list(object$headings), sum)
+  # tot$x  <- round(tot$x / sum(tot$x) * 100,1)
   
   for (i in seq(length(lev.head))) {
     var.under.head     <- head.var[which(head.var[,1] == lev.head[i]),2]
