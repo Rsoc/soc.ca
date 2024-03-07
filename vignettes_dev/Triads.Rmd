@@ -157,10 +157,20 @@ l.mca$"Men"         <- soc.mca(a2) %>% soc.ca:::soc.mca.triads(triads = triads)
 l.mca <- soc.ca:::fixate.coordinates(l.mca)
 
 # Plot individually
-map.ca.base() + add.triads(l.mca$Original) + add.combination.points(l.mca$Original)
-map.ca.base() + add.triads(l.mca$`No Passive`) + add.combination.points(l.mca$`No Passive`)
-map.ca.base() + add.triads(l.mca$Women) + add.combination.points(l.mca$Women)
-map.ca.base() + add.triads(l.mca$Men) + add.combination.points(l.mca$Men)
+map.ca.base() + soc.ca:::add.triads(l.mca$Original) + soc.ca:::add.combination.points(l.mca$Original)
+map.ca.base() + soc.ca:::add.triads(l.mca$`No Passive`) + soc.ca:::add.combination.points(l.mca$`No Passive`)
+map.ca.base() + soc.ca:::add.triads(l.mca$Women) + soc.ca:::add.combination.points(l.mca$Women)
+map.ca.base() + soc.ca:::add.triads(l.mca$Men) + soc.ca:::add.combination.points(l.mca$Men)
+
+# If we want a stricter definition than the pem cut.off we can use the valid.correlations.only argument and takes the value from r$triads.edges$valid.correlation
+# If you want a different definition of an edge adjust r$triads.edges$valid.correlation.
+
+map.ca.base() + soc.ca:::add.triads(l.mca$Original, valid.correlations.only = TRUE) + soc.ca:::add.combination.points(l.mca$Original)
+
+# We can control the shapes 
+r <- l.mca$Original
+r$triads.coords$shape[1] <- "X"
+map.ca.base() + soc.ca:::add.triads(r, valid.correlations.only = TRUE) + soc.ca:::add.combination.points(r)
 
 # Plot together?
 

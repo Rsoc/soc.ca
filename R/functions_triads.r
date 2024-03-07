@@ -65,6 +65,14 @@ soc.mca.triads <- function(r,
   # Combination points
   combination.points <- calculate.combination.points(triads, r, dim, ind)
   
+  # Point shapes
+  cat.coords <- left_join(td, cat.coords,  by = c("category", "triad"))
+  
+  lets <- c(LETTERS, letters)
+  lets <- c(lets, paste0(lets, lets))
+  
+  cat.coords$shape     <- lets[1:nrow(cat.coords)]
+  
   r$triads             <- triads
   r$triads.ind         <- ind
   r$triads.dim         <- dim
@@ -236,27 +244,34 @@ add.combination.points <- function (r, combined.coord = r$combination.points$com
 }
 
 add.triads <- function(r, triads.coords = r$triads.coords, triad.edges = r$triads.edges, mapping = aes(shape = category, color = triad), mapping_triads = aes(color = triad, alpha = pem),
-                       point.size = 3, pem.cut = 0.5,
+                       point.size = 3, pem.cut = 0.5, valid.correlations.only = FALSE,
                        ...){
-
 
   tec           <- triad.edges %>% group_by(triad) %>% summarise(edges = sum(pem > 0), .groups = "drop_last") %>% ungroup()
   triads.coords <- left_join(triads.coords, tec, by = c("triad"))
 
-  triad.edges$pem[triad.edges$pem < 0] <- 0
+  if(valid.correlations.only == TRUE){
+  triad.edges$pem[triad.edges$valid.correlation == FALSE] <- 0
+  }
+  
+  triad.edges$pem[triad.edges$pem <= 0] <- 0
   triad.edges$pem[triad.edges$pem > pem.cut] <- pem.cut
 
   mapping        <- soc.ca:::add_modify_aes(mapping, aes(x = X, y = Y))
   mapping_triads <- soc.ca:::add_modify_aes(mapping_triads, aes(x = X, xend = Xend, y = Y, yend = Yend))
 
+  shape.scale <- LETTERS
+  if(!is.null(triads.coords$shape)) shape.scale <- setNames(triads.coords$shape, triads.coords$category) 
+  
+  
   o <- list()
 
   o$segment       <- geom_segment(data = triad.edges, mapping = mapping_triads, size = 0.3, ...)
 
   o$background <- geom_point(data = triads.coords, mapping = mapping, size = point.size + 2, shape = 21, alpha = 0.8, fill = "white", color = "white")
-  o$ring       <- geom_point(data = triads.coords %>% filter(edges >= 3), mapping = mapping, size = point.size + 2, shape = 21, alpha = 0.8, fill = "white")
+  o$ring       <- geom_point(data = triads.coords, mapping = mapping, size = point.size + 2, shape = 21, alpha = 0.8, fill = "white")
   o$points     <- geom_point(data = triads.coords, mapping = mapping, size = point.size, ...)
-  o$shape      <- scale_shape_manual(values = LETTERS)
+  o$shape      <- scale_shape_manual(values = shape.scale)
   o$alpha      <- scale_alpha(range = c(0,1), limits = c(0, pem.cut), guide = "none")
   o
 }

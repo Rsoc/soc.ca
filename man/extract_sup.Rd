@@ -4,7 +4,7 @@
 \alias{extract_sup}
 \title{Extract supplementary categories from an soc.mca}
 \usage{
-extract_sup(result, dim = 1:2)
+extract_sup(result, dim = 1:3)
 }
 \arguments{
 \item{result}{a soc.mca object}
