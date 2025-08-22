@@ -13,7 +13,7 @@ add.quadrant.labels(
 )
 }
 \arguments{
-\item{quadrant.labels}{}
+\item{quadrant.labels}{a character string with the labels for each quadrant}
 
 \item{distance}{if equal to "npc" labels are positioned dynamically at the edges of the plot. see \link[ggpp]{annotate}. If a numeric vector it is interpreted as the distance to 0 on both X and Y.}
 
@@ -32,8 +32,12 @@ This function is a convience function that uses \link[ggpp]{annotate} to easily 
 \examples{
 example(soc.mca)
 map.ind(result, point.size = 1) + add.quadrant.labels()
-labels <- c("Dominant:\nCultural fraction", "Dominant:\nEconomic fraction", "Dominated:\nEconomic fraction", "Dominated:\nCultural fraction")
+labels <- c("Dominant:\nCultural fraction", "Dominant:\nEconomic fraction",
+            "Dominated:\nEconomic fraction", "Dominated:\nCultural fraction")
 map.ca.base() + add.quadrant.labels(labels, geom = "text")
-map.ca.base() + add.ind(result, color = "grey80") + add.quadrant.labels(labels, geom = "text", distance = 1) 
-map.ca.base() + add.categories(result, color = "grey50", check_overlap = TRUE) + add.quadrant.labels(labels, geom = "label", distance = 0.5, fill = c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3"), alpha = 0.3) 
+map.ca.base() + add.ind(result, color = "grey80") + 
+                add.quadrant.labels(labels, geom = "text", distance = 1) 
+map.ca.base() + add.categories(result, color = "grey50", check_overlap = TRUE) +
+               add.quadrant.labels(labels, geom = "label", distance = 0.5,
+               fill = c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3"), alpha = 0.3) 
 }

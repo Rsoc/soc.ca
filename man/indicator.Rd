@@ -20,9 +20,10 @@ Returns a indicator matrix
 Creates an indicator matrix from a data.frame with the categories of the questions as columns and individuals as rows.
 }
 \examples{
-a  <- rep(c("A","B"), 5)
+a  <- rep(c("A","B"), 5) 
 b  <- rep(c("C", "D"), 5)
-indicator(data.frame(a,b))
+x  <- data.frame(a, b)
+indicator(x)
 }
 \seealso{
 \link{soc.mca}

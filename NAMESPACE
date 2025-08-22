@@ -2,7 +2,9 @@
 
 S3method(print,soc.mca)
 export("%>%")
+export(add.cases)
 export(add.categories)
+export(add.category.relations)
 export(add.density)
 export(add.ellipse)
 export(add.ind)

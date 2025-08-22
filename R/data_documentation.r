@@ -21,7 +21,6 @@
 #'   Analysis from Correspondence Analysis to Structured Data Analysis.
 #'   Dordrecht: Kluwer Academic Publishers.
 #'
-#' @docType package
 #' @name soc.ca
 #' @import ggplot2
 #' @rawNamespace import(gridExtra, except = combine)
@@ -50,6 +49,8 @@
 #'
 #' # Runs the analysis
 #' result         <- soc.mca(active, sup)
+"_PACKAGE"
+
 utils::globalVariables(".") 
 NULL
 
@@ -387,23 +388,23 @@ NULL
 #' ethno   <- data.frame(Immigrants = political_space97$Immigrants,
 #'                       "North-Africans" = political_space97$NorthAfricans,
 #'                       Races = political_space97$Races,
-#'                        "At home" = political_space97$AtHome, check.names = FALSE)
+#'                        "At home" = political_space97$AtHome, check.names = FALSE) 
 #'
 #' autho   <- data.frame("Death Penalty" = political_space97$DeathPenalty,
-#'                        School = political_space97$School, check.names = FALSE)
+#'                        School = political_space97$School, check.names = FALSE) 
 #'
 #' social  <- data.frame("Strike Effectiveness" = political_space97$StrikeEffectivness,
 #'                        "Strike 95" = political_space97$Strike95,
 #'                       "Unions" = political_space97$Unions,
-#'                       "Public services" = political_space97$PublicServices, check.names = FALSE)
+#'                       "Public services" = political_space97$PublicServices, check.names = FALSE) 
 #'
 #' economy <- data.frame(Liberalism = political_space97$Liberalism,
 #'                       Profit = political_space97$Profit,
 #'                       Privatization = political_space97$Privatization,
-#'                       Globalization = political_space97$Globalization, check.names = FALSE)
+#'                       Globalization = political_space97$Globalization, check.names = FALSE) 
 #'
 #' politics <- data.frame(Democracy = political_space97$Democracy,
-#'                         Politicians = political_space97$Politicians, check.names = FALSE)
+#'                         Politicians = political_space97$Politicians, check.names = FALSE) 
 #'
 #' supranat <- data.frame(Euro = political_space97$Euro, "EU Power" = political_space97$EUpower,
 #'                        "End EU" = political_space97$EndEU,
@@ -411,6 +412,10 @@ NULL
 #'
 #' # Creating and naming list of headings
 #' active <- list(ethno, autho, social, economy, politics, supranat)
+#' active <- lapply(active, function(x) x |> apply(2, as.factor) |> as.data.frame(check.names = FALSE)) 
+#' 
+#' 
+#' 
 #' names(active) <- c("Ethnocentrism", "Authoritarianism",
 #'                     "Social", "Economy", "Politics", "Supranationality")
 #' sup    <- data.frame(political_space97$Vote)

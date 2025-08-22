@@ -495,8 +495,8 @@ average.coord <- function(object, x, dim = c(1, 2)){
 #' supplementary.categories(result, sup)
 supplementary.categories <- function(object, sup, dim = 1:2){
   
-  sup.is <- soc.ca:::what.is.x(sup)
-  object.is <- soc.ca:::what.is.x(object)
+  sup.is    <- what.is.x(sup, check.na = FALSE)
+  object.is <- what.is.x(object)
   
   
   # If sup is an indicator

@@ -12,7 +12,7 @@ map.ellipse(
   ellipse.color = "default",
   label.size = 4,
   draw.levels = 1:nlevels(variable),
-  ellipse.line = "solid"
+  ellipse_line = "solid"
 )
 }
 \arguments{
@@ -25,13 +25,13 @@ active varibles used for the \link{soc.ca} object.}
 
 \item{ellipse.label}{if TRUE the labels are included in the map.}
 
-\item{ellipse.color}{defines the color of the ellipses. If "default" the globally defined default colors are used. Ellipse.color can be either length of 1 or equal to the number of drawn levels.}
+\item{ellipse.color}{defines the color of the ellipses. If "default" the globally defined default colors are used. ellipse.color can be either length of 1 or equal to the number of drawn levels.}
 
 \item{label.size}{defines the size of the labels.}
 
 \item{draw.levels}{indicates the levels in the variable for which a ellipse is drawn.}
 
-\item{ellipse.line}{defines the type of line used for the ellipses.}
+\item{ellipse_line}{defines the type of line used for the ellipses.}
 }
 \value{
 a plot with a concentration ellipse containing 80\% of the 

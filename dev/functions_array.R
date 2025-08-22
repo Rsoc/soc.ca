@@ -63,5 +63,3 @@ map.ellipse.array <- function(object, variable, dim=c(1,2), draw.ellipses=TRUE, 
   # Plot the maps
   map.array(list.of.maps, ncol=ncol, title=title)
 }
-
-map.ellipse.array(result, active[,1])

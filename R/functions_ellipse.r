@@ -8,10 +8,10 @@
 #' @param variable is a factor of the same length and in the same order as the 
 #'   active varibles used for the \link{soc.ca} object.
 #' @param ellipse.label if TRUE the labels are included in the map.
-#' @param ellipse.color defines the color of the ellipses. If "default" the globally defined default colors are used. Ellipse.color can be either length of 1 or equal to the number of drawn levels.
+#' @param ellipse.color defines the color of the ellipses. If "default" the globally defined default colors are used. ellipse.color can be either length of 1 or equal to the number of drawn levels.
 #' @param label.size defines the size of the labels.
 #' @param draw.levels indicates the levels in the variable for which a ellipse is drawn.
-#' @param ellipse.line defines the type of line used for the ellipses.
+#' @param ellipse_line defines the type of line used for the ellipses.
 #' @return a plot with a concentration ellipse containing 80\% of the 
 #'   individuals for each modality.
 #' @seealso \link{map.ind}, \link{map.ctr}
@@ -22,7 +22,7 @@
 #' @export
 
 map.ellipse <- function(object, ca.plot = map.ind(object), variable, ellipse.label = TRUE,
-                        ellipse.color = "default", label.size = 4, draw.levels = 1:nlevels(variable), ellipse.line = "solid"
+                        ellipse.color = "default", label.size = 4, draw.levels = 1:nlevels(variable), ellipse_line = "solid"
 ){
   dim         <- ca.plot$dimensions 
   id.coord    <- as.data.frame(object$coord.ind[, dim])
@@ -39,49 +39,49 @@ map.ellipse <- function(object, ca.plot = map.ind(object), variable, ellipse.lab
   ellipse.colors[] <- ellipse.color
   coord.list       <- split(id.coord, variable)
   
-  ellipse.data              <- function(coord, id){
+  ellipse_data              <- function(coord, id){
     out.list                <- list()
-    out.list$ellipse.coord  <- ellipse.coord(id, coord)
-    out.list$ellipse.axis   <- ellipse.axis(out.list$ellipse.coord)
-    out.list$ellipse.origo  <- ellipse.origo(out.list$ellipse.axis)
+    out.list$ellipse_coord  <- ellipse_coord(id, coord)
+    out.list$ellipse_axis   <- ellipse_axis(out.list$ellipse_coord)
+    out.list$ellipse_origo  <- ellipse_origo(out.list$ellipse_axis)
     out.list
   }
   
-  ellipse.list              <- lapply(coord.list, ellipse.data, id = id)
+  ellipse_list              <- lapply(coord.list, ellipse_data, id = id)
   
-  for ( i in 1:length(ellipse.list)){
-    ellipse.list[[i]]$color <- ellipse.colors[i] 
-    ellipse.list[[i]]$label <- lev.var[i]
+  for ( i in 1:length(ellipse_list)){
+    ellipse_list[[i]]$color <- ellipse.colors[i] 
+    ellipse_list[[i]]$label <- lev.var[i]
   }
   
   
-  ellipse.annotate          <- function(ellipse.data, ca.plot, ellipse.label = TRUE, label.size = 4, ellipse.line = "solid"){
-    e.plot     <- ca.plot + annotate(geom = "path", x = ellipse.data$ellipse.coord[,1], y = ellipse.data$ellipse.coord[,2],
-                                     color = ellipse.data$color, linetype = ellipse.line)
-    e.plot     <- e.plot + annotate(geom = "line", x = ellipse.data$ellipse.axis[[1]]$x, y = ellipse.data$ellipse.axis[[1]]$y,
-                                    color = ellipse.data$color, , linetype = ellipse.line)
-    e.plot     <- e.plot + annotate(geom = "line", x = ellipse.data$ellipse.axis[[2]]$x, y = ellipse.data$ellipse.axis[[2]]$y,
-                                    color = ellipse.data$color, linetype = ellipse.line)
-    e.plot     <- e.plot + annotate(geom = "point", x = ellipse.data$ellipse.origo[[1]], y = ellipse.data$ellipse.origo[[2]],
-                                    color = ellipse.data$color)
+  ellipse_annotate          <- function(ellipse_data, ca.plot, ellipse.label = TRUE, label.size = 4, ellipse_line = "solid"){
+    e.plot     <- ca.plot + annotate(geom = "path", x = ellipse_data$ellipse_coord[,1], y = ellipse_data$ellipse_coord[,2],
+                                     color = ellipse_data$color, linetype = ellipse_line)
+    e.plot     <- e.plot + annotate(geom = "line", x = ellipse_data$ellipse_axis[[1]]$x, y = ellipse_data$ellipse_axis[[1]]$y,
+                                    color = ellipse_data$color, , linetype = ellipse_line)
+    e.plot     <- e.plot + annotate(geom = "line", x = ellipse_data$ellipse_axis[[2]]$x, y = ellipse_data$ellipse_axis[[2]]$y,
+                                    color = ellipse_data$color, linetype = ellipse_line)
+    e.plot     <- e.plot + annotate(geom = "point", x = ellipse_data$ellipse_origo[[1]], y = ellipse_data$ellipse_origo[[2]],
+                                    color = ellipse_data$color)
     if(identical(ellipse.label, TRUE)){
-      e.plot     <- e.plot + annotate(geom = "text", x = ellipse.data$ellipse.origo[[1]], y = ellipse.data$ellipse.origo[[2]],
-                                      label = ellipse.data$label, hjust = -0.15, fontface = "italic", size = label.size)
+      e.plot     <- e.plot + annotate(geom = "text", x = ellipse_data$ellipse_origo[[1]], y = ellipse_data$ellipse_origo[[2]],
+                                      label = ellipse_data$label, hjust = -0.15, fontface = "italic", size = label.size)
     }
     
     e.plot
   }
   
-  for (i in 1:length(ellipse.list)) ca.plot <- ellipse.annotate(ellipse.list[[i]], ca.plot,
+  for (i in 1:length(ellipse_list)) ca.plot <- ellipse_annotate(ellipse_list[[i]], ca.plot,
                                                                 ellipse.label = ellipse.label, label.size = label.size,
-                                                                ellipse.line = ellipse.line)
+                                                                ellipse_line = ellipse_line)
   ca.plot
 }
 
 
 
 ################### Ellipse akser funktionen
-ellipse.axis <- function(el.dat){
+ellipse_axis <- function(el.dat){
 n            <- length(na.omit(el.dat[, 1]))
 p.pairs      <- el.dat[1, ]
   for (i in 1:(n/2)){
@@ -105,12 +105,12 @@ minpath       <- as.data.frame(el.dat[c(mintemp$x, mintemp$y), ], row.names = c(
 maxtemp       <- p.pairs[p.max, 1:2]
 maxpath       <- as.data.frame(el.dat[c(maxtemp$x, maxtemp$y), ], row.names = c("1","2"))
 
-ellipse.axis.points <- list(maxpath, minpath)
-ellipse.axis.points
+ellipse_axis.points <- list(maxpath, minpath)
+ellipse_axis.points
 }
 
-############## Ellipse.coord
-ellipse.coord <- function(id, id.coord.var){
+############## ellipse_coord
+ellipse_coord <- function(id, id.coord.var){
 id.var        <- as.data.frame(id.coord.var)
 colnames(id.var) <- c("x", "y")
 
@@ -122,8 +122,8 @@ data.ell      <- as.data.frame(with(id.var, ellipse(cor(x, y),
 data.ell
 }
 
-#############################3#### Ellipse origo
-ellipse.origo <- function(el.axis){
+################################# Ellipse origo
+ellipse_origo <- function(el.axis){
  temp         <- el.axis[[1]][c(1, 2), ]
  x1           <- temp[1, 1]
  x2           <- temp[2, 1]
@@ -136,14 +136,12 @@ el.origo
 
 #' Calculate concentraion ellipses
 #'
-#' @param object 
-#' @param var 
-#' @param dim 
-#' @param kappa 
-#' @param npoints 
-#'
-#' @return
-#' @export ellipses
+#' @param object a soc.mca result object
+#' @param var a factor
+#' @param dim numerical vector with the dimension
+#' @param kappa the kappa value
+#' @param npoints number of points
+#' @export
 #'
 #' @examples
 #' example(soc.mca)
@@ -160,7 +158,7 @@ ellipses <- function(object, var, dim = c(1, 2),
   warning("var contains NA values. Made explicit with forcats::fct_explicit_na()")
   }
   
-  m   <- soc.ca:::supplementary_variable(object, var)$coord[, dim]
+  m   <- supplementary_variable(object, var)$coord[, dim]
   m[, 1] <- m[, 1] * object$eigen[dim[1]] %>% sqrt()
   m[, 2] <- m[, 2] * object$eigen[dim[2]] %>% sqrt()
   v <- supplementary_variable(object, var)$var[1:length(levels(var)), dim]

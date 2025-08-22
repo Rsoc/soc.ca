@@ -7,15 +7,15 @@
 ellipses(object, var, dim = c(1, 2), kappa = 2, npoints = 1000)
 }
 \arguments{
-\item{object}{}
+\item{object}{a soc.mca result object}
 
-\item{var}{}
+\item{var}{a factor}
 
-\item{dim}{}
+\item{dim}{numerical vector with the dimension}
 
-\item{kappa}{}
+\item{kappa}{the kappa value}
 
-\item{npoints}{}
+\item{npoints}{number of points}
 }
 \description{
 Calculate concentraion ellipses

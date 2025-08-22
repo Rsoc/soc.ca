@@ -4,10 +4,18 @@
 \alias{add.categories}
 \title{Add a layer of categories (modalities) to an mca map}
 \usage{
-The presets adds, replaces or filters from the categories in cats.
-  "ctr" returns all categories contributing above average to the plane
-  defined in dim. "sup" returns the supplementary categories from object.
-  "all" returns both supplementary and active categories.
+add.categories(
+  object,
+  preset = c("active", "ctr", "sup", "all"),
+  dim = c(1, 2),
+  cats = extract_mod(object, dim),
+  mapping = aes(label = Modality),
+  repel = FALSE,
+  check_overlap = FALSE,
+  points = FALSE,
+  draw.labels = TRUE,
+  ...
+)
 }
 \arguments{
 \item{object}{a soc.mca result object}
@@ -19,7 +27,7 @@ change is made to "cats".}
 
 \item{cats}{a data.frame with coordinates of categories as produced by \link{extract_mod} or \link{extract_sup}. This controls the plotted points.}
 
-\item{mapping}{a call to \link{aes} from the ggplot2 package. Here you can map aesthetics to variables such as color, alpha, size and family.}
+\item{mapping}{a call to \link[ggplot2]{aes} from the ggplot2 package. Here you can map aesthetics to variables such as color, alpha, size and family.}
 
 \item{repel}{if TRUE label position is adjusted to lower overlap}
 
@@ -27,7 +35,9 @@ change is made to "cats".}
 
 \item{points}{if TRUE points are plotted}
 
-\item{...}{further arguments are passed onto \link{geom_text} or \link{geom_text_repel}}
+\item{draw.labels}{if TRUE labels are plotted}
+
+\item{...}{further arguments are passed onto \link[ggplot2]{geom_text} or \link[ggrepel]{geom_text_repel}}
 }
 \value{
 a ggplot2 object that can be added to an existing plot like those produced by \link{map.ca.base}
@@ -35,8 +45,17 @@ a ggplot2 object that can be added to an existing plot like those produced by \l
 \description{
 Add a layer of categories (modalities) to an mca map
 }
+\details{
+The `preset` argument adds, replaces or filters categories in `cats`:
+\itemize{
+  \item `"ctr"`: returns all categories contributing above average to the plane defined in `dim`.
+  \item `"sup"`: returns the supplementary categories from `object`.
+  \item `"all"`: returns both supplementary and active categories.
+}
+}
 \examples{
 example(soc.mca)
 map.ca.base() + add.categories(result, check_overlap = TRUE)
-map.ca.base() + add.categories(result, preset = "all", mapping = aes(color = type, label = Modality), repel = TRUE)
+map.ca.base() + add.categories(result, preset = "all",
+                mapping = aes(color = type, label = Modality), repel = TRUE)
 }

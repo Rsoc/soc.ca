@@ -185,7 +185,7 @@ soc.mca <- function(active, sup = NULL, identifier = NULL, passive = getOption("
   #      The actual analysis, a CA of the indicator matrix       #
   ################################################################
   
-  result <- subset.ca.indicator(ind.act, ind.sup, active.set, passive.set, Q = Q, Qm = Qm, Moschidis = Moschidis, detailed.results = detailed.results, weight = weight)
+  result <- subset_ca_indicator(ind.act, ind.sup, active.set, passive.set, Q = Q, Qm = Qm, Moschidis = Moschidis, detailed.results = detailed.results, weight = weight)
   
   result$variable.all <- varlist.long
   
@@ -340,7 +340,7 @@ soc.mca <- function(active, sup = NULL, identifier = NULL, passive = getOption("
 # ' #@export
 # ' @return a list of various results. See \link{soc.mca} documentation
 
-subset.ca.indicator <- function (ind.act, ind.sup, active.set, passive.set, Q, Qm, 
+subset_ca_indicator <- function (ind.act, ind.sup, active.set, passive.set, Q, Qm, 
                                  Moschidis, detailed.results = FALSE, weight = NULL) {
   
   
@@ -558,14 +558,21 @@ subset.ca.indicator <- function (ind.act, ind.sup, active.set, passive.set, Q, Q
 #' @return Returns a indicator matrix
 #' @seealso \link{soc.mca}
 #' @examples 
-#' a  <- rep(c("A","B"), 5)
+#' a  <- rep(c("A","B"), 5) 
 #' b  <- rep(c("C", "D"), 5)
-#' indicator(data.frame(a,b))
+#' x  <- data.frame(a, b)
+#' indicator(x)
 #' @export indicator
 
 indicator  <- function(x, id = NULL, ps = ": "){
-  
+
   obj         <- x
+  
+  fct         <- apply(x, 2, is.factor)
+  if(any(fct == FALSE)){
+  obj[, fct == FALSE]         <-   obj[, fct == FALSE, drop = FALSE] |> lapply(as.factor)
+  }
+  
   I           <- nrow(obj)                                      # Number of individuals
   levels.n    <- unlist(lapply(obj, nlevels))
   n           <- cumsum(levels.n)                               # Number of modalities for each question
@@ -1015,6 +1022,7 @@ supplementary.individuals <- function(object, sup.indicator, replace = FALSE){
 #' Performs tests on what has been passed on to soc.mca by the user.
 #'
 #' @param x the active variables sent to soc.mca
+#' @param check.na If TRUE checks whether x contains NA values and returns an error
 #'
 #' @return a character vector with an evaluation of whether x is data.frame, a list of data.frames, an indicator or a list of indicators.
 #'
@@ -1040,11 +1048,17 @@ supplementary.individuals <- function(object, sup.indicator, replace = FALSE){
 #' 
 #' # Invalid scenarios ----
 #' 
+
+#' # X is a data.frame - but does not contain only factors
+#' x <- taste[, 2:7]
+#' x[, 1] <- x[, 1] |> as.character()
+#' what.is.x(x)  
+
 #' # X is a matrix - but not numeric
 #' x <- as.matrix(taste[, 2:7])
 #' what.is.x(x)  
 #' 
-#' # X is a of data.frames list but does not have names
+#' # X is a list of data.frames list but does not have names
 #' x <- list(taste[, 1:3], taste[, 4:5])
 #' what.is.x(x)
 #' 
@@ -1071,7 +1085,7 @@ supplementary.individuals <- function(object, sup.indicator, replace = FALSE){
 #' what.is.x(x)
 #' }
 
-what.is.x  <- function(x){
+what.is.x  <- function(x, check.na = TRUE){
   # Is it a list of data.frames?
   is.d    <- is.data.frame(x)
   is.l    <- is.list(x)
@@ -1100,7 +1114,12 @@ what.is.x  <- function(x){
   if(is.m == TRUE & is.numeric(x) == FALSE) stop("Your data is a matrix, but it is not numeric.") 
   
   # Check for missing
+  if(check.na == TRUE){
   if(anyNA(x, recursive = TRUE)) stop("Your data includes NA. Try recoding to missing.")
+  }
+    
+  # Check for factors
+  if(is.d == TRUE & all(sapply(x, is.factor)) == FALSE) warning("x is a data.frame but not all variables are factors.")
   
   # Is it a list of only matrixes?
   o <- NA

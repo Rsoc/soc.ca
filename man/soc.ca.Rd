@@ -2,6 +2,7 @@
 % Please edit documentation in R/data_documentation.r
 \docType{package}
 \name{soc.ca}
+\alias{soc.ca-package}
 \alias{soc.ca}
 \title{Soc.ca a package for specific correspondence analysis}
 \description{
@@ -41,4 +42,11 @@ Le Roux, Brigitte, and Henry Rouanet. 2010. Multiple
 Le Roux, Brigitte, and Henry Rouanet. 2004. Geometric Data
   Analysis from Correspondence Analysis to Structured Data Analysis.
   Dordrecht: Kluwer Academic Publishers.
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/Rsoc/soc.ca}
+}
+
 }

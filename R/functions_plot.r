@@ -30,7 +30,7 @@
 #' @param label if TRUE each point is assigned its label, defined in the soc.ca 
 #'   object. See \link{assign.label} and \link{add.to.label} for ways to alter 
 #'   the labels.
-#' @param label.repel if TRUE overlapping labels are rearranged, see \link{geom_text_repel} or \link{geom_label_repel}.
+#' @param label.repel if TRUE overlapping labels are rearranged, see \link[ggrepel]{geom_text_repel} or \link[ggrepel]{geom_label_repel}.
 #' @param label.alpha defines the alpha of the labels. Values range from 0 to 1.
 #'   It may be mapped to a variable with a suitable length and order.
 #' @param label.color defines the color of the labels. It may be mapped to a
@@ -39,9 +39,9 @@
 #' @param label.size defines the size of the labels. It may be mapped to a
 #'   variable with a suitable length and order.
 #' @param label.fill defines the color of the box behind the labels. It may be mapped to a
-#'   variable with a suitable length and order. This only works if label.repel is TRUE. See \link{geom_label_repel}.
+#'   variable with a suitable length and order. This only works if label.repel is TRUE. See \link[ggrepel]{geom_label_repel}.
 #' @param legend if set to TRUE a legend is provided. Change the legend with the
-#'   \link{guides}, \link{theme} and link{guide_legend} functions from the
+#'   \link[ggplot2]{guides}, \link[ggplot2]{theme} and \link[ggplot2]{guide_legend} functions from the
 #'   ggplot2 package.
 #' @examples
 #' example(soc.ca)
@@ -108,7 +108,7 @@ map.mod         <- function(object, dim = c(1, 2),
 #' @param label if TRUE each point is assigned its label, defined in the soc.ca 
 #'   object. See \link{assign.label} and \link{add.to.label} for ways to alter 
 #'   the labels.
-#' @param label.repel if TRUE overlapping labels are rearranged, see \link{geom_text_repel} or \link{geom_label_repel}.
+#' @param label.repel if TRUE overlapping labels are rearranged, see \link[ggrepel]{geom_text_repel} or \link[ggrepel]{geom_label_repel}.
 #' @param label.alpha defines the alpha of the labels. Values range from 0 to 1.
 #'   It may be mapped to a variable with a suitable length and order.
 #' @param label.color defines the color of the labels. It may be mapped to a
@@ -117,9 +117,9 @@ map.mod         <- function(object, dim = c(1, 2),
 #' @param label.size defines the size of the labels. It may be mapped to a
 #'   variable with a suitable length and order.
 #' @param label.fill defines the color of the box behind the labels. It may be mapped to a
-#'   variable with a suitable length and order. This only works if label.repel is TRUE. See \link{geom_label_repel}.   
+#'   variable with a suitable length and order. This only works if label.repel is TRUE. See \link[ggrepel]{geom_label_repel}.   
 #' @param legend if set to TRUE a legend is provided. Change the legend with the
-#'   \link{guides}, \link{theme} and link{guide_legend} functions from the
+#'   \link[ggplot2]{guides}, \link[ggplot2]{theme} and \link[ggplot2]{guide_legend} functions from the
 #'   ggplot2 package.
 #' @examples
 #' example(soc.ca)
@@ -187,7 +187,7 @@ map.ctr         <- function(object, dim = c(1, 2), ctr.dim = 1,
 #' @param label if TRUE each point is assigned its label, defined in the soc.ca 
 #'   object. See \link{assign.label} and \link{add.to.label} for ways to alter 
 #'   the labels.
-#' @param label.repel if TRUE overlapping labels are rearranged, see \link{geom_text_repel} or \link{geom_label_repel}.
+#' @param label.repel if TRUE overlapping labels are rearranged, see \link[ggrepel]{geom_text_repel} or \link[ggrepel]{geom_label_repel}.
 #' @param label.alpha defines the alpha of the labels. Values range from 0 to 1.
 #'   It may be mapped to a variable with a suitable length and order.
 #' @param label.color defines the color of the labels. It may be mapped to a
@@ -196,9 +196,9 @@ map.ctr         <- function(object, dim = c(1, 2), ctr.dim = 1,
 #' @param label.size defines the size of the labels. It may be mapped to a
 #'   variable with a suitable length and order.
 #' @param label.fill defines the color of the box behind the labels. It may be mapped to a
-#'   variable with a suitable length and order. This only works if label.repel is TRUE. See \link{geom_label_repel}.
+#'   variable with a suitable length and order. This only works if label.repel is TRUE. See \link[ggrepel]{geom_label_repel}.
 #' @param legend if set to TRUE a legend is provided. Change the legend with the
-#'   \link{guides}, \link{theme} and link{guide_legend} functions from the
+#'   \link[ggplot2]{guides}, \link[ggplot2]{theme} and \link[ggplot2]{guide_legend} functions from the
 #'   ggplot2 package.
 #' @examples
 #' example(soc.ca)
@@ -267,7 +267,7 @@ map.active         <- function(object, dim = c(1, 2),
 #' @param label if TRUE each point is assigned its label, defined in the soc.ca 
 #'   object. See \link{assign.label} and \link{add.to.label} for ways to alter 
 #'   the labels.
-#' @param label.repel if TRUE overlapping labels are rearranged, see \link{geom_text_repel} or \link{geom_label_repel}.
+#' @param label.repel if TRUE overlapping labels are rearranged, see \link[ggrepel]{geom_text_repel} or \link[ggrepel]{geom_label_repel}.
 #' @param label.alpha defines the alpha of the labels. Values range from 0 to 1.
 #'   It may be mapped to a variable with a suitable length and order.
 #' @param label.color defines the color of the labels. It may be mapped to a
@@ -276,9 +276,9 @@ map.active         <- function(object, dim = c(1, 2),
 #' @param label.size defines the size of the labels. It may be mapped to a
 #'   variable with a suitable length and order.
 #' @param label.fill defines the color of the box behind the labels. It may be mapped to a
-#'   variable with a suitable length and order. This only works if label.repel is TRUE. See \link{geom_label_repel}.
+#'   variable with a suitable length and order. This only works if label.repel is TRUE. See \link[ggrepel]{geom_label_repel}.
 #' @param legend if set to TRUE a legend is provided. Change the legend with the
-#'   \link{guides}, \link{theme} and link{guide_legend} functions from the
+#'   \link[ggplot2]{guides}, \link[ggplot2]{theme} and \link[ggplot2]{guide_legend} functions from the
 #'   ggplot2 package.
 #' @examples
 #' example(soc.ca)
@@ -344,7 +344,7 @@ map.sup         <- function(object, dim = c(1, 2),
 #' @param label if TRUE each point is assigned its label, defined in the soc.ca 
 #'   object. See \link{assign.label} and \link{add.to.label} for ways to alter 
 #'   the labels.
-#' @param label.repel if TRUE overlapping labels are rearranged, see \link{geom_text_repel} or \link{geom_label_repel}.
+#' @param label.repel if TRUE overlapping labels are rearranged, see \link[ggrepel]{geom_text_repel} or \link[ggrepel]{geom_label_repel}.
 #' @param label.alpha defines the alpha of the labels. Values range from 0 to 1.
 #'   It may be mapped to a variable with a suitable length and order.
 #' @param label.color defines the color of the labels. It may be mapped to a
@@ -353,9 +353,9 @@ map.sup         <- function(object, dim = c(1, 2),
 #' @param label.size defines the size of the labels. It may be mapped to a
 #'   variable with a suitable length and order.
 #' @param label.fill defines the color of the box behind the labels. It may be mapped to a
-#'   variable with a suitable length and order. This only works if label.repel is TRUE. See \link{geom_label_repel}.
+#'   variable with a suitable length and order. This only works if label.repel is TRUE. See \link[ggrepel]{geom_label_repel}.
 #' @param legend if set to TRUE a legend is provided. Change the legend with the
-#'   \link{guides}, \link{theme} and link{guide_legend} functions from the
+#'   \link[ggplot2]{guides}, \link[ggplot2]{theme} and \link[ggplot2]{guide_legend} functions from the
 #'   ggplot2 package.
 #' @examples
 #' example(soc.ca)
@@ -438,7 +438,7 @@ map.ind         <- function(object, dim = c(1, 2),
 #' @param label if TRUE each point is assigned its label, defined in the soc.ca 
 #'   object. See \link{assign.label} and \link{add.to.label} for ways to alter 
 #'   the labels.
-#' @param label.repel if TRUE overlapping labels are rearranged, see \link{geom_text_repel} or \link{geom_label_repel}.
+#' @param label.repel if TRUE overlapping labels are rearranged, see \link[ggrepel]{geom_text_repel} or \link[ggrepel]{geom_label_repel}.
 #' @param label.alpha defines the alpha of the labels. Values range from 0 to 1.
 #'   It may be mapped to a variable with a suitable length and order.
 #' @param label.color defines the color of the labels. It may be mapped to a
@@ -447,9 +447,9 @@ map.ind         <- function(object, dim = c(1, 2),
 #' @param label.size defines the size of the labels. It may be mapped to a
 #'   variable with a suitable length and order.
 #' @param label.fill defines the color of the box behind the labels. It may be mapped to a
-#'   variable with a suitable length and order. This only works if label.repel is TRUE. See \link{geom_label_repel}.
+#'   variable with a suitable length and order. This only works if label.repel is TRUE. See \link[ggrepel]{geom_label_repel}.
 #' @param legend if set to TRUE a legend is provided. Change the legend with the
-#'   \link{guides}, \link{theme} and \link{guide_legend} functions from the
+#'   \link[ggplot2]{guides}, \link[ggplot2]{theme} and \link[ggplot2]{guide_legend} functions from the
 #'   ggplot2 package.
 #' @param ... further arguments are currently ignored.
 #' @examples
@@ -538,7 +538,7 @@ map.select         <- function(object, dim = c(1, 2), ctr.dim = 1,
 #' @param label if TRUE each point is assigned its label, defined in the soc.ca 
 #'   object. See \link{assign.label} and \link{add.to.label} for ways to alter 
 #'   the labels.
-#' @param label.repel if TRUE overlapping labels are rearranged, see \link{geom_text_repel} or \link{geom_label_repel}.
+#' @param label.repel if TRUE overlapping labels are rearranged, see \link[ggrepel]{geom_text_repel} or \link[ggrepel]{geom_label_repel}.
 #' @param label.alpha defines the alpha of the labels. Values range from 0 to 1.
 #'   It may be mapped to a variable with a suitable length and order.
 #' @param label.color defines the color of the labels. It may be mapped to a
@@ -547,9 +547,9 @@ map.select         <- function(object, dim = c(1, 2), ctr.dim = 1,
 #' @param label.size defines the size of the labels. It may be mapped to a
 #'   variable with a suitable length and order.
 #' @param label.fill defines the color of the box behind the labels. It may be mapped to a
-#'   variable with a suitable length and order. This only works if label.repel is TRUE. See \link{geom_label_repel}.
+#'   variable with a suitable length and order. This only works if label.repel is TRUE. See \link[ggrepel]{geom_label_repel}.
 #' @param legend if set to TRUE a legend is provided. Change the legend with the
-#'   \link{guides}, \link{theme} and link{guide_legend} functions from the
+#'   \link[ggplot2]{guides}, \link[ggplot2]{theme} and \link[ggplot2]{guide_legend} functions from the
 #'   ggplot2 package.
 #' @examples
 #' example(soc.ca)
@@ -1068,8 +1068,8 @@ add.count <- function(x, p, label = TRUE, ...){
 #' @param label if TRUE the label of the points are shown
 #' @param min.size is the minimum size given to the groups of a numerical 
 #'   variable, see \link{min_cut}.
-#' @param ... further arguments are passed onto \link{geom_path},
-#'   \link{geom_point} and \link{geom_text} from the ggplot2 package
+#' @param ... further arguments are passed onto \link[ggplot2]{geom_path},
+#'   \link[ggplot2]{geom_point} and \link[ggplot2]{geom_text} from the ggplot2 package
 #' @export
 #' @examples
 #' example(soc.ca)

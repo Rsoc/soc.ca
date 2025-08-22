@@ -40,6 +40,8 @@ Add a layer with concentration ellipses to an mca map.
 }
 \examples{
 example(soc.mca)
-map.ca.base() + add.ind(result, mapping = aes(color = sup$Gender)) + add.ellipse(result, sup$Gender)
-map.ca.base() + add.ind(result, mapping = aes(color = sup$Age == "65+")) + add.ellipse(result, sup$Age == "65+", draw = "TRUE")
+map.ca.base() + add.ind(result, mapping = aes(color = sup$Gender)) +
+                  add.ellipse(result, sup$Gender)
+map.ca.base() + add.ind(result, mapping = aes(color = sup$Age == "65+")) +
+                          add.ellipse(result, sup$Age == "65+", draw = "TRUE")
 }

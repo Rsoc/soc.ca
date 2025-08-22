@@ -49,7 +49,7 @@ add.categories
 
 add.category.outcome <- function(r, outcome, cats = get.category.outcome(r, outcome), mapping = aes(color = pem, label = category), repel = FALSE, check_overlap = FALSE, ...){
   
-  mapping <- soc.ca:::add_modify_aes(mapping, aes(x = X, y = Y))
+  mapping <- add_modify_aes(mapping, aes(x = X, y = Y))
   
   o <- list()
   

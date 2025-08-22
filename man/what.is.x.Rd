@@ -4,10 +4,12 @@
 \alias{what.is.x}
 \title{Check if data is valid for soc.mca}
 \usage{
-what.is.x(x)
+what.is.x(x, check.na = TRUE)
 }
 \arguments{
 \item{x}{the active variables sent to soc.mca}
+
+\item{check.na}{If TRUE checks whether x contains NA values and returns an error}
 }
 \value{
 a character vector with an evaluation of whether x is data.frame, a list of data.frames, an indicator or a list of indicators.
@@ -37,11 +39,15 @@ what.is.x(x)
 
 # Invalid scenarios ----
 
+# X is a data.frame - but does not contain only factors
+x <- taste[, 2:7]
+x[, 1] <- x[, 1] |> as.character()
+what.is.x(x)  
 # X is a matrix - but not numeric
 x <- as.matrix(taste[, 2:7])
 what.is.x(x)  
 
-# X is a of data.frames list but does not have names
+# X is a list of data.frames list but does not have names
 x <- list(taste[, 1:3], taste[, 4:5])
 what.is.x(x)
 

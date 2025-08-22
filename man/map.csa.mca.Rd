@@ -21,7 +21,7 @@ map.csa.mca(
 
 \item{smooth}{if TRUE a line is added to the plot}
 
-\item{method}{the method used by ggplot to set the line see \link{geom_smooth}}
+\item{method}{the method used by ggplot to set the line see \link[ggplot2]{geom_smooth}}
 }
 \description{
 Map the coordinates of the individuals in a CSA and its MCA
@@ -32,5 +32,5 @@ csa.res  <- soc.csa(result, class.age)
 map.csa.mca(csa.res, mca.dim = 2, csa.dim = 1)
 }
 \seealso{
-\link{soc.csa}, \link{map.csa.all}, link{map.csa.mca.array}
+\link{soc.csa}, \link{map.csa.all}, \link{map.csa.mca.array}
 }

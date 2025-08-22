@@ -170,11 +170,11 @@ map.ca.base <- function(up = NULL, down = NULL, right = NULL, left = NULL, base_
 #' @param object a soc.mca result object
 #' @param dim a numeric vector with the plotted dimensions
 #' @param ind a data.frame with coordinates of cases as produced by \link{extract_ind}. This controls the plotted points.
-#' @param mapping a call to \link{aes} from the ggplot2 package. Here you can map aesthetics to variables such as color, fill, alpha, size and shape.
-#' @param ... further arguments are passed on to geom_point()
+#' @param mapping a call to \link[ggplot2]{aes} from the ggplot2 package. Here you can map aesthetics to variables such as color, fill, alpha, size and shape.
+#' @param ... further arguments are passed on to \link[ggplot2]{geom_point}
 #'
 #' @return a ggplot2 object that can be added to an existing plot like those produced by \link{map.ca.base}
-#' @export add.ind
+#' @export add.cases
 #'
 #' @examples
 #' example(soc.mca)
@@ -191,15 +191,10 @@ add.cases    <- function(object, dim = c(1, 2), ind = extract_ind(object, dim), 
 }
 
 #' @rdname add.cases
-#' @export
+#' @export add.ind
 
 add.ind <- add.cases   
 
-
-
-add_modify_aes <- function(mapping, ...) {
-  ggplot2:::rename_aes(modifyList(mapping, ...))  
-}
 
 #' Add a layer of categories (modalities) to an mca map
 #'
@@ -208,23 +203,28 @@ add_modify_aes <- function(mapping, ...) {
 #'   change is made to "cats".
 #' @param dim a numeric vector with the dimensions for the plane
 #' @param cats a data.frame with coordinates of categories as produced by \link{extract_mod} or \link{extract_sup}. This controls the plotted points.
-#' @param mapping a call to \link{aes} from the ggplot2 package. Here you can map aesthetics to variables such as color, alpha, size and family.
+#' @param mapping a call to \link[ggplot2]{aes} from the ggplot2 package. Here you can map aesthetics to variables such as color, alpha, size and family.
 #' @param repel if TRUE label position is adjusted to lower overlap
 #' @param check_overlap if TRUE overlapping categories are removed
 #' @param points if TRUE points are plotted
-#' @param ... further arguments are passed onto \link{geom_text} or \link{geom_text_repel}
+#' @param draw.labels if TRUE labels are plotted
+#' @param ... further arguments are passed onto \link[ggplot2]{geom_text} or \link[ggrepel]{geom_text_repel}
 #'
 #' @return a ggplot2 object that can be added to an existing plot like those produced by \link{map.ca.base}
-#' @usage The presets adds, replaces or filters from the categories in cats.
-#'   "ctr" returns all categories contributing above average to the plane
-#'   defined in dim. "sup" returns the supplementary categories from object.
-#'   "all" returns both supplementary and active categories.
+#' @details
+#' The `preset` argument adds, replaces or filters categories in `cats`:
+#' \itemize{
+#'   \item `"ctr"`: returns all categories contributing above average to the plane defined in `dim`.
+#'   \item `"sup"`: returns the supplementary categories from `object`.
+#'   \item `"all"`: returns both supplementary and active categories.
+#' }
 #' @export add.categories
 #'
 #' @examples
 #' example(soc.mca)
 #' map.ca.base() + add.categories(result, check_overlap = TRUE)
-#' map.ca.base() + add.categories(result, preset = "all", mapping = aes(color = type, label = Modality), repel = TRUE)
+#' map.ca.base() + add.categories(result, preset = "all",
+#'                 mapping = aes(color = type, label = Modality), repel = TRUE)
 add.categories  <- function(object, preset = c("active", "ctr", "sup", "all"), dim = c(1, 2),
                             cats = extract_mod(object, dim),
                             mapping = aes(label = Modality), repel = FALSE, check_overlap = FALSE,
@@ -273,8 +273,10 @@ add.categories  <- function(object, preset = c("active", "ctr", "sup", "all"), d
 #'
 #' @examples
 #' example(soc.mca)
-#' map.ca.base() + add.ind(result, mapping = aes(color = sup$Gender)) + add.ellipse(result, sup$Gender)
-#' map.ca.base() + add.ind(result, mapping = aes(color = sup$Age == "65+")) + add.ellipse(result, sup$Age == "65+", draw = "TRUE")
+#' map.ca.base() + add.ind(result, mapping = aes(color = sup$Gender)) +
+#'                   add.ellipse(result, sup$Gender)
+#' map.ca.base() + add.ind(result, mapping = aes(color = sup$Age == "65+")) +
+#'                           add.ellipse(result, sup$Age == "65+", draw = "TRUE")
 
 add.ellipse <- function(object, var = NULL, draw = unique(var), dim = c(1, 2), el = ellipses(object, var = var, dim = dim),
                         mapping = aes(color = Category), draw.axis = TRUE, ...){
@@ -330,7 +332,7 @@ add.density <-  function(object, dim = c(1, 2), ind = extract_ind(object, dim), 
 #' 
 #' This function is a convience function that uses \link[ggpp]{annotate} to easily create labels for the quadrants.
 #'
-#' @param quadrant.labels 
+#' @param quadrant.labels a character string with the labels for each quadrant
 #' @param distance if equal to "npc" labels are positioned dynamically at the edges of the plot. see \link[ggpp]{annotate}. If a numeric vector it is interpreted as the distance to 0 on both X and Y.
 #' @param geom controls the annotation geom; usually you would use "text" or "label".
 #' @param color either a single value or 4 values that control the color of the labels
@@ -342,10 +344,14 @@ add.density <-  function(object, dim = c(1, 2), ind = extract_ind(object, dim), 
 #' @examples
 #' example(soc.mca)
 #' map.ind(result, point.size = 1) + add.quadrant.labels()
-#' labels <- c("Dominant:\nCultural fraction", "Dominant:\nEconomic fraction", "Dominated:\nEconomic fraction", "Dominated:\nCultural fraction")
+#' labels <- c("Dominant:\nCultural fraction", "Dominant:\nEconomic fraction",
+#'             "Dominated:\nEconomic fraction", "Dominated:\nCultural fraction")
 #' map.ca.base() + add.quadrant.labels(labels, geom = "text")
-#' map.ca.base() + add.ind(result, color = "grey80") + add.quadrant.labels(labels, geom = "text", distance = 1) 
-#' map.ca.base() + add.categories(result, color = "grey50", check_overlap = TRUE) + add.quadrant.labels(labels, geom = "label", distance = 0.5, fill = c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3"), alpha = 0.3) 
+#' map.ca.base() + add.ind(result, color = "grey80") + 
+#'                 add.quadrant.labels(labels, geom = "text", distance = 1) 
+#' map.ca.base() + add.categories(result, color = "grey50", check_overlap = TRUE) +
+#'                add.quadrant.labels(labels, geom = "label", distance = 0.5,
+#'                fill = c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3"), alpha = 0.3) 
 
 # It could have origo labels.
 add.quadrant.labels <- function(quadrant.labels = c("A", "B", "C", "D"), distance = "npc", geom = "label", color = "black", ...){
@@ -363,6 +369,18 @@ add.quadrant.labels <- function(quadrant.labels = c("A", "B", "C", "D"), distanc
 }
 
 
+#' Add category relations to a soc.ca plot
+#'
+#' @param r a soc.mca result object
+#' @param cat.rel a tibble with category relations like the one produced by \link{get.category.relations}
+#' @param dim plotting dimensions
+#' @param mapping aesthetics passed on to geom_segment
+#' @param ... further arguments are passed on to \link[ggplot2]{geom_segment}
+#'
+#' @returns
+#' @export
+#'
+#' @examples
 add.category.relations <- function(r, cat.rel = get.category.relations(r, dim = dim) |> filter(valid.correlation), dim = c(1, 2),  mapping = aes(alpha = pem), ...){
   
   mapping <- add_modify_aes(mapping, aes(x = X, xend = Xend, y = Y, yend = Yend))
@@ -370,4 +388,23 @@ add.category.relations <- function(r, cat.rel = get.category.relations(r, dim = 
   o$points <- geom_segment(data = cat.rel, mapping = mapping, ...)
   o
   
+}
+
+
+#' rename_aes
+#'  
+#' We import this function from ggplot2 because it is not exported.
+#' @param x an aes
+
+rename_aes <- function(x){
+  names(x) <- ggplot2::standardise_aes_names(names(x))
+  duplicated_names <- names(x)[duplicated(names(x))]
+  if (length(duplicated_names) > 0L) {
+    warning("Duplicated aesthetics after name standardisation")
+  }
+  x
+}
+
+add_modify_aes <- function(mapping, ...) {
+  rename_aes(modifyList(mapping, ...))  
 }

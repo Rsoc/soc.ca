@@ -143,15 +143,13 @@ mca.triads <- function(l.mca, l.triads, dim = c(1,2), fix.mca = 1){
 
 #' Get and calculate the relationships and oppositions between each pair of categories
 #' 
-#' Use this function to calculate PEM \link[GDAtools]{pem} values, chisq, distance and coordinates for each pair of categories in either an indicator matrix or the categories from an soc.mca result object. These relationship are usefull for both diagnostics, analysis, interpretation and plotting. 
+#' Use this function to calculate PEM \link[descriptio]{pem.table} values, chisq, distance and coordinates for each pair of categories in either an indicator matrix or the categories from an soc.mca result object. These relationship are useful for both diagnostics, analysis, interpretation and plotting. 
 #' For plotting combine with \link{add.category.relations} to build your plot. 
 #' 
 #'
 #' @param r an soc.mca result object
 #' @param ind an indicator matrix, see \link{indicator}
 #' @param dim a numeric vector with the dimensions for the coordinates. This is only sent to \link{extract_mod}.
-#' @param variable a character vector with the variable where each category in ind came from. If ind was created directly with \link{indicator} you can use names(colnames(ind)).
-#' @param coords a data.frame with coordinates - similar to those produced by \link{extract_mod}
 #' @param rel a matrix with pairs of categories
 #'
 #' @return a tibble
@@ -180,7 +178,7 @@ get.category.relations <- function(r, ind = r$indicator.matrix.active, dim = c(1
   f.pem <- function(x, y){
     a <- ind[, x] %>% factor(levels = c("0", "1"))
     b <- ind[, y] %>% factor(levels = c("0", "1"))
-    o <- soc.ca:::pem_fast(a, b)
+    o <- pem_fast(a, b)
     o[2,2]
   }
   
@@ -223,15 +221,15 @@ add.combination.points <- function (r, combined.coord = r$combination.points$com
 {
   
   cats <- combined.coord %>% filter(label %in% draw.levels)
-  mapping <- soc.ca:::add_modify_aes(mapping, aes(x = X, y = Y))
+  mapping <- add_modify_aes(mapping, aes(x = X, y = Y))
   o <- list()
   
-  mapping_lines <- soc.ca:::add_modify_aes(mapping, aes(label = NULL, size = NULL))
+  mapping_lines <- add_modify_aes(mapping, aes(label = NULL, size = NULL))
   o$lines       <- geom_path(data = cats, mapping = mapping_lines, linetype = linetype,
                              ...)
   
   if (identical(points, TRUE)) {
-    mapping_points <- soc.ca:::add_modify_aes(mapping, aes(label = NULL))
+    mapping_points <- add_modify_aes(mapping, aes(label = NULL))
     o$points <- geom_point(data = cats, mapping = mapping_points, 
                            ...)
   }
@@ -257,8 +255,8 @@ add.triads <- function(r, triads.coords = r$triads.coords, triad.edges = r$triad
   triad.edges$pem[triad.edges$pem <= 0] <- 0
   triad.edges$pem[triad.edges$pem > pem.cut] <- pem.cut
 
-  mapping        <- soc.ca:::add_modify_aes(mapping, aes(x = X, y = Y))
-  mapping_triads <- soc.ca:::add_modify_aes(mapping_triads, aes(x = X, xend = Xend, y = Y, yend = Yend))
+  mapping        <- add_modify_aes(mapping, aes(x = X, y = Y))
+  mapping_triads <- add_modify_aes(mapping_triads, aes(x = X, xend = Xend, y = Y, yend = Yend))
 
   shape.scale <- LETTERS
   if(!is.null(triads.coords$shape)) shape.scale <- setNames(triads.coords$shape, triads.coords$category) 

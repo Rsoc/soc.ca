@@ -9,7 +9,7 @@ randomize.mca(r, replace = FALSE)
 \arguments{
 \item{r}{a result object from soc.mca}
 
-\item{replace}{}
+\item{replace}{should sampling be with replacement? see \link[base]{sample}}
 }
 \value{
 a soc.mca object

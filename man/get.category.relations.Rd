@@ -19,16 +19,12 @@ get.category.relations(
 \item{dim}{a numeric vector with the dimensions for the coordinates. This is only sent to \link{extract_mod}.}
 
 \item{rel}{a matrix with pairs of categories}
-
-\item{variable}{a character vector with the variable where each category in ind came from. If ind was created directly with \link{indicator} you can use names(colnames(ind)).}
-
-\item{coords}{a data.frame with coordinates - similar to those produced by \link{extract_mod}}
 }
 \value{
 a tibble
 }
 \description{
-Use this function to calculate PEM \link[GDAtools]{pem} values, chisq, distance and coordinates for each pair of categories in either an indicator matrix or the categories from an soc.mca result object. These relationship are usefull for both diagnostics, analysis, interpretation and plotting. 
+Use this function to calculate PEM \link[descriptio]{pem.table} values, chisq, distance and coordinates for each pair of categories in either an indicator matrix or the categories from an soc.mca result object. These relationship are useful for both diagnostics, analysis, interpretation and plotting. 
 For plotting combine with \link{add.category.relations} to build your plot.
 }
 \examples{

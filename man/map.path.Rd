@@ -31,8 +31,8 @@ vertical axis.}
 \item{min.size}{is the minimum size given to the groups of a numerical 
 variable, see \link{min_cut}.}
 
-\item{...}{further arguments are passed onto \link{geom_path},
-\link{geom_point} and \link{geom_text} from the ggplot2 package}
+\item{...}{further arguments are passed onto \link[ggplot2]{geom_path},
+\link[ggplot2]{geom_point} and \link[ggplot2]{geom_text} from the ggplot2 package}
 }
 \description{
 Plot a path along an ordered variable. If the variable is numerical it is cut

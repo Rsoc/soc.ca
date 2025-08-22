@@ -342,7 +342,7 @@ indicator.to.long <- function(r){
 #'
 #'
 #' @param r a result object from soc.mca
-#' @param replace
+#' @param replace should sampling be with replacement? see \link[base]{sample}
 #'
 #' @return a soc.mca object
 #' @export
@@ -357,7 +357,8 @@ randomize.mca <- function(r, replace = FALSE){
   iw <- pivot_wider(im, id_cols = case, names_from = variable, values_from = label)
   ir <- map_df(iw, ~.x[sample(length(.x), replace = replace)] )
   passive <- im$category[im$passive] %>% unique()
-  if(length(passive) == 0){ passive <- NA }
+  if(length(passive) == 0){ passive <- NULL }
+  ir <- ir |> mutate_all(as.factor)
   soc.mca(ir |> select(-case), passive = passive)
 }
 
@@ -386,14 +387,15 @@ randomize.mca <- function(r, replace = FALSE){
 #' pr$removed               # This example has no irrelevant variables so nothing is removed
 
 prune.mca <- function(r, eigen.cut.off = 0.55, network.pruning = TRUE, average.pruning = FALSE, min.degree = 1){
-  if(requireNamespace("igraph", quietly = TRUE) == FALSE) return("You need the package igraph in order to run this function")
-  require("igraph", quietly = TRUE)
+  # if(requireNamespace("igraph", quietly = TRUE) == FALSE) return("You need the package igraph in order to run this function")
+  # require("igraph", quietly = TRUE)
+  requireNamespace("igraph", quietly = TRUE)
   
   mec  <- mca.eigen.check(r, passive = r$names.passive)
   g    <- igraph::graph_from_data_frame(mec, directed = FALSE)
-  gso  <- igraph::graph.strength(g, weights = E(g)$"First eigen")
+  gso  <- igraph::graph.strength(g, weights = igraph::E(g)$"First eigen")
   
-  gi <- delete.edges(g, edges = which(E(g)$"First eigen" < eigen.cut.off))
+  gi <- igraph::delete.edges(g, edges = which(igraph::E(g)$"First eigen" < eigen.cut.off))
   
   if(identical(average.pruning, TRUE)){
     kill.their.edges <- which(gso < mean(gso))
@@ -402,12 +404,12 @@ prune.mca <- function(r, eigen.cut.off = 0.55, network.pruning = TRUE, average.p
   }
   
   if(identical(network.pruning, TRUE)){
-    kill.their.edges <- which(degree(gi) < min.degree)
+    kill.their.edges <- which(igraph::degree(gi) < min.degree)
     gi[, kill.their.edges] <- 0
     gi[kill.their.edges, ] <- 0
   }
   
-  gs  <- graph.strength(gi, weights = E(gi)$"First eigen")
+  gs  <- igraph::graph.strength(gi, weights = igraph::E(gi)$"First eigen")
   set <- names(gs)[gs >= min.degree] 
   
   if(length(set) == 0) {
@@ -429,7 +431,7 @@ prune.mca <- function(r, eigen.cut.off = 0.55, network.pruning = TRUE, average.p
   ri    <- soc.mca(iw.set, passive = passive)
   
     o      <- list()
-  o$var  <- tibble(variable = V(g)$name, "graph.strength.original" = gso, "graph.strength.pruned" = gs, "below.average" = gso < mean(gso))
+  o$var  <- tibble(variable = igraph::V(g)$name, "graph.strength.original" = gso, "graph.strength.pruned" = gs, "below.average" = gso < mean(gso))
   o$mca.eigen.check <- mec
   o$g    <- gi
   o$remaining.var <- set

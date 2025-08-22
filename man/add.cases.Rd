@@ -28,9 +28,9 @@ add.ind(
 
 \item{ind}{a data.frame with coordinates of cases as produced by \link{extract_ind}. This controls the plotted points.}
 
-\item{mapping}{a call to \link{aes} from the ggplot2 package. Here you can map aesthetics to variables such as color, fill, alpha, size and shape.}
+\item{mapping}{a call to \link[ggplot2]{aes} from the ggplot2 package. Here you can map aesthetics to variables such as color, fill, alpha, size and shape.}
 
-\item{...}{further arguments are passed on to geom_point()}
+\item{...}{further arguments are passed on to \link[ggplot2]{geom_point}}
 }
 \value{
 a ggplot2 object that can be added to an existing plot like those produced by \link{map.ca.base}

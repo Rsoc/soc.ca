@@ -145,8 +145,8 @@ return(plot.list)
 #' @param mca.dim the dimension from the original MCA
 #' @param csa.dim the dimension from the CSA
 #' @param smooth if TRUE a line is added to the plot
-#' @param method the method used by ggplot to set the line see \link{geom_smooth}
-#' @seealso \link{soc.csa}, \link{map.csa.all}, link{map.csa.mca.array}
+#' @param method the method used by ggplot to set the line see \link[ggplot2]{geom_smooth}
+#' @seealso \link{soc.csa}, \link{map.csa.all}, \link{map.csa.mca.array}
 #' @export
 #' @examples
 #' example(soc.csa)
