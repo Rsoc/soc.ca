@@ -9,5 +9,5 @@ utils::globalVariables(c(
   "merge_v", "pem", "set_caption", "set_header_labels", "str_split",
   "theme_booktabs", "triad", "type", "valid.correlation",
   "valign", "value", "values", "variable", "variable.x",
-  "variable.y", "x", "y", "Active Modalities", "First eigen"
+  "variable.y", "x", "y", "Active Modalities", "First eigen", "id"
 ))
