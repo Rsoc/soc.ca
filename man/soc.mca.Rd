@@ -3,7 +3,6 @@
 \name{soc.mca}
 \alias{soc.mca}
 \title{soc.mca
-
 \code{soc.mca} performs a specific multiple correspondence analysis on a data.frame of factors, where cases are rows and columns are variables.}
 \usage{
 soc.mca(

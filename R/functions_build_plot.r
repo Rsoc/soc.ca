@@ -315,10 +315,7 @@ add.ellipse <- function(object, var = NULL, draw = unique(var), dim = c(1, 2), e
 #' @param mapping a call to \link[ggplot2]{aes} from the ggplot2 package. Here you can map aesthetics to variables such as color, fill, alpha, size and linetype.
 #' @param ... further arguments are passed onto \link[ggplot2]{geom_density_2d}
 #'
-#' @return
 #' @export
-#'
-#' @examples
 add.density <-  function(object, dim = c(1, 2), ind = extract_ind(object, dim), mapping = aes(), ...){
   
   mapping    <- add_modify_aes(mapping, aes(x = X, y = Y))
@@ -377,10 +374,7 @@ add.quadrant.labels <- function(quadrant.labels = c("A", "B", "C", "D"), distanc
 #' @param mapping aesthetics passed on to geom_segment
 #' @param ... further arguments are passed on to \link[ggplot2]{geom_segment}
 #'
-#' @returns
 #' @export
-#'
-#' @examples
 add.category.relations <- function(r, cat.rel = get.category.relations(r, dim = dim) |> filter(valid.correlation), dim = c(1, 2),  mapping = aes(alpha = pem), ...){
   
   mapping <- add_modify_aes(mapping, aes(x = X, xend = Xend, y = Y, yend = Yend))

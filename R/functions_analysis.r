@@ -1,6 +1,5 @@
 #' Specific Multiple Correspondence Analysis
 #' @title soc.mca
-#'
 #' \code{soc.mca} performs a specific multiple correspondence analysis on a data.frame of factors, where cases are rows and columns are variables.
 #' @param active       Defines the active modalities in a data.frame with rows of individuals and columns of factors, without NA's'. Active can also be a named list of data.frames. The data.frames will correspond to the analytical headings.
 #' @param sup          Defines the supplementary modalities in a data.frame with rows of individuals and columns of factors, without NA's 

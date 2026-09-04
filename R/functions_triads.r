@@ -110,7 +110,7 @@ mca.triads <- function(l.mca, l.triads, dim = c(1,2), fix.mca = 1){
   
   # Sup coordinates
   get.sup   <- function(mca, sup, dim){
-    sup.coord <- sup %>% select(-id) %>% map(~average.coord(mca, .x, dim = dim)) %>% bind_rows(.id = "name") %>% dplyr::filter(.data$label)
+    sup.coord <- sup %>% select(-.data$id) %>% map(~average.coord(mca, .x, dim = dim)) %>% bind_rows(.id = "name") %>% dplyr::filter(.data$label)
     sup.coord <- sup.coord %>% left_join(., tri.names, by = "name") %>% select(-.data$group, -.data$label)
     sup.coord
   }

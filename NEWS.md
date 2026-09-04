@@ -13,7 +13,9 @@
 * csa.measures now includes new measures
 * New example datasets: moschidis, political_space97
 * A whole new framework for plotting - map.ca.base - that is much closer to the ggplot2 way of plottig and gives more control
+* Functions for profiles and triads - but these are still under active development
 * Several other minor functions and tests
+
 
 ## Technical changes since 0.7
 * soc.mca has been simplified substantially

@@ -6,10 +6,18 @@ Description: Specific and class specific multiple correspondence analysis on
 URL: https://github.com/Rsoc/soc.ca
 Version: 0.8.1
 Maintainer: Anton Grau Larsen <agraul@ruc.dk>
-Author: Anton Grau Larsen and Jacob Lunding with contributions from Christoph Ellersgaard and
-    Stefan Andrade
+Authors@R: c(person(given = c("Anton", "Grau"),
+                      family = "Larsen",
+                      role = c("aut", "cre"),
+                      email = "agraul@ruc.dk"),
+               person(given = "Jacob",
+                      family = "Lunding",
+                      role = "aut"),
+               person(given = "Stefan",
+                      family = "Andrade",
+                      role = "aut"))
 Depends:
-    R (>= 3.5.0),
+    R (>= 4.1.0),
     ggplot2
 Imports:
     gridExtra,

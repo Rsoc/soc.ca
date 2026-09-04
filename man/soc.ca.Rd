@@ -50,3 +50,13 @@ Useful links:
 }
 
 }
+\author{
+\strong{Maintainer}: Anton Grau Larsen \email{agraul@ruc.dk}
+
+Authors:
+\itemize{
+  \item Jacob Lunding
+  \item Stefan Andrade
+}
+
+}
